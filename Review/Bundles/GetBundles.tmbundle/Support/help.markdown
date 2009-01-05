@@ -1,7 +1,5 @@
 ---
 
-<center><font color=red><big><big>Still Under Constructions</big></big></font></center>
-
 <center><big>"GetBundles" provides an easy to use interface to install available TextMate bundles which are hosted on textmate.org's svn repositories, on github.com, and on private sites.<br>
   It makes usage of the “Bundle Server” running at textmate.org.<br>Additionally it updates TextMate's “Support Folder” automatically if needed.</big></center>
 
@@ -71,7 +69,7 @@ After invoking "GetBundles" the script downloads the current bundle cache file f
 
 Once you have the list of bundles, you can select one or more and hit <button>Install Bundles</button>, <button>&#x21A9;</button>, or double-click at the bundle to install it/them . After a successful installation, TextMate will open the “Bundle Editor” and “GetBundles” will refresh the installation status in the table. The installation can be cancelled by hitting <button>&#x238B;</button>, as long as TextMate has not already physically installed that bundle (GetBundles uses a temporary folder first). If a given bundle has been already installed on your system by using a versioning control system (svn/git), “GetBundles” cannot touch it. To install, delete, or update  this bundle rename or delete it and install it by using GetBundles or use the versioning control system (svn/git).
 
-"GetBundles" always checks before an installation whether there is an update of TextMate's “Support Folder”. If so it will update it first. This update can also be invoked directly by executing `Update “Support Folder”` in the "Gear Menu". See also [here](#sect_3.1.3.5).
+"GetBundles" always checks before an installation whether there is an update of TextMate's “Support Folder”. If so it will update it first. This update can also be invoked directly by executing `Update “Support Folder”` in the "Gear Menu". See also [here](#sect_3.1.6.5).
 
 In order to close the "GetBundles" dialog simply hit the <button>&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;&nbsp;</button> or press <button>&#x2318;W</button>.
 
@@ -96,24 +94,49 @@ If you hold down the <button>&#x2325;</button> key while installing a bundle the
 
 The core of the dialog is a table listing all discovered bundles.
 
+**Name**
 
-The first column **Name** displays the bundle's name. 
+It displays the bundle's name. The name appears in bold face if there is an update available. If a bundle identified by its UUID (Universally Unique Identifier) has more then one source the name will be colorized.
 
-
-The third column **Source** lists where the bundle is hosted:
+**Status**
 
 <table style="margin-left:1cm">
-    <tr><td>Official</td><td><a href="http:/svn.textmate.org/trunk/Bundles/">http:/svn.textmate.org/trunk/Bundles/</a> </td></tr>
-    <tr><td>Review</td><td><a href="http:/svn.textmate.org/trunk/Review/Bundles/">http:/svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
-    <tr><td>Github</td><td><a href="http://github.com/">http://github.com/</a></td></tr>
-    <tr><td>Private</td><td>hosted on private sites</td></tr>
+    <tr><td style="font-size:9pt"><span style="color:silver"><em>empty</em></span></td><td style="font-size:9pt">bundle is not installed</td></tr>
+    <tr><td style="font-size:9pt">Ok</td><td style="font-size:9pt">bundle is installed and up-to-date</td></tr>
+    <tr><td style="font-size:9pt">XX old</td><td style="font-size:9pt">bundle is installed but there is an update available which was uploaded at least XX later</td></tr>
+    <tr><td style="font-size:9pt">installed (source unknown)</td><td style="font-size:9pt">bundle is installed but the source couldn't be resolved</td></tr>
 </table>
 
+**Source**
 
+It lists where the bundle is hosted:
+
+<table style="margin-left:1cm">
+    <tr><td style="font-size:9pt">Official</td><td style="font-size:9pt"><a href="http:/svn.textmate.org/trunk/Bundles/">http:/svn.textmate.org/trunk/Bundles/</a> </td></tr>
+    <tr><td style="font-size:9pt">Review</td><td style="font-size:9pt"><a href="http:/svn.textmate.org/trunk/Review/Bundles/">http:/svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
+    <tr><td style="font-size:9pt">Github</td><td style="font-size:9pt"><a href="http://github.com/">http://github.com/</a></td></tr>
+    <tr><td style="font-size:9pt">Private</td><td style="font-size:9pt">hosted on private sites</td></tr>
+</table>
+
+**Location & Comments**
+
+<table style="margin-left:1cm">
+<tr><td style="font-size:9pt">default</td><td style="font-size:9pt"><span style="color:silver;">PATH_TO_TextMate.app</span><a onclick='TextMate.system("open \"`locate TextMate.app/Contents/SharedSupport/Bundle | head -n1`\"",null);' style="cursor:pointer">/Contents/SharedSupport/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">Users Pristine</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Users/bibiko/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">Users Lib</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Users/bibiko/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">System Pristine</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">System Lib</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">[local changes]</td><td style="font-size:9pt">there are local changes</td></tr>
+<tr><td style="font-size:9pt">(svn)</td><td style="font-size:9pt">bundle is under svn control</td></tr>
+<tr><td style="font-size:9pt">(git)</td><td style="font-size:9pt">bundle is under git control</td></tr>
+<tr><td style="font-size:9pt">bundle disabled</td><td style="font-size:9pt">the bundle is installed but disabled in the "Bundle Editor" (Filter List…)</td></tr>
+<tr><td style="font-size:9pt">bundle deleted</td><td style="font-size:9pt">default bundle is deleted but still installed</td></tr>
+<tr><td style="font-size:9pt">date: YY-MM-DD HH:MM</td><td style="font-size:9pt">the revision date of each source for a bundle which has more than one source</td></tr>
+</table>
 
 All columns can be sorted by clicking on appropriate part of the header.
 
-It is possible to select more than one bundle at the same time, and to install all of them.
+It is possible to select more than one bundle at the same time to install all of them.
 
 ### Repository Filter ###
 
@@ -124,9 +147,9 @@ The bundle list can be further filtered using these buttons
 which will display only those bundles which are hosted on the selected repository:
 
 <table style="margin-left:1cm">
-    <tr><td>Official</td><td><a href="http://svn.textmate.org/trunk/Bundles/">http://svn.textmate.org/trunk/Bundles/</a> </td></tr>
-    <tr><td>Under Review</td><td><a href="http://svn.textmate.org/trunk/Review/Bundles/">http://svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
-    <tr><td>3rd Party</td><td>hosted on GitHub <a href="http://github.com/">http://github.com/</a> or privately</td></tr>
+    <tr><td style="font-size:9pt">Official</td><td style="font-size:9pt"><a href="http://svn.textmate.org/trunk/Bundles/">http://svn.textmate.org/trunk/Bundles/</a> </td></tr>
+    <tr><td style="font-size:9pt">Under Review</td><td style="font-size:9pt"><a href="http://svn.textmate.org/trunk/Review/Bundles/">http://svn.textmate.org/trunk/Review/Bundles/</a></td></tr>
+    <tr><td style="font-size:9pt">3rd Party</td><td style="font-size:9pt">hosted on GitHub <a href="http://github.com/">http://github.com/</a> or privately</td></tr>
 </table>
 
 ### Searching ###
@@ -151,12 +174,12 @@ which will display only those bundles which are hosted on the selected repositor
 #### Additional pre-defined search patterns ####
 
 <table style="margin-left:1cm">
-    <tr><td>=o</td><td>lists all bundles marked as O (Official)</td></tr>
-    <tr><td>=r</td><td>lists all bundles marked as R (Under Review)</td></tr>
-    <tr><td>=g</td><td>lists all bundles marked as G (hosted on github.com)</td></tr>
-    <tr><td>=p</td><td>lists all bundles marked as P (hosted privately)</td></tr>
-    <tr><td>=i</td><td>lists all bundles which are installed locally</td></tr>
-    <tr><td>=u</td><td>lists all bundles for which an update is available</td></tr>
+    <tr><td style="font-size:9pt">=o</td><td style="font-size:9pt">lists all bundles marked as O (Official)</td></tr>
+    <tr><td style="font-size:9pt">=r</td><td style="font-size:9pt">lists all bundles marked as R (Under Review)</td></tr>
+    <tr><td style="font-size:9pt">=g</td><td style="font-size:9pt">lists all bundles marked as G (hosted on github.com)</td></tr>
+    <tr><td style="font-size:9pt">=p</td><td style="font-size:9pt">lists all bundles marked as P (hosted privately)</td></tr>
+    <tr><td style="font-size:9pt">=i</td><td style="font-size:9pt">lists all bundles which are installed locally</td></tr>
+    <tr><td style="font-size:9pt">=u</td><td style="font-size:9pt">lists all bundles for which an update is available</td></tr>
 </table>
 
 ### Get Bundle Info (“Info Window”)###
@@ -173,7 +196,7 @@ which will display only those bundles which are hosted on the selected repositor
 
 ### Gear Action Menu ###
 
-<button>&#x2318;&#x238B;</button> <img valign=middle src="images/img_gear.png"><br>
+<img valign=middle src="images/img_gear.png"> <button>&#x2318;&#x238B;</button><br>
 ![](images/img_gear_menu.png)
 
 The "Gear Action Menu" provides some additional commands:
@@ -189,11 +212,11 @@ This command deletes the current list of bundles and reload the bundle list comi
 GetBundles will scan these local folders:
 
 <table style="margin-left:1cm">
-  <tr><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
-  <tr><td>&nbsp;</td><td><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
-  <tr><td>&nbsp;</td><td><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Bundles</a></td></tr>
-  <tr><td>&nbsp;</td><td><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Bundles</a></td></tr>
-  <tr><td>&nbsp;</td><td><span style="color:silver;">PATH_TO_TextMate.app</span><a onclick='TextMate.system("open \"`locate TextMate.app/Contents/SharedSupport/Bundle | head -n1`\"",null);' style="cursor:pointer">/Contents/SharedSupport/Bundles</a></td></tr>
+  <tr><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
+  <tr><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
+  <tr><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Bundles</a></td></tr>
+  <tr><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Bundles</a></td></tr>
+  <tr><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt"><span style="color:silver;">PATH_TO_TextMate.app</span><a onclick='TextMate.system("open \"`locate TextMate.app/Contents/SharedSupport/Bundle | head -n1`\"",null);' style="cursor:pointer">/Contents/SharedSupport/Bundles</a></td></tr>
 </table>
 
 
@@ -251,24 +274,24 @@ This drawer shows the current content of the log file <a onclick='TextMate.syste
 
 # Keyboard Shortcuts #
 <table style="margin-left:1cm">
-<tr><td align="center"><button>&#x2318;W</button></td><td>Close the "GetBundles" dialog</td></tr>
-<tr><td align="center"><button>&#x21A9;</button></td><td>Install selected bundle(s)</td></tr>
-<tr><td align="center"><button>&#x238B;</button></td><td>Cancel current task / Clear search field</td></tr>
-<tr><td align="center"><button>&#x2318;&#x238B;</button></td><td>Open "Gear Action Menu"</td></tr>
-<tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;L</button></td><td>Open/Close "Log"</td></tr>
-<tr><td align="center"><button>&#x2318;I</button></td><td>Get details about selected bundle</td></tr>
-<tr><td align="center"><button>&#x2318;O</button></td><td>Open selected bundle as TextMate project if installed</td></tr>
-<tr><td align="center"><button>&#x21E7;&#x2318;O</button></td><td>Reveal selected bundle in Finder if installed</td></tr>
-<tr><td align="center"><button>&#x2318;F</button></td><td>Activate the search field</td></tr>
-<tr><td align="center"><button>&#x2318;R</button></td><td>Refresh status of locally installed bundles</td></tr>
-<tr><td align="center"><button>&#x2318;U</button></td><td>Install all available updates (except for bundles under versioning control)</td></tr>
-
+<tr><td align="center"><button>&#x2318;W</button></td><td style="font-size:9pt">Close the "GetBundles" dialog</td></tr>
+<tr><td align="center"><button>&#x21A9;</button></td><td style="font-size:9pt">Install selected bundle(s)</td></tr>
+<tr><td align="center"><button>&#x238B;</button></td><td style="font-size:9pt">Cancel current task / Clear search field</td></tr>
+<tr><td align="center"><button>&#x2318;&#x238B;</button></td><td style="font-size:9pt">Open "Gear Action Menu"</td></tr>
+<tr><td align="center"><button>&#x2325;&#x21E7;&#x2318;L</button></td><td style="font-size:9pt">Open/Close "Log"</td></tr>
+<tr><td align="center"><button>&#x2318;I</button></td><td style="font-size:9pt">Get details about selected bundle</td></tr>
+<tr><td align="center"><button>&#x2318;O</button></td><td style="font-size:9pt">Open selected bundle as TextMate project if installed</td></tr>
+<tr><td align="center"><button>&#x21E7;&#x2318;O</button></td><td style="font-size:9pt">Reveal selected bundle in Finder if installed</td></tr>
+<tr><td align="center"><button>&#x2318;F</button></td><td style="font-size:9pt">Activate the search field</td></tr>
+<tr><td align="center"><button>&#x2318;R</button></td><td style="font-size:9pt">Refresh status of locally installed bundles</td></tr>
+<tr><td align="center"><button>&#x2318;U</button></td><td style="font-size:9pt">Install all available updates (except for bundles under versioning control)</td></tr>
 </table>
+
 
 # Used Shell Variables
 
 <table style="margin-left:1cm">
-  <tr><td><strong>TM_SVN</strong></td><td>&nbsp;</td><td>absolute path to the `svn` client</td></tr>
+  <tr><td style="font-size:9pt"><strong>TM_SVN</strong></td><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt">user-defined absolute path to the <code>svn</code> client</td></tr>
 </table>
 
 All variables can be set in TextMate's Preferences, under the item "Advanced".
@@ -338,7 +361,7 @@ To set up proxy support in `git`, do the following:
 
 # Main Bundle Maintainer
 
-***Date: Dec 18 2008***
+***Date: Jan 05 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

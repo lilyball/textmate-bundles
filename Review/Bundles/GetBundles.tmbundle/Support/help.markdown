@@ -84,6 +84,12 @@ If you hold down the <button>&#x2325;</button> key while installing a bundle the
 </small>
 </pre>
 
+## GetBundles' preference file ##
+
+GetBundles makes usage of the preference file <a onclick='TextMate.system("open \"$HOME/Library/Preferences/com.macromates.textmate.getbundles.plist\"",null);' style="cursor:pointer">com.macromates.textmate.getbundles.plist</a> located in `~/Library/Preferences`. Mainly it stores the sources of each installed TextMate bundle. “GetBundles” has to know the source in order to check if there are updates available. If the user installed “GetBundles” after installing other non-default bundles “GetBundles” tries to resolve the source of each installed bundle automatically. If this fails for some reasons the user will be asked to resolve the relevant sources. In case of 'illogical' status messages this file can be removed manually to try to fix it ( <button title="click to remove 'com.macromates.textmate.getbundles.plist'" onclick='TextMate.system("rm \"$HOME/Library/Preferences/com.macromates.textmate.getbundles.plist\"",null);'>remove</button> ).
+
+This preference file will be deleted automatically after updating the GetBundles bundle. 
+
 # Interface #
 
 ## Main Dialog ##
@@ -122,8 +128,8 @@ It lists where the bundle is hosted:
 
 <table style="margin-left:1cm">
 <tr><td style="font-size:9pt">default</td><td style="font-size:9pt"><span style="color:silver;">PATH_TO_TextMate.app</span><a onclick='TextMate.system("open \"`locate TextMate.app/Contents/SharedSupport/Bundle | head -n1`\"",null);' style="cursor:pointer">/Contents/SharedSupport/Bundles</a></td></tr>
-<tr><td style="font-size:9pt">Users Pristine</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Users/bibiko/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
-<tr><td style="font-size:9pt">Users Lib</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Users/bibiko/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">Users Pristine</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
+<tr><td style="font-size:9pt">Users Lib</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"$HOME/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">~/Library/Application Support/TextMate/Bundles</a></td></tr>
 <tr><td style="font-size:9pt">System Pristine</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Pristine Copy/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Pristine Copy/Bundles</a></td></tr>
 <tr><td style="font-size:9pt">System Lib</td><td style="font-size:9pt"><a onclick='TextMate.system("open \"/Library/Application Support/TextMate/Bundles\"",null);' style="cursor:pointer">/Library/Application Support/TextMate/Bundles</a></td></tr>
 <tr><td style="font-size:9pt">[local changes]</td><td style="font-size:9pt">there are local changes</td></tr>
@@ -322,6 +328,8 @@ All variables can be set in TextMate's Preferences, under the item "Advanced".
 * “GetBundles” updates the “Support Folder” even if it is up-to-date. Why?
 > This only could happen if you install a bundle just after the bundle list appeared. The internal routine to check for an update runs as background process.
 
+* The "status" column lists illogical messages. What can I do?
+> This can happen if the installation source of a bundle differs from the stored source in GetBundles' preference file. Try to remove that file manually. [see also here](#sect_2.1)
 
 # Appendix #
 

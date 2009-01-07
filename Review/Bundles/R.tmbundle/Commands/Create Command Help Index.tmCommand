@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>
-[[ -e "$TM_BUNDLE_SUPPORT"/help.index ]] &amp;&amp; rm "$TM_BUNDLE_SUPPORT"/help.index
-[[ -e "$TM_BUNDLE_SUPPORT"/help.pkgs ]] &amp;&amp; rm "$TM_BUNDLE_SUPPORT"/help.pkgs
+rm -f "$TM_BUNDLE_SUPPORT"/help.index
+rm -f "$TM_BUNDLE_SUPPORT"/help.pkgs
+rm -f "$TM_BUNDLE_SUPPORT"/libpaths
 
 . "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
 

@@ -15,10 +15,14 @@ if RUBY_VERSION >= "1.9"
   	def reject(&block)
   		each_line.reject(&block)
   	end 
-	
-  	def map(&block)
-  		each_line.map(&block)
-  	end
+  
+    def map(&block)
+      each_line.map(&block)
+    end
+  
+    def inject(*args, &block)
+      each_line.inject(*args, &block)
+    end
   end
 end
 

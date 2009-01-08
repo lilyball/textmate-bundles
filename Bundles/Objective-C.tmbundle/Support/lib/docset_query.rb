@@ -3,6 +3,7 @@ SUPPORT = ENV['TM_SUPPORT_PATH']
 require SUPPORT + '/lib/exit_codes'
 require SUPPORT + '/lib/escape'
 require SUPPORT + '/lib/osx/plist'
+require SUPPORT + '/lib/ui'
 
 DOCSET_CMD = "/Developer/usr/bin/docsetutil search -skip-text -query "
 
@@ -87,8 +88,8 @@ def search_docs (query)
 end
 
 def show_document (results, query)
-	if results.length == 0
-		TextMate.exit_show_tool_tip "Cannot find documentation for: #{query}"
+	if results.nil? || results.empty?
+		return nil
 	elsif results.length == 1
 		url = results[0].url
 	else
@@ -126,14 +127,33 @@ def get_user_selected_reference (class_names)
 	res['selectedMenuItem'] ? res['selectedMenuItem']['url'] : nil
 end
 
+def search_docs_all(query)
+  return nil if query.to_s.empty?
+
+  results = search_docs(query)
+  man = man_page(query)
+  results << man if man
+
+  return results
+end
+
 def documentation_for_word
 	query = ENV['TM_SELECTED_TEXT'] || ENV['TM_CURRENT_WORD']
-	results = search_docs(query)
+	query = $& if query.to_s =~ /\w*/
 
-	man = man_page(query) 
-	results << man if man
+	if query.to_s.empty?
+		query = %x{ __CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbpaste -pboard find }
+		query = $& if query =~ /\w+/
+		query = TextMate::UI.request_string :title => "Documentation Search", :default => query, :prompt => "Search documentation for word"    
+		abort if query.nil?
+	end
 
-	show_document(results, query)
+	results = search_docs_all(query)
+	if results.nil? || results.empty?
+		TextMate.exit_show_tool_tip "Cannot find documentation for: #{query}"
+	else
+		show_document(results, query)
+	end
 end
 
 def documentation_for_selector

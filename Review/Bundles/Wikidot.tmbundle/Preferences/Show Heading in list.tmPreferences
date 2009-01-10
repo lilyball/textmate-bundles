@@ -3,21 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Show Heading in list</string>
+	<string>Symbol List</string>
 	<key>scope</key>
-	<string>text.html.wikidot</string>
+	<string>markup.heading.wikidot</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
-		<key>symbolTransformation</key>
-		<string>
-		s/^\s*+\s*([^=].*)(?&lt;!=)+{2,}\s*$/    $1/;
-		s/^\s*++\s*([^=].*)(?&lt;!=)+{2,}\s*$/   $1/;
-		s/^\s*+++\s*([^=].*)(?&lt;!=)+{2,}\s*$/  $1/;
-		s/^\s*++++\s*([^=].*)(?&lt;!=)+{2,}\s*$/ $1/;
-		s/^\s*++++++\s*([^=].*)(?&lt;!=)+{2,}\s*$/$1/;
-	</string>
 	</dict>
 	<key>uuid</key>
 	<string>1C4FB26E-519A-445B-AA1B-E6FCD672C216</string>

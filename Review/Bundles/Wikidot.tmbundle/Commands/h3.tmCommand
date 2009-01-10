@@ -31,7 +31,7 @@
 		echo ereg_replace("^ *(\++) *", "$level ", $existing);
 	} else {
 		if (empty($existing)) {
-			echo "$level \${1:Level 1 heading}";
+			echo "$level \${1:Level 3 heading}";
 		}else{
 			echo ereg_replace("^ *", "$level ", $existing);			
 		}

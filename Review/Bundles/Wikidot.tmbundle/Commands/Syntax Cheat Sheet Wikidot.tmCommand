@@ -10,22 +10,27 @@
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "Mx Cheat Sheet"
 Markdown.pl &lt;&lt;MARKDOWN
-## Run ##
 
 THIS NEEDS A LOT OF WORK AND IS BASICALLY BROKEN NOW.
 
 THE OFFICIAL HELP IS HERE
 
-http://www.wikidot.com/doc:wiki-syntax
+    http://www.wikidot.com/doc:wiki-syntax
+
+## Paragraphs ##
+
+    Two line breaks
+    will signify
+    a paragraph.
+    
+    New paragraph starts
+    here.
 
 
+## Links ##
+Internal:
 
-
-
-
-
-++ Links
-	[[[link-to-a-page]]]
+	[[[page-name]]]
 	[[[link "TO" ą pagE]]]
 	[[[category: sample page]]]
 	[[[some page| custom text]]]	custom text	using custom text
@@ -34,6 +39,7 @@ http://www.wikidot.com/doc:wiki-syntax
 	[[[doc#toc1]]]
 	[[# anchorname]]
 
+## External ##
 	[email@site.com email me!]
 	
 ++ Lists

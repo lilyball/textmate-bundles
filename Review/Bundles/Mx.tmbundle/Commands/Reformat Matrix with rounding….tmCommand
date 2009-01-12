@@ -9,17 +9,16 @@
 &lt;?php
 // creator: tim.bates@ed.ac.uk 
 // license = GPL
-// Purpose: Takes a delimtted block of text like this:
-/*
-
 // TO-DO: Add a dialog call to ask for rounding precision
-// TOD:
+/* Purpose: Takes a delimtted block of text like this:
+
  1 7 0  0 0  0  
  2 0 9    0 0  0
  3   0 0 11 0  0
  4 0 0 0 12 0
  5  0 0    0 0  13
  6  8 10   0 0  14
+
  and returns it formatted fixed width thus:
 1      7      0      0      0      0
 2      0      9      0      0      0
@@ -37,7 +36,7 @@
 // Set $debug to 1 to let play with it in a TM window
 
 
-$debug = 0;
+$debug = 1;
 $padWidth = 7;
 $nDecimals = 3;
 
@@ -92,12 +91,13 @@ function array_round(&amp;$item1, $key, $nDecimals) {
 
 if ($debug) {
 	echo "&lt;pre&gt;";
-	$input ="Y 201 27 0 0 0 0 
-	 202 0 209 0 0 0
-	 203 0 0 211 0 0
-	 204 0 0 0 212 0
-	 205 0 0 0 0 213
-	 206 28 210 0 0 214
+	echo "uses the first item's size to set the $padWidth\n\n";
+		$input ="Y   201 0 0 0 0 99 
+	 202 202 0 0 0 0
+	 203 0 203 0 0 0
+	 204 0 0 204 0 0
+	 205 0 0 0 205 0 
+	 206 0 0 0  0 206
 ";
 }else{
    $input = file_get_contents('php://stdin');

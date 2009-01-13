@@ -370,7 +370,9 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Troubleshooting &amp; FAQ
 
-Each command should be cancelled by pressing <button>&#x2318;.</button>.
+-   __How can I cancel a running task?__
+
+    Each command should be canceled by pressing <button>&#x2318;.</button>. If the task was canceled a warning message will be prompted. By pressing <button>&#x2318;Z</button> (undo) the last command will be restored. If you canceled a task which redirected the output to a file (e.g. via sink() ) it could be the case that this redirection is still active. You can test it by executing e.g. `1+1`. If you don't see the result you can reset Rdaemon by executing the command `Reset Output` <button>&#x2325;&#x2318;A</button> one or more times.
 
 -   __How can I change the language, time format, etc. used by the Rdaemon?__
 
@@ -409,11 +411,11 @@ Each command should be cancelled by pressing <button>&#x2318;.</button>.
 
 -   __Can I run Rdaemon, R.app, or R in the terminal at the same time?__
 
-    Yes. Rdaemon should not interfere R.app or R running in the Terminal. The only thing which won't work is the usage of Rdaemon together with the remote bundle "R Console (R.app)" if Rdaemon had plotted something in a Quartz device a helper application is open. "R Console (R.app)" is using AppleScript to interact with R.app.  Unfortunately this helper application and R.app have the same AppleScript name "R".
+    Yes. Rdaemon should not interfere R.app or R running in the Terminal. The only thing which won't work is the usage of Rdaemon together with the remote bundle "R Console (R.app)" if Rdaemon had plotted something in a Quartz device (It makes usage of an helper application). "R Console (R.app)" is using AppleScript to interact with R.app. Unfortunately this helper application and R.app have the same AppleScript name "R".
 
 # Main Bundle Maintainer
 
-***Date: Nov 24 2008***
+***Date: Jan 13 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

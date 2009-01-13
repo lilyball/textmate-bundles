@@ -108,7 +108,7 @@ public class Foo
    }
    
    void method2() {
-    
+       // make sure this is shown as method2 in the symbol list
    }
    
 }

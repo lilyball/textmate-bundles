@@ -8,39 +8,23 @@
 	<string>#!/usr/bin/php
 &lt;?php
 // author tim.bates@ed.ac.uk
-// version .5 
+// version .7
 // created: 22:10:2008
 // bolds or unbolds the selection or the currentword
 
-$input = file_get_contents('php://stdin');
-
-$marker   =  $_ENV["TM_BOLD_MARKER"];
-//$marker =  $_ENV["TM_ITALIC_MARKER"];
-//$marker =  $_ENV["TM_UNDERLINED_MARKER"];
-$thisLine =  $_ENV["TM_CURRENT_LINE"];
+$input        = $_ENV["TM_SELECTED_TEXT"];
+$marker       = $_ENV["TM_BOLD_MARKER"];
+$esapedMarker = addcslashes($marker, "*()[].$^");
 
 // TM_CURRENT_WORD doesn't include markup :-(
-
-$noFormat = ereg_replace("\*\*(.*)\*\*", "\\1", $input);
-
-//echo "i got: $input\n";
-
-if ($input==$noFormat) {
+$unFormatted = ereg_replace("$esapedMarker(.*)$esapedMarker", "\\1", $input);
+if ($input==$unFormatted) {
 	//plain--&gt;formatted
-	echo("**$input**");
-}else{
-	//bold --&gt; plain
-	echo("$noFormat");
+	echo($marker . $input . $marker);
+}else {
+	//formatted--&gt;plain
+	echo($unFormatted);
 }
-
-
-/*
-foreach ($_ENV as $key =&gt; $value) {
-	echo "$key = $value\n";
-}
-// $_ENV["TM_SELECTED_TEXT"]);
-*/
-
 ?&gt;</string>
 	<key>fallbackInput</key>
 	<string>line</string>

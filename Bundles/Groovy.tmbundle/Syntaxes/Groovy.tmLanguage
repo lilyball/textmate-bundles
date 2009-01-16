@@ -1149,6 +1149,16 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>include</key>
+					<string>#string-quoted-double-contents</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string-quoted-double-contents</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
@@ -1185,6 +1195,38 @@
 				</dict>
 			</array>
 		</dict>
+		<key>string-quoted-double-multiline</key>
+		<dict>
+			<key>begin</key>
+			<string>"""</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.groovy</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>"""</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.groovy</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.multiline.groovy</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string-quoted-double-contents</string>
+				</dict>
+			</array>
+		</dict>
 		<key>string-quoted-single</key>
 		<dict>
 			<key>begin</key>
@@ -1212,6 +1254,16 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>include</key>
+					<string>#string-quoted-single-contents</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string-quoted-single-contents</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
 					<key>match</key>
 					<string>\\.</string>
 					<key>name</key>
@@ -1219,10 +1271,50 @@
 				</dict>
 			</array>
 		</dict>
+		<key>string-quoted-single-multiline</key>
+		<dict>
+			<key>begin</key>
+			<string>'''</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.groovy</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>'''</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.groovy</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.single.multiline.groovy</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string-quoted-single-contents</string>
+				</dict>
+			</array>
+		</dict>
 		<key>strings</key>
 		<dict>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#string-quoted-double-multiline</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-quoted-single-multiline</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#string-quoted-double</string>

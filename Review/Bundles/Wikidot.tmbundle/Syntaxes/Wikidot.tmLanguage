@@ -537,13 +537,18 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
+							<string>entity.name.tag.wikidot</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
 							<string>punctuation.definition.link.wikidot</string>
 						</dict>
 					</dict>
 					<key>comment</key>
 					<string>[[[match any link]]]</string>
 					<key>match</key>
-					<string>(\[{1,3})(.*?)(\]{1,3})</string>
+					<string>(\[{1,3})([^\] ]*)(| )?([^\]]*)?(\]{1,3})</string>
 					<key>name</key>
 					<string>meta.link.wikidot</string>
 				</dict>

@@ -7,164 +7,184 @@
 	<key>bundleUUID</key>
 	<string>D99E8C0C-792F-11D9-A212-000D93B3A10E</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "Mx Cheat Sheet"
-Markdown.pl &lt;&lt;MARKDOWN
+	<string>#!/usr/bin/env php
+&lt;h1&gt;Wikidot Syntax Help&lt;/h1&gt;
 
-THIS NEEDS A LOT OF WORK AND IS BASICALLY BROKEN NOW.
+The Official Help Is &lt;a href="http://www.wikidot.com/doc:wiki-syntax" title="Wikidot - Free and Pro Wiki Hosting: Wiki Syntax"&gt;HERE&lt;/a&gt;
 
-THE OFFICIAL HELP IS HERE
-
-    http://www.wikidot.com/doc:wiki-syntax
-
-## Paragraphs ##
-
-    Two line breaks
-    will signify
+&lt;h3 id="paragraphs"&gt;Paragraphs&lt;/h3&gt;
+	&lt;pre&gt;
+    Two line breaks signify
     a paragraph.
-    
-    New paragraph starts
-    here.
 
+    New paragraph starts here.
+	&lt;/pre&gt;
 
-## Links ##
-Internal:
-
-	[[[page-name]]]
-	[[[link "TO" ą pagE]]]
-	[[[category: sample page]]]
-	[[[some page| custom text]]]	custom text	using custom text
-	[[[doc|Documentation]]]	Documentation	linking to an existing page (different color)
-	[[[doc#toc1|Section 1]]]	Section 1	linking to an anchor (first section)
-	[[[doc#toc1]]]
-	[[# anchorname]]
-
-## External ##
-	[email@site.com email me!]
+&lt;h3 id="links"&gt;Links&lt;/h3&gt;
+&lt;h4 id="internal"&gt;Internal:&lt;/h4&gt;
+&lt;ul&gt;
+	&lt;li&gt;[[[page-name]]]&lt;/li&gt;
+	&lt;li&gt;[[[link "TO" ą pagE]]]&lt;/li&gt;
+	&lt;li&gt;[[[category: sample page]]]&lt;/li&gt;
+	&lt;li&gt;[[[some page| custom text]]]	&lt;em&gt;Link using custom text&lt;/em&gt;&lt;/li&gt;
+	&lt;li&gt;[[[doc|Documentation]]]	        &lt;em&gt;Linking to an existing page (different color)&lt;/em&gt;&lt;/li&gt;
+	&lt;li&gt;[[[doc#toc1|Section 1]]]        &lt;em&gt;Section 1 linking to an anchor (first section)&lt;/em&gt;&lt;/li&gt;
+	&lt;li&gt;[[[doc#toc1]]]&lt;/li&gt;
+	&lt;li&gt;[[# anchorname]]&lt;/li&gt;        &lt;em&gt;An anchor&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="external"&gt;External&lt;/h4&gt;
+	&lt;ul&gt;
+		&lt;li&gt;[email@site.com email me!]&lt;/li&gt;
+		&lt;li&gt;[http://www.apple.com Apple!]&lt;/li&gt;
+		&lt;li&gt;[wikipeida:Eisenhower]&lt;/li&gt;
+	&lt;/ul&gt;
 	
-++ Lists
-+++ Bulleted
+&lt;h3 id="lists"&gt;Lists&lt;/h3&gt;
+&lt;h4 id="bulleted"&gt;Bulleted&lt;/h4&gt;
+&lt;pre&gt;
 * Bullet 1
 * Bullet 2
  * Bullet 2.1
-+++ Numbered
+&lt;/pre&gt;
+&lt;h4 id="numbered"&gt;Numbered&lt;/h4&gt;
+&lt;pre&gt;
 # Item 1
 # Item 2
  # Item 2.1
-+++ Definition Lists
+&lt;/pre&gt;
+&lt;h4 id="definitionlists"&gt;Definition Lists&lt;/h4&gt;
+&lt;pre&gt;
 : Item 1 : Something
 : Item 2 : Something else
+&lt;/pre&gt;
 
-
-+++ Block Quote
+&lt;h3 id="blockquote"&gt;Block Quote&lt;/h3&gt;
+&lt;pre&gt;
 &gt; leading
 &gt;&gt; characters
+&lt;/pre&gt;
+&lt;h3 id="image"&gt;Image&lt;/h3&gt;
 
-+++ Image
-[[image image-source attribute1="value1" attribute2="value2"]]
-* alt="string"
-* width="200px"
-* height="200px"
-* style="border: 1px solid red; padding: 2em;"
-* class="myCSSstyle"
+&lt;pre&gt;[[image image-source attribute1="value1" attribute2="value2"]]&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;alt="string"&lt;/li&gt;
+&lt;li&gt;width="200px"&lt;/li&gt;
+&lt;li&gt;height="200px"&lt;/li&gt;
+&lt;li&gt;style="border: 1px solid red; padding: 2em;"&lt;/li&gt;
+&lt;li&gt;class="myCSSstyle"&lt;/li&gt;
 
-+++ Image Gallery
+&lt;h3 id="imagegallery"&gt;Image Gallery&lt;/h3&gt;
+&lt;pre&gt;
 	[[gallery size="image-size"]]
 or
 	[[gallery size="image-size"]]
 	: image-source1 attribute1="value1" attribute2="value2"
 	: image-source2 attribute1="value1" attribute2="value2"
 	[[/gallery]]
-
-+++ Code Block
+&lt;/pre&gt;
+&lt;h3 id="codeblock"&gt;Code Block&lt;/h3&gt;
+&lt;pre&gt;
 [[code type='php]]
-
+  your code in here
 [[/code]]
-
-++ Tables
+&lt;pre&gt;
+	
+&lt;h3 id="tables"&gt;Tables&lt;/h3&gt;
+&lt;pre&gt;
 ||~ head 1 ||~ head 2 ||~ head 3 ||
 || cell 1 || cell 2 || cell 3 ||
 |||| long cell 4 || cell 5 ||
 ||cell 6 |||| long cell 7 ||
 |||||| looong cell 8||
+&lt;/pre&gt;
 
+&lt;h2 id="aligningtext"&gt;Aligning Text&lt;/h2&gt;
 
-++ Aligning Text
-
-[[&lt;]] left       [[/&lt;]]
-[[&gt;]] right      [[/&gt;]]
+&lt;pre&gt;
+[[&amp;lt;]] left       [[/&amp;lt;]]
+[[&amp;gt;]] right      [[/&amp;gt;]]
 [[=]] centered   [[/=]]
 [[==]] justified [[/==]]
+&lt;/pre&gt;
+
+&lt;h2 id="customdivs"&gt;Custom Divs&lt;/h2&gt;
+&lt;h3 id=""&gt;&lt;h3&gt;&lt;/h3&gt;&lt;/h3&gt;
+Custom DIV for (multi column)
+
+&lt;pre&gt;
+	[[div style="float:left; width: 45%; padding: 0 2%"]]
+		left 
+		column 
+		text
+	[[/div]]
+	[[div style="float:left; width: 45%; padding: 0 2%"]]
+		right 
+		column 
+		text
+	[[/div]]
+&lt;/pre&gt;
+
+&lt;h3&gt;Other uses of div code&lt;/h3&gt;
+
+&lt;p&gt;[[div style="margin-left: 10px;"]]&lt;/p&gt;
 
 
-++ Custom Divs
+&lt;h2&gt;Footnotes&lt;/h2&gt;
+&lt;p&gt;Some text[[footnote]]And a small footnote.[[/footnote]]. Here we go 
+with another footnote[[footnote]]Content of another footnote.[[/footnote]].&lt;/p&gt;
+&lt;pre&gt;
+    [[footnoteblock]]
+&lt;/pre&gt;
 
-+++ Custom DIV for (multi column)
+&lt;h2 id="math"&gt;Math&lt;/h2&gt;
+	&lt;pre&gt;
+	[[math label1]]
+	\rho _{\rm GJ} = -\sigma (r) \left[ (1 - \eta _{\ast }^2 {\kappa \over {\eta ^3}}) \cos \chi \right.
+	+ \left. {3\over 2} \theta (\eta) H(\eta)
+	\xi \sin \chi \cos \phi \right]
+	[[/math]]
+	&lt;/pre&gt;
+&lt;h3&gt;Inline Math&lt;/h3&gt;
+&lt;pre&gt;
+	[[$ E = mc^2 $]] is much more popular than  [[$ G_{\mu\nu} - \Lambda g_{\mu\nu}  $]]
+&lt;/pre&gt;
 
-[[div style="float:left; width: 45%; padding: 0 2%"]]
-left 
-column 
-text
-[[/div]]
-[[div style="float:left; width: 45%; padding: 0 2%"]]
-right 
-column 
-text
-[[/div]]
+&lt;h2 id="misc"&gt;Misc&lt;/h2&gt;
+&lt;h3 id=""&gt;Include other pages&lt;/h3&gt;
+&lt;pre&gt;
+	[[include pagename]]
+&lt;/pre&gt;
 
-+++ Other uses of div code
+&lt;h3 id="Embedding Video"&gt;Embedding Video&lt;/h3&gt;
+&lt;pre&gt;
+	[[embedvideo]] ... [[/embedvideo]]
 
-[[div style="margin-left: 10px;"]]
+	e.g.
+	[[embedvideo]]
+		&amp;lt;embed style=&amp;quot;width:400px; height:326px;&amp;quot; id=&amp;quot;VideoPlayback&amp;quot; align=&amp;quot;middle&amp;quot;
+		type=&amp;quot;application/x-shockwave-flash&amp;quot;
+		src=&amp;quot;http://video.google.com/googleplayer.swf?docId=263244138622602613&amp;quot;
+		allowScriptAccess=&amp;quot;sameDomain&amp;quot; quality=&amp;quot;best&amp;quot; bgcolor=&amp;quot;#ffffff&amp;quot; scale=&amp;quot;noScale&amp;quot; salign=&amp;quot;TL&amp;quot; 
+		FlashVars=&amp;quot;playerMode=embedded&amp;quot;&amp;gt; &amp;lt;/embed&amp;gt;
+	[[/embedvideo]]
+&lt;/pre&gt;
 
+&lt;h3 id="embeddingaudio"&gt;Embedding Audio&lt;/h3&gt;
+&lt;pre&gt;
+	[[embedaudio]] ... [[/embedaudio]] 
+&lt;/pre&gt;
 
-++ Footnotes
-Some text[[footnote]]And a small footnote.[[/footnote]]. Here we go 
-with another footnote[[footnote]]Content of another footnote.[[/footnote]].
+&lt;h3 id="Embed_external_code"&gt;Embed external code&lt;/h3&gt;
+&lt;pre&gt;
+	[[embed]]
+        &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://del.icio.us/feeds/js/tags/michal_frackowiak?icon;size=12-35;color=87ceeb-0000ff;title=my%20del.icio.us%20tags&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    [[/embed]]
+&lt;/pre&gt;
 
-[[footnoteblock]]
-
-
-++ Math
-[[math label1]]
-\rho _{\rm GJ} = -\sigma (r) \left[ (1 - \eta _{\ast }^2 {\kappa \over {\eta ^3}}) \cos \chi \right.
-+ \left. {3\over 2} \theta (\eta) H(\eta)
-\xi \sin \chi \cos \phi \right]
-[[/math]]
-
-+++ Inline Math
-[[$ E = mc^2 $]] is much more popular than  [[$ G_{\mu\nu} - \Lambda g_{\mu\nu}  $]]
-
-+++ Misc
-++++ Include other pages
-[[include pagename]]
-
-++++ Embedding Video
-[[embedvideo]] ... [[/embedvideo]]
-e.g.
-[[embedvideo]]
-&lt;embed style="width:400px; height:326px;" id="VideoPlayback" align="middle"
-type="application/x-shockwave-flash"
-src="http://video.google.com/googleplayer.swf?docId=263244138622602613"
-allowScriptAccess="sameDomain" quality="best" bgcolor="#ffffff" scale="noScale" salign="TL" 
-FlashVars="playerMode=embedded"&gt; &lt;/embed&gt;
-[[/embedvideo]]
-
-++++ Embedding Audio
-[[embedaudio]] ... [[/embedaudio]] 
-
-++++ Embed external code
-[[embed]]
-&lt;script type="text/javascript" src="http://del.icio.us/feeds/js/tags/michal_frackowiak?icon;size=12-35;color=87ceeb-0000ff;title=my%20del.icio.us%20tags"&gt;&lt;/script&gt;
-[[/embed]]
-
-
-++++ Embed iframe
-[[iframe url-source attributes]]
-
-
-
-MARKDOWN
-html_footer</string>
+&lt;h3 id="embediframe"&gt;Embed iframe&lt;/h3&gt;
+&lt;pre&gt;
+	[[iframe url-source attributes]]
+&lt;/pre&gt;</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

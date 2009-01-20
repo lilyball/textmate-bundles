@@ -219,6 +219,10 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>include</key>
+					<string>#macro</string>
+				</dict>
+				<dict>
 					<key>comment</key>
 					<string>&amp; is handled automagically by confluence, so we match it to avoid text.html.basic from flagging it</string>
 					<key>match</key>
@@ -549,6 +553,110 @@
 					<string>(?&lt;!w)\[[0-9+]\]</string>
 					<key>name</key>
 					<string>entity.name.tag.confluence</string>
+				</dict>
+			</array>
+		</dict>
+		<key>macro</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>({)(?=\w)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.macro.begin.confluence</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>}</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.macro.end.confluence</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.macro.confluence</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(\w+)(:?)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>support.function.macro.confluence</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.seperator.macro.confluence</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=})</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#macro-parameters</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>macro-parameter</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(\w+)(?:(=)?)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.paramater.name.confluence</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.seperator.argument.confluence</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>variable.parameter.macro.confluence</string>
+					<key>end</key>
+					<string>(?=}|\|)</string>
+					<key>name</key>
+					<string>meta.macro.parameter.confluence</string>
+				</dict>
+			</array>
+		</dict>
+		<key>macro-parameters</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\|</string>
+					<key>name</key>
+					<string>punctuation.seperator.macro.parameter.confluence</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#macro-parameter</string>
 				</dict>
 			</array>
 		</dict>

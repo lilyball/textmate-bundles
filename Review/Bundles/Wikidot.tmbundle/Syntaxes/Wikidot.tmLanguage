@@ -126,7 +126,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^([\t ]?)(\#)</string>
+			<string>^([\t ]+)?(\#)</string>
 			<key>captures</key>
 			<dict>
 				<key>2</key>
@@ -135,6 +135,8 @@
 					<string>punctuation.definition.list_item.wikidot</string>
 				</dict>
 			</dict>
+			<key>comment</key>
+			<string># list item</string>
 			<key>end</key>
 			<string>$\n?</string>
 			<key>name</key>
@@ -255,7 +257,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^((\s\s)|(\t))[^\*\-].*$</string>
+			<string>^((\s\s)|(\t))[^\*\-#].*$</string>
 			<key>name</key>
 			<string>markup.raw.wikidot</string>
 		</dict>

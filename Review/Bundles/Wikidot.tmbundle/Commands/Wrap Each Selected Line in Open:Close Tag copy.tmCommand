@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// author tim.bates@ed.ac.uk
+// version .7
+// created: 22:10:2008
+// wraps the selection in open tags
+
+$input     = $_ENV["TM_SELECTED_TEXT"];
+// $input = "B12
+// B6
+// Niacin
+// Phosphatidylserine
+// no gluten, no caseine (dairy)
+// ";
+$lines = explode('
+', $input);
+// print_r($lines);
+// die();
+$out = "";
+foreach ($lines as $key =&gt; $value) {
+	 $out .= "\${1:*} $value\n";
+}
+echo $out;
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^@W</string>
+	<key>name</key>
+	<string>Wrap Each Selected Line in Open/Close Tag copy</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>C0A615C6-7C27-48A8-8D78-33A85658C74F</string>
+</dict>
+</plist>

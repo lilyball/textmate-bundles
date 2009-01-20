@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env php
+&lt;?php
+	// inset a line or lines in a selection by 1 space
+	// Created: jan.09 Author: timothy.c.bates@gmail.com
+	// Overrides existing option-tab
+
+	if (1) { //set to 0 for debugging
+		$input = fread(STDIN, 1024);
+	}else{
+		$input = "On the bump stops";
+// 		$input = "1 On the bump stops
+// 2 On the bump stops
+// 3 On the bump stops
+// 4 On the bump stops";
+		// $input = ""; //case of empty line
+		echo "&lt;pre&gt;&lt;br&gt;started with:&lt;br&gt;$input&lt;br&gt;--&gt;&lt;br&gt;";
+	}
+	$lines = explode('
+', $input);
+echo " ". implode("\n ", $lines);
+?&gt;
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~	</string>
+	<key>name</key>
+	<string>Inset by 1 space (opt-Tab)</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>F7B5D23E-8258-4112-964E-2A2774BC6D0B</string>
+</dict>
+</plist>

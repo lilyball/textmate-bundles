@@ -214,6 +214,74 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>code-macro</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(code)(:?)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.macro.confluence</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.seperator.macro.confluence</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>({)(code)(?=})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.macro.end.confluence</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.macro.confluence</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.macro.code.confluence</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string></string>
+							<key>end</key>
+							<string>(?={code})</string>
+							<key>name</key>
+							<string>meta.macro.code.content.confluence</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#macro-parameters</string>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>}</string>
+									<key>contentName</key>
+									<string>markup.raw.code.confluence</string>
+									<key>end</key>
+									<string>(?={code})</string>
+									<key>name</key>
+									<string>meta.macro.code.xml.content.confluence</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>inline</key>
 		<dict>
 			<key>patterns</key>
@@ -440,32 +508,6 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>{code}</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>meta.tag.code.confluence</string>
-						</dict>
-					</dict>
-					<key>contentName</key>
-					<string>markup.raw.confluence</string>
-					<key>end</key>
-					<string>{code}</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>meta.tag.code.confluence</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.block.code.confluence</string>
-				</dict>
-				<dict>
-					<key>begin</key>
 					<string>{quote}</string>
 					<key>beginCaptures</key>
 					<dict>
@@ -667,7 +709,12 @@
 		<key>specific-macros</key>
 		<dict>
 			<key>patterns</key>
-			<array/>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#code-macro</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

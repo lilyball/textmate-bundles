@@ -516,7 +516,7 @@
 					<key>match</key>
 					<string>\B\+((\([^)]*\)|{[^}]*}|\[[^]]+\]){0,3})(\S.*?\S|\S)\+\B</string>
 					<key>name</key>
-					<string>markup.inserted.confluence</string>
+					<string>markup.underline.confluence</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -585,6 +585,10 @@
 					<string>meta.macro.confluence</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#specific-macros</string>
+						</dict>
 						<dict>
 							<key>begin</key>
 							<string>(\w+)(:?)</string>
@@ -659,6 +663,11 @@
 					<string>#macro-parameter</string>
 				</dict>
 			</array>
+		</dict>
+		<key>specific-macros</key>
+		<dict>
+			<key>patterns</key>
+			<array/>
 		</dict>
 	</dict>
 	<key>scopeName</key>

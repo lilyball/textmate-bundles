@@ -335,6 +335,46 @@
 						</dict>
 						<dict>
 							<key>begin</key>
+							<string>(?i:sql)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.paramater.name.confluence</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?={code})</string>
+							<key>name</key>
+							<string>meta.macro.code.sql.confluence</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#macro-parameters</string>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>}</string>
+									<key>contentName</key>
+									<string>source.sql</string>
+									<key>end</key>
+									<string>(?={code})</string>
+									<key>name</key>
+									<string>meta.embedded.block.sql</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>source.sql</string>
+										</dict>
+									</array>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
 							<string></string>
 							<key>end</key>
 							<string>(?={code})</string>

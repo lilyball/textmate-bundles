@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>REM ${1:`LANG=en_US date +'%b'`} ${2:`date +'%e'`} ${3:`date +'%Y'`} AT ${4:16}:${5:00} MSG ${0:message…}</string>
+	<string>REM ${1:`LANG=en_US date +'%b'`} ${2/^(.)$|.*/(?1: )/}${2:`date +'%e'`} ${3:`date +'%Y'`}${4: AT ${5:16}:${6:00}} MSG ${0:message…}</string>
 	<key>name</key>
 	<string>Date and Time</string>
 	<key>scope</key>

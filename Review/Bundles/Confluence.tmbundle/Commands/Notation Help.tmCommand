@@ -5,14 +5,12 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/bin/bash
+	<string>#!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/textmate"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 
-if [ -z "$TM_CONFLUENCE_HOME" ]
-then
-	echo '&lt;p&gt;Please &lt;a href="http://manual.macromates.com/en/environment_variables#static_variables"&gt;set the environment variable&lt;/a&gt; ‘TM_CONFLUENCE_HOME’ to the &lt;em&gt;base&lt;/em&gt; install address (e.g. ‘http://confluence.atlassian.com’) of your Confluence install.&lt;/p&gt;'
-else
-	echo "&lt;meta http-equiv='Refresh' content='0;URL=$TM_CONFLUENCE_HOME/renderer/notationhelp.action'&gt;"
-fi
+TextMate.require_env_var('TM_CONFLUENCE_HOME', 'Please set TM_CONFLUENCE_HOME to the address of your Confluence install (e.g. ‘http://confluence.atlassian.com’)')
+TextMate.exit_show_html("&lt;meta http-equiv='Refresh' content='0;URL=#{ENV['TM_CONFLUENCE_HOME']}/renderer/notationhelp.action'&gt;")
 </string>
 	<key>input</key>
 	<string>none</string>

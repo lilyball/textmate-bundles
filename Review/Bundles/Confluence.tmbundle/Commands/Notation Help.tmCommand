@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/bin/bash
+
+if [ -z "$TM_CONFLUENCE_HOME" ]
+then
+	echo '&lt;p&gt;Please &lt;a href="http://manual.macromates.com/en/environment_variables#static_variables"&gt;set the environment variable&lt;/a&gt; ‘TM_CONFLUENCE_HOME’ to the &lt;em&gt;base&lt;/em&gt; install address (e.g. ‘http://confluence.atlassian.com’) of your Confluence install.&lt;/p&gt;'
+else
+	echo "&lt;meta http-equiv='Refresh' content='0;URL=$TM_CONFLUENCE_HOME/renderer/notationhelp.action'&gt;"
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Notation Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>text.html.confluence</string>
+	<key>uuid</key>
+	<string>0194731A-FA1C-46A0-920E-AE8977A3282E</string>
+</dict>
+</plist>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>require_cmd groovyConsole
+osascript -e 'on openGroovyConsole()
+	do shell script "groovyConsole &gt; /dev/null 2&gt;&amp;1 &amp;"
+end openGroovyConsole
+
+tell application "System Events"
+	set theProcesses to every process whose name is "java"
+	if (count of theProcesses) is 0 then
+		openGroovyConsole() of me
+	else
+		set foundIt to false
+		repeat with i from 1 to (count of theProcesses)
+			set thisProcess to item i of theProcesses
+			try
+				tell thisProcess
+					set theWindow to (the window "GroovyConsole")
+					set frontmost of thisProcess to true
+					set foundIt to true
+				end tell
+			on error number 1
+				-- do nothing
+			end try
+		end repeat
+		if foundIt is false then
+			openGroovyConsole() of me
+		end if
+	end if
+end tell' &gt; /dev/null 2&gt;&amp;1 &amp;</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@R</string>
+	<key>name</key>
+	<string>Groovy Console</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.groovy</string>
+	<key>uuid</key>
+	<string>951D524E-4CB0-4A71-91A5-4DCA57D6686D</string>
+</dict>
+</plist>

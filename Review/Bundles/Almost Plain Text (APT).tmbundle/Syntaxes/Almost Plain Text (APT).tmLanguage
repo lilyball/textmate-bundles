@@ -155,6 +155,13 @@
 				</dict>
 			</array>
 		</dict>
+		<key>escapes</key>
+		<dict>
+			<key>match</key>
+			<string>\\[~=\-\+\*\[\]\&lt;\&gt;\{\}\\]</string>
+			<key>name</key>
+			<string>constant.character.escape.apt</string>
+		</dict>
 		<key>formatting</key>
 		<dict>
 			<key>patterns</key>
@@ -261,6 +268,10 @@
 				<dict>
 					<key>include</key>
 					<string>#velocity-token</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#escapes</string>
 				</dict>
 			</array>
 		</dict>

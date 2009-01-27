@@ -17,16 +17,89 @@
 			<key>begin</key>
 			<string>^\s+-{3,}$\n</string>
 			<key>end</key>
-			<string>^\s+-{3,}$\n</string>
+			<string>^(?=\s*\n)</string>
 			<key>name</key>
 			<string>meta.heading.apt</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>^\s+\w.+$\n?</string>
+					<key>begin</key>
+					<string>^</string>
+					<key>end</key>
+					<string>^(?=\s*\n)</string>
 					<key>name</key>
-					<string>markup.heading.title-author-or-date.apt</string>
+					<string>meta.heading.title.apt</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>^(?!\s+-)</string>
+							<key>end</key>
+							<string>^(?=\s+-|\s*\n)</string>
+							<key>name</key>
+							<string>markup.heading.title.apt</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>^\s+-{3,}$\n</string>
+							<key>end</key>
+							<string>^(?=\s*\n)</string>
+							<key>name</key>
+							<string>meta.heading.author.apt</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>^</string>
+									<key>end</key>
+									<string>^(?=\s*\n)</string>
+									<key>name</key>
+									<string>meta.heading.author.inner.apt</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>begin</key>
+											<string>^(?!\s+-)</string>
+											<key>end</key>
+											<string>^(?=\s+-|\s*\n)</string>
+											<key>name</key>
+											<string>markup.heading.author.apt</string>
+										</dict>
+										<dict>
+											<key>begin</key>
+											<string>^\s+-{3,}$\n</string>
+											<key>end</key>
+											<string>^(?=\s*\n)</string>
+											<key>name</key>
+											<string>meta.heading.date.apt</string>
+											<key>patterns</key>
+											<array>
+												<dict>
+													<key>begin</key>
+													<string>^</string>
+													<key>end</key>
+													<string>^(?=\s*\n)</string>
+													<key>name</key>
+													<string>meta.heading.date.inner.apt</string>
+													<key>patterns</key>
+													<array>
+														<dict>
+															<key>begin</key>
+															<string>^(?!\s+-)</string>
+															<key>end</key>
+															<string>^(?=\s+-|\s*\n)</string>
+															<key>name</key>
+															<string>markup.heading.date.apt</string>
+														</dict>
+													</array>
+												</dict>
+											</array>
+										</dict>
+									</array>
+								</dict>
+							</array>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

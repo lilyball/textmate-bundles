@@ -63,6 +63,30 @@ module TextMate
       end
     end
 
+    def require_env_var(env_var, message = nil)
+      unless ENV.has_key? env_var
+        require ENV['TM_SUPPORT_PATH'] + '/lib/tm/htmloutput'
+        TextMate::HTMLOutput.show(
+          :title      => "Environment Variable Not Set",
+          :sub_title  => "Environment Variable Not Set - #{env_var}"
+        ) do |io|
+          io << <<-HTML
+            <h3 class="error">The environment variable <tt>#{env_var}</tt> is unset.</h3>
+
+            <p>#{message || "To succesfully run this action you need to
+            set the <tt>«#{env_var}»</tt> environment variable. If you know that it is already
+            installed on your system, you instead need to update
+            your search path."}</p>
+
+            <p>The manual has a section about
+            <a href=\"help:anchor='static_variables'%20bookID='TextMate%20Help'\">
+            setting environment variables</a>.</p>
+          HTML
+        end
+        TextMate.exit_show_html
+      end
+    end
+    
     def min_support(version)
       actual_version = ::IO.read(ENV['TM_SUPPORT_PATH'] + '/version').to_i
       if actual_version < version then

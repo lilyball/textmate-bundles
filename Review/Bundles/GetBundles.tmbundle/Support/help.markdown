@@ -80,7 +80,7 @@ If you hold down the <button>&#x2325;</button> key while installing a bundle the
 *Remark:* Please note that if you done any modifications to an already existing bundle these modifications are still valid after an update of that bundle. If you encounter a problem please check for user-defined modifications first.
 
 <pre>
-<small><i>Hint</i> The underlying script is written for Ruby 1.8.1 and up and has been tested on Mac OSX 10.4.x and 10.5.x. The script will probably not run under Ruby 1.9. If Ruby 1.9 is officially released the script will be updated as necessary.
+<small><i>Hint</i> The underlying script is written for Ruby 1.8.1 to 1.8.6 and has been tested on Mac OSX 10.4.x and 10.5.x. The script will probably not run under Ruby 1.8.7 (an hybrid version between 1.8.6 and 1.9) resp. 1.9. If Ruby 1.9 is officially released the script will be updated as necessary.
 </small>
 </pre>
 
@@ -369,7 +369,7 @@ To set up proxy support in `git`, do the following:
 
 # Main Bundle Maintainer
 
-***Date: Jan 15 2009***
+***Date: Jan 28 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

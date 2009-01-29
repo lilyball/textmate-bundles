@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>NAME=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
+	<string>NAME="$(cat)"
 if [[ -z "$NAME" ]]; then
 	NAME='${1:function_name}'
 fi

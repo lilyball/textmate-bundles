@@ -66,30 +66,6 @@
 			<string>#interpolation</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>\$\({2}</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.shell</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\){2}</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.shell</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.other.math.shell</string>
-		</dict>
-		<dict>
 			<key>include</key>
 			<string>#heredoc</string>
 		</dict>
@@ -810,6 +786,30 @@
 		<dict>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>begin</key>
+					<string>\$\({2}</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\){2}</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.other.math.shell</string>
+				</dict>
 				<dict>
 					<key>begin</key>
 					<string>`</string>

@@ -11,7 +11,7 @@ if [[ -z "$NAME" ]]; then
 fi
 
 cat &lt;&lt;SNIPPET
-function $NAME {
+function $NAME () {
 	\${0:#statements}
 }
 SNIPPET</string>

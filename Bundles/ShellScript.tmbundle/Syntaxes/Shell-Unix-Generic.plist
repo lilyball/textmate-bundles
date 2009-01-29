@@ -90,30 +90,6 @@
 			<string>string.other.math.shell</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>[&gt;&lt;]\(</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.shell</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.shell</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.interpolated.process-substitution.shell</string>
-		</dict>
-		<dict>
 			<key>include</key>
 			<string>#heredoc</string>
 		</dict>
@@ -901,6 +877,30 @@
 							<string>$self</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>[&gt;&lt;]\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.interpolated.process-substitution.shell</string>
 				</dict>
 			</array>
 		</dict>

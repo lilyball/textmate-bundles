@@ -86,16 +86,8 @@
 			<string>#function-definition</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>\b(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\b</string>
-			<key>name</key>
-			<string>keyword.control.shell</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(?:export)\b</string>
-			<key>name</key>
-			<string>storage.modifier.shell</string>
+			<key>include</key>
+			<string>#keyword</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -897,6 +889,24 @@
 					</dict>
 					<key>name</key>
 					<string>string.interpolated.process-substitution.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>keyword</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(?:if|then|else|elif|fi|for|in|do|done|select|case|continue|esac|while|until)\b</string>
+					<key>name</key>
+					<string>keyword.control.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(?:export)\b</string>
+					<key>name</key>
+					<string>storage.modifier.shell</string>
 				</dict>
 			</array>
 		</dict>

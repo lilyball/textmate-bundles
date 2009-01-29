@@ -207,7 +207,50 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
+					<key>begin</key>
+					<string>\b(function)\s+(\S+)(?:\s*(\(\)))?</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.function.shell</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.shell</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>;|&amp;|$</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.function.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b(\S+)\s*(\(\))</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
@@ -220,10 +263,25 @@
 							<string>punctuation.definition.arguments.shell</string>
 						</dict>
 					</dict>
-					<key>match</key>
-					<string>\b([^ \t\n]*)\s*(\(\))</string>
+					<key>end</key>
+					<string>;|&amp;|$</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.function.shell</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>meta.function.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

@@ -31,6 +31,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#pipeline</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#operator</string>
 		</dict>
 		<dict>
@@ -896,27 +900,33 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\b(time)\b</string>
-					<key>name</key>
-					<string>support.function.shell</string>
-				</dict>
-				<dict>
-					<key>match</key>
 					<string>;|&amp;&amp;|&amp;|\|\|</string>
 					<key>name</key>
 					<string>keyword.operator.list.shell</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>[|!]</string>
-					<key>name</key>
-					<string>keyword.operator.pipe.shell</string>
-				</dict>
-				<dict>
-					<key>match</key>
 					<string>(?&lt;=\s|:|=|^)~</string>
 					<key>name</key>
 					<string>keyword.operator.tilde.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>pipeline</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(time)\b</string>
+					<key>name</key>
+					<string>keyword.other.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[|!]</string>
+					<key>name</key>
+					<string>keyword.operator.pipe.shell</string>
 				</dict>
 			</array>
 		</dict>

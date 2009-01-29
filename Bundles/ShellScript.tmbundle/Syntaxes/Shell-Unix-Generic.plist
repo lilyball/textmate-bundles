@@ -80,6 +80,46 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>arithmetic-evaluation</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\+{1,2}|-{1,2}|!|~|\*{1,2}|/|%|&lt;[&lt;=]?|&gt;[&gt;=]?|==|!=|^|\|{1,2}|&amp;{1,2}|\?|\:|,|=|[*/%+\-&amp;^|]=|&lt;&lt;=|&gt;&gt;=</string>
+					<key>name</key>
+					<string>keyword.operator.arithmetic.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>0[xX]\h+</string>
+					<key>name</key>
+					<string>constant.numeric.hex.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>0\d+</string>
+					<key>name</key>
+					<string>constant.numeric.octal.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\d{1,2}#[0-9a-zA-Z@_]+</string>
+					<key>name</key>
+					<string>constant.numeric.other.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\d+</string>
+					<key>name</key>
+					<string>constant.numeric.integer.shell</string>
+				</dict>
+			</array>
+		</dict>
 		<key>comment</key>
 		<dict>
 			<key>patterns</key>
@@ -134,23 +174,31 @@
 				<dict>
 					<key>begin</key>
 					<string>(\({2})</string>
-					<key>captures</key>
+					<key>beginCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.expression.shell</string>
+							<string>punctuation.definition.string.begin.shell</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(\){2})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.shell</string>
+						</dict>
+					</dict>
 					<key>name</key>
-					<string>meta.scope.expression.shell</string>
+					<string>string.other.math.shell</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>$self</string>
+							<string>#arithmetic-evaluation</string>
 						</dict>
 					</array>
 				</dict>
@@ -843,6 +891,13 @@
 					</dict>
 					<key>name</key>
 					<string>string.other.math.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#arithmetic-evaluation</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>

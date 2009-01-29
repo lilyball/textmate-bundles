@@ -35,6 +35,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#list</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#operator</string>
 		</dict>
 		<dict>
@@ -894,7 +898,7 @@
 				</dict>
 			</array>
 		</dict>
-		<key>operator</key>
+		<key>list</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -904,6 +908,12 @@
 					<key>name</key>
 					<string>keyword.operator.list.shell</string>
 				</dict>
+			</array>
+		</dict>
+		<key>operator</key>
+		<dict>
+			<key>patterns</key>
+			<array>
 				<dict>
 					<key>match</key>
 					<string>(?&lt;=\s|:|=|^)~</string>

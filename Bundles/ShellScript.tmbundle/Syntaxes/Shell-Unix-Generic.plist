@@ -134,23 +134,8 @@
 			<string>#comment</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.shell</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.arguments.shell</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>\b([^ \t\n]*)\s*(\(\))</string>
-			<key>name</key>
-			<string>meta.function.shell</string>
+			<key>include</key>
+			<string>#function-definition</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -290,6 +275,31 @@
 							<string>$self</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>function-definition</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.shell</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.arguments.shell</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b([^ \t\n]*)\s*(\(\))</string>
+					<key>name</key>
+					<string>meta.function.shell</string>
 				</dict>
 			</array>
 		</dict>

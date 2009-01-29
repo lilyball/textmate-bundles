@@ -122,12 +122,8 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>comment</key>
-							<string>do we want a special rule for ( expr )?</string>
-							<key>match</key>
-							<string>==|!=|&amp;&amp;|!|\|\|</string>
-							<key>name</key>
-							<string>keyword.operator.logical.shell</string>
+							<key>include</key>
+							<string>#logical-expression</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -907,6 +903,20 @@
 					<string>;|&amp;&amp;|&amp;|\|\|</string>
 					<key>name</key>
 					<string>keyword.operator.list.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>logical-expression</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>do we want a special rule for ( expr )?</string>
+					<key>match</key>
+					<string>==|!=|&amp;&amp;|!|\|\|</string>
+					<key>name</key>
+					<string>keyword.operator.logical.shell</string>
 				</dict>
 			</array>
 		</dict>

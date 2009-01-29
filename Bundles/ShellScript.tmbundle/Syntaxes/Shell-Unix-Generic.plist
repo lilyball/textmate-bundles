@@ -914,7 +914,13 @@
 					<key>comment</key>
 					<string>do we want a special rule for ( expr )?</string>
 					<key>match</key>
-					<string>==|!=|&amp;&amp;|!|\|\|</string>
+					<string>=[=~]?|!=?|&lt;|&gt;|&amp;&amp;|\|\|</string>
+					<key>name</key>
+					<string>keyword.operator.logical.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>-(nt|ot|ef|eq|ne|l[te]|g[te]|[a-hknoprstuwxzOGLSN])</string>
 					<key>name</key>
 					<string>keyword.operator.logical.shell</string>
 				</dict>

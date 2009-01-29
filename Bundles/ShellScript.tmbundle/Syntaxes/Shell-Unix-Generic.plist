@@ -1217,6 +1217,32 @@
 					<string>\}</string>
 					<key>name</key>
 					<string>variable.other.bracket.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>match</key>
+							<string>!|:[-=?]?|\*|@|#{1,2}|%{1,2}|/</string>
+							<key>name</key>
+							<string>keyword.operator.expansion.shell</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.array.shell</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.section.array.shell</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(\[)([^\]]+)(\])</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

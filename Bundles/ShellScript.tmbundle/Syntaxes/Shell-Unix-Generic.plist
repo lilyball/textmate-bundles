@@ -81,6 +81,10 @@
 			<key>include</key>
 			<string>#keyword</string>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>#support</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
@@ -1724,6 +1728,24 @@
 							<string>constant.character.escape.control-char.shell</string>
 						</dict>
 					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>support</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>:|\.</string>
+					<key>name</key>
+					<string>support.function.builtin.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b(?:alias|bg|bind|break|builtin|caller|cd|command|compgen|complete|declare|dirs|disown|echo|enable|eval|exec|exit|false|fc|fg|getopts|hash|help|history|jobs|kill|let|local|logout|popd|printf|pushd|pwd|read|readonly|set|shift|shopt|source|suspend|test|times|trap|true|type|typeset|ulimit|umask|unalias|unset|wait)\b</string>
+					<key>name</key>
+					<string>support.function.builtin.shell</string>
 				</dict>
 			</array>
 		</dict>

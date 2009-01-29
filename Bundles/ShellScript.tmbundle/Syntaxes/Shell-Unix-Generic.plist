@@ -16,9 +16,9 @@
 	<key>firstLineMatch</key>
 	<string>^#!.*(bash|zsh|sh|tcsh)</string>
 	<key>foldingStartMarker</key>
-	<string>(?&lt;!\$)\{|\b(do|if|case)\b</string>
+	<string>\b(if|case)\b|(\{|\b(do)\b)$</string>
 	<key>foldingStopMarker</key>
-	<string>\}|\b(done|fi|esac)\b</string>
+	<string>^\s*(\}|(done|fi|esac)\b)</string>
 	<key>keyEquivalent</key>
 	<string>^~S</string>
 	<key>name</key>

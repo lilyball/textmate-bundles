@@ -220,7 +220,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\b(function)\s+(\S+)(?:\s*(\(\)))?</string>
+					<string>\b(function)\s+((?:[^\s\\]|\\.)+)(?:\s*(\(\)))?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -261,7 +261,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(\S+)\s*(\(\))</string>
+					<string>\b((?:[^\s\\]|\\.)+)\s*(\(\))</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

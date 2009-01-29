@@ -98,12 +98,8 @@
 			<string>#herestring</string>
 		</dict>
 		<dict>
-			<key>comment</key>
-			<string>valid: &amp;&gt;word &gt;&amp;word &gt;word [n]&gt;&amp;[n] [n]&lt;word [n]&gt;word [n]&gt;&gt;word [n]&lt;&amp;word (last one is duplicate)</string>
-			<key>match</key>
-			<string>&amp;&gt;|\d*&gt;&amp;\d*|\d*(&gt;&gt;|&gt;|&lt;)|\d*&lt;&amp;|\d*&lt;&gt;</string>
-			<key>name</key>
-			<string>keyword.operator.redirect.shell</string>
+			<key>include</key>
+			<string>#redirection</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -901,6 +897,20 @@
 					</dict>
 					<key>name</key>
 					<string>string.interpolated.process-substitution.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>redirection</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>comment</key>
+					<string>valid: &amp;&gt;word &gt;&amp;word &gt;word [n]&gt;&amp;[n] [n]&lt;word [n]&gt;word [n]&gt;&gt;word [n]&lt;&amp;word (last one is duplicate)</string>
+					<key>match</key>
+					<string>&amp;&gt;|\d*&gt;&amp;\d*|\d*(&gt;&gt;|&gt;|&lt;)|\d*&lt;&amp;|\d*&lt;&gt;</string>
+					<key>name</key>
+					<string>keyword.operator.redirect.shell</string>
 				</dict>
 			</array>
 		</dict>

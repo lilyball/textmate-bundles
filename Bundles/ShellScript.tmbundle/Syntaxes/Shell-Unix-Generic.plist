@@ -84,6 +84,87 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>case-clause</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?=\S)</string>
+					<key>end</key>
+					<string>;;</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.case-clause.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.scope.case-clause.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(\(|(?=\S))</string>
+							<key>captures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.case-pattern.shell</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\)</string>
+							<key>name</key>
+							<string>meta.scope.case-pattern.shell</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>\|</string>
+									<key>name</key>
+									<string>punctuation.separator.pipe-sign.shell</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#string</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#variable</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#interpolation</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#pathname</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?&lt;=\))</string>
+							<key>end</key>
+							<string>(?=;;)</string>
+							<key>name</key>
+							<string>meta.scope.case-clause-body.shell</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>$self</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>comment</key>
 		<dict>
 			<key>patterns</key>
@@ -1326,6 +1407,10 @@
 					<string>meta.scope.case-block.shell</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>include</key>
+							<string>#case-clause</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>$self</string>

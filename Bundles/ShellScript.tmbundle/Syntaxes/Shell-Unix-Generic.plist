@@ -39,10 +39,6 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#operator</string>
-		</dict>
-		<dict>
-			<key>include</key>
 			<string>#compound-command</string>
 		</dict>
 		<dict>
@@ -72,6 +68,10 @@
 		<dict>
 			<key>include</key>
 			<string>#redirection</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#pathname</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -1199,7 +1199,7 @@
 				</dict>
 			</array>
 		</dict>
-		<key>operator</key>
+		<key>pathname</key>
 		<dict>
 			<key>patterns</key>
 			<array>
@@ -1208,6 +1208,48 @@
 					<string>(?&lt;=\s|:|=|^)~</string>
 					<key>name</key>
 					<string>keyword.operator.tilde.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\*|\?</string>
+					<key>name</key>
+					<string>keyword.operator.glob.shell</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>([?*+@!])(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.extglob.shell</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.extglob.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.extglob.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.structure.extglob.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

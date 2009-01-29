@@ -80,46 +80,6 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>arithmetic-evaluation</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#variable</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\+{1,2}|-{1,2}|!|~|\*{1,2}|/|%|&lt;[&lt;=]?|&gt;[&gt;=]?|==|!=|^|\|{1,2}|&amp;{1,2}|\?|\:|,|=|[*/%+\-&amp;^|]=|&lt;&lt;=|&gt;&gt;=</string>
-					<key>name</key>
-					<string>keyword.operator.arithmetic.shell</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>0[xX]\h+</string>
-					<key>name</key>
-					<string>constant.numeric.hex.shell</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>0\d+</string>
-					<key>name</key>
-					<string>constant.numeric.octal.shell</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\d{1,2}#[0-9a-zA-Z@_]+</string>
-					<key>name</key>
-					<string>constant.numeric.other.shell</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\d+</string>
-					<key>name</key>
-					<string>constant.numeric.integer.shell</string>
-				</dict>
-			</array>
-		</dict>
 		<key>comment</key>
 		<dict>
 			<key>patterns</key>
@@ -198,7 +158,7 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#arithmetic-evaluation</string>
+							<string>#math</string>
 						</dict>
 					</array>
 				</dict>
@@ -1079,7 +1039,7 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#arithmetic-evaluation</string>
+							<string>#math</string>
 						</dict>
 					</array>
 				</dict>
@@ -1196,6 +1156,46 @@
 					<string>-(nt|ot|ef|eq|ne|l[te]|g[te]|[a-hknoprstuwxzOGLSN])</string>
 					<key>name</key>
 					<string>keyword.operator.logical.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>math</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\+{1,2}|-{1,2}|!|~|\*{1,2}|/|%|&lt;[&lt;=]?|&gt;[&gt;=]?|==|!=|^|\|{1,2}|&amp;{1,2}|\?|\:|,|=|[*/%+\-&amp;^|]=|&lt;&lt;=|&gt;&gt;=</string>
+					<key>name</key>
+					<string>keyword.operator.arithmetic.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>0[xX]\h+</string>
+					<key>name</key>
+					<string>constant.numeric.hex.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>0\d+</string>
+					<key>name</key>
+					<string>constant.numeric.octal.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\d{1,2}#[0-9a-zA-Z@_]+</string>
+					<key>name</key>
+					<string>constant.numeric.other.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\d+</string>
+					<key>name</key>
+					<string>constant.numeric.integer.shell</string>
 				</dict>
 			</array>
 		</dict>

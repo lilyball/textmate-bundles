@@ -1392,14 +1392,31 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
+							<key>begin</key>
 							<string>\b(?:in)\b</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.shell</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=\b(?:esac)\b)</string>
 							<key>name</key>
-							<string>keyword.control.shell</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#case-clause</string>
+							<string>meta.scope.case-body.shell</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#case-clause</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>$self</string>
+								</dict>
+							</array>
 						</dict>
 						<dict>
 							<key>include</key>

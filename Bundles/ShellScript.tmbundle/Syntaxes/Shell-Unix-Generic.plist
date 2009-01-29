@@ -26,22 +26,8 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>match</key>
-			<string>\b(time)\b</string>
-			<key>name</key>
-			<string>support.function.shell</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>;|&amp;&amp;|&amp;|\|\|</string>
-			<key>name</key>
-			<string>keyword.operator.list.shell</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>[|!]</string>
-			<key>name</key>
-			<string>keyword.operator.pipe.shell</string>
+			<key>include</key>
+			<string>#operator</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -50,12 +36,6 @@
 		<dict>
 			<key>include</key>
 			<string>#string</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s|:|=|^)~</string>
-			<key>name</key>
-			<string>keyword.operator.tilde.shell</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -907,6 +887,36 @@
 					<string>\b(?:export)\b</string>
 					<key>name</key>
 					<string>storage.modifier.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>operator</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(time)\b</string>
+					<key>name</key>
+					<string>support.function.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>;|&amp;&amp;|&amp;|\|\|</string>
+					<key>name</key>
+					<string>keyword.operator.list.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>[|!]</string>
+					<key>name</key>
+					<string>keyword.operator.pipe.shell</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=\s|:|=|^)~</string>
+					<key>name</key>
+					<string>keyword.operator.tilde.shell</string>
 				</dict>
 			</array>
 		</dict>

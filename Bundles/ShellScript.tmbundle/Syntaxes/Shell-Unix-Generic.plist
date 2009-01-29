@@ -1417,6 +1417,29 @@
 						</dict>
 					</array>
 				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b(if)\b</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\b(fi)\b</string>
+					<key>name</key>
+					<string>meta.scope.if-block.shell</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>$self</string>
+						</dict>
+					</array>
+				</dict>
 			</array>
 		</dict>
 		<key>math</key>

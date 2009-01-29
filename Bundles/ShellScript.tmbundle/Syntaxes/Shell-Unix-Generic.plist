@@ -130,18 +130,8 @@
 			<string>keyword.operator.redirect.shell</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.shell</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?&lt;!\$)(#)(?!\{).*$\n?</string>
-			<key>name</key>
-			<string>comment.line.number-sign.shell</string>
+			<key>include</key>
+			<string>#comment</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -177,6 +167,26 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>comment</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.shell</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(?&lt;!\$)(#)(?!\{).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.number-sign.shell</string>
+				</dict>
+			</array>
+		</dict>
 		<key>compound-command</key>
 		<dict>
 			<key>patterns</key>

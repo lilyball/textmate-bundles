@@ -908,30 +908,6 @@
 						</dict>
 					</array>
 				</dict>
-				<dict>
-					<key>begin</key>
-					<string>[&gt;&lt;]\(</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.begin.shell</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.end.shell</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>string.interpolated.process-substitution.shell</string>
-				</dict>
 			</array>
 		</dict>
 		<key>keyword</key>
@@ -1018,6 +994,30 @@
 		<dict>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>begin</key>
+					<string>[&gt;&lt;]\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.begin.shell</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.string.end.shell</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>string.interpolated.process-substitution.shell</string>
+				</dict>
 				<dict>
 					<key>comment</key>
 					<string>valid: &amp;&gt;word &gt;&amp;word &gt;word [n]&gt;&amp;[n] [n]&lt;word [n]&gt;word [n]&gt;&gt;word [n]&lt;&amp;word (last one is duplicate)</string>

@@ -1723,7 +1723,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>:|\.</string>
+					<string>(?&lt;=^|\s)(?::|\.)(?=\s|;|&amp;|$)</string>
 					<key>name</key>
 					<string>support.function.builtin.shell</string>
 				</dict>

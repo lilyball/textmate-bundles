@@ -1376,20 +1376,10 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(case)\s+((?:[^\s\\]|\\.)+)\s+(in)\b</string>
-					<key>beginCaptures</key>
+					<string>\b(case)\b</string>
+					<key>captures</key>
 					<dict>
 						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.control.shell</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>variable.other.loop.shell</string>
-						</dict>
-						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.control.shell</string>
@@ -1397,18 +1387,16 @@
 					</dict>
 					<key>end</key>
 					<string>\b(esac)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.control.shell</string>
-						</dict>
-					</dict>
 					<key>name</key>
 					<string>meta.scope.case-block.shell</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>match</key>
+							<string>\b(?:in)\b</string>
+							<key>name</key>
+							<string>keyword.control.shell</string>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#case-clause</string>

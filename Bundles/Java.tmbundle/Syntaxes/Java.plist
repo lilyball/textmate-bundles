@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -317,7 +317,7 @@
 		<key>class</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=\w?[^=;]*(?:class|(?:@)?interface)\s+\w+)</string>
+			<string>(?=\w?[^=;]*(?:class|(?:@)?interface|enum)\s+\w+)</string>
 			<key>end</key>
 			<string>}</string>
 			<key>endCaptures</key>
@@ -355,7 +355,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(class|(?:@)?interface)\s+(\w+)</string>
+					<string>(class|(?:@)?interface|enum)\s+(\w+)</string>
 					<key>name</key>
 					<string>meta.class.identifier.java</string>
 				</dict>
@@ -441,6 +441,10 @@
 				<dict>
 					<key>include</key>
 					<string>#class</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#enums</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -617,6 +621,52 @@
 					<string>(\.)?\b([A-Z][A-Z0-9_]+)(?!&lt;|\.class|\s*\w+\s*=)\b</string>
 					<key>name</key>
 					<string>constant.other.java</string>
+				</dict>
+			</array>
+		</dict>
+		<key>enums</key>
+		<dict>
+			<key>begin</key>
+			<string>^(?=\s*[A-Z0-9_]+\s*({|\(|,))</string>
+			<key>end</key>
+			<string>(?=;|})</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\w+</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.enum.java</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=,|;|})</string>
+					<key>name</key>
+					<string>meta.enum.java</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#parens</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>{</string>
+							<key>end</key>
+							<string>}</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#class-body</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+text = ENV['TM_SELECTED_TEXT']
+
+# kill the script if we don't have any text
+exit(0) if text.nil? || text.strip().empty?
+
+output = ""
+
+enum = 0
+enumRegex = /^(\s*)([a-zA-Z_]\w*)(?:\s*=\s*(-?[0-9]+))?(.*)$/
+first = true
+
+text.each_line { |line|
+	line.rstrip!
+
+	indent = line[enumRegex, 1]
+	name = line[enumRegex, 2]
+	value = line[enumRegex, 3]
+	misc = line[enumRegex, 4]
+	
+	if name.nil? then
+		# skip invalid lines (may be comments)
+		output &lt;&lt; "#{line}\n"
+		next
+	end
+	
+	indent = "" if indent.nil?
+	misc = "" if misc.nil?
+	enum = value.to_i() if !value.nil?
+	
+	if first then
+		output &lt;&lt; "#{indent}Const ${1}#{name} = #{enum}#{misc}\n"
+		first = false
+	else
+		output &lt;&lt; "#{indent}Const $1#{name} = #{enum}#{misc}\n"
+	end
+	
+	enum += 1
+}
+
+output.chomp!
+output &lt;&lt; "$0"
+
+print output
+</string>
+	<key>fallbackInput</key>
+	<string>none</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Enum Constants from Selection</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>uuid</key>
+	<string>98B3477F-E57C-448F-88D2-0C6E2C75C593</string>
+</dict>
+</plist>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Indentation (Excluded Scopes)</string>
+	<key>scope</key>
+	<string>source.blitzmax meta.extern.blitzmax</string>
+	<key>settings</key>
+	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>(?xi)^\s*\bend\s*(extern|type)\b</string>
+		<key>increaseIndentPattern</key>
+		<string>(?xi)^\s*\b(?&lt;!end|end\s)(extern|type)\b</string>
+		<key>indentNextLinePattern</key>
+		<string>(?xi)^\s*[^\s].*\.\.\s*$</string>
+	</dict>
+	<key>uuid</key>
+	<string>2AB9DFF0-D6E3-4642-BD35-1210B70462CD</string>
+</dict>
+</plist>

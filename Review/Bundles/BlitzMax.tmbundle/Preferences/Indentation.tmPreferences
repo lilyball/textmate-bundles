@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Indentation</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>settings</key>
+	<dict>
+		<key>decreaseIndentPattern</key>
+		<string>(?xi)
+	^\s*\b(
+	# end &lt;keyword&gt;
+		end\s*(function|method|type|select|while|extern|if|try) |
+	# else/if
+		else | else\s*if |
+		catch | wend | until | forever | next
+	)\b</string>
+		<key>increaseIndentPattern</key>
+		<string>(?xi)
+	^\s*\b(
+		(?&lt;!end|end\s)(function|method|type|select|while|extern|try|if) |
+		else|else\s*if |
+		for | catch | repeat
+	)\b</string>
+		<key>indentNextLinePattern</key>
+		<string>(?xi)\.\.\s*('.*)?$</string>
+	</dict>
+	<key>uuid</key>
+	<string>6D8F6BA0-82AA-4259-8127-CFC30F26CBCF</string>
+</dict>
+</plist>

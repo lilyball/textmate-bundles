@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+if ENV['TM_BLITZMAX'].nil? then
+	print "TM_BLITZMAX shell variable not set.\n\nPlease see the Help (⌃⌘T Help) command for more information."
+	exit
+end
+
+selection = ENV['TM_SELECTED_TEXT']
+if selection.nil? then
+	selection = ENV['TM_CURRENT_WORD']
+end
+
+bmaxPath = ENV['TM_BLITZMAX']
+cmdTxt = bmaxPath+"/docs/html/Modules/commands.txt"
+
+if File.exist?(cmdTxt) then
+	cmdTxtIO = File.new(cmdTxt, 'r')
+	cmdRegexWDoc = /^(([_a-zA-Z]\w*).+) : ([^|]*)\|.+$/
+	cmdRegexNoDoc = /^(([_a-zA-Z]\w*).+)\|.+$/
+	cmdTxtIO.each_line	{ |line|
+		if line =~ cmdRegexWDoc then
+			if line[cmdRegexWDoc, 2].casecmp(selection) == 0 then
+				puts "#{line[cmdRegexWDoc, 1]}\n#{line[cmdRegexWDoc, 3]}"
+				break
+			end
+		elsif line =~ cmdRegexNoDoc then
+			if line[cmdRegexNoDoc, 2].casecmp(selection) == 0 then
+				puts line[cmdRegexNoDoc, 1]
+				break
+			end
+		end
+	}
+end
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^h</string>
+	<key>name</key>
+	<string>Documentation for Word</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>uuid</key>
+	<string>D8B7E910-1FD3-41E5-90CE-A35B9413B72C</string>
+</dict>
+</plist>

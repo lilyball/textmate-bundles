@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string># if TM_BLITZMAX is not set, assume bmk to be in the user's PATH
+if [[ -n "$TM_BLITZMAX" ]] ; then
+	BMK="$TM_BLITZMAX/bin/bmk"
+else
+	exit_show_tool_tip \
+"TM_BLITZMAX shell variable not set.
+
+Please see the Help (⌃⌘T Help) command for more information."
+fi
+
+BMAX_COMPILE_DIR=$TM_DIRECTORY
+
+# set up
+if [[ -n "$TM_BLITZMAX_MAIN_FILE" &amp;&amp; -n "$TM_PROJECT_DIRECTORY" ]] ; then
+	# Project build
+	cd "$TM_PROJECT_DIRECTORY"
+	BMAX_COMPILE_DIR=$TM_PROJECT_DIRECTORY
+	BMAX_COMPILE_PATH=$TM_BLITZMAX_MAIN_FILE
+else
+	if [[ -n "$TM_DIRECTORY" ]] ; then
+		# Change to the file's directory if possible
+		cd "$TM_DIRECTORY"
+	fi
+	BMAX_COMPILE_PATH=$TM_FILEPATH
+fi
+
+# fail if the path is not set
+if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
+
+	# compensate for Win32 / E paths
+	if [[ "$MACHTYPE" == "i686-pc-cygwin" ]] ; then
+		BMAX_COMPILE_PATH=`cygpath -m "$BMAX_COMPILE_PATH"`
+	fi
+
+	#scan for build options
+	BUILDTYPE="makeapp"
+	APPTYPE="console"
+	BUILDMODE="DEBUG"
+	WITHTHREADS="NO"
+	RUNAFTER="NO"
+
+	for BUILDOPT in `grep -hiE -e "^[^\\w\\d]*'[^\\w\\d]*buildopt:[^\\d\\w]*\\w+" "$BMAX_COMPILE_PATH" | \
+		ruby -w -e "puts STDIN.read().downcase().gsub(/^\s*'\s*buildopt:\s*/,\"\")"` ;
+	do
+		case "$BUILDOPT" in
+		'threads')
+			WITHTHREADS="YES"
+		;;
+		'debug')
+			BUILDMODE="DEBUG"
+		;;
+		'release')
+			BUILDMODE="RELEASE"
+		;;
+		'library')
+			BUILDTYPE="makelib"
+			APPTYPE=""
+		;;
+		'gui')
+			BUILDTYPE="makeapp"
+			APPTYPE="gui"
+		;;
+		'console')
+			BUILDTYPE="makeapp"
+			APPTYPE=""
+		;;
+		'execute')
+			RUNAFTER='YES'
+		;;
+		esac
+	done
+
+	# application type (ignore if makelib)
+	if [[ "$APPTYPE" == "gui" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then
+		BUILDOPTS="$BUILDOPTS -t $APPTYPE"
+		echo "Building app bundle&lt;br/&gt;"
+	elif [[ "$BUILDTYPE" == "makelib" ]] ; then
+		echo "Building library&lt;br/&gt;"
+	else
+		echo "Building console app&lt;br/&gt;"
+	fi
+
+	# build mode
+	if [[ "$BUILDMODE" == "DEBUG" ]] ; then
+		BUILDOPTS="$BUILDOPTS -d"
+		echo "Debug enabled&lt;br/&gt;"
+	elif [[ "$BUILDMODE" == "RELEASE" ]] ; then
+		BUILDOPTS="$BUILDOPTS -r"
+	fi
+
+	# threading
+	if [[ "$WITHTHREADS" == "YES" ]] ; then
+		BUILDOPTS="$BUILDOPTS -h"
+		echo "Threading enabled&lt;br/&gt;"
+	fi
+
+	# build/fail
+	if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
+		echo "&lt;pre&gt;$ bmk $BUILDTYPE $BUILDOPTS \"$BMAX_COMPILE_PATH\"&lt;/pre&gt;"
+		echo "&lt;pre&gt;"
+		$BMK $BUILDTYPE $BUILDOPTS "$BMAX_COMPILE_PATH" 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
+		
+		if [[ "$RUNAFTER" == "YES" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then
+			BMAX_APP_FILE=`basename "$BMAX_COMPILE_PATH" | cut -d"." -f1`
+			if [[ "$MACHTYPE" == "i686-pc-cygwin" ]] ; then
+				cmd /c "$BMAX_COMPILE_DIR/$BMAX_APP_FILE.exe"
+			elif [[ "$APPTYPE" == "gui" ]] ; then
+				open "$BMAX_COMPILE_DIR/$BMAX_APP_FILE.app"
+			elif [[ "$APPTYPE" == "console" ]] ; then
+				open "$BMAX_COMPILE_DIR/$BMAX_APP_FILE"
+			fi
+		fi
+	fi
+
+else
+	pre "Failed to build application"
+fi
+
+exit_show_html</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Build App</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>uuid</key>
+	<string>993D4D7B-2E51-4EE1-8ED4-3A3DC87540F1</string>
+</dict>
+</plist>

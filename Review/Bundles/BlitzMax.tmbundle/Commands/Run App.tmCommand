@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>BMAX_COMPILE_DIR=$TM_DIRECTORY
+
+# set up
+if [[ -n "$TM_BLITZMAX_MAIN_FILE" &amp;&amp; -n "$TM_PROJECT_DIRECTORY" ]] ; then
+	# Project build
+	cd "$TM_PROJECT_DIRECTORY"
+	BMAX_COMPILE_DIR=$TM_PROJECT_DIRECTORY
+	BMAX_COMPILE_PATH=$TM_BLITZMAX_MAIN_FILE
+else
+	if [[ -n "$TM_DIRECTORY" ]] ; then
+		# Change to the file's directory if possible
+		cd "$TM_DIRECTORY"
+	fi
+	BMAX_COMPILE_PATH=$TM_FILEPATH
+fi
+
+# fail if the path is not set
+if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
+
+	# compensate for Win32 / E paths
+	if [[ "$MACHTYPE" == "i686-pc-cygwin" ]] ; then
+		BMAX_COMPILE_PATH=`cygpath -m "$BMAX_COMPILE_PATH"`
+	fi
+
+	#scan for build options
+	BUILDTYPE="makeapp"
+	APPTYPE="console"
+
+	for BUILDOPT in `grep -hiE -e "^[^\\w\\d]*'[^\\w\\d]*buildopt:[^\\d\\w]*\\w+" "$BMAX_COMPILE_PATH" | \
+		ruby -w -e "puts STDIN.read().downcase().gsub(/^\s*'\s*buildopt:\s*/,\"\")"` ;
+	do
+		case "$BUILDOPT" in
+		'library')
+			BUILDTYPE="makelib"
+			APPTYPE=""
+		;;
+		'gui')
+			BUILDTYPE="makeapp"
+			APPTYPE="gui"
+		;;
+		'console')
+			BUILDTYPE="makeapp"
+			APPTYPE=""
+		;;
+		esac
+	done
+
+	# build/fail
+	if [[ -n "$BMAX_COMPILE_PATH" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then
+		BMAX_APP_FILE=`basename "$BMAX_COMPILE_PATH" | cut -d"." -f1`
+		if [[ "$MACHTYPE" == "i686-pc-cygwin" ]] ; then
+			# win32/cygwin
+			cmd /c "$BMAX_COMPILE_DIR/$BMAX_APP_FILE.exe"
+		elif [[ "$APPTYPE" == "gui" ]] ; then
+			# mac os GUI
+			open "$BMAX_COMPILE_DIR/$BMAX_APP_FILE.app"
+		elif [[ "$APPTYPE" == "console" ]] ; then
+			# mac os console
+			open "$BMAX_COMPILE_DIR/$BMAX_APP_FILE"
+		fi
+	fi
+else
+	pre "Failed to run application"
+fi
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Run App</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>uuid</key>
+	<string>2839A351-F340-4669-BD49-05772C5190F5</string>
+</dict>
+</plist>

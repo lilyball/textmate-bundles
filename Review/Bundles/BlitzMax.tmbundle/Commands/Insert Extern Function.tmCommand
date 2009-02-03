@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+method_name = ENV['TM_CURRENT_WORD']
+if method_name.nil? then
+	method_name = "Name"
+end
+
+print "Function #{method_name}($1)"
+</string>
+	<key>fallbackInput</key>
+	<string>word</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>$</string>
+	<key>name</key>
+	<string>Insert Extern Function</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.blitzmax meta.extern.blitzmax</string>
+	<key>uuid</key>
+	<string>D3CF0F11-8AA1-436C-BB8A-63F8B63B1A6D</string>
+</dict>
+</plist>

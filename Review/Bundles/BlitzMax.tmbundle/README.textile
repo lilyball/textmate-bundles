@@ -1,0 +1,76 @@
+h1. BlitzMax TextMate Bundle
+
+h2. Install
+
+h4. With Git
+
+Clone the git repository into _/Users/you/Library/Application Support/TextMate/Bundles/BlitzMax.tmbundle_.
+
+For example:
+
+<pre>cd /Users/you/Library/Application Support/TextMate/Bundles/
+git clone git://github.com/nilium/blitzmax.tmbundle.git</pre>
+
+
+h4. Without Git
+
+To install the bundle, download the bundle as a ZIP/TAR file from GitHub (see links) and extract the contents of the archive to _/Users/you/Library/Application Support/TextMate/Bundles/BlitzMax.tmbundle_.  You will have to create the BlitzMax.tmbundle directory yourself.
+
+h4. Setup
+
+Once you've downloaded and installed the bundle, open TextMate and go into your preferences.  Under the Advanced page, select 'Shell Variables' and add the variable TM_BLITZMAX.  Set its value to the path to the root of your BlitzMax directory (trailing slash not needed).  For example, _/Developer/Applications/BlitzMax_.
+
+h2. Using the Bundle
+
+h4. Projects
+
+If you have a BlitzMax project managed in TextMate, you can set the TM_BLITZMAX_MAIN_FILE to the main file of your project in your Project's information pane (click the 'i' button at the bottom of the project drawer).  The path to the main file should be relative to the root project directory.  If the project directory (TM_PROJECT_DIRECTORY) or TM_BLITZMAX_MAIN_FILE is not set, files will build normally.
+
+h4. Build Options
+
+When building BMax source code using the Build App command, you can toggle certain options to be passed to bmk via build options left in source comments.  These comments are formatted as such:
+
+<pre>'buildopt:[option]</pre>
+
+There are seven build options you can toggle:
+
+* _console_ - Builds the source code as a console application.
+* _gui_ - Builds the source code as a GUI application bundle.
+* _library_ - Builds the source code as a library (refer to bmk's "makelib" command).
+* _debug_ - Enables debugging.
+* _release_ - Disables debugging.
+* _threads_ - Enables threading.  Keep in mind that this is still an experimental feature in BlitzMax.
+* _execute_ - Runs the application after building.  Same result as using the Run App command.
+
+These comments can be located anywhere in your main source file, but must always be on a line of their own.  You may have whitespace between `' buildopt:` and the option name.  For example, the following will not work:
+
+<pre>Function Foo:Int( Bar:String ) 'buildopt: threads</pre>
+
+but this will:
+
+<pre>	' buildopt: threads
+Function Foo:Int( Bar:String )</pre>
+
+h4. Building Modules
+
+Module building is split into two commands:
+
+* *Build Modules*<br/>
+This builds modules regularly, without threading enabled.
+* *Build Modules (Threaded)*<br/>
+This builds modules with threading enabled.  Bear in mind that threading is an experimental feature in BlitzMax at the time of this writing.
+
+h2. Notes
+
+This bundle is written for use with TextMate (and, optionally, use in the E text editor- changes may have to be made for Cygwin support however [check cygpath]).  If you make any changes to it you consider valuable, I would encourage you to submit them.
+
+There is currently a small amount of snippets, and I've tried to write them such that they do actually benefit you in writing code.
+
+If you have any questions, you can contact me at ncower AT gmail DOT com.
+
+h2. Links
+
+* "BlitzMax":http://www.blitzbasic.com
+* "GitHub Repo":http://github.com/nilium/blitzmax.tmbundle/tree/master
+* "TextMate":http://www.macromates.com
+* "E Text Editor":http://www.e-texteditor.com (Essentially TextMate for Windows)

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "BlitzMax Bundle Help" "BlitzMax"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'MARKDOWN'
+
+# Setup
+
+Before you can use the BlitzMax bundle, you must first set the TM\_BLITZMAX shell variable.
+
+To do this, open TextMate's preferences (⌘,) and navigate to the _Advanced_ pane.  Select the _Shell Variables_ tab and add the TM\_BLITZMAX variable, where its value is the location of your BlitzMax installation.  For example, "/Developer/Applications/BlitzMax".  Do not include a trailing slash in the path.
+
+This variable allows you to build your applications (⌘B), modules, documentation, and view documentation for the current word you have selected (^H).
+
+# Using Projects
+
+When using projects, you can set the TM\_BLITZMAX\_MAIN\_FILE shell variable for your project and specify the main BMX file to build when you use the Build App (⌘B) command.
+
+To set this variable, open the project drawer and deselect any files, then click the "i" button at the bottom of the drawer to open the project info.  Add the TM\_BLITZMAX\_MAIN\_FILE variable, and set its value to the file relative to the main file project's directory.
+
+# Build Options
+
+When using the Build App and Run App commands, your main source file (either the file you have open or the one specified by TM\_BLITZMAX\_MAIN\_FILE) is quickly scanned for a set of build options to determine how to build and/or execute the results.  These build options are available under the Build Options snippets, and are as follows:
+
+* **Threaded**  
+When building the application, include support for multithreading.  You must have compiled your modules with threading as well for this to work, otherwise you will receive linker errors.
+* **Release &amp; Debug**  
+Specified whether or not to compile the program in debug mode.
+* **GUI Application**  
+Builds an application bundle instead of a simple executable file.
+* **Console Application**  
+Builds a simple executable application.  The opposite of GUI application, essentially.
+* **Library**  
+_Attempts_ to build a library.  This is currently unsupported in BlitzMax and is included for potential future support.  Currently passes the (accepted) makelib instruction to bmk, results may vary.
+* **Run After Build**  
+If included, executes the resulting output immediately after building it.
+
+Build options are formatted as comments inside your source code and do not have any meaning outside of this bundle.  They are written as
+   ' buildopt: option
+where 'option' is the option you're enabling for the Build &amp; Run commands.  The comments must be on their own lines with only whitespace preceeding them.</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>uuid</key>
+	<string>6B1E7623-749F-46BD-9115-7A83FAC7452F</string>
+</dict>
+</plist>

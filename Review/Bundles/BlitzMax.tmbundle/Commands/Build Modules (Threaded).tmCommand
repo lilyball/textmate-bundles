@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># Assume bmk to be in the user's path if TM_BLITZMAX is not set
+if [[ -n "$TM_BLITZMAX" ]] ; then
+	"$TM_BLITZMAX/bin/bmk" makemods -h 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
+	exit_show_html
+else
+	exit_show_tool_tip \
+"TM_BLITZMAX shell variable not set.
+
+Please see the Help (⌃⌘T Help) command for more information."
+fi</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Build Modules (Threaded)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>runEnvironment</key>
+	<string>windows</string>
+	<key>scope</key>
+	<string>source.blitzmax</string>
+	<key>uuid</key>
+	<string>794154C5-BB29-4109-A430-7A79E39098AE</string>
+	<key>winCommand</key>
+	<string>bmk makemods -h</string>
+</dict>
+</plist>

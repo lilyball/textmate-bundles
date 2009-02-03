@@ -27,6 +27,36 @@
 	<array>
 		<dict>
 			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>$</string>
+			<key>name</key>
+			<string>comment.line.apostrophe.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#url_content</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?i)\b(?&lt;!end|end\s)rem\b</string>
+			<key>end</key>
+			<string>(?i)\bend\s?rem\b</string>
+			<key>name</key>
+			<string>comment.block.rem.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#url_content</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
 			<string>(?i)\b(?:(local)|(global))\s*</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -60,6 +90,25 @@
 			</array>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.constant.blitzmax</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.other.blitzmax</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?i)(const)\s+([a-zA-Z_]\w*)</string>
+			<key>name</key>
+			<string>meta.constant.blitzmax</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>(?i)\bptr\b</string>
 			<key>name</key>
@@ -72,29 +121,10 @@
 			<string>storage.modifier.variable.reference.blitzmax</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>'</string>
-			<key>end</key>
-			<string>$</string>
+			<key>match</key>
+			<string>(?i)^\s*\?(not\s+)?\w*</string>
 			<key>name</key>
-			<string>comment.line.apostrophe.blitzmax</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>[a-zA-Z_]\w*://\S*</string>
-					<key>name</key>
-					<string>meta.url.blitzmax</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(?i)\b(?&lt;!end|end\s)rem\b</string>
-			<key>end</key>
-			<string>(?i)\bend\s?rem\b</string>
-			<key>name</key>
-			<string>comment.block.rem.blitzmax</string>
+			<string>keyword.control.preprocessor.blitzmax</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -283,7 +313,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>storage.type.function.method.extern.blitzmax</string>
+									<string>storage.type.method.method.extern.blitzmax</string>
 								</dict>
 								<key>2</key>
 								<dict>
@@ -355,9 +385,47 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i)\b(import)\s+(?:((?:[a-zA-Z_]\w*\.?)+)|(?="))</string>
+			<string>(?i)\b(import)\s+((?:[a-zA-Z_]\w*\.?)+)</string>
 			<key>name</key>
-			<string>meta.import.blitzmax</string>
+			<string>meta.import.module.blitzmax</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(?i)\b(import)\s+(")</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.import.blitzmax</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>string.quoted.double.blitzmax</string>
+			<key>end</key>
+			<string>(")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.import.file.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string_content</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -398,46 +466,118 @@
 			<string>meta.module.blitzmax</string>
 		</dict>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(?i)\b(include)\s+(")</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.include.blitzmax</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
 			</dict>
-			<key>match</key>
-			<string>(?i)\b(include)\s+(?=")</string>
+			<key>contentName</key>
+			<string>string.quoted.double.blitzmax</string>
+			<key>end</key>
+			<string>(")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.include.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string_content</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(?i)\b(incbin)\s+(")</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.incbin.blitzmax</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
 			</dict>
-			<key>match</key>
-			<string>(?i)\b(incbin)\s+(?=")</string>
+			<key>contentName</key>
+			<string>string.quoted.double.blitzmax</string>
+			<key>end</key>
+			<string>(")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.incbin.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string_content</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>(?i)\b(moduleinfo)\s+(")</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.other.moduleinfo.blitzmax</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
 			</dict>
-			<key>match</key>
-			<string>(?i)\b(moduleinfo)\s+(?=")</string>
+			<key>contentName</key>
+			<string>string.quoted.double.blitzmax</string>
+			<key>end</key>
+			<string>(")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.quoted.double.blitzmax</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>meta.moduleinfo.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string_content</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -492,7 +632,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.function.method.blitzmax</string>
+							<string>storage.type.method.blitzmax</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -512,7 +652,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>storage.type.function.method.blitzmax</string>
+							<string>storage.type.method.blitzmax</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -792,27 +932,48 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i)\b(object|string|byte|short|int|long|float|double)\b</string>
-			<key>name</key>
-			<string>storage.type.blitzmax</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i)\b(null|pi|true|false)\b</string>
+			<string>(?i)\bpi\b</string>
 			<key>name</key>
 			<string>constant.language.blitzmax</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i)^\s*\?(not\s+)?\w*</string>
+			<string>(?i)\bnull\b</string>
 			<key>name</key>
-			<string>keyword.control.preprocessor.blitzmax</string>
+			<string>constant.language.null.blitzmax</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(((\$[0-9a-fA-F]+)|(\%[01]+))|(\b(?&lt;!%|\$)([0-9]+(\.[0-9]+)?)|(\.[0-9]+)))\b</string>
+			<string>(?i)\b(true|false)\b</string>
 			<key>name</key>
-			<string>constant.numeric.blitzmax</string>
+			<string>constant.language.boolean.blitzmax</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\$[0-9a-fA-F]{1,16})</string>
+			<key>name</key>
+			<string>constant.numeric.integer.hexadecimal.blitzmax</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\%[01]{1,128})</string>
+			<key>name</key>
+			<string>constant.numeric.integer.binary.blitzmax</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?x) (?&lt;! % | \$ ) (
+			        \b ([0-9]+ \. [0-9]+) |
+			        (\. [0-9]+)
+			    )</string>
+			<key>name</key>
+			<string>constant.numeric.float.blitzmax</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?x)\b(([0-9]+))</string>
+			<key>name</key>
+			<string>constant.numeric.integer.blitzmax</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -824,16 +985,8 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\~[0qnr~t]</string>
-					<key>name</key>
-					<string>constant.character.escape.blitzmax</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>[a-zA-Z_]\w*://[^\s"]*</string>
-					<key>name</key>
-					<string>meta.url.blitzmax</string>
+					<key>include</key>
+					<string>#string_content</string>
 				</dict>
 			</array>
 		</dict>
@@ -860,7 +1013,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.blitzmax</string>
+					<string>storage.type.class.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -881,20 +1034,6 @@
 			<string>(?i)\b\:(([a-zA-Z_]\w*)( (Ptr|Var))*)</string>
 			<key>name</key>
 			<string>meta.typename.blitzmax</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.constant.blitzmax</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?i)(const)\s+(?:[a-zA-Z_]\w*)</string>
-			<key>name</key>
-			<string>meta.constant.blitzmax</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -928,6 +1067,28 @@
 			</array>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>string_content</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\~[0qnr~t]</string>
+					<key>name</key>
+					<string>constant.character.escape.blitzmax</string>
+				</dict>
+			</array>
+		</dict>
+		<key>url_content</key>
+		<dict>
+			<key>match</key>
+			<string>[a-zA-Z_]\w*://\S*</string>
+			<key>name</key>
+			<string>meta.url.blitzmax</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.blitzmax</string>
 	<key>uuid</key>

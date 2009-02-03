@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>word=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
+	<string>#!/bin/bash
+word=${TM_SELECTED_TEXT:-$TM_CURRENT_WORD}
 
 try_man () {
 	if man -w "$word" &amp;&gt;/dev/null; then

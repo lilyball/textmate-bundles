@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>NAME="$(cat)"
+	<string>#!/bin/bash
+NAME="$(cat)"
 if [[ -z "$NAME" ]]; then
 	NAME='${1:function_name}'
 fi

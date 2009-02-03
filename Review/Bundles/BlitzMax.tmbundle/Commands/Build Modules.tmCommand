@@ -7,6 +7,9 @@
 	<key>command</key>
 	<string># Assume bmk to be in the user's path if TM_BLITZMAX is not set
 if [[ -n "$TM_BLITZMAX" ]] ; then
+	. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+	html_header "Build Modules" "BlitzMax"
+	
 	"$TM_BLITZMAX/bin/bmk" makemods 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
 	exit_show_html
 else

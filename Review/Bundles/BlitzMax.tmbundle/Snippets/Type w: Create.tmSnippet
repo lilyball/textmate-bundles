@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>Type ${1:TTypeName}${2/.+/ Extends /}${2:Object}
+	<string>Type ${1:TTypeName}${2/.+/ Extends /}${2:}
 	
 	Function Create:$1($3)
 		Local ${4:n${1/(.+)/\L$1/}}:$1 = New $1

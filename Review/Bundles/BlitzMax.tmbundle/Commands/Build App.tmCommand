@@ -31,6 +31,9 @@ else
 	BMAX_COMPILE_PATH=$TM_FILEPATH
 fi
 
+. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Build App" "$BMAX_COMPILE_PATH"
+
 # fail if the path is not set
 if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 
@@ -77,20 +80,22 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 		esac
 	done
 
+	echo "&lt;ul&gt;"
+
 	# application type (ignore if makelib)
 	if [[ "$APPTYPE" == "gui" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then
 		BUILDOPTS="$BUILDOPTS -t $APPTYPE"
-		echo "Building app bundle&lt;br/&gt;"
+		echo "&lt;li&gt;Building app bundle&lt;/li&gt;"
 	elif [[ "$BUILDTYPE" == "makelib" ]] ; then
-		echo "Building library&lt;br/&gt;"
+		echo "&lt;li&gt;Building library&lt;/li&gt;"
 	else
-		echo "Building console app&lt;br/&gt;"
+		echo "&lt;li&gt;Building console app&lt;/li&gt;"
 	fi
 
 	# build mode
 	if [[ "$BUILDMODE" == "DEBUG" ]] ; then
 		BUILDOPTS="$BUILDOPTS -d"
-		echo "Debug enabled&lt;br/&gt;"
+		echo "&lt;li&gt;Debug enabled&lt;/li&gt;"
 	elif [[ "$BUILDMODE" == "RELEASE" ]] ; then
 		BUILDOPTS="$BUILDOPTS -r"
 	fi
@@ -98,13 +103,14 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 	# threading
 	if [[ "$WITHTHREADS" == "YES" ]] ; then
 		BUILDOPTS="$BUILDOPTS -h"
-		echo "Threading enabled&lt;br/&gt;"
+		echo "&lt;li&gt;Threading enabled&lt;/li&gt;"
 	fi
+
+	echo "&lt;/ul&gt;"
 
 	# build/fail
 	if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 		echo "&lt;pre&gt;$ bmk $BUILDTYPE $BUILDOPTS \"$BMAX_COMPILE_PATH\"&lt;/pre&gt;"
-		echo "&lt;pre&gt;"
 		$BMK $BUILDTYPE $BUILDOPTS "$BMAX_COMPILE_PATH" 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
 		
 		if [[ "$RUNAFTER" == "YES" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then

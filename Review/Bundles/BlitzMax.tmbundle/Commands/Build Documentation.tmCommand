@@ -8,6 +8,9 @@
 	<string>#!/bin/sh
 
 if [[ -n "$TM_BLITZMAX" ]] ; then
+	. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+	html_header "Build Documentation" "BlitzMax"
+	
 	"$TM_BLITZMAX/bin/docmods"
 	exit_show_html
 else

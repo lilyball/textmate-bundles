@@ -33,12 +33,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.variable.local.blitzmax</string>
+					<string>keyword.other.variable.local.blitzmax</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.variable.global.blitzmax</string>
+					<string>keyword.other.variable.global.blitzmax</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -51,7 +51,7 @@
 					<key>match</key>
 					<string>[a-zA-Z_]\w*</string>
 					<key>name</key>
-					<string>variable.blitzmax</string>
+					<string>variable.other.blitzmax</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -130,7 +130,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.try.blitzmax</string>
+					<string>keyword.control.try.blitzmax</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -140,7 +140,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.try.blitzmax</string>
+					<string>keyword.control.try.blitzmax</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -151,7 +151,7 @@
 					<key>match</key>
 					<string>(?i)^\s*(catch)</string>
 					<key>name</key>
-					<string>keyword.try.catch.blitzmax</string>
+					<string>keyword.control.try.catch.blitzmax</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -167,12 +167,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.extern.blitzmax</string>
+					<string>keyword.other.extern.blitzmax</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.blitzmax</string>
+					<string>string.quoted.double.blitzmax</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -182,7 +182,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.extern.blitzmax</string>
+					<string>keyword.other.extern.blitzmax</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -197,7 +197,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.variable.global.extern.blitzmax</string>
+							<string>keyword.other.variable.global.extern.blitzmax</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -210,7 +210,7 @@
 							<key>match</key>
 							<string>[a-zA-Z_]\w*</string>
 							<key>name</key>
-							<string>variable.blitzmax</string>
+							<string>variable.other.blitzmax</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -260,7 +260,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.type.class.inheriting.extern.blitzmax</string>
+							<string>entity.other.inherited-class.extern.blitzmax</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -346,26 +346,16 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.import.blitzmax</string>
+					<string>keyword.other.import.blitzmax</string>
 				</dict>
-				<key>3</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.module.blitzmax</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>string.quoted.blitzmax</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.file.blitzmax</string>
+					<string>string.unquoted.module.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i)\b(import)\s+(((?:[a-zA-Z_]\w*\.?)+)|("([^"]*)"))</string>
+			<string>(?i)\b(import)\s+(?:((?:[a-zA-Z_]\w*\.?)+)|(?="))</string>
 			<key>name</key>
 			<string>meta.import.blitzmax</string>
 		</dict>
@@ -375,12 +365,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.framework.blitzmax</string>
+					<string>keyword.other.framework.blitzmax</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.framework.blitzmax</string>
+					<string>string.unquoted.module.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -394,12 +384,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.module.blitzmax</string>
+					<string>keyword.other.module.blitzmax</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.module.blitzmax</string>
+					<string>string.unquoted.module.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -413,21 +403,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.include.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>string.quoted.blitzmax</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.file.blitzmax</string>
+					<string>keyword.other.include.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i)\b(include)\s+("([^"]*)")</string>
+			<string>(?i)\b(include)\s+(?=")</string>
 			<key>name</key>
 			<string>meta.include.blitzmax</string>
 		</dict>
@@ -437,21 +417,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.incbin.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>string.quoted.blitzmax</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.file.blitzmax</string>
+					<string>keyword.other.incbin.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i)\b(incbin)\s+("([^"]*)")</string>
+			<string>(?i)\b(incbin)\s+(?=")</string>
 			<key>name</key>
 			<string>meta.incbin.blitzmax</string>
 		</dict>
@@ -461,16 +431,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.moduleinfo.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>string.quoted.blitzmax</string>
+					<string>keyword.other.moduleinfo.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i)\b(moduleinfo)\s+("[^"]*")</string>
+			<string>(?i)\b(moduleinfo)\s+(?=")</string>
 			<key>name</key>
 			<string>meta.moduleinfo.blitzmax</string>
 		</dict>
@@ -497,7 +462,7 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.type.class.inheriting.blitzmax</string>
+					<string>entity.other.inherited-class.blitzmax</string>
 				</dict>
 				<key>5</key>
 				<dict>
@@ -533,11 +498,6 @@
 						<dict>
 							<key>name</key>
 							<string>entity.name.function.method.blitzmax</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.blitzmax</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -579,7 +539,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.variable.field.blitzmax</string>
+							<string>keyword.other.variable.field.blitzmax</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -592,7 +552,7 @@
 							<key>match</key>
 							<string>[a-zA-Z_]\w*</string>
 							<key>name</key>
-							<string>variable.blitzmax</string>
+							<string>variable.other.blitzmax</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -828,13 +788,13 @@
 			<key>match</key>
 			<string>(?i)\b(strict|superstrict)\b</string>
 			<key>name</key>
-			<string>keyword.strictness.blitzmax</string>
+			<string>keyword.other.strictness.blitzmax</string>
 		</dict>
 		<dict>
 			<key>match</key>
 			<string>(?i)\b(object|string|byte|short|int|long|float|double)\b</string>
 			<key>name</key>
-			<string>keyword.type.blitzmax</string>
+			<string>storage.type.blitzmax</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -860,7 +820,7 @@
 			<key>end</key>
 			<string>"</string>
 			<key>name</key>
-			<string>string.quoted.blitzmax</string>
+			<string>string.quoted.double.blitzmax</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -879,9 +839,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i)\b(self|super)\b</string>
+			<string>(?i)\b(self)\b</string>
 			<key>name</key>
-			<string>variable.language.blitzmax</string>
+			<string>variable.language.self.blitzmax</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(?i)\b(super)\b</string>
+			<key>name</key>
+			<string>variable.language.super.blitzmax</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -889,12 +855,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.blitzmax</string>
+					<string>keyword.other.new.blitzmax</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.typename.blitzmax</string>
+					<string>storage.type.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -922,16 +888,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.constant.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.constant.blitzmax</string>
+					<string>keyword.other.constant.blitzmax</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?i)(const)\s+([a-zA-Z_]\w*)</string>
+			<string>(?i)(const)\s+(?:[a-zA-Z_]\w*)</string>
 			<key>name</key>
 			<string>meta.constant.blitzmax</string>
 		</dict>

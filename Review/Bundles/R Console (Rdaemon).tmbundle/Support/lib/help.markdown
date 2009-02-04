@@ -413,9 +413,14 @@ As default it also displays an inline menu if there is only one suggestion found
 
     Yes. Rdaemon should not interfere R.app or R running in the Terminal. The only thing which won't work is the usage of Rdaemon together with the remote bundle "R Console (R.app)" if Rdaemon had plotted something in a Quartz device (It makes usage of an helper application). "R Console (R.app)" is using AppleScript to interact with R.app. Unfortunately this helper application and R.app have the same AppleScript name "R".
 
+-   __…cut… – Warning: more than 50000 lines (see the entire output in the “Console Logfile/r\_out” ⌥⌘T)__
+
+    Due to a TextMate internal the maximum number of inserted lines is set to 50,000. Via ⌥⌘T one can open the “Console File” resp. show the end of r_out to have a look at the entire output.
+
+
 # Main Bundle Maintainer
 
-***Date: Jan 13 2009***
+***Date: Feb 04 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

@@ -26,6 +26,12 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>match</key>
+			<string>;</string>
+			<key>name</key>
+			<string>punctuation.terminator.statement.blitzmax</string>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>'</string>
 			<key>end</key>
@@ -68,7 +74,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.variable.global.blitzmax</string>
+					<string>storage.modifier.global.blitzmax</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -191,7 +197,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(?i)(?:(?:^|;)\s*)(extern)(?:\s+("[^"]*"))?</string>
+			<string>(?i)(?:(?:^|;)\s*)(extern)(?:\s+((")[^"]*("))|\b)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -203,6 +209,16 @@
 				<dict>
 					<key>name</key>
 					<string>string.quoted.double.blitzmax</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.blitzmax</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.blitzmax</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -285,7 +301,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>storage.modifier.class.extends.extern.blitzmax</string>
+							<string>storage.modifier.extends.extern.blitzmax</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -324,7 +340,7 @@
 							<key>match</key>
 							<string>(?i)(?:(?:^|;)\s*)(method)\s+([a-zA-Z_]\w*)\b</string>
 							<key>name</key>
-							<string>meta.function.method.blitzmax</string>
+							<string>meta.method.blitzmax</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -402,19 +418,19 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.begin.blitzmax</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>string.quoted.double.blitzmax</string>
 			<key>end</key>
-			<string>(")</string>
+			<string>"</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.end.blitzmax</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -478,19 +494,19 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.begin.blitzmax</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>string.quoted.double.blitzmax</string>
 			<key>end</key>
-			<string>(")</string>
+			<string>"</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.end.blitzmax</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -516,19 +532,19 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.begin.blitzmax</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>string.quoted.double.blitzmax</string>
 			<key>end</key>
-			<string>(")</string>
+			<string>"</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.end.blitzmax</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -554,19 +570,19 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.begin.blitzmax</string>
 				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>string.quoted.double.blitzmax</string>
 			<key>end</key>
-			<string>(")</string>
+			<string>"</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double.blitzmax</string>
+					<string>punctuation.definition.string.end.blitzmax</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -597,7 +613,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.class.extends.blitzmax</string>
+					<string>storage.modifier.extends.blitzmax</string>
 				</dict>
 				<key>4</key>
 				<dict>
@@ -656,7 +672,7 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.function.method.blitzmax</string>
+					<string>meta.method.blitzmax</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -978,8 +994,24 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.blitzmax</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.blitzmax</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.blitzmax</string>
 			<key>patterns</key>

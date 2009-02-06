@@ -220,7 +220,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Nov 24 2008***
+***Date: Feb 06 2008***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

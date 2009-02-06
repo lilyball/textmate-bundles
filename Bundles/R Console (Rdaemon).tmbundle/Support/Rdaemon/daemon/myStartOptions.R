@@ -116,6 +116,29 @@ alarm <- function() {
 	system("osascript -e beep")
 }
 
+promptRdaemon <- prompt
+prompt <- function(object, filename = NULL, name = NULL, ...) {
+	tf <- tempdir()
+	if (missing(name)) 
+		name <- if (is.character(object)) 
+			object
+		else {
+			name <- substitute(object)
+			if (is.name(name)) 
+			  as.character(name)
+			else if (is.call(name) && (as.character(name[[1]]) %in% 
+			  c("::", ":::", "getAnywhere"))) {
+			  name <- as.character(name)
+			  name[length(name)]
+			}
+			else stop("cannot determine a usable name")
+		}
+	if (is.null(filename)) 
+		filename <- paste(tf, "/", name, ".Rd", sep="")
+	promptRdaemon(object, filename = filename, name = name, ...)
+	system(paste("mate '", filename, "'", sep=""))
+}
+
 .chooseActiveScreenDevice <- function() {
 	plots <- dev.list()
 	out <- ""

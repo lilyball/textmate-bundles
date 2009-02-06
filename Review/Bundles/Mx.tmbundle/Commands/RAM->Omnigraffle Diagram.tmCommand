@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// creator: tim.bates@ed.ac.uk 
+// license = GPL
+// TO-DO: lots :-)
+// 1. Send to Omnigraffle via applescript? or to new script Editor window?
+// 2. ?
+
+/* Purpose: Takes a RAM path like this:
+	F1  &lt;-&gt; F1,   NA,   1
+	q1  &lt;-&gt; q1,   e1,   NA
+	q2  &lt;-&gt; q2,   e2,   NA
+	q3  &lt;-&gt; q3,   e3,   NA
+	And returns an omnigraffle applescript to draw the diagram
+*/
+// USEAGE notes:
+// takes mx matrix and returns formatted nicely into columns
+// takes mx matrix and returns formatted nicely into columns
+$debug = 0;
+function createObjects($aObjectNameList){
+	foreach ($aObjectNameList as $key =&gt; $value) {
+		if (1) {
+			// TODO: should detect a capital letter?
+		$shape = "Circle";
+		}else{
+			$shape = "Square";
+		}
+		echo "set $value to make new shape at end of graphics with properties {size:{50, 50}, text:{text:\"$value\", size:14, alignment:center}, name:\"$shape\"}\n";
+	}
+}
+function stringTo2DArray($stringIn, $delimitter=" "){
+	// strips all white space, rows are lines
+	$stringIn = ereg_replace("[ \t]+", " ", $stringIn); // whitespace-runs --&gt; single space char 
+	$stringIn = trim($stringIn); // trim leading and trailing white space
+	$rows     = explode("\n", $stringIn); //break on lines
+	$o        = array();
+	foreach ($rows as $key =&gt; $row) {
+		$row  = trim($row);
+		$o[]  = explode($delimitter, $row);
+	}
+	return $o;
+}
+function stringToArray($stringIn, $delimitter=" "){
+	// strips newlines and all white space
+	$stringIn  = ereg_replace("[ \t\n]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+	$stringIn  = trim($stringIn);
+	return explode($delimitter, $stringIn);
+}
+
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input = "
+	F1  &lt;-&gt; F1,   NA,   1
+	q1  &lt;-&gt; q1,   e1,   NA
+	q2  &lt;-&gt; q2,   e2,   NA
+	q3  &lt;-&gt; q3,   e3,   NA
+	q4  &lt;-&gt; q4,   e4,   NA
+	q5  &lt;-&gt; q5,   e5,   NA
+	q6  &lt;-&gt; q6,   e6,   NA
+	q7  &lt;-&gt; q7,   e7,   NA
+	q8  &lt;-&gt; q8,   e8,   NA
+	q9  &lt;-&gt; q9,   e9,   NA
+	q11 &lt;-&gt; q11, e11,   NA
+	q12 &lt;-&gt; q12, e12,   NA
+	q13 &lt;-&gt; q13, e13,   NA
+	q14 &lt;-&gt; q14, e14,   NA
+	q15 &lt;-&gt; q15, e15,   NA
+	q16 &lt;-&gt; q16, e16,   NA
+	q17 &lt;-&gt; q17, e17,   NA
+	F1 -&gt;  q1,    p1,   NA
+	F1 -&gt;  q2,    p2,   NA
+	F1 -&gt;  q3,    p3,   NA
+	F1 -&gt;  q4,    p4,   NA
+	F1 -&gt;  q5,    p5,   NA
+	F1 -&gt;  q6,    p6,   NA
+	F1 -&gt;  q7,    p7,   NA
+	F1 -&gt;  q8,    p8,   NA
+	F1 -&gt;  q9,    p9,   NA
+	F1 -&gt;  q11,   p11,  NA
+	F1 -&gt;  q12,   p12,  NA
+	F1 -&gt;  q13,   p13,  NA
+	F1 -&gt;  q14,   p14,  NA
+	F1 -&gt;  q15,   p15,  NA
+	F1 -&gt;  q16,   p16,  NA
+	F1 -&gt;  q17,   p17,  NA
+	q9  &lt;-&gt; q7,   c1,   NA
+	q15 &lt;-&gt; q11,  c2,   NA
+	q2  &lt;-&gt; q1,   c3,   NA
+	q17 &lt;-&gt; q13,  c4,   NA
+	q5  &lt;-&gt; q4,   c5,   NA
+	q9  &lt;-&gt; q6,   c6,   NA
+	q4  &lt;-&gt; q2,   c7,   NA
+	q12 &lt;-&gt; q1,   c8,   NA
+	q12 &lt;-&gt; q5,   c9,   NA
+	q15 &lt;-&gt; q6,   c10,  NA";
+}else{
+   $input = file_get_contents('php://stdin');
+   // $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+$objects = array();
+$aPaths = stringTo2DArray($input, $delimitter=", ");
+$pathCreationString = "";
+foreach ($aPaths as $key =&gt; $value) {
+	$aPath = stringToArray($value[0], $delimitter=" "); // "q15 &lt;-&gt; q6"--&gt; array(q15,&lt;-&gt;, q6);
+	$pathCreationString .= "set line1 to make new line at end of graphics with properties {point list:{{5, 5}, {10, 10}}, head type:\"FilledArrow\", line type:curved}\n";
+
+	$pathCreationString .= "set alabel to make new shape at end of graphics with properties {draws stroke: false, origin: {10,10}, autosizing: full, size: {32,27}, text: {text: \"$value[1]\", size: 14, alignment: center}, draws shadow: false}\n";
+	$pathCreationString .= "set labelConnection of alabel to line1\n";
+	$pathCreationString .= "set labelPosition of alabel to 0.4\n";
+
+	$pathCreationString .= "set source of line1 to $aPath[0]\n";
+	$pathCreationString .= "set destination of line1 to $aPath[2]\n";
+
+	$objects[] = $aPath[0];
+	$objects[] = $aPath[2];
+}
+$uniqueObjects = array_unique($objects);
+echo "&lt;pre&gt;\n";
+echo "tell application \"OmniGraffle Professional\"\ntell canvas of front window\n";
+createObjects($uniqueObjects);
+echo $pathCreationString;
+echo "end tell\nend tell";
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^D</string>
+	<key>name</key>
+	<string>RAM-&gt;Omnigraffle Diagram</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.mx, source.r</string>
+	<key>uuid</key>
+	<string>8C312D56-4B39-438A-815B-0E36115A6F11</string>
+</dict>
+</plist>

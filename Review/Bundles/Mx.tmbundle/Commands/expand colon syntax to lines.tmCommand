@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// takes a line like this
+// F1 -&gt;  q1:17, NA
+// and expands variables using colon syntax
+// F1 -&gt;  q1, NA
+// F1 -&gt;  q2, NA
+//...
+// F1 -&gt;  q17, NA
+
+// if n=1:1 is found, then the expansion also replaces all instances of n
+// qn &lt;-&gt; qn, en=1:17,   NA 
+// q1 &lt;-&gt; q1, e1,   NA 
+// q2 &lt;-&gt; q2, e2,   NA 
+
+$debug = 0;
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input ="F1 -&gt;  q1:17, NA";
+	// $input = "qn &lt;-&gt; qn, en=1:17,   NA";
+}else{
+	$input = file_get_contents('php://stdin');
+	// $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+if (ereg ("([a-zA-Z])=[0-9]+:[0-9]+", $input, $equalsMarker) ) {
+	// print_r($equalsMarker);
+	$replacePhrase   = $equalsMarker[0]; //i.e., "n=1:12"
+	$replaceConstant = $equalsMarker[1]; //i.e., "n"
+	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
+	// print_r($aFound);
+	$from = $aFound[2];
+	$to   = ($aFound[3])+1;
+	$o    = "";
+	$input = str_replace($replacePhrase, $replaceConstant, $input);
+	for ($i = $from; $i &lt; $to; $i++) { 
+		$o.= str_replace($replaceConstant, $i, $input) . "\n";
+	}
+} else {
+	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
+	// print_r($aFound);
+	$from = $aFound[2];
+	$to   = ($aFound[3])+1;
+	$o    = "";
+	for ($i = $from; $i &lt; $to; $i++) { 
+		$o.= $aFound[1]. $i. $aFound[4]. "\n";
+	}
+}
+echo $o;
+
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>~@e</string>
+	<key>name</key>
+	<string>expand colon syntax to lines</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.r</string>
+	<key>uuid</key>
+	<string>B6DAB3DA-0E30-485E-90DD-EBDCDFF8CBF4</string>
+</dict>
+</plist>

@@ -14,8 +14,7 @@ fi
 export RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 
 
-# send CTRL+C to the Rdaemon and dispose all frozen ProgressDialogs
-kill -s INT $RPID 2&>/dev/null
+# dispose all frozen ProgressDialogs if there're some
 {
 while [ 1 ]
 do

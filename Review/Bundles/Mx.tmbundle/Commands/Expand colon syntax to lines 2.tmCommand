@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// takes a line like this
+// F1 -&gt;  q1:17, NA
+// and expands variables using colon syntax
+// F1 -&gt;  q1, NA
+// F1 -&gt;  q2, NA
+//...
+// F1 -&gt;  q17, NA
+
+// if n=1:1 is found, then the expansion also replaces all instances of n
+// qn &lt;-&gt; qn, en=1:17,   NA
+// q1 &lt;-&gt; q1, e1,   NA 
+// q2 &lt;-&gt; q2, e2,   NA 
+
+$debug = 0;
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input ="F1 -&gt;  q1:17, NA";
+	$input = "qn=1:17 &lt;-&gt; qn, en,   NA";
+	// $input = "qn &lt;-&gt; qn, en=1:17,   NA";
+	$input = "F1 -&gt;  c(q2,q8,q13,q18,q24,q29)    n,   NA";
+	echo "you gave me\n &lt;em&gt;&amp;ldquo;$input&amp;rdquo;&lt;/em&gt;\n";
+} else {
+	// $input = file_get_contents('php://stdin');
+	$input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+if (ereg ("c\((.*)\)", $input, $equalsMarker) ) {
+     // F2 c(q1,q2,q3), n, NA
+	// print_r($equalsMarker);
+	$cPhraseToDelete = $equalsMarker[0]; // i.e., "n=1:12"
+	$aList           = explode(",", $equalsMarker[1]); // i.e., "n=1:12"
+	ereg("(^.*) +(c\(.*\)), *(.*), *(.*$)\n?", $input, $aFound);
+	// print_r($aFound);
+	$o    = "";
+	foreach ($aList as $key =&gt; $value) {
+		if ( 	$aFound[3]=='n' ) {
+			$o.= "$aFound[1] $value, $value, $aFound[4]\n";
+		} else {
+			$o.= "$aFound[1], $value, $aFound[3], $aFound[4]\n";
+		}
+	}
+}elseif (ereg ("([a-zA-Z])=[0-9]+:[0-9]+", $input, $equalsMarker) ) {
+	// print_r($equalsMarker);
+	// Array (
+	//     [0] =&gt; n=1:17
+	//     [1] =&gt; n
+	// )
+	$replacePhrase   = $equalsMarker[0]; // i.e., "n=1:12"
+	$replaceConstant = $equalsMarker[1]; // i.e., "n"
+	// get from and to
+	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
+	// print_r($aFound);
+	$from  = $aFound[2];
+	$to    = ($aFound[3])+1;
+	$o     = "";
+	$input = str_replace($replacePhrase, $replaceConstant, $input);
+	for ($i = $from; $i &lt; $to; $i++) { 
+		$o.= str_replace($replaceConstant, $i, $input) . "\n";
+	}
+} else {
+	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
+	// print_r($aFound);
+	$from = $aFound[2];
+	$to   = ($aFound[3])+1;
+	$o    = "";
+	for ($i = $from; $i &lt; $to; $i++) { 
+		$o.= $aFound[1]. $i. $aFound[4]. "\n";
+	}
+}
+echo $o;
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^E</string>
+	<key>name</key>
+	<string>Expand colon syntax to lines</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.mx, source.r</string>
+	<key>uuid</key>
+	<string>4C158675-E586-49DB-8A02-35F7D36D861A</string>
+</dict>
+</plist>

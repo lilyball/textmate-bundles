@@ -7,53 +7,67 @@
 	<key>command</key>
 	<string>#!/usr/bin/php
 &lt;?php
-// takes a line like this
-// F1 -&gt;  q1:17, NA
-// and expands variables using colon syntax
-// F1 -&gt;  q1, NA
-// F1 -&gt;  q2, NA
-//...
-// F1 -&gt;  q17, NA
+// takes lines like this
+// F1 -&gt;  q2,   q2, NA
+// F1 -&gt;  q8,   q8, NA
+// F1 -&gt;  q13, q13, NA
+// F1 -&gt;  q18, q18, NA
+// F1 -&gt;  q24, q24, NA
+// F1 -&gt;  q29, q29, NA
+// a makes a residual for each unique variable  either side of a path sign
+// F1 &lt;-&gt;  F1, NA, 1
+// q2 &lt;-&gt;  q2, NA, NA
 
-// if n=1:1 is found, then the expansion also replaces all instances of n
-// qn &lt;-&gt; qn, en=1:17,   NA
-// q1 &lt;-&gt; q1, e1,   NA 
-// q2 &lt;-&gt; q2, e2,   NA 
+function stringTo2DArray($stringIn, $delimitter=" "){
+	// strips all white space, rows are lines
+	$stringIn = ereg_replace("[ \t]+", " ", $stringIn); // whitespace-runs --&gt; single space char 
+	$stringIn = trim($stringIn); // trim leading and trailing white space
+	$rows     = explode("\n", $stringIn); //break on lines
+	$o        = array();
+	foreach ($rows as $key =&gt; $row) {
+		$row  = trim($row);
+		$o[]  = explode($delimitter, $row);
+	}
+	return $o;
+}
+function stringToArray($stringIn, $delimitter=" "){
+	// strips newlines and all white space
+	$stringIn  = ereg_replace("[ \t\n]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+	$stringIn  = trim($stringIn);
+	return explode($delimitter, $stringIn);
+}
 
 $debug = 0;
 if ($debug) {
 	echo "&lt;pre&gt;";
-	$input ="F1 -&gt;  q1:17, NA";
+	$input ="F1 -&gt; q2,   q2, NA
+F1 -&gt;  q8,   q8, NA
+F1 -&gt;  q13, q13, NA
+F1 -&gt;  q18, q18, NA
+F1 -&gt;  q24, q24, NA
+F1 -&gt;  q29, q29, NA";
 	// $input = "qn &lt;-&gt; qn, en=1:17,   NA";
 }else{
 	$input = file_get_contents('php://stdin');
-	// $input = $_ENV["TM_SELECTED_TEXT"];	
+	// $input = $_ENV;["TM_SELECTED_TEXT"];	
 }
 
-if (ereg ("([a-zA-Z])=[0-9]+:[0-9]+", $input, $equalsMarker) ) {
-	// print_r($equalsMarker);
-	$replacePhrase   = $equalsMarker[0]; //i.e., "n=1:12"
-	$replaceConstant = $equalsMarker[1]; //i.e., "n"
-	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
-	// print_r($aFound);
-	$from = $aFound[2];
-	$to   = ($aFound[3])+1;
-	$o    = "";
-	$input = str_replace($replacePhrase, $replaceConstant, $input);
-	for ($i = $from; $i &lt; $to; $i++) { 
-		$o.= str_replace($replaceConstant, $i, $input) . "\n";
-	}
-} else {
-	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
-	// print_r($aFound);
-	$from = $aFound[2];
-	$to   = ($aFound[3])+1;
-	$o    = "";
-	for ($i = $from; $i &lt; $to; $i++) { 
-		$o.= $aFound[1]. $i. $aFound[4]. "\n";
-	}
+$stringIn = ereg_replace("[ \t]+", " ", $input); // whitespace-runs --&gt; single space char 
+$stringIn = trim($stringIn);          // trim leading and trailing white space
+$rows     = explode("\n", $stringIn); // break on lines
+$o        = array();
+foreach ($rows as $key =&gt; $value) {
+	$value = ereg_replace(" +&lt;?-&gt;? +", ", ", $value); // whitespace-runs --&gt; single space char 
+	$row   = explode(", ", $value); //break on lines
+	$o[]   = $row[0]; $o[] = $row[1];
 }
-echo $o;
+
+$aUnique = array_unique($o);
+$o="";
+foreach ($aUnique as $key =&gt; $value) {
+	$o.="$value &lt;-&gt; $value, $value, NA\n";
+}
+echo "$input\n\n#residuals\n$o";
 
 ?&gt;</string>
 	<key>input</key>
@@ -61,7 +75,7 @@ echo $o;
 	<key>keyEquivalent</key>
 	<string>^E</string>
 	<key>name</key>
-	<string>Expand colon syntax to lines </string>
+	<string>Create residuals</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>

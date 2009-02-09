@@ -128,6 +128,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>(?i)\bvarptr\b</string>
+			<key>name</key>
+			<string>keyword.operator.blitzmax</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>(?i)^\s*\?(not\s+)?\w*</string>
 			<key>name</key>
 			<string>keyword.control.preprocessor.blitzmax</string>
@@ -165,7 +171,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>storage.modifier.attribute.blitzmax</string>
+							<string>entity.other.attribute-name.blitzmax</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -202,7 +208,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>storage.modifier.attribute.blitzmax</string>
+							<string>entity.other.attribute-name.blitzmax</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1154,7 +1160,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\~[0qnr~t]</string>
+					<string>\~[^"]</string>
 					<key>name</key>
 					<string>constant.character.escape.blitzmax</string>
 				</dict>

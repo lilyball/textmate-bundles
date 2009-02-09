@@ -143,8 +143,6 @@
 					<string>storage.modifier.attributes.braces.blitzmax</string>
 				</dict>
 			</dict>
-			<key>contentName</key>
-			<string>storage.modifier.attributes.blitzmax</string>
 			<key>end</key>
 			<string>(\})</string>
 			<key>endCaptures</key>
@@ -157,6 +155,62 @@
 			</dict>
 			<key>name</key>
 			<string>meta.attributes.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b([a-zA-Z_]\w*)\s*(=)\s*</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.attribute.blitzmax</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\s|\}|[a-zA-Z_])</string>
+					<key>name</key>
+					<string>meta.attribute.blitzmax</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string_quoted</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#num_hex</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#num_bin</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#num_float</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#num_int</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.attribute.blitzmax</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b([a-zA-Z_]\w*)(?:\s*((?!=)|(?=\})))</string>
+					<key>name</key>
+					<string>meta.attribute.blitzmax</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -965,62 +1019,24 @@
 			<string>constant.language.boolean.blitzmax</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(\$[0-9a-fA-F]{1,16})</string>
-			<key>name</key>
-			<string>constant.numeric.integer.hexadecimal.blitzmax</string>
+			<key>include</key>
+			<string>#num_hex</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(\%[01]{1,128})</string>
-			<key>name</key>
-			<string>constant.numeric.integer.binary.blitzmax</string>
+			<key>include</key>
+			<string>#num_bin</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?x) (?&lt;! % | \$ ) (
-			        \b ([0-9]+ \. [0-9]+) |
-			        (\. [0-9]+)
-			    )</string>
-			<key>name</key>
-			<string>constant.numeric.float.blitzmax</string>
+			<key>include</key>
+			<string>#num_float</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?x)\b(([0-9]+))</string>
-			<key>name</key>
-			<string>constant.numeric.integer.blitzmax</string>
+			<key>include</key>
+			<string>#num_int</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.blitzmax</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>"</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.blitzmax</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.quoted.double.blitzmax</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#string_content</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#string_quoted</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -1101,6 +1117,37 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>num_bin</key>
+		<dict>
+			<key>match</key>
+			<string>(\%[01]{1,128})</string>
+			<key>name</key>
+			<string>constant.numeric.integer.binary.blitzmax</string>
+		</dict>
+		<key>num_float</key>
+		<dict>
+			<key>match</key>
+			<string>(?x) (?&lt;! % | \$ ) (
+			        \b ([0-9]+ \. [0-9]+) |
+			        (\. [0-9]+)
+			    )</string>
+			<key>name</key>
+			<string>constant.numeric.float.blitzmax</string>
+		</dict>
+		<key>num_hex</key>
+		<dict>
+			<key>match</key>
+			<string>(\$[0-9a-fA-F]{1,16})</string>
+			<key>name</key>
+			<string>constant.numeric.integer.hexadecimal.blitzmax</string>
+		</dict>
+		<key>num_int</key>
+		<dict>
+			<key>match</key>
+			<string>(?x)\b(([0-9]+))</string>
+			<key>name</key>
+			<string>constant.numeric.integer.blitzmax</string>
+		</dict>
 		<key>string_content</key>
 		<dict>
 			<key>patterns</key>
@@ -1110,6 +1157,42 @@
 					<string>\~[0qnr~t]</string>
 					<key>name</key>
 					<string>constant.character.escape.blitzmax</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#url_content</string>
+				</dict>
+			</array>
+		</dict>
+		<key>string_quoted</key>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.blitzmax</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.blitzmax</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#string_content</string>
 				</dict>
 			</array>
 		</dict>

@@ -4,20 +4,26 @@
 
 * Header commands should not override ⌘1-5.
 	* Is that a hard rule? writing html and headings are very common - making them a multi-key command decreases utility
+		* It's really frowned upon to override the default shortcuts, unless they replicate or augment the functionality of what is overridden. Headings are common but changing tabs is too, ties in with the consistency you mention below. :)
+		
 * Are 'Ordered List Item' and 'Unordered Item' supposed to have tab triggers? Seems odd.
 	* makes for consistency and memorability across different markup languages: I wish all the markups did this.
-* Any reason you started the comment preferences at 3 rather than 1?
-	* Changed to 1 now: Was just copying another language and then playing to get it working
+		* No worries here, just making sure you realized.
+	
 * Seems to be an error in the syntax document starting at 'Image Gallery'.
 	* That looked (and previewed fine to me)?
+		* The list right before 'Image Gallery' is missing the end tag.
+		
 * Link commands should be be removed in favor of the Hyperlink Helper bundle where possible.
 	* I've emailed a pref to handle generic links out of Hyperlink Helper
 	* Hyperlink helper doesn't allow different link types, but in wikidot, a wikipedia link is built-in as [wikipedia:topic]
 	* Internal links (link to the same site as the caller) are [[[wrapped in triple brackets]]]. That should stay in the wikidot bundle
+	
 * meta.separator should end in \n? to better scope the caret.
 	* done 
 * markup.raw.wikidot should end in \n? to better scope the caret.
-	* done 
+	* done
+		* Both of these need a ? added on the end incase they are the last line (and don't have a \n)
 
 ---
 

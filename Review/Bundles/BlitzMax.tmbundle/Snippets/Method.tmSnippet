@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>Method ${1:Name}:${2:Int}(${3/.+/ /}$3${3/.+/ /})
+	<string>Method ${1:Name}${2/^([\!\@\#\$\%].*)|(.+)/(?2:\:)/}${2:Int}(${3/.+/ /}$3${3/.+/ /})
 	$0
 End Method</string>
 	<key>name</key>

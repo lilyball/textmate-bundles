@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>Function ${1:Name}:${2:Int}(${3/.+/ /}$3${3/.+/ /})${4/.+/="}$4${4/.+/"}</string>
+	<string>Function ${1:Name}${2/^([\!\@\#\$\%].*)|(.+)/(?2:\:)/}${2:Int}(${3/.+/ /}$3${3/.+/ /})${4/.+/="}$4${4/.+/"}</string>
 	<key>name</key>
 	<string>Extern Function</string>
 	<key>scope</key>

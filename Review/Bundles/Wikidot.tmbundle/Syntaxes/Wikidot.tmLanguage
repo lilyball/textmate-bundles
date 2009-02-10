@@ -407,6 +407,52 @@
 					</array>
 				</dict>
 				<dict>
+					<key>begin</key>
+					<string>\^\^</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.superscript.wikidot</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\^\^</string>
+					<key>name</key>
+					<string>markup.superscript.wikidot</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\,\,</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.subscript.wikidot</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\,\,</string>
+					<key>name</key>
+					<string>markup.subscript.wikidot</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>captures</key>
 					<dict>
 						<key>1</key>

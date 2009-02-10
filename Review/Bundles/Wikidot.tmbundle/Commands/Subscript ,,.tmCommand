@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// author tim.bates@ed.ac.uk
+// version .7
+// created:10:02:2009
+// superscripts the selection or the currentword
+
+$input        = $_ENV["TM_SELECTED_TEXT"];
+$marker       = ",,";
+$esapedMarker = addcslashes($marker, "*()[].$^");
+
+$unFormatted = ereg_replace("$esapedMarker(.*)$esapedMarker", "\\1", $input);
+if ($input==$unFormatted) {
+	//plain--&gt;formatted
+	echo($marker . $input . $marker);
+}else {
+	//formatted--&gt;plain
+	echo($unFormatted);
+}
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@b</string>
+	<key>name</key>
+	<string>Subscript ,,</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>tabTrigger</key>
+	<string>sup</string>
+	<key>uuid</key>
+	<string>0AFB0715-5B7B-4A95-B159-EB686B0693D9</string>
+</dict>
+</plist>

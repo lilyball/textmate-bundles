@@ -497,11 +497,11 @@ CFDictionaryRef convertHash(VALUE obj) {
 
 // Converts an Array to a CFArrayRef
 CFArrayRef convertArray(VALUE obj) {
-	CFIndex count = (CFIndex)RARRAY(obj)->len;
+	CFIndex count = (CFIndex)RARRAY_LEN(obj);
 	CFMutableArrayRef array = CFArrayCreateMutable(kCFAllocatorDefault, count, &kCFTypeArrayCallBacks);
 	int i;
 	for (i = 0; i < count; i++) {
-		CFPropertyListRef aVal = convertObject(RARRAY(obj)->ptr[i]);
+		CFPropertyListRef aVal = convertObject(RARRAY_PTR(obj)[i]);
 		CFArrayAppendValue(array, aVal);
 		CFRelease(aVal);
 	}

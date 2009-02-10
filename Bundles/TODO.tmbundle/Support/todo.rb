@@ -40,7 +40,7 @@ ignores = ENV['TM_TODO_IGNORE']
 
 def TextMate.file_link (file, line = 0)
   return "txmt://open/?url=file://" +
-    file.gsub(/[^a-zA-Z0-9.-\/]/) { |m| sprintf("%%%02X", m[0]) } +
+    file.gsub(/([^a-zA-Z0-9.-\/]+)/) { '%' + $1.unpack('H2' * $1.size).join('%').upcase } +
     "&amp;line=" + line.to_s
 end
 

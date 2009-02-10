@@ -60,6 +60,43 @@
 			</array>
 		</dict>
 		<dict>
+			<key>comment</key>
+			<string> derived from html comment, replacing angle brackets with square</string>
+			<key>match</key>
+			<string>\[!--.*--\]</string>
+			<key>name</key>
+			<string>punctuation.definition.comment.wikidot</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\[!--</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.wikidot</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>--\s*\]</string>
+			<key>name</key>
+			<string>comment.block.wikidot</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>--</string>
+					<key>name</key>
+					<string>invalid.illegal.bad-comments-or-CDATA.html</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>begin</key>
 			<string>\[!--</string>
 			<key>captures</key>
@@ -91,7 +128,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*-{4,}\s*$\n</string>
+			<string>^\s*-{4,}\s*$\n?</string>
 			<key>name</key>
 			<string>meta.separator.wikidot</string>
 		</dict>
@@ -257,7 +294,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^((\s\s)|(\t))[^\*\-#].*$\n</string>
+			<string>^((\s\s)|(\t))[^\*\-#].*$\n?</string>
 			<key>name</key>
 			<string>markup.raw.wikidot</string>
 		</dict>
@@ -398,52 +435,6 @@
 					<string>__</string>
 					<key>name</key>
 					<string>markup.underline.wikidot</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#inline</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>\^\^</string>
-					<key>captures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.superscript.wikidot</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\^\^</string>
-					<key>name</key>
-					<string>markup.superscript.wikidot</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#inline</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>\,\,</string>
-					<key>captures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.subscript.wikidot</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\,\,</string>
-					<key>name</key>
-					<string>markup.subscript.wikidot</string>
 					<key>patterns</key>
 					<array>
 						<dict>

@@ -10,48 +10,88 @@
 	<string>#!/usr/bin/env php
 &lt;h1&gt;Wikidot Syntax Help&lt;/h1&gt;
 
-The Official Help Is &lt;a href="http://www.wikidot.com/doc:wiki-syntax" title="Wikidot - Free and Pro Wiki Hosting: Wiki Syntax"&gt;HERE&lt;/a&gt;
+&lt;p&gt;The Official Help Is &lt;a href="http://www.wikidot.com/doc:wiki-syntax" title="Wikidot - Free and Pro Wiki Hosting: Wiki Syntax"&gt;HERE&lt;/a&gt;
 
-&lt;h3 id="paragraphs"&gt;Paragraphs&lt;/h3&gt;
+	&lt;h3 id="paragraphs"&gt;Paragraphs&lt;/h3&gt;
 	&lt;pre&gt;
-    Two line breaks signify
-    a paragraph.
+		Two line breaks signify
+		a paragraph.
 
-    New paragraph starts here.
+		New paragraph starts here.
 	&lt;/pre&gt;
 
-&lt;h3 id="links"&gt;Links&lt;/h3&gt;
-&lt;h4 id="internal"&gt;Internal:&lt;/h4&gt;
-&lt;ul&gt;
-	&lt;li&gt;[[[page-name]]]&lt;/li&gt;
-	&lt;li&gt;[[[link "TO" ą pagE]]]&lt;/li&gt;
-	&lt;li&gt;[[[category: sample page]]]&lt;/li&gt;
-	&lt;li&gt;[[[some page| custom text]]]	&lt;em&gt;Link using custom text&lt;/em&gt;&lt;/li&gt;
-	&lt;li&gt;[[[doc|Documentation]]]	        &lt;em&gt;Linking to an existing page (different color)&lt;/em&gt;&lt;/li&gt;
-	&lt;li&gt;[[[doc#toc1|Section 1]]]        &lt;em&gt;Section 1 linking to an anchor (first section)&lt;/em&gt;&lt;/li&gt;
-	&lt;li&gt;[[[doc#toc1]]]&lt;/li&gt;
-	&lt;li&gt;[[# anchorname]]&lt;/li&gt;        &lt;em&gt;An anchor&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id="external"&gt;External&lt;/h4&gt;
+	&lt;h3 id="links"&gt;Links&lt;/h3&gt;
+	&lt;h4 id="internal"&gt;Internal:&lt;/h4&gt;
+	&lt;ul&gt;
+		&lt;li&gt;[[[page-name]]] 
+			&lt;a href="page-name"&gt;link to internal page&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li&gt;[[[link "TO" ą pagE]]]
+			&lt;a href="page-name"&gt;auto-cleaned to lower-case, no spaces&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li&gt;[[[category: sample page]]]&lt;/li&gt;
+		&lt;li&gt;[[[some page| custom text]]]	&lt;em&gt;Link using custom text&lt;/em&gt;&lt;/li&gt;
+		&lt;li&gt;[[[doc|Documentation]]]	   &lt;em&gt;Linking to an existing page (different color)&lt;/em&gt;&lt;/li&gt;
+		&lt;li&gt;[[[doc#toc1|Section 1]]]     &lt;em&gt;Section 1 linking to an anchor (first section)&lt;/em&gt;&lt;/li&gt;
+		&lt;li&gt;[[[doc#toc1]]]&lt;/li&gt;
+		&lt;li&gt;[[# anchorname]]&lt;/li&gt;        &lt;em&gt;An anchor&lt;/em&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;h4 id="external"&gt;External&lt;/h4&gt;
 	&lt;ul&gt;
 		&lt;li&gt;[email@site.com email me!]&lt;/li&gt;
-		&lt;li&gt;[http://www.apple.com Apple!]&lt;/li&gt;
-		&lt;li&gt;[wikipeida:Eisenhower]&lt;/li&gt;
-	&lt;/ul&gt;
-	
+		&lt;li&gt;[http://www.apple.com Apple!]
+			&lt;a href="http://www.apple.com"&gt;external link with a title&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/li&gt;
+	&lt;li&gt;[wikipeida:Eisenhower]
+		&lt;a href="http://en.wikipedia.org/wiki/Dwight_D._Eisenhower"&gt;Magic wikipedia link&lt;/a&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h3 id="lists"&gt;Lists&lt;/h3&gt;
 &lt;h4 id="bulleted"&gt;Bulleted&lt;/h4&gt;
+&lt;table border="0" cellspacing="5" cellpadding="5"&gt;
+	&lt;tr&gt;
+		&lt;td align="left"&gt;
 &lt;pre&gt;
 * Bullet 1
 * Bullet 2
  * Bullet 2.1
 &lt;/pre&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;ul&gt;
+				&lt;li&gt;Bullet 1&lt;/li&gt;
+				&lt;li&gt;Bullet 2&lt;/li&gt;
+				&lt;ul&gt;
+					&lt;li&gt;Bullet 2.1&lt;/li&gt;
+				&lt;/ul&gt;
+			&lt;/ul&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+
 &lt;h4 id="numbered"&gt;Numbered&lt;/h4&gt;
+&lt;table border="0" cellspacing="5" cellpadding="5"&gt;
+	&lt;tr&gt;
+		&lt;td align="left"&gt;
 &lt;pre&gt;
 # Item 1
 # Item 2
  # Item 2.1
 &lt;/pre&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;ol&gt;
+				&lt;li&gt;Bullet 1&lt;/li&gt;
+				&lt;li&gt;Bullet 2&lt;/li&gt;
+				&lt;ol&gt;
+					&lt;li&gt;Bullet 2.1&lt;/li&gt;
+				&lt;/ol&gt;
+			&lt;/ol&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
 &lt;h4 id="definitionlists"&gt;Definition Lists&lt;/h4&gt;
 &lt;pre&gt;
 : Item 1 : Something
@@ -67,16 +107,16 @@ The Official Help Is &lt;a href="http://www.wikidot.com/doc:wiki-syntax" title="
 
 &lt;pre&gt;[[image image-source attribute1="value1" attribute2="value2"]]&lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;alt="string"&lt;/li&gt;
-&lt;li&gt;width="200px"&lt;/li&gt;
-&lt;li&gt;height="200px"&lt;/li&gt;
-&lt;li&gt;style="border: 1px solid red; padding: 2em;"&lt;/li&gt;
-&lt;li&gt;class="myCSSstyle"&lt;/li&gt;
-
+	&lt;li&gt;alt="string"&lt;/li&gt;
+	&lt;li&gt;width="200px"&lt;/li&gt;
+	&lt;li&gt;height="200px"&lt;/li&gt;
+	&lt;li&gt;style="border: 1px solid red; padding: 2em;"&lt;/li&gt;
+	&lt;li&gt;class="myCSSstyle"&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id="imagegallery"&gt;Image Gallery&lt;/h3&gt;
 &lt;pre&gt;
 	[[gallery size="image-size"]]
-or
+	or
 	[[gallery size="image-size"]]
 	: image-source1 attribute1="value1" attribute2="value2"
 	: image-source2 attribute1="value1" attribute2="value2"
@@ -87,8 +127,8 @@ or
 [[code type='php]]
   your code in here
 [[/code]]
-&lt;pre&gt;
-	
+&lt;/pre&gt;
+
 &lt;h3 id="tables"&gt;Tables&lt;/h3&gt;
 &lt;pre&gt;
 ||~ head 1 ||~ head 2 ||~ head 3 ||
@@ -112,85 +152,86 @@ or
 Custom DIV for (multi column)
 
 &lt;pre&gt;
-	[[div style="float:left; width: 45%; padding: 0 2%"]]
-		left 
-		column 
-		text
-	[[/div]]
-	[[div style="float:left; width: 45%; padding: 0 2%"]]
-		right 
-		column 
-		text
-	[[/div]]
+[[div style="float:left; width: 45%; padding: 0 2%"]]
+left 
+column 
+text
+[[/div]]
+[[div style="float:left; width: 45%; padding: 0 2%"]]
+right 
+column 
+text
+[[/div]]
 &lt;/pre&gt;
 
 &lt;h3&gt;Other uses of div code&lt;/h3&gt;
 
 &lt;p&gt;[[div style="margin-left: 10px;"]]&lt;/p&gt;
 
-
 &lt;h2&gt;Footnotes&lt;/h2&gt;
 &lt;p&gt;Some text[[footnote]]And a small footnote.[[/footnote]]. Here we go 
 with another footnote[[footnote]]Content of another footnote.[[/footnote]].&lt;/p&gt;
 &lt;pre&gt;
-    [[footnoteblock]]
+[[footnoteblock]]
 &lt;/pre&gt;
 
 &lt;h2 id="math"&gt;Math&lt;/h2&gt;
-	&lt;pre&gt;
-	[[math label1]]
-	\rho _{\rm GJ} = -\sigma (r) \left[ (1 - \eta _{\ast }^2 {\kappa \over {\eta ^3}}) \cos \chi \right.
-	+ \left. {3\over 2} \theta (\eta) H(\eta)
-	\xi \sin \chi \cos \phi \right]
-	[[/math]]
-	&lt;/pre&gt;
+&lt;pre&gt;
+[[math label1]]
+  \rho _{\rm GJ} = -\sigma (r) \left[ (1 - \eta _{\ast }^2 {\kappa \over {\eta ^3}}) \cos \chi \right.
+  + \left. {3\over 2} \theta (\eta) H(\eta)
+  \xi \sin \chi \cos \phi \right]
+[[/math]]
+&lt;/pre&gt;
+
 &lt;h3&gt;Inline Math&lt;/h3&gt;
 &lt;pre&gt;
-	[[$ E = mc^2 $]] is much more popular than  [[$ G_{\mu\nu} - \Lambda g_{\mu\nu}  $]]
+[[$ E = mc^2 $]] is much more popular than  [[$ G_{\mu\nu} - \Lambda g_{\mu\nu}  $]]
 &lt;/pre&gt;
 
 &lt;h2 id="misc"&gt;Misc&lt;/h2&gt;
 &lt;h3 id=""&gt;Include other pages&lt;/h3&gt;
 &lt;pre&gt;
-	[[include pagename]]
+[[include pagename]]
 &lt;/pre&gt;
 
 &lt;h3 id="Embedding Video"&gt;Embedding Video&lt;/h3&gt;
 &lt;pre&gt;
-	[[embedvideo]] ... [[/embedvideo]]
+[[embedvideo]] ... [[/embedvideo]]
 
-	e.g.
-	[[embedvideo]]
-		&amp;lt;embed style=&amp;quot;width:400px; height:326px;&amp;quot; id=&amp;quot;VideoPlayback&amp;quot; align=&amp;quot;middle&amp;quot;
-		type=&amp;quot;application/x-shockwave-flash&amp;quot;
-		src=&amp;quot;http://video.google.com/googleplayer.swf?docId=263244138622602613&amp;quot;
-		allowScriptAccess=&amp;quot;sameDomain&amp;quot; quality=&amp;quot;best&amp;quot; bgcolor=&amp;quot;#ffffff&amp;quot; scale=&amp;quot;noScale&amp;quot; salign=&amp;quot;TL&amp;quot; 
-		FlashVars=&amp;quot;playerMode=embedded&amp;quot;&amp;gt; &amp;lt;/embed&amp;gt;
-	[[/embedvideo]]
+e.g.
+[[embedvideo]]
+&amp;lt;embed style=&amp;quot;width:400px; height:326px;&amp;quot; id=&amp;quot;VideoPlayback&amp;quot; align=&amp;quot;middle&amp;quot;
+type=&amp;quot;application/x-shockwave-flash&amp;quot;
+src=&amp;quot;http://video.google.com/googleplayer.swf?docId=263244138622602613&amp;quot;
+allowScriptAccess=&amp;quot;sameDomain&amp;quot; quality=&amp;quot;best&amp;quot; bgcolor=&amp;quot;#ffffff&amp;quot; scale=&amp;quot;noScale&amp;quot; salign=&amp;quot;TL&amp;quot; 
+FlashVars=&amp;quot;playerMode=embedded&amp;quot;&amp;gt; &amp;lt;/embed&amp;gt;
+[[/embedvideo]]
 &lt;/pre&gt;
 
 &lt;h3 id="embeddingaudio"&gt;Embedding Audio&lt;/h3&gt;
 &lt;pre&gt;
-	[[embedaudio]] ... [[/embedaudio]] 
+[[embedaudio]] ... [[/embedaudio]] 
 &lt;/pre&gt;
 
 &lt;h3 id="Embed_external_code"&gt;Embed external code&lt;/h3&gt;
 &lt;pre&gt;
-	[[embed]]
-        &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://del.icio.us/feeds/js/tags/michal_frackowiak?icon;size=12-35;color=87ceeb-0000ff;title=my%20del.icio.us%20tags&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    [[/embed]]
+[[embed]]
+	&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;http://del.icio.us/feeds/js/tags/michal_frackowiak?icon;size=12-35;color=87ceeb-0000ff;title=my%20del.icio.us%20tags&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+[[/embed]]
 &lt;/pre&gt;
 
 &lt;h3 id="embediframe"&gt;Embed iframe&lt;/h3&gt;
 &lt;pre&gt;
-	[[iframe url-source attributes]]
-&lt;/pre&gt;</string>
+[[iframe url-source attributes]]
+&lt;/pre&gt;
+			</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^h</string>
 	<key>name</key>
-	<string>Syntax Cheat Sheet Wikidot</string>
+	<string>Syntax Cheat Sheet Wikidot (cntrl-H)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>

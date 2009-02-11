@@ -199,7 +199,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(setMethod|setGeneric|setGroupGeneric|setClass)\s*\(\s*("|\x{27})([a-zA-Z._][a-zA-Z0-9._]+?)\2</string>
+			<string>(setMethod|setGeneric|setGroupGeneric|setClass)\s*\(\s*("|\x{27})([a-zA-Z._\[\$@][a-zA-Z0-9._\[]*?)\2</string>
 			<key>name</key>
 			<string>meta.method.declaration.r</string>
 		</dict>

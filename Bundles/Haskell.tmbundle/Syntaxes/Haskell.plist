@@ -113,6 +113,12 @@
 			<array>
 				<dict>
 					<key>match</key>
+					<string>\b(Monad|Functor|Eq|Ord|Read|Show|Num|(Frac|Ra)tional|Enum|Bounded|Real(Frac|Float)?|Integral|Floating)\b</string>
+					<key>name</key>
+					<string>support.class.prelude.haskell</string>
+				</dict>
+				<dict>
+					<key>match</key>
 					<string>[A-Z][A-Za-z_']*</string>
 					<key>name</key>
 					<string>entity.other.inherited-class.haskell</string>
@@ -393,7 +399,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(Just|Nothing|Left|Right|True|False|\(\))\b</string>
+			<string>\b(Just|Nothing|Left|Right|True|False|LT|EQ|GT|\(\)|\[\])\b</string>
 			<key>name</key>
 			<string>support.constant.haskell</string>
 		</dict>
@@ -404,22 +410,8 @@
 			<string>constant.other.haskell</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.haskell</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(--).*$\n?</string>
-			<key>name</key>
-			<string>comment.line.double-dash.haskell</string>
-		</dict>
-		<dict>
 			<key>include</key>
-			<string>#block_comment</string>
+			<string>#comments</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -468,6 +460,30 @@
 			<string>comment.block.haskell</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#block_comment</string>
+				</dict>
+			</array>
+		</dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.haskell</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(--).*$\n?</string>
+					<key>name</key>
+					<string>comment.line.double-dash.haskell</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#block_comment</string>
@@ -594,15 +610,15 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b[a-z][a-zA-Z0-9_']*\b</string>
+					<string>\b(Int(eger)?|Maybe|Either|Bool|Float|Double|Char|String|Ordering|ShowS|ReadS|FilePath|IO(Error)?)\b</string>
 					<key>name</key>
-					<string>variable.other.generic-type.haskell</string>
+					<string>support.type.prelude.haskell</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(Int|Double|Integer|Maybe|IO|Either|Bool|Float|Char|FilePath|IOError)\b</string>
+					<string>\b[a-z][a-zA-Z0-9_']*\b</string>
 					<key>name</key>
-					<string>support.type.prelude.haskell</string>
+					<string>variable.other.generic-type.haskell</string>
 				</dict>
 				<dict>
 					<key>match</key>

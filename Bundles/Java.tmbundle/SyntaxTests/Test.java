@@ -112,3 +112,9 @@ public class Foo
    }
    
 }
+
+public class ImplementsOverMultipleLines
+   implements Bar,
+              Baz
+{
+}

@@ -3,17 +3,39 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>[[ ! -d "$HOME"/Rdaemon ]] &amp;&amp; "$DIALOG" -e -p '{messageTitle="Rdaemon";alertStyle="critical";informativeText="Please install Rdaemon first!";}' &amp;&gt;/dev/null &amp;&amp; exit_show_tool_tip
+	<string>
 
 #get R's PID
 RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
-echo $RPID
+
 #check whether Rdaemon runs - if not start it
 if [ -z $RPID ]; then
-	if [ -f "$HOME"/Rdaemon/daemon/startScript.sh ]; then
-		"$HOME"/Rdaemon/daemon/startScript.sh
-	fi
+
+  if [ -f "$HOME"/Rdaemon/daemon/startScript.sh ]; then
+  	rm -rf "$HOME"/Rdaemon/daemon
+  	rm -rf "$HOME"/Rdaemon/help
+  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon/daemon "$HOME"/Rdaemon
+  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon/help "$HOME"/Rdaemon 
+  	"$HOME"/Rdaemon/daemon/startScript.sh
+  	echo -en "&gt; "
+  else
+  	[[ -d "$HOME"/Rdaemon ]] &amp;&amp; echo -e "The folder '$HOME/Rdaemon' already exists! Please remove or rename it first." &amp;&amp; exit_show_tool_tip
+  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon "$HOME"/Rdaemon
+  	echo -e "Rdaemon was installed in:\n'$HOME/Rdaemon'"
+  	if [ -f "$HOME"/Rdaemon/daemon/startScript.sh ]; then
+  		"$HOME"/Rdaemon/daemon/startScript.sh
+  		echo -en "&gt; "
+  	else
+  		echo "Error while installing Rdaemon!"
+  		exit_show_tool_tip
+  	fi
+  fi
+
+else
+	echo -n "&gt; "
 fi
+
+
 open "$HOME"/Rdaemon/Rsession.tmproj
 mate "$HOME"/Rdaemon/console.Rcon
 open "txmt://open?line=1000000&amp;column=10000000"

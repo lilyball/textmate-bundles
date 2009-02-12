@@ -22,7 +22,5 @@ if [[ "$SOURCE" != $TM_JAVA_FILEGLOB ]]; then
   if (($rc >= 1)); then exit $rc; fi
 fi
 
-cd "$output";
-
-"$TM_JAVA" -Dfile.encoding=utf-8 $(basename -s .java "$SOURCE") $@;
+CLASSPATH="$output:$CLASSPATH" "$TM_JAVA" -Dfile.encoding=utf-8 $(basename -s .java "$SOURCE") $@;
 exit $?;

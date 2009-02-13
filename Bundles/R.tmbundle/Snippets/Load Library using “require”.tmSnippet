@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>require("${1:name}")</string>
+	<string>require("${1:`. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
+
+[[ ! -z $TM_SELECTED_TEXT ]] &amp;&amp; echo 'Please remove selection' &amp;&amp; exit 206
+
+cat "$TM_BUNDLE_SUPPORT"/help.pkgs | sort -f | ruby -e '
+	isDIALOG2 = ! ENV["DIALOG"].match(/2$/).nil?
+	exit unless isDIALOG2
+	require File.join(ENV["TM_SUPPORT_PATH"], "lib/ui.rb")
+	require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
+	words = STDIN.read().split("\n")
+	if isDIALOG2
+		TextMate::UI.complete(words)
+	else
+		index=TextMate::UI.menu(words)
+		if index != nil
+			print words[index]
+		else
+			TextMate.exit_discard()
+		end
+	end
+	exit 203
+'`}")</string>
 	<key>name</key>
 	<string>Load Library using “require”</string>
 	<key>scope</key>

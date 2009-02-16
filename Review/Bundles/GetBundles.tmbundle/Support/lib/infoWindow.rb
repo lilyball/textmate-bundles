@@ -78,20 +78,31 @@ def gitInfo(bundle)
   data = ""
   url = bundle['url']
   namehasdot = false
-  searchPath = url.gsub(/.*?com\/(.*?)\/(.*)/, '\1-\2')
+  url =~ /.*?com\/(.*?)\/(.*)/
+  owner = $1
   projectName = url.gsub(/.*?com\/(.*?)\/(.*)/, '\2')
-  unless searchPath =~ /\./
+  unless projectName =~ /\./
 
     begin
       GBTimeout::timeout($timeout) do
-        d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{searchPath}"})
+        d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{projectName}"})
         if d.has_key?('repositories') and d['repositories'].size > 0
-          info = d['repositories'].first
+          d['repositories'].each do |r|
+            if r['username'] == owner
+              info = r
+              break
+            end
+          end
         else
           # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
-          d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{searchPath.gsub('-','+')}"})
+          d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{path.gsub('-','+')}"})
           if d.has_key?('repositories') and d['repositories'].size > 0
-            info = d['repositories'].first
+            d['repositories'].each do |r|
+              if r['username'] == owner
+                info = r
+                break
+              end
+            end
           # if .../search/foo+bar+foo1 fails init an empty dict
           else
             info = {}
@@ -113,7 +124,7 @@ def gitInfo(bundle)
     info['watchers'] = "<font color=silver><small>no data available</small></font>"
     info['private'] = "<font color=silver><small>no data available</small></font>"
     info['forks'] = "<font color=silver><small>no data available</small></font>"
-    info['owner'] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
+    info['username'] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
   end
 
   return if $close
@@ -124,7 +135,7 @@ def gitInfo(bundle)
     GBTimeout::timeout(10) do
       loop do
         begin
-          lastCommit = YAML.load(%x{curl -sSL "http://github.com/api/v1/json/#{info['owner']}/#{projectName}/commits/master"})['commits'].first['committed_date']
+          lastCommit = YAML.load(%x{curl -sSL "http://github.com/api/v1/json/#{info['username']}/#{projectName}/commits/master"})['commits'].first['committed_date']
         rescue
           lastCommit = nil
         end
@@ -211,9 +222,7 @@ def gitInfo(bundle)
       <h3><u>git Information:</u></h3>#{gitbugreport}
       <b>Description:</b><br />&nbsp;#{info['description']}<br />
       <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
-      <b>Owner:</b><br />&nbsp;<a href='http://github.com/#{info['owner']}'>#{info['owner']}</a><br />
-      <b>Watchers:</b><br />&nbsp;#{info['watchers']}<br />
-      <b>Private:</b><br />&nbsp;#{info['private']}<br />
+      <b>Username:</b><br />&nbsp;<a href='http://github.com/#{info['username']}'>#{info['username']}</a><br />
       <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
       <b>Last Modified:</b><br />&nbsp;#{Time.parse(lastCommit).getutc.to_s}<br />
       HTML

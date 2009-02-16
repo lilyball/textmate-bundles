@@ -29,7 +29,7 @@
 # Your block will be called with type :out or :err.  If you don't want to handle a particular type,
 # return nil and Executor will apply basic formatting for you.
 #
-# TextMate::Executor.run also accepts four optional named arguments.
+# TextMate::Executor.run also accepts six optional named arguments.
 #   :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
 #   :version_regex is a regular expression to which the resulting version string is passed.
 #     $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
@@ -37,6 +37,8 @@
 #   :env is the environment in which the command will be run.  Default is ENV.
 #   :script_args are arguments to be passed to the *script* as opposed to the interpreter.  They will
 #     be appended after the path to the script in the arguments to the interpreter.
+#   :use_hashbang Tells Executor wether to override it's first argument with the current file's #! if that exists.
+#     The default is “true”.  Set it to “false” to prevent the hash bang from overriding the interpreter.
 
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 require SUPPORT_LIB + 'tm/process'
@@ -65,13 +67,14 @@ module TextMate
                    :version_regex => /\A(.*)$/,
                    :verb          => "Running",
                    :env           => nil,
-                   :script_args   => []}
+                   :script_args   => [],
+                   :use_hashbang  => true}
 
         options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 
         options.merge! args.pop if args.last.is_a? Hash
 
-        if File.exists?(args[-1])
+        if File.exists?(args[-1]) and options[:use_hashbang] == true
           args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
         end
 

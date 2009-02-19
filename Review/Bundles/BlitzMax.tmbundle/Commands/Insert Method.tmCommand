@@ -8,12 +8,14 @@
 	<string>#!/usr/bin/env ruby -wKU
 
 method_name = ENV['TM_CURRENT_WORD']
-if method_name.nil? then
+if method_name.nil? || method_name.length == 0 then
 	method_name = "Name"
 end
 
+snippet_return_args = '${2/^([\!\@\#\$\%].*)|(.+)|^(:)/(?2:\:)/}${2:Int}($3)'
+
 print &lt;&lt;END_SNIPPET
-Method #{method_name}($1)
+Method ${1:#{method_name}}#{snippet_return_args}
 	$0
 End Method
 END_SNIPPET

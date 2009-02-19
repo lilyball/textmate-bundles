@@ -10,7 +10,7 @@
 	<dict>
 		<key>decreaseIndentPattern</key>
 		<string>(?xi)
-	^\s*\b(
+	^\s*(
 	# end &lt;keyword&gt;
 		end\s*(function|method|type|select|while|extern|if|try) |
 	# else/if
@@ -19,7 +19,7 @@
 	)\b</string>
 		<key>increaseIndentPattern</key>
 		<string>(?xi)
-	^\s*\b(
+	^\s*(
 		(?&lt;!end|end\s)(function|method|type|select|while|extern|try|if) |
 		else|else\s*if |
 		for | catch | repeat

@@ -12,7 +12,8 @@ rescue
   exit
 end
 
-search_string = ARGV[0]
+search_string = ARGV[0].gsub(/\\ /, '￰').gsub(/ /, '').gsub(/￰/, ' ')
+
 if search_string.empty?
   print ""
   exit

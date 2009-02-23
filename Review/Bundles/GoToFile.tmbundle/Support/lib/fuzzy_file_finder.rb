@@ -53,7 +53,7 @@ class FuzzyFileFinder
   class CharacterRun < Struct.new(:string, :inside) #:nodoc:
     def to_s
       if inside
-        "(#{string})"
+        "￰#{string}￱"
       else
         string
       end
@@ -170,7 +170,7 @@ class FuzzyFileFinder
   #   the file matches the given pattern. A score of 1 means the
   #   pattern matches the file exactly.
   def search(pattern, &block)
-    pattern.gsub!(" ", "")
+    # pattern.gsub!(" ", "")
     path_parts = pattern.split("/")
     path_parts.push "" if pattern[-1,1] == "/"
 

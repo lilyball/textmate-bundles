@@ -34,7 +34,7 @@ begin
       </div>
       <div>
         <span class='mylink' title='#{p[:path].gsub(/^#{ENV['HOME']}/, '~')}' onclick='myClick("#{p[:path]}")'>
-    #{p[:highlighted_path].gsub('(','<span class=\'highlight\'>').gsub(')','</span>')}
+    #{p[:highlighted_path].gsub('￰','<span class=\'highlight\'>').gsub('￱','</span>')}
         </span>
       </div>
     </div>

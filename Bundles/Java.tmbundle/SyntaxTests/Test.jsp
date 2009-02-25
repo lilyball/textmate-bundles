@@ -39,3 +39,9 @@ public class Test {
 
 }
 %>
+
+<%@ page import="java.util.*, java.lang.*" %>
+<%@ page buffer="5kb" autoFlush="false" %>
+<%@ page errorPage="error.jsp" %>
+<%@ include file="relativeURL" %>
+<%@ taglib uri="URIToTagLibrary" prefix="somePrefix" %>

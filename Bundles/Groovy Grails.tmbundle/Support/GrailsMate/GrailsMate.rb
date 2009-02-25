@@ -31,8 +31,12 @@ class GrailsCommand
         pref_key = "#{@location}::#{@task}"
         last_value = prefs.transaction(true) { prefs[pref_key] }
         option = @option_getter[last_value]
-        prefs.transaction { prefs[pref_key] = option }
-        Shellwords.shellwords(option).each { |option| @command << option }
+        if option.nil?
+          return nil
+        else
+          prefs.transaction { prefs[pref_key] = option }
+          (Shellwords.shellwords(option).each { |option| @command << option }) unless option.empty?
+        end
       end
     end
     @command
@@ -40,25 +44,29 @@ class GrailsCommand
       
   def run
     Dir.chdir(@location) do 
+      cmd = command
       TextMate::HTMLOutput.show(:window_title => "GrailsMate", :page_title => "GrailsMate", :sub_title => "#{@location}") do |io|
-        cmd = command
-        io << "<pre>"
-        io << "<strong>grails " + htmlize(cmd.join(' ')) + "</strong><br/>"
-        TextMate::Process.run(@grails, cmd) do |line|
-          line.chomp!
-          match = false
-          if line =~ /^(Running test )(\S+)(\.\.\.)$/
-            match = $1 + "<a href='txmt://open?url=file://#{@location}/test/reports/plain/TEST-#{$2}.txt'>#{$2}</a>" + $3 + "</br>"
-          else 
-            @colorisations.each do | color, patterns |
-              if match == false and patterns.detect { |pattern| line =~ pattern }
-                match = "<span style=\"color: #{color}\">#{htmlize line}</span><br/>"
+        if cmd.nil?
+          io << "Command cancelled."
+        else
+          io << "<pre>"
+          io << "<strong>grails " + htmlize(cmd.join(' ')) + "</strong><br/>"
+          TextMate::Process.run(@grails, cmd) do |line|
+            line.chomp!
+            match = false
+            if line =~ /^(Running test )(\S+)(\.\.\.)$/
+              match = $1 + "<a href='txmt://open?url=file://#{@location}/test/reports/plain/TEST-#{$2}.txt'>#{$2}</a>" + $3 + "</br>"
+            else 
+              @colorisations.each do | color, patterns |
+                if match == false and patterns.detect { |pattern| line =~ pattern }
+                  match = "<span style=\"color: #{color}\">#{htmlize line}</span><br/>"
+                end
               end
             end
+            io << (match ? match : "#{htmlize line}<br/>")
           end
-          io << (match ? match : "#{htmlize line}<br/>")
+          io << "</pre>"
         end
-        io << "</pre>"
       end
     end
   end

@@ -18,6 +18,8 @@ if (name != null) {
  <%
 }
 %>
+
+
 <h1 id=""></h1>
 
 <%!
@@ -45,3 +47,16 @@ public class Test {
 <%@ page errorPage="error.jsp" %>
 <%@ include file="relativeURL" %>
 <%@ taglib uri="URIToTagLibrary" prefix="somePrefix" %>
+
+<jsp:declaration>
+String test = "blah";
+</jsp:declaration>
+<jsp:scriptlet>
+if (test.equals("blah")) {
+</jsp:scriptlet>
+<jsp:expression>
+"expression to be printet: " + test
+</jsp:expression>
+<jsp:scriptlet>
+}
+</jsp:scriptlet>

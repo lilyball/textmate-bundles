@@ -148,28 +148,46 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>&lt;%[!=]?</string>
-			<key>captures</key>
+			<string>(&lt;%[!=]?)|(&lt;jsp:scriptlet&gt;|&lt;jsp:expression&gt;|&lt;jsp:declaration&gt;)</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>0</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.section.embedded.jsp</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.block.jsp</string>
+				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?&lt;=%&gt;)</string>
+			<string>(?&lt;=&lt;/jsp:scriptlet&gt;|&lt;/jsp:expression&gt;|&lt;/jsp:declaration&gt;|%&gt;)</string>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.block.jsp</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.embedded.jsp</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>%&gt;</string>
+					<string>(&lt;/jsp:scriptlet&gt;|&lt;/jsp:expression&gt;|&lt;/jsp:declaration&gt;)|(%&gt;)</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;!\n)(?!\%&gt;|\{|\})</string>
+					<string>(?&lt;!\n)(?!&lt;/jsp:scriptlet&gt;|&lt;/jsp:expression&gt;|&lt;/jsp:declaration&gt;|%&gt;|\{|\})</string>
 					<key>end</key>
-					<string>(?=\%&gt;|\{|\})|\n</string>
+					<string>(?=&lt;/jsp:scriptlet&gt;|&lt;/jsp:expression&gt;|&lt;/jsp:declaration&gt;|%&gt;|\{|\})|\n</string>
 					<key>name</key>
 					<string>source.java.embedded.html</string>
 					<key>patterns</key>
@@ -189,17 +207,22 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>%&gt;</string>
+							<string>(&lt;/jsp:scriptlet&gt;|&lt;/jsp:expression&gt;|&lt;/jsp:declaration&gt;)|(%&gt;)</string>
 							<key>captures</key>
 							<dict>
-								<key>0</key>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.block.jsp</string>
+								</dict>
+								<key>2</key>
 								<dict>
 									<key>name</key>
 									<string>punctuation.section.embedded.jsp</string>
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>&lt;%[!=]</string>
+							<string>(&lt;jsp:scriptlet&gt;|&lt;jsp:expression&gt;|&lt;jsp:declaration&gt;)|(&lt;%[!=]?)</string>
 							<key>patterns</key>
 							<array>
 								<dict>

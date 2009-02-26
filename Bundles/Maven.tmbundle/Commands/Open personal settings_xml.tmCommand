@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>settings=~/.m2/settings.xml
+if [ -f "$settings" ]
+then
+	open -a TextMate ~/.m2/settings.xml
+else
+	TextMate.exit_show_tooltip "‘$settings’ does not exist"
+fi </string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^@S</string>
+	<key>name</key>
+	<string>Open personal settings.xml</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>A69B943D-83B8-467E-A6AC-0CDF9A288EB9</string>
+</dict>
+</plist>

@@ -14,8 +14,7 @@ end
 
 snippet_return_args = '${2/^([\!\@\#\$\%].*)|(.+)|^(:)/(?2:\:)/}${2:Int}($3)'
 
-print "Function #{method_name}($1)"
-</string>
+print "Function ${1:#{method_name}}#{snippet_return_args}"</string>
 	<key>fallbackInput</key>
 	<string>word</string>
 	<key>input</key>

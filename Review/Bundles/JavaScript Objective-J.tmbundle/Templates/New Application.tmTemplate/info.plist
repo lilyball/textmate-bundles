@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>command</key>
@@ -32,7 +32,7 @@ TARGETDIR="$HOME/Desktop/$PROJECTTITLE"
 
 mkdir -p "$TARGETDIR"
 
-TEMPLATEDIR="$TM_BUNDLE_SUPPORT/AppTemplate"
+TEMPLATEDIR="$OBJJ_HOME/lib/NewApplication"
 
 TITLE=$(echo -en "$PLIST" | head -n 1)
 
@@ -43,31 +43,43 @@ DATE=`date "+%b %d, %Y"`
 YEAR=`date "+%Y"`
 
 cat "$TEMPLATEDIR/index.html" | perl -pe "
-s/#\{app_title\}/$TITLE/g;
-s/#\{author\}/$AUTHOR/g;
-s/#\{date\}/$DATE/g;
-s/#\{year\}/$YEAR/g;
+s/&lt;title&gt;.*?&lt;\/title&gt;/&lt;title&gt;$TITLE&lt;\/title&gt;/g;
+s/__Me__/$AUTHOR/g;
+s/__MyCompanyName__/$AUTHOR/g;
+s/__Date__/$DATE/g;
+s/Copyright +\d+/Copyright $YEAR/g;
 " &gt; "$TARGETDIR/index.html"
 
+cat "$TEMPLATEDIR/index-debug.html" | perl -pe "
+s/&lt;title&gt;.*?&lt;\/title&gt;/&lt;title&gt;$TITLE&lt;\/title&gt;/g;
+s/__Me__/$AUTHOR/g;
+s/__MyCompanyName__/$AUTHOR/g;
+s/__Date__/$DATE/g;
+s/Copyright +\d+/Copyright $YEAR/g;
+" &gt; "$TARGETDIR/index-debug.html"
+
 cat "$TEMPLATEDIR/main.j" | perl -pe "
-s/#\{app_title\}/$TITLE/g;
-s/#\{author\}/$AUTHOR/g;
-s/#\{date\}/$DATE/g;
-s/#\{year\}/$YEAR/g;
+s/__Me__/$AUTHOR/g;
+s/__MyCompanyName__/$AUTHOR/g;
+s/__Date__/$DATE/g;
+s/Copyright +\d+/Copyright $YEAR/g;
 " &gt; "$TARGETDIR/main.j"
 
 cat "$TEMPLATEDIR/Info.plist" | perl -pe "
-s/#\{app_title\}/$AUTHOR/g;
+s/Hello World/$TITLE/;
 " &gt; "$TARGETDIR/Info.plist"
 
 cat "$TEMPLATEDIR/AppController.j" | perl -pe "
-s/#\{author\}/$AUTHOR/g;
+s/__Me__/$AUTHOR/g;
+s/__MyCompanyName__/$AUTHOR/g;
+s/__Date__/$DATE/g;
+s/Copyright +\d+/Copyright $YEAR/g;
 " &gt; "$TARGETDIR/AppController.j"
 
 if [ $FEMBEDDED == 1 ]; then
-  cp -R "$OBJJ_HOME/Frameworks" "$TARGETDIR"
+  cp -R "$OBJJ_HOME/lib/Frameworks" "$TARGETDIR"
 else
-  ln -s "$OBJJ_HOME/Frameworks" "$TARGETDIR/Frameworks"
+  ln -s "$OBJJ_HOME/lib/Frameworks" "$TARGETDIR/Frameworks"
 fi
 
 mate "$TARGETDIR"

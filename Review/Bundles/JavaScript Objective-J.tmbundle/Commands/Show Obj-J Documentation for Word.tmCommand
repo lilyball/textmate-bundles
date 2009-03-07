@@ -6,10 +6,11 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>[[ -z $OBJJ_HOME ]] &amp;&amp; echo "OBJJ_HOME wasn't set!" &amp;&amp; exit 206
+[[ ! -d "$OBJJ_HOME/Documentation" ]] &amp;&amp; echo "Please copy the folder ‘Documentation’ to $OBJJ_HOME" &amp;&amp; exit 206
 
 function showUpClassPage {
 cat &lt;&lt;-HTM
-&lt;body onload='javascript:window.location.href="tm-file://$OBJJ_HOME/Documentation/classes/$1"'&gt;
+&lt;body onload='javascript:window.location.href="tm-file://$OBJJ_HOME/Documentation/class$1"'&gt;
 &lt;/body&gt;
 HTM
 exit 205
@@ -36,11 +37,14 @@ DOCHEAD=$(perl -e '
 ')
 
 # caret is inside of a class name
-[[ `echo $TM_SCOPE | grep -c 'support.class.cappuccino'` -gt 0 ]] &amp;&amp; showUpClassPage "$TM_CURRENT_WORD.html"
+if [ `echo $TM_SCOPE | grep -c 'support.class.cappuccino'` -gt 0 ]; then
+	n=$(echo $TM_CURRENT_WORD | perl -pe 's/(.)(.)(.*)/_$1_$2_$3/;s/(?&lt;!_)([A-Z])(?!_)/_$1/g;s/_{2,}/_/g')
+	showUpClassPage "$n.html"
+fi
 
 # caret is inside of a foundation class name
 if [ `echo $TM_SCOPE | grep -c 'support.variable.cappuccino.foundation'` -gt 0 ]; then
- [[ "$TM_CURRENT_WORD" == "CPApp" ]] &amp;&amp; showUpClassPage "CPApplication.html"
+ [[ "$TM_CURRENT_WORD" == "CPApp" ]] &amp;&amp; showUpClassPage "_C_P_Application.html"
 fi
 
 # caret is inside of a objj function

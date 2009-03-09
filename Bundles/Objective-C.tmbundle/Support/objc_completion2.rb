@@ -795,7 +795,7 @@ class ObjCMethodCompletion
       obType = :instanceMethod
       list = list_from_shell_command(typeName, obType)
       if list.nil? && File.exists?(userClasses = "#{ENV['TM_PROJECT_DIRECTORY']}/.classes.TM_Completions.txt.gz")
-        candidates = %x{ zgrep ^#{e_sh h[var] + "[[:space:]]" } #{userClasses} }.split("\n")
+        candidates = %x{ zgrep ^#{e_sh h[var] + "[[:space:]]" } #{e_sh userClasses} }.split("\n")
         unless candidates.empty?
           list = Set.new
           c = candidates[0].split("\t")[1].split(":")

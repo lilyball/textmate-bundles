@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+c = File.basename(ENV['TM_DROPPED_FILE']).sub(/\.(as|mxml)/,'')
+print "&lt;${1:mx${2::}}${3:#{c}} \$0/&gt;"
+</string>
+	<key>draggedFileExtensions</key>
+	<array>
+		<string>as</string>
+		<string>mxml</string>
+	</array>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Component</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.xml.mxml</string>
+	<key>uuid</key>
+	<string>2BA425B4-C91A-4E5B-B7A2-FA8215A2F8A8</string>
+</dict>
+</plist>

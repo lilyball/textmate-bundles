@@ -802,10 +802,8 @@
 			<string>keyword.control.if.blitzmax</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?i)\b(exit|continue)\b</string>
-			<key>name</key>
-			<string>keyword.control.loop.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_control_keywords</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1003,12 +1001,6 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i)\breturn\b</string>
-			<key>name</key>
-			<string>keyword.control.return.blitzmax</string>
-		</dict>
-		<dict>
-			<key>match</key>
 			<string>(?i)\b(strict|superstrict)\b</string>
 			<key>name</key>
 			<string>keyword.other.strictness.blitzmax</string>
@@ -1128,6 +1120,13 @@
 					<string>$self</string>
 				</dict>
 			</array>
+		</dict>
+		<key>bmax_control_keywords</key>
+		<dict>
+			<key>match</key>
+			<string>(?i)\b(throw|return|exit|continue)\b</string>
+			<key>name</key>
+			<string>keyword.control.blitzmax</string>
 		</dict>
 		<key>bmax_typename</key>
 		<dict>
@@ -1308,7 +1307,7 @@
 		<key>url_content</key>
 		<dict>
 			<key>match</key>
-			<string>[a-zA-Z_]\w*://\S*</string>
+			<string>[a-zA-Z_]\w*://[^ "'()\[\]]*</string>
 			<key>name</key>
 			<string>meta.url.blitzmax</string>
 		</dict>

@@ -12,6 +12,8 @@
 		/(?&lt;=[\s\]\)\}])(\.)/
 	The Regexp to stop in front of the "Terminator":
 		/(?&lt;=[\s\]\)\}])(?=\.)/
+	The Regexp for a simple "Identifier" is:
+		/(`.|[^`,\(\)\[\]\{\}])+/
 	The support.*.prelude matches were extracted from:
 		Maude interpreter standard prelude.
 		Version alpha88d.
@@ -1191,7 +1193,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(op)\s+(\S+)\s+(to)\s+(\S+)\s+(\.)</string>
+					<string>\b(op)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(to)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(\.)</string>
 					<key>name</key>
 					<string>meta.mapping.operator.maude</string>
 				</dict>
@@ -1230,7 +1232,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(op)\s+(\S+)\s+(to)\s+(term)\s+(.+)\s+(\.)</string>
+					<string>\b(op)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(to)\s+(term)\s+(.+)\s+(\.)</string>
 					<key>name</key>
 					<string>meta.mapping.operator.maude</string>
 				</dict>
@@ -1284,7 +1286,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(op)\s+(\S+)\s+(:)\s+(.*)\s+([-~]&gt;)\s+(\S+)\s+(to)\s+(\S+)\s+(\.)</string>
+					<string>\b(op)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(:)\s+(.*)\s+([-~]&gt;)\s+(\S+)\s+(to)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(\.)</string>
 					<key>name</key>
 					<string>meta.mapping.operator.maude</string>
 				</dict>
@@ -2107,7 +2109,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(op)\s+(\S+)\s+(to)\s+(\S+)\b</string>
+					<string>\b(op)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(to)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -2149,7 +2151,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(op)\s+(\S+)\s+(:)\s+(.*)\s+([-~]&gt;)\s+(\S+)\s+(to)\s+(\S+)\b</string>
+					<string>\b(op)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\s+(:)\s+(.*)\s+([-~]&gt;)\s+(\S+)\s+(to)\s+((?:`.|[^`,\(\)\[\]\{\}])+)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

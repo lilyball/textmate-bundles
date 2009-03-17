@@ -661,7 +661,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\*\*\*\(</string>
+					<string>(?&lt;=^|\s)\*\*\*\(</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -700,7 +700,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(\*\*\*).*$\n?</string>
+					<string>(?&lt;=^|\s)(\*\*\*).*$\n?</string>
 					<key>name</key>
 					<string>comment.line.triple-star.maude</string>
 				</dict>
@@ -714,7 +714,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(---).*$\n?</string>
+					<string>(?&lt;=^|\s)(---).*$\n?</string>
 					<key>name</key>
 					<string>comment.line.triple-dash.maude</string>
 				</dict>

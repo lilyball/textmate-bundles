@@ -210,11 +210,13 @@ module Maude
     end
     
     def emit_message(type, file, text)
-      htmlname = strong { htmlize(filename(file)) }
+      htmlfile = strong { htmlize(filename(file)) }
+      htmltext = htmlize(text)
+      htmltext.gsub!(htmlize(file), htmlfile)  if file
       p do
         span({'style' => "color: #{colors[type]}"}) do
           strong { htmlize(type) }
-        end + ': ' + htmlize(text).gsub(htmlize(file), htmlname)
+        end + ': ' + htmltext
       end
     end
     

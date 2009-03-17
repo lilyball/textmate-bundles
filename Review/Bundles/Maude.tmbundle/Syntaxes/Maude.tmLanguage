@@ -513,15 +513,10 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\b(o(n|ff)?)\s+(\.)</string>
+					<string>(?&lt;=[\s\]\)\}])(\.)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.command.set.maude</string>
-						</dict>
-						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.terminator.maude</string>
@@ -639,6 +634,20 @@
 							<string>\b(break|verbose|profile)\b</string>
 							<key>name</key>
 							<string>meta.command.set.other.maude</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.other.command.set.value.maude</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>\b(o(?:n|ff))\b</string>
+							<key>name</key>
+							<string>meta.command.set.value.maude</string>
 						</dict>
 					</array>
 				</dict>

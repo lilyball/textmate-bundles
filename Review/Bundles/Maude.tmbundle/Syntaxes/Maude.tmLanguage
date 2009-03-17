@@ -155,7 +155,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(in|load|quit|eof|popd|pwd|cd|pushd|ls)\b\s*(.*)$</string>
+					<string>\b(in|load|q(uit)?|eof|popd|pwd|cd|pushd|ls)\b\s*(.*)$</string>
 					<key>name</key>
 					<string>meta.command.system.maude</string>
 				</dict>
@@ -493,7 +493,7 @@
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\b(search\s+graph|path(?:\s+labels)?|modules?|all|sorts|ops|vars|mbs|eqs|rls|components|kinds|summary|views?|profile)\b</string>
+							<string>\b(search\s+graph|path(?:\s+labels?)?|modules?|all|sorts|ops|vars|mbs|eqs|rls|components|kinds|summary|views?|profile)\b</string>
 							<key>name</key>
 							<string>keyword.other.command.show.maude</string>
 						</dict>
@@ -543,7 +543,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>\b(show)\s+(advise|stats|timing|loop\s+(stats|timing)|breakdown|command|gc)\b</string>
+							<string>\b(show)\s+(advis(e|or(y|ies))|stats|timing|loop\s+(stats|timing)|breakdown|c(md|ommand)|gc)\b</string>
 							<key>name</key>
 							<string>meta.command.set.show.maude</string>
 						</dict>
@@ -562,7 +562,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>\b(print)\s+(mixfix|flat|with\s+(paren(theses|s)?|aliases)|conceal|number|rat|color|format|graph)\b</string>
+							<string>\b(print)\s+(mixfix|flat(tened)?|with\s+(paren(s|theses)?|alias(es)?)|conceal|number|rat|color|format|graph)\b</string>
 							<key>name</key>
 							<string>meta.command.set.print.maude</string>
 						</dict>
@@ -581,7 +581,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>\b(trace)(?:\s+(condition|whole|substitution|select|mbs|eqs|rls|rewrite|body))?\b</string>
+							<string>\b(trace)(?:\s+(cond(ition)?|whole|subst(itution)?|select|mbs|eqs|rls|rew(rite)?|body))?\b</string>
 							<key>name</key>
 							<string>meta.command.set.trace.maude</string>
 						</dict>
@@ -600,7 +600,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>\b(clear)\s+(memo|rules|profile)\b</string>
+							<string>\b(clear)\s+(memo|r(l|ule)s?|profile)\b</string>
 							<key>name</key>
 							<string>meta.command.set.clear.maude</string>
 						</dict>

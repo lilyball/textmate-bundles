@@ -1035,7 +1035,7 @@
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>(?&lt;=\))(?=\s)</string>
+							<string>(?&lt;=\))(?=[\s\]\)\}])</string>
 							<key>name</key>
 							<string>meta.module.rename.maude</string>
 							<key>patterns</key>
@@ -1052,7 +1052,7 @@
 										</dict>
 									</dict>
 									<key>end</key>
-									<string>(\))(?=\s)</string>
+									<string>(\))(?=[\s\]\)\}])</string>
 									<key>endCaptures</key>
 									<dict>
 										<key>1</key>

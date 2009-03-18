@@ -661,7 +661,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=^|\s)\*\*\*\(</string>
+					<string>(?&lt;=^|\s)\*{3}\(</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -681,7 +681,38 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>comment.block.maude</string>
+					<string>comment.block.triple-star.maude</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment-content</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=^|\s)-{3}\(</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.begin.maude</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.end.maude</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>comment.block.triple-dash.maude</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -700,7 +731,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=^|\s)(\*\*\*).*$\n?</string>
+					<string>(?&lt;=^|\s)(\*{3}).*$\n?</string>
 					<key>name</key>
 					<string>comment.line.triple-star.maude</string>
 				</dict>
@@ -714,7 +745,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=^|\s)(---).*$\n?</string>
+					<string>(?&lt;=^|\s)(-{3}).*$\n?</string>
 					<key>name</key>
 					<string>comment.line.triple-dash.maude</string>
 				</dict>

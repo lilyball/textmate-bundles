@@ -16,7 +16,7 @@ def make_link(text)
   when %r{\A[a-zA-Z][a-zA-Z0-9.+-]*://.*\z}:  entity_escape(text)
   when %r{\A.*\.(com|uk|net|org|info)\z}:     "http://#{entity_escape text}"
   when %r{\A\S+\z}:                           entity_escape(text)
-  else                                        "http://some-site.com/"
+  else                                        "http://example.com/"
   end
 end
 

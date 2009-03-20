@@ -91,7 +91,7 @@ class Connector
     end
     tables = []
     do_query(query, database).rows.each {|row| tables << row[0] }
-    tables
+    tables.sort
   end
 
   def database_list
@@ -101,7 +101,7 @@ class Connector
     elsif @server == 'mysql'
       do_query('SHOW DATABASES').rows.each { |row| databases << row[0] }
     end
-    databases
+    databases.sort
   end
 
   def get_fields(table = nil)

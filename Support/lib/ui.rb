@@ -129,44 +129,26 @@ module TextMate
         pid = fork do
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
-          
-          require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
-          characters = "a-zA-Z0-9" # Hard-coded into D2
-          characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
-          # `echo '#{characters}'>/tmp/characters.txt` #DEBUG
 
-          options[:initial_filter] ||= Word.current_word characters, :left
+          unless options.has_key? :initial_filter
+            require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
+            characters = "a-zA-Z0-9" # Hard-coded into D2
+            characters += Regexp.escape(options[:extra_chars]) if options[:extra_chars]
+            options[:initial_filter] = Word.current_word characters, :left
+          end
 
-          choices         = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
-          plist           = {'suggestions' => choices}
-          plist['images'] = options[:images] if options[:images]
+          command =  "#{TM_DIALOG} popup --returnChoice"
+          command << " --alreadyTyped #{e_sh options[:initial_filter]}"
+          command << " --staticPrefix #{e_sh options[:static_prefix]}"           if options[:static_prefix]
+          command << " --additionalWordCharacters #{e_sh options[:extra_chars]}" if options[:extra_chars]
+          command << " --caseInsensitive"                                        if options[:case_insensitive]
 
-          to_insert = ''
-          result    = nil
-          if ENV['DIALOG'] =~ /2$/ and not ENV['TM_USE_MENU_COMPLETION']
-            # If the user has Dialog 2 available we can show the popup
+          choices = choices.map! {|c| {'display' => c.to_s} } unless choices[0].is_a? Hash
+          plist   = {'suggestions' => choices}
 
-            command =  "#{TM_DIALOG} popup --returnChoice"
-            command << " --alreadyTyped #{e_sh options[:initial_filter]}"
-            command << " --staticPrefix #{e_sh options[:static_prefix]}"   if options[:static_prefix]
-            command << " --additionalWordCharacters #{e_sh options[:extra_chars]}"       if options[:extra_chars]
-            command << " --caseInsensitive"                                if options[:case_insensitive]
-            ::IO.popen(command, 'w+') do |io|
-              io << plist.to_plist
-              io.close_write
-              result = OSX::PropertyList.load io rescue nil
-            end
-          else
-            # For users without Dialog 2 we show a simple menu with the suggestion titles
-            # We need to filter the list of suggestions down so that only the matches are included in the menu
-            choices      = choices.select { |c| (c['match'] || c['display']) =~ /^#{Regexp.quote(options[:initial_filter])}/ }
-            menu_choices = choices.map { |c| c['display'] }
-            choice       = menu(menu_choices)
-            if choice
-              result = choices[choice]
-              # With the popup the match text will always be inserted first, so we must emulate it too
-              to_insert << e_sn((result['match'] || result['display'])[options[:initial_filter].length..-1])
-            end
+          result = ::IO.popen(command, 'w+') do |io|
+            io << plist.to_plist; io.close_write
+            OSX::PropertyList.load io rescue nil
           end
 
           # Use a default block if none was provided
@@ -175,7 +157,7 @@ module TextMate
           end
 
           # The block should return the text to insert as a snippet
-          to_insert << block.call(result).to_s
+          to_insert = block.call(result).to_s
 
           # Insert the snippet if necessary
           `"$DIALOG" x-insert --snippet #{e_sh to_insert}` unless to_insert.empty?
@@ -503,14 +485,14 @@ class TestCompletes < Test::Unit::TestCase
     # Nested completes
     # Put a complete in the block of another complete 
     # to make it wait for you to choose the first before starting the next.
-    TextMate::UI.complete(@choices) do |choice|
-      TextMate::UI.complete(@choices) do |choice|
-        TextMate::UI.complete(@choices) do |choice|
-          choice['insert']
+    TextMate::UI.complete(@choices) do |choice_a|
+      TextMate::UI.complete(@choices) do |choice_b|
+        TextMate::UI.complete(@choices) do |choice_c|
+          choice_c['insert']
         end
-        choice['insert']
+        choice_b['insert']
       end
-      choice['insert']
+      choice_a['insert']
     end
     # 
   end

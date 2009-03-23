@@ -1052,7 +1052,7 @@ end
 
 def enableBundle(aBundle,path)
   begin
-    %x{open -a Finder '#{aBundle['path']}'}
+    %x{mate '#{aBundle['path']}'}
   rescue
     writeToLogFile("Error while enabling bundle.\n#{$!}")
   end
@@ -1071,7 +1071,7 @@ end
 
 def unDeleteBundle(aBundle,path)
   begin
-    %x{open -a Finder '#{aBundle['path']}'}
+    %x{mate '#{aBundle['path']}'}
   rescue
     writeToLogFile("Error while undeleting bundle.\n#{$!}")
   end
@@ -1176,7 +1176,7 @@ while $run do
         updateDIALOG
       when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
       when 'revealInFinderIsPressed': %x{osascript -e 'tell app "Finder" to reveal POSIX file("#{$localBundles[$dialogResult['uuid']]['path']}")'}
-      when 'openAsProjectIsPressed': %x{open -a Finder '#{$localBundles[$dialogResult['uuid']]['path']}'}
+      when 'openAsProjectIsPressed': %x{mate '#{$localBundles[$dialogResult['uuid']]['path']}'}
       when 'deleteButtonIsPressed':
         case $dialogResult['action']
           when "Enable": enableBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])

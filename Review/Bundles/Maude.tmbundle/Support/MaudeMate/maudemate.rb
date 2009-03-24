@@ -1,13 +1,8 @@
-require "#{ENV["TM_BUNDLE_SUPPORT"]}/lib/mk_scriptmate"
+require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/executor"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/save_current_document"
 require "pathname"
+require "ostruct"
 require "cgi"
-
-$SCRIPTMATE_VERSION = "$Revision: 1 $"
-
-# We have no way to hook into Maude the way PyMate and RubyMate do, so we
-# - perform slightly more massaging of messages into HTML
-# - swallow all messages from the stderr stream
-# - then pluck them into @error instead
 
 module Maude
   class OutputParser
@@ -254,18 +249,58 @@ module Maude
       end.join
     end
   end
+
+  Language = OpenStruct.new({
+    :language => 'Core Maude',
+    :executable => ENV['TM_MAUDE'] || 'maude',
+    :arguments => %w[-batch -no-banner -no-ansi-color -no-wrap],
+    :environment => { 'MAUDE_LIB' => [ENV['MAUDE_LIB'], ENV['TM_DIRECTORY']].compact.join(':') },
+    :version => 'Core Maude \1',
+  })
 end
 
-class MaudeMate < ScriptMate
-  def filter_stdout(str)
-    @stdout_parser ||= Maude::OutputParser.new
-    @stdout_parser.emit_html(str)
-  end
-  
-  def filter_stderr(str)
-    @stderr_parser ||= Maude::ErrorParser.new
-    @error << @stderr_parser.emit_html(str)
-    @error.gsub!(/<\/blockquote>\s*<blockquote>/i, "<br>\n")
-    nil
+module MaudeMate
+  class << self
+    def filter_stdout(str)
+      @stdout_parser ||= Maude::OutputParser.new
+      @stdout_parser.emit_html(str)
+    end
+
+    def filter_stderr(str)
+      # We can't hook into Maude like Ruby or Python, so instead we filter the
+      # error messages here and redirect them to where Executor expects its
+      # neatly formatted exception report.
+      @stderr_parser ||= Maude::ErrorParser.new
+      io = IO.for_fd(ENV['TM_ERROR_FD'].to_i)
+      io << @stderr_parser.emit_html(str)
+      io.flush
+      ''
+    end
+
+    def emit_options(input, other_opts)
+      @maude ||= Maude::Language
+      puts @maude.language
+      puts @maude.executable
+      opts = {}
+      opts[:version_replace] = @maude.version
+      opts[:env] = @maude.environment
+      unless input.empty?
+        opts[:input] = input.join("\n")
+        opts[:interactive_input] = false
+      end
+      [@maude.executable, @maude.arguments, ENV['TM_FILEPATH'], opts.merge(other_opts)]
+    end
+
+    def run(input, opts = {})
+      TextMate.save_current_document
+      Maude::Executor.run(*emit_options(input, opts)) { |str, type| 
+        case type
+        when :out
+          filter_stdout(str)
+        when :err
+          filter_stderr(str)
+        end
+      }
+    end
   end
 end

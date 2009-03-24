@@ -65,11 +65,10 @@ module Maude
                    :version_regex   => /\A(.*)$/,
                    :version_replace => '\1',
                    :verb            => "Running",
-                   :env             => nil,
                    :script_args     => [],
                    :use_hashbang    => true}
         
-        passthrough_options = [:env]
+        passthrough_options = [:env, :input, :interactive_input]
 
         options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 

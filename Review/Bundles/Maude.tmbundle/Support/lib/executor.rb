@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# tm/executor.rb
+# lib/executor.rb
 #
 # Provides some tools to create “Run Script” commands
 # that fancily HTML format stdout/stderr.
@@ -17,11 +17,11 @@
 #
 # Call it like this (you'll get rudimentary htmlification of the executable's output):
 #
-#   TextMate::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH'])
+#   Maude::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH'])
 #
 # Or like this if you want to transform the output yourself:
 #
-#   TextMate::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH']) do |str, type|
+#   Maude::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH']) do |str, type|
 #     str = htmlize(str)
 #     str =  "<span class=\"stderr\">#{htmlize(str)}</span>" if type == :out
 #   end
@@ -29,7 +29,7 @@
 # Your block will be called with type :out or :err.  If you don't want to handle a particular type,
 # return nil and Executor will apply basic formatting for you.
 #
-# TextMate::Executor.run also accepts six optional named arguments.
+# Maude::Executor.run also accepts six optional named arguments.
 #   :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
 #   :version_regex is a regular expression to which the resulting version string is passed.
 #     $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
@@ -52,11 +52,11 @@ $KCODE = 'u' if RUBY_VERSION < "1.9"
 
 $stdout.sync = true
 
-module TextMate
+module Maude
   module Executor
     class << self
 
-      # Textmate::Executor.run
+      # Maude::Executor.run
       #   Provides an API function for running
 
       def run(*args, &block)
@@ -84,7 +84,7 @@ module TextMate
         # should do in that case -- Alex Ross
         TextMate.require_cmd(args[0]) unless args[0].is_a?(Array)
         
-        out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
+        out, err = TextMate::Process.run(args[0], options[:version_args], :interactive_input => false)
         version = $1 if options[:version_regex] =~ (out + err)
         
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe

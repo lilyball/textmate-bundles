@@ -80,8 +80,7 @@ module Maude
         # should do in that case -- Alex Ross
         TextMate.require_cmd(args[0]) unless args[0].is_a?(Array)
         
-        out, err = TextMate::Process.run(args[0], options[:version_args], :interactive_input => false)
-        version = $1 if options[:version_regex] =~ (out + err)
+        version = parse_version(args[0], options)
         
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
@@ -183,6 +182,11 @@ module Maude
 
       def parse_hashbang(file)
         $1.chomp.split if /\A#!(.*)$/ =~ File.read(file)
+      end
+
+      def parse_version(executable, options)
+        out, err = TextMate::Process.run(executable, options[:version_args], :interactive_input => false)
+        return $1 if options[:version_regex] =~ (out + err)
       end
 
       private

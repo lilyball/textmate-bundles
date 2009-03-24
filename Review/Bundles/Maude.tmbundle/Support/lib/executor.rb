@@ -1,284 +1,300 @@
+# encoding: utf-8
+
+# tm/executor.rb
+#
+# Provides some tools to create “Run Script” commands
+# that fancily HTML format stdout/stderr.
+#
+# Nice features include:
+#  • Automatic interactive input.
+#  • Automatic Fancy HTML headers
+#  • The environment variable TM_ERROR_FD will contain a file descriptor to which HTML-formatted
+#    exceptions can be written.
+#
+# Executor runs best if TextMate.save_current_document is called first.  Doing so ensures
+# that TM_FILEPATH contains the path to the contents of your current document, even if the
+# current document has not yet been saved, or the file is unwriteable.
+#
+# Call it like this (you'll get rudimentary htmlification of the executable's output):
+#
+#   TextMate::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH'])
+#
+# Or like this if you want to transform the output yourself:
+#
+#   TextMate::Executor.run(ENV['TM_SHELL'] || ENV['SHELL'] || 'bash', ENV['TM_FILEPATH']) do |str, type|
+#     str = htmlize(str)
+#     str =  "<span class=\"stderr\">#{htmlize(str)}</span>" if type == :out
+#   end
+# 
+# Your block will be called with type :out or :err.  If you don't want to handle a particular type,
+# return nil and Executor will apply basic formatting for you.
+#
+# TextMate::Executor.run also accepts six optional named arguments.
+#   :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
+#   :version_regex is a regular expression to which the resulting version string is passed.
+#     $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
+#   :verb describes what the call to Executor is doing.  Default is “Running”.
+#   :env is the environment in which the command will be run.  Default is ENV.
+#   :script_args are arguments to be passed to the *script* as opposed to the interpreter.  They will
+#     be appended after the path to the script in the arguments to the interpreter.
+#   :use_hashbang Tells Executor wether to override it's first argument with the current file's #! if that exists.
+#     The default is “true”.  Set it to “false” to prevent the hash bang from overriding the interpreter.
+
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
-require SUPPORT_LIB + 'io'
+require SUPPORT_LIB + 'tm/process'
+require SUPPORT_LIB + 'tm/htmloutput'
+require SUPPORT_LIB + 'tm/require_cmd'
 require SUPPORT_LIB + 'escape'
-require SUPPORT_LIB + 'web_preview'
+require SUPPORT_LIB + 'exit_codes'
+require SUPPORT_LIB + 'io'
 
-require 'fcntl'
+$KCODE = 'u' if RUBY_VERSION < "1.9"
 
-class UserScript
-  attr_reader :name, :path
-  
-  def initialize(content, argv = nil, read_from_stdin = true, &block)
-    @read_from_stdin = read_from_stdin
-    @content = content
-    @block = block
-    @argv = argv || ARGV.to_a
-    @hashbang = $1 if @content =~ /\A#!(.*)$/
-    @path = '-'
-    @name = 'untitled'
-    if ENV.has_key?('TM_FILEPATH') then
-      @name = ENV['TM_FILENAME']
-      unless @read_from_stdin
-        @path = ENV['TM_FILEPATH']
-        open(@path, 'w') { |io| io.write(@content) }
-      end
-    end
-  end
-  
-  protected
-    def popen3(*cmd)
-      # like Open3.popen3, but returns [stdin, stdout, strerr, pid]
-      # pipe[0] for read, pipe[1] for write
-      pin  = IO::pipe
-      pout = IO::pipe
-      perr = IO::pipe
+$stdout.sync = true
 
-      pid = fork {
-        pin[1].close
-        STDIN.reopen(pin[0])
-        pin[0].close
+module TextMate
+  module Executor
+    class << self
 
-        pout[0].close
-        STDOUT.reopen(pout[1])
-        pout[1].close
+      # Textmate::Executor.run
+      #   Provides an API function for running
 
-        perr[0].close
-        STDERR.reopen(perr[1])
-        perr[1].close
+      def run(*args, &block)
+        block ||= Proc.new {}
+        args.flatten!
 
-        exec(*cmd)
-      }
+        options = {:version_args  => ['--version'],
+                   :version_regex => /\A(.*)$/,
+                   :verb          => "Running",
+                   :env           => nil,
+                   :script_args   => [],
+                   :use_hashbang  => true}
 
-      pin[0].close
-      pout[1].close
-      perr[1].close
+        options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 
-      pin[1].sync = true
+        options.merge! args.pop if args.last.is_a? Hash
 
-      [pin[1], pout[0], perr[0], pid]
-    end
-  
-    def command_line(argv)
-      # return the command line that will be invoked.
-      cmd = filter_cmd(executable, args, e_sh(@path), argv)
-      cmd = cmd.flatten.join(' ') unless String === cmd
-      cmd
-    end
-    
-  public
-    def lang
-      # return the name of the language that @content uses.
-      'Unknown'
-    end
-    
-    def executable
-      # return the path to the executable that will run @content.
-    end
-    
-    def args
-      # return any arguments to be passed to the executable.
-      []
-    end
-    
-    def version_string
-      # return the version string of the executable.
-      %x{#{executable} --version 2>&1}.chomp + " (#{executable})"
-    end
-    
-    def filter_cmd(exec, args, path, argv)
-      # return the elements of the command line that will be invoked.
-      [exec, args, path, argv]
-    end
-    
-    def run
-      # return [stdout, stderr, stack_dump, pid]
-      rd, wr = IO.pipe
-      rd.fcntl(Fcntl::F_SETFD, 1)
-      ENV['TM_ERROR_FD'] = wr.to_i.to_s
-      cmd = command_line(@argv)
-      stdin, stdout, stderr, pid = popen3(cmd)
-      Thread.new do
-        stdin.write @content if @read_from_stdin
-        @block.call stdin if @block
-        stdin.close
-      end
-      wr.close
-      [stdout, stderr, rd, pid]
-    end
-end
+        if File.exists?(args[-1]) and options[:use_hashbang] == true
+          args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
+        end
 
-class CommandMate
-  def initialize(command)
-    # command.should.respond_to? :run
-    # command.run.should == [stdout, stderr, stack_dump, pid]
-    @error = ''
-    @command = command
-    @mate = self.class.name
-    @retval = nil
-    STDOUT.sync = true
-  end
-  
-  protected
-    def filter_stdout(str)
-      # strings from stdout are passed through this method before printing
-      htmlize(str).gsub(/\<br\>/, "<br>\n")
-    end
-    
-    def filter_stderr(str)
-      # strings from stderr are passwd through this method before printing
-      "<span style='color: red'>#{htmlize str}</span>".gsub(/\<br\>/, "<br>\n")
-    end
-    
-    def emit_header
-      puts html_head(:window_title => "#{@command}", :page_title => "#{@command}", :sub_title => "")
-      puts "<pre>"
-    end
-    
-    def emit_footer
-      puts "</pre>"
-      html_footer
-    end
-  
-  public
-    def emit_html
-      stdout, stderr, stack_dump, @pid = @command.run
-      %w[INT TERM].each do |signal|
-        trap(signal) do
-          begin
-            Process.kill("KILL", @pid)
-            sleep 0.5
-            Process.kill("TERM", @pid)
-          rescue
-            # process doesn't exist anymore
+        # TODO: checking for an array here because a #! line
+        # in the script will cause args[0] set to an array by the previous statement.
+        # This array could begin with /usr/bin/env and I'm not sure what require_cmd
+        # should do in that case -- Alex Ross
+        TextMate.require_cmd(args[0]) unless args[0].is_a?(Array)
+        
+        out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
+        version = $1 if options[:version_regex] =~ (out + err)
+        
+        tm_error_fd_read, tm_error_fd_write = ::IO.pipe
+        tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
+        ENV['TM_ERROR_FD'] = tm_error_fd_write.to_i.to_s
+
+        tm_echo_fd_read, tm_echo_fd_write = ::IO.pipe
+        tm_echo_fd_read.fcntl(Fcntl::F_SETFD, 1)
+        ENV['TM_INTERACTIVE_INPUT_ECHO_FD'] = tm_echo_fd_write.to_i.to_s
+
+        options[:script_args].each { |arg| args << arg }
+        
+        TextMate::HTMLOutput.show(:title => "#{options[:verb]} “#{ENV['TM_DISPLAYNAME'] || File.basename(ENV["TM_FILEPATH"])}”…", :sub_title => version, :html_head => script_style_header) do |io|
+          
+          io << '<div class="executor">'
+          
+          callback = proc do |str, type|
+            str.gsub!(ENV["TM_FILEPATH"], "untitled") if ENV["TM_FILE_IS_UNTITLED"]
+            filtered_str = block.call(str,type) if [:err, :out].include? type
+            if [:err, :out].include?(type) and not filtered_str.nil?
+              io << filtered_str
+            else
+              str = htmlize(str)
+              str = "<span class=\"err\">#{str}</span>" if type == :err
+              str = "<span class=\"echo\">#{str}</span>" if type == :echo
+              io << str
+            end
           end
+          
+          io << "<!-- » #{args[0,args.length-1].join(" ")} #{ENV["TM_DISPLAYNAME"]} -->"
+          
+          if options.has_key?(:bootstrap) and File.exists?(options[:bootstrap])
+            raise "Bootstrap script is not executable." unless File.executable?(options[:bootstrap])
+            args[0,0] = options[:bootstrap] # add the bootstrap script to the front of args
+          end
+          
+          start = Time.now
+          process_output_wrapper(io) do
+            TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
+          end
+          finish = Time.now
+          
+          
+          tm_error_fd_write.close
+          error = tm_error_fd_read.read
+          tm_error_fd_read.close
+
+          if ENV.has_key? "TM_FILE_IS_UNTITLED"
+            # replace links to temporary file with links to current (unsaved) file, by removing
+            # the url option from any txmt:// links.
+            error.gsub!("url=file://#{ENV['TM_FILEPATH']}", '')
+            error.gsub!("url=file://#{e_url ENV['TM_FILEPATH']}", '')
+            error.gsub!(ENV['TM_FILENAME'], "untitled")
+            error.gsub!(e_url(ENV['TM_FILENAME']), "untitled")
+          elsif ENV.has_key? 'TM_ORIG_FILEPATH'
+            error.gsub!(ENV['TM_FILEPATH'], ENV['TM_ORIG_FILEPATH'])
+            error.gsub!(e_url(ENV['TM_FILEPATH']), e_url(ENV['TM_ORIG_FILEPATH']))
+            error.gsub!(ENV['TM_FILENAME'], ENV['TM_ORIG_FILENAME'])
+            error.gsub!(e_url(ENV['TM_FILENAME']), e_url(ENV['TM_ORIG_FILENAME']))
+          end
+
+          io << error
+          io << '<div class="controls"><a href="#" onclick="copyOutput(document.getElementById(\'_executor_output\'))">copy output</a></div>'
+          
+
+          io << "<div id=\"exception_report\" class=\"framed\">"
+          if $?.exited?
+            io << format("Program exited with code \##{$?.exitstatus} after %0.2f seconds.", finish-start)
+          elsif $?.signaled?
+            io << format("Program terminated by uncaught signal \##{$?.termsig} after %0.2f seconds.", finish-start)
+          elsif $?.stopped?
+            io << format("Program stopped by signal \##{$?.termsig} after %0.2f seconds.", finish-start)
+          end
+          io << '</div></div>'
         end
       end
-      emit_header()
-      TextMate::IO.exhaust(:out => stdout, :err => stderr, :stk => stack_dump) do |str, type|
-        case type
-        when :out then puts filter_stdout(str).to_s
-        when :err then puts filter_stderr(str).to_s
-        when :stk then @error << str
+      
+      def make_project_master_current_document
+        if (ENV.has_key?("TM_PROJECT_DIRECTORY") and ENV.has_key?("TM_PROJECT_MASTER") and not ENV["TM_PROJECT_MASTER"] == "")
+          proj_dir    = ENV["TM_PROJECT_DIRECTORY"]
+          proj_master = ENV["TM_PROJECT_MASTER"]
+          if proj_master[0].chr == "/"
+            filepath = proj_master
+          else
+            filepath = "#{proj_dir}/#{proj_master}"
+          end
+          unless File.exists?(filepath)
+            TextMate::HTMLOutput.show(:title => "Bad TM_PROJECT_MASTER!", :sub_title => "") do |io|
+              io << "<h2 class=\"warning\">The file suggested by <code>TM_PROJECT_MASTER</code> does not exist.</h2>\n"
+              io << "<p>The file “<code>#{filepath}</code>” named by the environment variable <code>TM_PROJECT_MASTER</code> could not be found.  Please unset or correct TM_PROJECT_MASTER.</p>"
+            end
+            TextMate.exit_show_html
+          end
+          ENV['TM_FILEPATH']    = filepath
+          ENV['TM_FILENAME']    = File.basename filepath
+          ENV['TM_DISPLAYNAME'] = File.basename filepath
+          Dir.chdir(File.dirname(filepath))
         end
       end
-      emit_footer()
-      Process.waitpid(@pid)
-      return @retval if @retval
-      return 1 unless @error == ''
-      return 0
-    end
-end
 
-class ScriptMate < CommandMate
-  # @command.name.should == "Displayed name of the script"
-  # @command.land.should == "Language used in the script"
-  # @command.version_string.should == "Version of the script interpreter"
-  protected
-    def emit_header
-      puts html_head(:window_title => "#{@command.name} — #{@mate}", :page_title => "#{@mate}", :sub_title => "#{@command.lang}")
-      puts <<-HTML
-<!-- scriptmate javascripts -->
-<script type="text/javascript" charset="utf-8">
-function press(evt) {
-   if (evt.keyCode == 67 && evt.ctrlKey == true) {
-      TextMate.system("kill -s INT #{@pid}; sleep 0.5; kill -s TERM #{@pid}", null);
-   }
-}
-document.body.addEventListener('keydown', press, false);
+      private
 
-function copyOutput(link) {
-  output = document.getElementById('_scriptmate_output').innerText;
-  cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
-  cmd.write(output);
-  cmd.close();
-  link.innerText = 'output copied to clipboard';
-}
-</script>
-<!-- end javascript -->
+      def process_output_wrapper(io)
+        io << <<-HTML
+
+<script type="text/javascript" charset="utf-8">document.body.addEventListener("keydown", press, false);</script>
+
+<!-- first box containing version info and script output -->
+<pre>
+<div id="_executor_output" > <!-- Script output -->
 HTML
-      puts <<-HTML
+        yield
+        io << <<-HTML
+        </div></pre>
+        HTML
+      end
+      
+      def script_style_header
+        return <<-HTML
+<!-- executor javascripts -->
+  <script type="text/javascript" charset="utf-8">
+  function press(evt) {
+     if (evt.keyCode == 67 && evt.ctrlKey == true) {
+       TextMate.system("kill -s USR1 #{::Process.pid};", null);
+     }
+  }
+  
+  function copyOutput(element) {
+    output = element.innerText;
+    cmd = TextMate.system('__CF_USER_TEXT_ENCODING=$UID:0x8000100:0x8000100 /usr/bin/pbcopy', function(){});
+    cmd.write(output);
+    cmd.close();
+    element.innerText = 'output copied to clipboard';
+  }
+  
+  </script>
+  <!-- end javascript -->
   <style type="text/css">
-    /* =================== */
-    /* = ScriptMate Styles = */
-    /* =================== */
 
-    div.scriptmate {
+    div.executor .controls {
+      text-align:right;
+      float:right;
+    }
+    div.executor .controls a {
+      text-decoration: none;
     }
 
-    div.scriptmate > div {
-    	/*border-bottom: 1px dotted #666;*/
-    	/*padding: 1ex;*/
-    }
-
-    div.scriptmate pre em {
-    	/* used for stderr */
-    	font-style: normal;
-    	color: #FF5600;
-    }
-
-    div.scriptmate div#exception_report
+    div.executor pre em
     {
-    	/*background-color: rgb(210, 220, 255);*/
+      font-style: normal;
+      color: #FF5600;
     }
 
-    div.scriptmate p#exception strong
+    div.executor p#exception strong
     {
-    	color: #E4450B;
+      color: #E4450B;
     }
 
-    div.scriptmate p#traceback
+    div.executor p#traceback
     {
-    	font-size: 8pt;
+      font-size: 8pt;
     }
 
-    div.scriptmate blockquote {
-    	font-style: normal;
-    	border: none;
+    div.executor blockquote {
+      font-style: normal;
+      border: none;
     }
 
-    div.scriptmate table {
-    	margin: 0;
-    	padding: 0;
+    div.executor table {
+      margin: 0;
+      padding: 0;
     }
 
-    div.scriptmate td {
-    	margin: 0;
-    	padding: 2px 2px 2px 5px;
-    	font-size: 10pt;
+    div.executor td {
+      margin: 0;
+      padding: 2px 2px 2px 5px;
+      font-size: 10pt;
     }
 
-    div.scriptmate a {
-    	color: #FF5600;
+    div.executor div#_executor_output {
+      white-space: normal;
+      -khtml-nbsp-mode: space;
+      -khtml-line-break: after-white-space;
+    }
+
+    div#_executor_output .out {  
+
+    }
+    div#_executor_output .err {  
+      color: red;
+    }
+    div#_executor_output .echo {
+      font-style: italic;
+    }
+    div#_executor_output .test {
+      font-weight: bold;
+    }
+    div#_executor_output .test.ok {  
+      color: green;
+    }
+    div#_executor_output .test.fail {  
+      color: red;
+    }
+    div#exception_report pre.snippet {
+      margin:4pt;
+      padding:4pt;
     }
   </style>
-  <div class="scriptmate #{@mate.downcase}">
-  <div class="controls" style="text-align:right;">
-    <a style="text-decoration: none;" href="#" onclick="copyOutput(document.getElementById('_script_output'))">copy output</a>
-  </div>
-  <!-- first box containing version info and script output -->
-  <pre>
-<strong>#{@mate} r#{$SCRIPTMATE_VERSION[/\d+/]} running #{@command.version_string}</strong>
-<strong>>>> #{@command.name}</strong>
-
-<div id="_scriptmate_output" style="white-space: normal; -khtml-nbsp-mode: space; -khtml-line-break: after-white-space;"> <!-- Script output -->
-  HTML
+HTML
+      end
     end
-    
-    def emit_footer
-      puts '</div></pre></div>'
-      puts <<-HTML
-<div id="exception_report" class="framed">
-  #{filter_stack(@error) unless @error == ''}
-  Program exited.
-</div>
-      HTML
-      html_footer
-    end
-  
-  public
-    def filter_stack(str)
-      # strings from the stack dump are passed through this method before printing
-      # htmlize(str).gsub(/\<br\>/, "<br>\n")
-      str
-    end
+  end
 end

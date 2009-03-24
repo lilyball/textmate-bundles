@@ -71,7 +71,7 @@ module Maude
         options.merge! args.pop if args.last.is_a? Hash
 
         if File.exists?(args[-1]) and options[:use_hashbang] == true
-          args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
+          args[0] = parse_hashbang(args[-1]) || args[0]
         end
 
         # TODO: checking for an array here because a #! line
@@ -179,6 +179,10 @@ module Maude
           ENV['TM_DISPLAYNAME'] = File.basename filepath
           Dir.chdir(File.dirname(filepath))
         end
+      end
+
+      def parse_hashbang(file)
+        $1.chomp.split if /\A#!(.*)$/ =~ File.read(file)
       end
 
       private

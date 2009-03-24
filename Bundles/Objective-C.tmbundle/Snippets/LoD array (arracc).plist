@@ -18,22 +18,17 @@
 	return [$3 objectAtIndex:i];
 }
 
-- (unsigned int)indexOf$1:($2)anObject
+- (unsigned int)indexOfObjectIn$1:($2)anObject
 {
 	return [$3 indexOfObject:anObject];
 }
 
-- (void)remove$1AtIndex:(unsigned int)i
+- (void)removeObjectFrom$1AtIndex:(unsigned int)i
 {
 	[$3 removeObjectAtIndex:i];
 }
 
-- (void)remove$1:($2)anObject
-{
-	[$3 removeObject:anObject];
-}
-
-- (unsigned int)countOf$1s
+- (unsigned int)countOf$1
 {
 	return [$3 count];
 }

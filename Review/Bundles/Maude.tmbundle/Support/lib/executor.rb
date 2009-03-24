@@ -68,6 +68,8 @@ module Maude
                    :env             => nil,
                    :script_args     => [],
                    :use_hashbang    => true}
+        
+        passthrough_options = [:env]
 
         options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 
@@ -112,6 +114,9 @@ module Maude
             end
           end
           
+          process_options = {:echo => true, :watch_fds => { :echo => tm_echo_fd_read }}
+          passthrough_options.each { |key| process_options[key] = options[key] if options.has_key?(key) }
+          
           io << "<!-- » #{args[0,args.length-1].join(" ")} #{ENV["TM_DISPLAYNAME"]} -->"
           
           if options.has_key?(:bootstrap) and File.exists?(options[:bootstrap])
@@ -121,7 +126,7 @@ module Maude
           
           start = Time.now
           process_output_wrapper(io) do
-            TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
+            TextMate::Process.run(args, process_options, &callback)
           end
           finish = Time.now
           

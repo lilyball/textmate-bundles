@@ -41,6 +41,10 @@
 #     be appended after the path to the script in the arguments to the interpreter.
 #   :use_hashbang Tells Executor wether to override it's first argument with the current file's #! if that exists.
 #     The default is “true”.  Set it to “false” to prevent the hash bang from overriding the interpreter.
+#   The following options are treated exactly as TextMate::Process.run would treat them:
+#     :env
+#     :input
+#     :interactive_input
 
 %w[tm/process tm/htmloutput tm/require_cmd escape exit_codes io].each { |lib|
   require "#{ENV['TM_SUPPORT_PATH']}/lib/#{lib}"

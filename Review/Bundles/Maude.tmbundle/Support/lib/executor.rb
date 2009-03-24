@@ -59,12 +59,13 @@ module Maude
         block ||= Proc.new {}
         args.flatten!
 
-        options = {:version_args  => ['--version'],
-                   :version_regex => /\A(.*)$/,
-                   :verb          => "Running",
-                   :env           => nil,
-                   :script_args   => [],
-                   :use_hashbang  => true}
+        options = {:version_args    => ['--version'],
+                   :version_regex   => /\A(.*)$/,
+                   :version_replace => '\1',
+                   :verb            => "Running",
+                   :env             => nil,
+                   :script_args     => [],
+                   :use_hashbang    => true}
 
         options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 
@@ -186,7 +187,9 @@ module Maude
 
       def parse_version(executable, options)
         out, err = TextMate::Process.run(executable, options[:version_args], :interactive_input => false)
-        return $1 if options[:version_regex] =~ (out + err)
+        if options[:version_regex] =~ (out + err)
+          return (out + err).sub(options[:version_regex], options[:version_replace])
+        end
       end
 
       private

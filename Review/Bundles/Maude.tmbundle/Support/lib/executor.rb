@@ -40,13 +40,9 @@
 #   :use_hashbang Tells Executor wether to override it's first argument with the current file's #! if that exists.
 #     The default is “true”.  Set it to “false” to prevent the hash bang from overriding the interpreter.
 
-SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
-require SUPPORT_LIB + 'tm/process'
-require SUPPORT_LIB + 'tm/htmloutput'
-require SUPPORT_LIB + 'tm/require_cmd'
-require SUPPORT_LIB + 'escape'
-require SUPPORT_LIB + 'exit_codes'
-require SUPPORT_LIB + 'io'
+%w[tm/process tm/htmloutput tm/require_cmd escape exit_codes io].each { |lib|
+  require "#{ENV['TM_SUPPORT_PATH']}/lib/#{lib}"
+}
 
 $KCODE = 'u' if RUBY_VERSION < "1.9"
 

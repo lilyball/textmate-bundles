@@ -298,6 +298,7 @@ This drawer shows the current content of the log file <a onclick='TextMate.syste
 
 <table style="margin-left:1cm">
   <tr><td style="font-size:9pt"><strong>TM_SVN</strong></td><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt">user-defined absolute path to the <code>svn</code> client</td></tr>
+  <tr><td style="font-size:9pt"><strong>FINDER_APP</strong></td><td style="font-size:9pt">&nbsp;</td><td style="font-size:9pt">set this variable to the name of that application (e.g. "Path Finder") which should be opened if you pressed "Reveal Bundle in Finder" (if unset "Finder" is its default)</td></tr>
 </table>
 
 All variables can be set in TextMate's Preferences, under the item "Advanced".
@@ -369,7 +370,7 @@ To set up proxy support in `git`, do the following:
 
 # Main Bundle Maintainer
 
-***Date: Jan 28 2009***
+***Date: Mar 25 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

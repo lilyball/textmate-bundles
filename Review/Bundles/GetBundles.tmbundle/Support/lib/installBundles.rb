@@ -1,3 +1,4 @@
+
 def installBundles(dlg)
   
   doUpdateSupportFolder if $updateSupportFolder
@@ -203,6 +204,8 @@ def installTAR(name, path, zip_path)
       begin
 
         if path =~ /^http:\/\/github\.com/  # hosted on github ?
+          # usr, nm = path.split('/')[3..4]
+          # ghid = YAML.load(open("http://github.com/api/v1/json/#{usr}/#{nm}/commits/master"))['commits'].first['id']
           executeShell(%Q{
 if curl -sSLo "#{$tempDir}/archive.tar" "#{path}"; then
   if tar -xf "#{$tempDir}/archive.tar" -C "#{$tempDir}"; then
@@ -242,7 +245,7 @@ fi
     return
   end
 
-  return if $close
+  return if $close || $errorcnt>0
   %x{touch '#{$tempDir}/#{name}.tmbundle/installed'}
     # install bundle if everything went fine
   executeShell("open '#{$tempDir}/#{name}.tmbundle'", false, true) if $errorcnt == 0

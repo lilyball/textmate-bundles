@@ -7,14 +7,11 @@
 	<key>command</key>
 	<string>#!/bin/bash
 
-# if [ `echo -n "$DIALOG" | tail -c 1` != "2" ]; then
-#   CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
-# else
-#   CHECK=$("$DIALOG" nib --list | egrep -c 'TextMate — GetBundles')
-# fi
-
-CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
-
+if [ `echo -n "$DIALOG" | tail -c 1` != "2" ]; then
+  CHECK=$("$DIALOG" -l | egrep -c 'TextMate — GetBundles')
+else
+  CHECK=$("$DIALOG" nib --list | egrep -c 'TextMate — GetBundles')
+fi
 
 [[ ! -d ~/Library/Logs ]] &amp;&amp; mkdir -p ~/Library/Logs
 rm -f ~/Library/Logs/TextMateGetBundles.log

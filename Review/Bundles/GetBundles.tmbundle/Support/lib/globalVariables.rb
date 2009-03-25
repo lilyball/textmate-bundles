@@ -1,6 +1,5 @@
 $NIB              = `uname -r`.split('.')[0].to_i > 8 ? 'BundlesTree' : 'BundlesTreeTiger'
 $isDIALOG2        = ! ENV['DIALOG'].match(/2$/).nil?
-$isDIALOG2  = false
 # DIALOG's parameters hash
 $params           = { }
 # DIALOG's async token

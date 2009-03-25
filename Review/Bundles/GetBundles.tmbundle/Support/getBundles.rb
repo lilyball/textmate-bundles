@@ -1176,7 +1176,7 @@ while $run do
         updateDIALOG
       when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
       when 'revealInFinderIsPressed':
-        $finder_app = ENV['FINDER_APP'] || "Finder"
+        $finder_app = ENV['TM_GETBUNDLES_REVEAL_BUNDLE_IN'] || "Finder"
         %x{osascript -e 'tell app "#{$finder_app}" to reveal POSIX file("#{$localBundles[$dialogResult['uuid']]['path']}")'}
       when 'openAsProjectIsPressed': %x{mate '#{$localBundles[$dialogResult['uuid']]['path']}'}
       when 'deleteButtonIsPressed':

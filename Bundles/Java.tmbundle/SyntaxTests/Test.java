@@ -122,3 +122,11 @@ public class ImplementsOverMultipleLines
 class Foo {
 	private java.util.List<double[]> bar;
 }
+
+class Foo
+{
+   void bar()
+   {
+       System.out.println("class name");
+   }
+}

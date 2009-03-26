@@ -118,3 +118,7 @@ public class ImplementsOverMultipleLines
               Baz
 {
 }
+
+class Foo {
+	private java.util.List<double[]> bar;
+}

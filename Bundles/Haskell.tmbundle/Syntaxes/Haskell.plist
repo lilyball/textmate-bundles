@@ -88,7 +88,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(class)</string>
+			<string>\b(class)\b</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -98,7 +98,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(where)</string>
+			<string>\b(where)\b</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -133,7 +133,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(instance)</string>
+			<string>\b(instance)\b</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -143,7 +143,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(where)</string>
+			<string>\b(where)\b|$</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -355,8 +355,7 @@
 			<string>(?x)
 			(')
 			(?:
-				[A-Za-z0-9]								# Basic Char
-			  | [\ !#$%\&amp;\*\+\.\/&lt;=&gt;\?\@\\\^\|_~":]		# Other Chars
+				[\ -\[\]-~]								# Basic Char
 			  | (\\(?:NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE
 					|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS
 					|US|SP|DEL|[abfnrtv\\\"'\&amp;]))		# Escapes
@@ -427,7 +426,7 @@
 			<key>comment</key>
 			<string>In case this regex seems overly general, note that Haskell permits the definition of new operators which can be nearly any string of punctuation characters, such as $%^&amp;*.</string>
 			<key>match</key>
-			<string>[|!%$+:\-.=&lt;/&gt;\\]+</string>
+			<string>[|!%$?~+:\-.=&lt;/&gt;\\]+</string>
 			<key>name</key>
 			<string>keyword.operator.haskell</string>
 		</dict>
@@ -631,6 +630,10 @@
 					<string>\(\)</string>
 					<key>name</key>
 					<string>support.constant.unit.haskell</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
 				</dict>
 			</array>
 		</dict>

@@ -32,9 +32,15 @@
 # TextMate::Executor.run also accepts six optional named arguments.
 #   :version_args are arguments that will be passed to the executable to generate a version string for use as the page's subtitle.
 #   :version_regex is a regular expression to which the resulting version string is passed.
-#     $1 of this regex is used as the subtitle of the Executor.run output.  By default, this just takes the first line.
+#     The subtitle of the Executor.run output is generated from this match.  By default, this just takes the first line.
+#   :version_replace is a string that is used to generate a version string for the page's subtitle from matching :version_regex.
+#     The rules of String.sub apply.  By default, this just extracts $1 from the match.
 #   :verb describes what the call to Executor is doing.  Default is “Running”.
 #   :env is the environment in which the command will be run.  Default is ENV.
+#   :interactive_input tells Executor to inject the interactive input library
+#     into the program so that any requests for input present the user with a
+#     dialog to enter it. Default is true, or false if the environment has
+#     TM_INTERACTIVE_INPUT_DISABLED defined.
 #   :script_args are arguments to be passed to the *script* as opposed to the interpreter.  They will
 #     be appended after the path to the script in the arguments to the interpreter.
 #   :use_hashbang Tells Executor wether to override it's first argument with the current file's #! if that exists.
@@ -63,19 +69,23 @@ module TextMate
         block ||= Proc.new {}
         args.flatten!
 
-        options = {:version_args  => ['--version'],
-                   :version_regex => /\A(.*)$/,
-                   :verb          => "Running",
-                   :env           => nil,
-                   :script_args   => [],
-                   :use_hashbang  => true}
+        options = {:version_args      => ['--version'],
+                   :version_regex     => /\A(.*)$/,
+                   :version_replace   => '\1',
+                   :verb              => "Running",
+                   :env               => nil,
+                   :interactive_input => ENV['TM_INTERACTIVE_INPUT_DISABLED'].nil?,
+                   :script_args       => [],
+                   :use_hashbang      => true}
+        
+        passthrough_options = [:env, :input, :interactive_input]
 
         options[:bootstrap] = ENV["TM_BUNDLE_SUPPORT"] + "/bin/bootstrap.sh" unless ENV["TM_BUNDLE_SUPPORT"].nil?
 
         options.merge! args.pop if args.last.is_a? Hash
 
         if File.exists?(args[-1]) and options[:use_hashbang] == true
-          args[0] = ($1.chomp.split if /\A#!(.*)$/ =~ File.read(args[-1])) || args[0]
+          args[0] = parse_hashbang(args[-1]) || args[0]
         end
 
         # TODO: checking for an array here because a #! line
@@ -84,8 +94,7 @@ module TextMate
         # should do in that case -- Alex Ross
         TextMate.require_cmd(args[0]) unless args[0].is_a?(Array)
         
-        out, err = Process.run(args[0], options[:version_args], :interactive_input => false)
-        version = $1 if options[:version_regex] =~ (out + err)
+        version = parse_version(args[0], options)
         
         tm_error_fd_read, tm_error_fd_write = ::IO.pipe
         tm_error_fd_read.fcntl(Fcntl::F_SETFD, 1)
@@ -114,6 +123,9 @@ module TextMate
             end
           end
           
+          process_options = {:echo => true, :watch_fds => { :echo => tm_echo_fd_read }}
+          passthrough_options.each { |key| process_options[key] = options[key] if options.has_key?(key) }
+          
           io << "<!-- » #{args[0,args.length-1].join(" ")} #{ENV["TM_DISPLAYNAME"]} -->"
           
           if options.has_key?(:bootstrap) and File.exists?(options[:bootstrap])
@@ -123,7 +135,7 @@ module TextMate
           
           start = Time.now
           process_output_wrapper(io) do
-            TextMate::Process.run(args, :env => options[:env], :echo => true, :watch_fds => { :echo => tm_echo_fd_read }, &callback)
+            TextMate::Process.run(args, process_options, &callback)
           end
           finish = Time.now
           
@@ -182,6 +194,17 @@ module TextMate
           ENV['TM_FILENAME']    = File.basename filepath
           ENV['TM_DISPLAYNAME'] = File.basename filepath
           Dir.chdir(File.dirname(filepath))
+        end
+      end
+
+      def parse_hashbang(file)
+        $1.chomp.split if /\A#!(.*)$/ =~ File.read(file)
+      end
+
+      def parse_version(executable, options)
+        out, err = TextMate::Process.run(executable, options[:version_args], :interactive_input => false)
+        if options[:version_regex] =~ (out + err)
+          return (out + err).sub(options[:version_regex], options[:version_replace])
         end
       end
 

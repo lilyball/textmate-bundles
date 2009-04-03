@@ -23,7 +23,7 @@ class Test extends Object implements Serializable {
         assert t : "Failure message"
         def m = new HashMap(key1: "123", key2: "123")
         m?.equals key1: "123"
-        
+        thing.default.return // <-- don't scope keywords like default in this context
 
         
         switch(t) {

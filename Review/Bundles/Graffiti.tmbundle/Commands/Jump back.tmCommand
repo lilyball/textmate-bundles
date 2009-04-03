@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoScrollOutput</key>
+	<true/>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/graffiti.rb'
+
+include Graffiti
+
+jumpBack()
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^x</string>
+	<key>name</key>
+	<string>Jump Back</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.c, source.c++, source.objc, source.objc++, source.java, source.ruby, text.xml, source.makefile</string>
+	<key>uuid</key>
+	<string>D3ABB124-274B-4614-8424-BD245BACFE3C</string>
+</dict>
+</plist>

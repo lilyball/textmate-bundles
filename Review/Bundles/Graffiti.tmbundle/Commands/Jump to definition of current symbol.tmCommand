@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoScrollOutput</key>
+	<true/>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/graffiti.rb'
+
+include Graffiti
+
+jumpToDefinitionOfCurrentWord()
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^c</string>
+	<key>name</key>
+	<string>Jump to Definition of Current Symbol</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>source.c, source.c++, source.objc, source.objc++, source.java, source.ruby, text.xml, source.makefile</string>
+	<key>uuid</key>
+	<string>7AEB2540-DB8A-4B77-B499-34BE8285B95A</string>
+</dict>
+</plist>

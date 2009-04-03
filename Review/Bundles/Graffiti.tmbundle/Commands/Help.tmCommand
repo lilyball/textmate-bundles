@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "Graffiti Help" "Graffiti"
+
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" &lt;&lt;'EOF'
+
+# Introduction
+
+The Graffiti TextMate bundle provides a set of commands to manipulate and browse Ruby, C/C++ and Java source code. It is based on two commands famous in the Unix world: [CScope][1] and [Exuberant CTags][2].
+
+# First Steps
+
+Before being able to use any other command of this bundle, you must create the tags, an index of the source code (for each one of your projects). To do so, call the command **Update tags**. This may take some time on very large projects.
+
+Graffiti will create an index, recursively, for the source files found in the directory `TM_PROJECT_DIRECTORY`. If you have trouble with this command, check that your environment variable `TM_PROJECT_DIRECTORY` is well defined. This variable can be overwritten in the [Project Information][3] window.
+
+# Command List
+
+**Complete** - 
+Use the *ctags* file to display a list of completion proposals as a popup.
+
+**Jump to Definition of Current Symbol** - 
+Ask to cscope the locations where the symbol can be found,
+ask the user via popup to choose one and jump to it at the proper line.
+
+**Jump Back** - 
+Jump to the previous location in the history.
+
+**Jump to Function Calling Current Function** - 
+Ask to cscope where the function under the cursor is called,
+ask the user via popup to choose one and jump to it at the proper line.
+
+**Jump to File Including Current File** - 
+Ask to cscope where the current file is #included,
+ask the user via popup to choose one and jump to it at the proper line.
+
+**Find Definitions of Current Symbol** - 
+Ask to cscope where the symbol is defined,
+and print it out as a nice HTML list.
+
+**Find Locations of Current Symbol** - 
+Ask to cscope the locations where the symbol can be found,
+and print it out as a nice HTML list.
+
+**Find Functions Calling Current Function** - 
+Ask to cscope where the function under the cursor is called,
+and print it out as a nice HTML list.
+
+**Find Files Including Current File** - 
+Ask to cscope where the current file is #included,
+and print it out as a nice HTML list.
+
+**Update Tags** - 
+Create the `.graffiti` if needed. Create *ctags* and *cscope* tag files
+starting from `TM_PROJECT_DIRECTORY`. Display this in a nice HTML output.
+
+# Configuration
+
+`TM_PROJECT_DIRECTORY` - 
+Graffiti create its tags index by recursively looking for all the source code files from the `TM_PROJECT_DIRECTORY` directory.
+
+`.graffiti` - 
+All the project related files (tag files, history, etc.) are located in this directory. It is created by Graffiti here: `TM_PROJECT_DIRECTORY/.graffiti`.
+
+# Maintainer
+
+For questions or sugestions, please contact [Mathieu Godart][4].
+
+[1]: http://ctags.sourceforge.net
+[2]: http://cscope.sourceforge.net/cscope_man_page.html
+[3]: http://manual.macromates.com/en/environment_variables#project_dependent_variables
+[4]: mathieu.godart@gmail.com
+
+EOF</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.c, source.c++, source.objc, source.objc++, source.java, source.ruby, text.xml, source.makefile</string>
+	<key>uuid</key>
+	<string>04CD64C3-29E2-428B-BD66-6B5756740485</string>
+</dict>
+</plist>

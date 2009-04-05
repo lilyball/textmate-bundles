@@ -60,84 +60,8 @@
 			<string>#bmax_preprocessor</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>(\{)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.attributes.braces.blitzmax</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\})</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.attributes.braces.blitzmax</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.attributes.blitzmax</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>\b([a-zA-Z_]\w*)\s*(=)\s*</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>entity.other.attribute-name.blitzmax</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=\s|\}|[a-zA-Z_])</string>
-					<key>name</key>
-					<string>meta.attribute.blitzmax</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#bmax_string_quoted</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_hex</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_bin</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_float</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_int</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>entity.other.attribute-name.blitzmax</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>\b([a-zA-Z_]\w*)(?:\s*((?!=)|(?=\})))</string>
-					<key>name</key>
-					<string>meta.attribute.blitzmax</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#bmax_attributes</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -917,22 +841,16 @@
 			<string>keyword.other.strictness.blitzmax</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?i)\bpi\b</string>
-			<key>name</key>
-			<string>constant.language.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_pi</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?i)\bnull\b</string>
-			<key>name</key>
-			<string>constant.language.null.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_null</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?i)\b(true|false)\b</string>
-			<key>name</key>
-			<string>constant.language.boolean.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_boolean</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -1031,6 +949,94 @@
 					<string>$self</string>
 				</dict>
 			</array>
+		</dict>
+		<key>bmax_attributes</key>
+		<dict>
+			<key>begin</key>
+			<string>(\{)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.attributes.braces.blitzmax</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.attributes.braces.blitzmax</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.attributes.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b([a-zA-Z_]\w*)\s*(=)\s*</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.blitzmax</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=\s|\}|[a-zA-Z_])</string>
+					<key>name</key>
+					<string>meta.attribute.blitzmax</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#bmax_string_quoted</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_num_hex</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_num_bin</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_num_float</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_num_int</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.blitzmax</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b([a-zA-Z_]\w*)(?:\s*((?!=)|(?=\})))</string>
+					<key>name</key>
+					<string>meta.attribute.blitzmax</string>
+				</dict>
+			</array>
+		</dict>
+		<key>bmax_boolean</key>
+		<dict>
+			<key>match</key>
+			<string>(?i)\b(true|false)\b</string>
+			<key>name</key>
+			<string>constant.language.boolean.blitzmax</string>
 		</dict>
 		<key>bmax_comment_block</key>
 		<dict>
@@ -1153,6 +1159,13 @@
 			<key>name</key>
 			<string>meta.variable.blitzmax</string>
 		</dict>
+		<key>bmax_null</key>
+		<dict>
+			<key>match</key>
+			<string>(?i)\bnull\b</string>
+			<key>name</key>
+			<string>constant.language.null.blitzmax</string>
+		</dict>
 		<key>bmax_num_bin</key>
 		<dict>
 			<key>match</key>
@@ -1183,6 +1196,13 @@
 			<string>(?x)\b(([0-9]+))</string>
 			<key>name</key>
 			<string>constant.numeric.integer.blitzmax</string>
+		</dict>
+		<key>bmax_pi</key>
+		<dict>
+			<key>match</key>
+			<string>(?i)\bpi\b</string>
+			<key>name</key>
+			<string>constant.language.blitzmax</string>
 		</dict>
 		<key>bmax_pointerops</key>
 		<dict>

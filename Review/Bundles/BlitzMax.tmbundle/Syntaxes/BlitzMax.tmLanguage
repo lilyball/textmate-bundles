@@ -150,7 +150,27 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#bmax_pointerops</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_pi</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_null</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_boolean</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#bmax_typename</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_types</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -158,36 +178,19 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_string</string>
+					<string>#bmax_string_quoted</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>(?i)\b(global)\s*</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.variable.global.extern.blitzmax</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\s*(.(?=[='])|$)</string>
-					<key>name</key>
-					<string>meta.variable.blitzmax</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>match</key>
-							<string>[a-zA-Z_]\w*</string>
-							<key>name</key>
-							<string>variable.other.blitzmax</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>$self</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>#bmax_global_variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_constant</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_preprocessor</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -269,7 +272,51 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>$self</string>
+							<string>#bmax_comment_quote</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_comment_block</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_pointerops</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_pi</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_null</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_boolean</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_typename</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_types</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_array</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_string_quoted</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_type_field</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#bmax_preprocessor</string>
 						</dict>
 					</array>
 				</dict>
@@ -622,11 +669,75 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#bmax_comment_quote</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_comment_line</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_attributes</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_pointerops</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_pi</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_null</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_boolean</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_types</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_typename</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_global_variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_constant</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_function</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_num_bin</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_num_hex</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_num_float</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_num_int</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#bmax_type_field</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#bmax_preprocessor</string>
 				</dict>
 			</array>
 		</dict>
@@ -1324,7 +1435,7 @@
 		<key>bmax_url_content</key>
 		<dict>
 			<key>match</key>
-			<string>[a-zA-Z_]\w*://[^ "'()\[\]]*</string>
+			<string>[a-zA-Z_]\w*://[^ "'()\[\]]*(?=$|\b)</string>
 			<key>name</key>
 			<string>meta.url.blitzmax</string>
 		</dict>

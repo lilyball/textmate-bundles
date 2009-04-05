@@ -40,57 +40,16 @@
 			<string>#comment_block</string>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>(?i)\b(?:(local)|(global))\s*</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.variable.local.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.global.blitzmax</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?='|=)|$</string>
-			<key>name</key>
-			<string>meta.variable.blitzmax</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>[a-zA-Z_]\w*</string>
-					<key>name</key>
-					<string>variable.other.blitzmax</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-			</array>
+			<key>include</key>
+			<string>#bmax_global_variable</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.constant.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>constant.other.blitzmax</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?i)(const)\s+([a-zA-Z_]\w*)</string>
-			<key>name</key>
-			<string>meta.constant.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_local_variable</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#bmax_constant</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -1121,12 +1080,57 @@
 				</dict>
 			</array>
 		</dict>
+		<key>bmax_constant</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.constant.blitzmax</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?i)\b(const)\b</string>
+			<key>name</key>
+			<string>meta.constant.blitzmax</string>
+		</dict>
 		<key>bmax_control_keywords</key>
 		<dict>
 			<key>match</key>
 			<string>(?i)\b(throw|return|exit|continue)\b</string>
 			<key>name</key>
 			<string>keyword.control.blitzmax</string>
+		</dict>
+		<key>bmax_global_variable</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.global.blitzmax</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?i)\b(global)\b</string>
+			<key>name</key>
+			<string>meta.variable.blitzmax</string>
+		</dict>
+		<key>bmax_local_variable</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.variable.local.blitzmax</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?i)\b(local)\b</string>
+			<key>name</key>
+			<string>meta.variable.blitzmax</string>
 		</dict>
 		<key>bmax_typename</key>
 		<dict>
@@ -1142,17 +1146,9 @@
 					<key>name</key>
 					<string>storage.type.blitzmax</string>
 				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.blitzmax</string>
-				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?xi)
-			    \b (?: (?: \: ([a-zA-Z_]\w*) | ([!@#%]|\$[zw]?) )
-			           ((?:\s (?:Ptr | Var))*)
-                       )</string>
+			<string>(?xi)(?: \: \s* ([a-zA-Z_]\w*) | ([!#%]|@{1,2}|\$[zw]?) )</string>
 			<key>name</key>
 			<string>meta.typename.blitzmax</string>
 		</dict>
@@ -1276,9 +1272,7 @@
 		</dict>
 		<key>type_field</key>
 		<dict>
-			<key>begin</key>
-			<string>(?i)\b(field)\s*</string>
-			<key>beginCaptures</key>
+			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -1286,23 +1280,10 @@
 					<string>keyword.other.variable.field.blitzmax</string>
 				</dict>
 			</dict>
-			<key>end</key>
-			<string>\s*(.(?=[='])|$)</string>
+			<key>match</key>
+			<string>(?i)\b(field)\b</string>
 			<key>name</key>
 			<string>meta.variable.field.blitzmax</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>[a-zA-Z_]\w*</string>
-					<key>name</key>
-					<string>variable.other.blitzmax</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-			</array>
 		</dict>
 		<key>url_content</key>
 		<dict>

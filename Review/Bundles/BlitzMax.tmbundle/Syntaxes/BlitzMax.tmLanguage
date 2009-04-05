@@ -52,28 +52,12 @@
 			<string>#bmax_constant</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?i)\bptr\b</string>
-			<key>name</key>
-			<string>storage.modifier.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_pointerops</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>(?i)\bvar\b</string>
-			<key>name</key>
-			<string>storage.modifier.blitzmax</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i)\bvarptr\b</string>
-			<key>name</key>
-			<string>keyword.operator.blitzmax</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(?i)^\s*\?(not\s+)?\w*</string>
-			<key>name</key>
-			<string>keyword.control.preprocessor.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_preprocessor</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -1180,9 +1164,9 @@
 		<dict>
 			<key>match</key>
 			<string>(?x) (?&lt;! % | \$ ) (
-			        \b ([0-9]+ \. [0-9]+) |
-			        (\. [0-9]+)
-			    )</string>
+					\b ([0-9]+ \. [0-9]+) |
+					(\. [0-9]+)
+				)</string>
 			<key>name</key>
 			<string>constant.numeric.float.blitzmax</string>
 		</dict>
@@ -1199,6 +1183,33 @@
 			<string>(?x)\b(([0-9]+))</string>
 			<key>name</key>
 			<string>constant.numeric.integer.blitzmax</string>
+		</dict>
+		<key>bmax_pointerops</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.blitzmax</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.blitzmax</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?i)\b(?:(ptr|var)|(varptr))\b</string>
+			<key>name</key>
+			<string>meta.pointerops.blitzmax</string>
+		</dict>
+		<key>bmax_preprocessor</key>
+		<dict>
+			<key>match</key>
+			<string>(?i)^\s*\?(not\s+)?\w*</string>
+			<key>name</key>
+			<string>keyword.control.preprocessor.blitzmax</string>
 		</dict>
 		<key>bmax_string_content</key>
 		<dict>

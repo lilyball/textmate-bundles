@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -wKU
+	<string>#!/usr/bin/env ruby
 
 if ENV['TM_BLITZMAX'].nil? then
 	print "TM_BLITZMAX shell variable not set.\n\nPlease see the Help (⌃⌘T Help) command for more information."
@@ -17,26 +17,53 @@ if selection.nil? then
 	selection = ENV['TM_CURRENT_WORD']
 end
 
+CMD_REGEX=/(?ix)
+# name 1
+^(#{selection})
+(?:
+	(?:
+		# type name 2
+		\sExtends\s([a-zA-Z_]\w*)
+	|
+		# function and such
+		# return type 3
+		(?: ( [^\(]* )
+		# arguments 4
+		( \( .* \) (?:\sNoDebug)? )?
+		)
+		# description 5
+		(?: \s \: \s ( .*? ))?
+	)
+)
+# docpath 6
+\|(\/.+$)
+/
+
 bmaxPath = ENV['TM_BLITZMAX']
 cmdTxt = bmaxPath+"/docs/html/Modules/commands.txt"
 
 if File.exist?(cmdTxt) then
 	cmdTxtIO = File.new(cmdTxt, 'r')
-	cmdRegexWDoc = /^(([_a-zA-Z]\w*).+) : ([^|]*)\|.+$/
-	cmdRegexNoDoc = /^(([_a-zA-Z]\w*).+)\|.+$/
-	cmdTxtIO.each_line	{ |line|
-		if line =~ cmdRegexWDoc then
-			if line[cmdRegexWDoc, 2].casecmp(selection) == 0 then
-				puts "#{line[cmdRegexWDoc, 1]}\n#{line[cmdRegexWDoc, 3]}"
-				break
+	
+	cmdTxtIO.each_line do |line|
+		if line =~ CMD_REGEX then
+			match = $~
+			# first off, handle the odd one out (e.g., EmitEventHook)
+			if match[3] and match[3] =~ /^=/ then
+				puts match[1]
+				puts match[5] unless match[5].nil? or match[5].empty?
+			elsif match[4] then
+				puts "#{match[1]}#{match[3].nil? || match[3].empty? ? "" : match[3]}#{match[4]}"
+				puts match[5] unless match[5].nil? or match[5].empty?
+			else
+				puts match[1]
+				puts match[5] unless match[5].nil? or match[5].empty?
 			end
-		elsif line =~ cmdRegexNoDoc then
-			if line[cmdRegexNoDoc, 2].casecmp(selection) == 0 then
-				puts line[cmdRegexNoDoc, 1]
-				break
-			end
+			break
 		end
-	}
+	end
+else
+	puts "commands.txt not found\nPlease rebuild your documentation"
 end
 </string>
 	<key>fallbackInput</key>
@@ -46,7 +73,7 @@ end
 	<key>keyEquivalent</key>
 	<string>^h</string>
 	<key>name</key>
-	<string>Documentation for Word</string>
+	<string>Documentation for Word / Selection</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

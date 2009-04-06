@@ -1,0 +1,1 @@
+GrailsCommand.new("clean").run

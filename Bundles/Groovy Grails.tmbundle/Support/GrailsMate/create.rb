@@ -16,7 +16,7 @@ class GrailsCreateCommand < GrailsCommand
       return nil
     else
       options = Shellwords.shellwords(option)
-      ["#{task}-#{options.pop}"] + options
+      ["#{task}-#{options.shift}"] + options
     end
   end
   

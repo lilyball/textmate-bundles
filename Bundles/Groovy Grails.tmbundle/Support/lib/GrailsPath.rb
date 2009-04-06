@@ -113,7 +113,7 @@ class GrailsPath
         buffer.find_method(:direction => :backwards).first rescue nil
       when :view
         basename
-      # when :integration_test
+      # when :unit_test
       #   buffer.find_method(:direction => :backwards).first.sub('^test_', '')
       else nil
       end
@@ -145,10 +145,10 @@ class GrailsPath
         when %r{/grails-app/domain/(.+\.(groovy))$}                     then :domain_class
         when %r{/grails-app/service/(.+Service\.(groovy))$}             then :service
         when %r{/grails-app/taglib/(.+TagLib\.(groovy))$}               then :taglib
-        when %r{/test/integration/(.+ControllerTests\.(groovy))$}       then :controller_test
-        when %r{/test/integration/(.+ServiceTests\.(groovy))$}          then :service_test
-        when %r{/test/integration/(.+TagLibTests\.(groovy))$}           then :taglib_test
-        when %r{/test/integration/(.+Tests\.(groovy))$}                 then :domain_class_test
+        when %r{/test/unit/(.+ControllerTests\.(groovy))$}       then :controller_test
+        when %r{/test/unit/(.+ServiceTests\.(groovy))$}          then :service_test
+        when %r{/test/unit/(.+TagLibTests\.(groovy))$}           then :taglib_test
+        when %r{/test/unit/(.+Tests\.(groovy))$}                 then :domain_class_test
         else nil
       end
     # Store the tail (modules + file) after the regexp
@@ -235,10 +235,10 @@ class GrailsPath
       :domain_class => 'grails-app/domain',
       :service => 'grails-app/services',
       :taglib => 'grails-app/taglib',
-      :controller_test => 'test/integration',
-      :domain_class_test => 'test/integration',
-      :service_test => 'test/integration',
-      :taglib_test => 'test/integration'
+      :controller_test => 'test/unit',
+      :domain_class_test => 'test/unit',
+      :service_test => 'test/unit',
+      :taglib_test => 'test/unit'
     }
   end
   

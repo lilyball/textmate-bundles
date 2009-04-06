@@ -207,11 +207,8 @@ module TextMate
       end
 
       def parse_version(executable, options)
-        f = open("/Users/alex/Desktop/version.log", "w")
         out, err = TextMate::Process.run(executable, options[:version_args], :interactive_input => false)
-        f.write("out + err: #{out + err}\n\n")
         if options[:version_regex] =~ (out + err)
-          f.write("version_regex matched #{$1}")
           return (out + err).sub(options[:version_regex], options[:version_replace])
         end
       end

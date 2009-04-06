@@ -143,7 +143,7 @@ class GrailsPath
         when %r{/grails-app/controllers/(.+Controller\.(groovy))$}      then :controller
         when %r{/grails-app/views/(.+\.(#{VIEW_EXTENSIONS * '|'}))$}    then :view
         when %r{/grails-app/domain/(.+\.(groovy))$}                     then :domain_class
-        when %r{/grails-app/service/(.+Service\.(groovy))$}             then :service
+        when %r{/grails-app/services/(.+Service\.(groovy))$}             then :service
         when %r{/grails-app/taglib/(.+TagLib\.(groovy))$}               then :taglib
         when %r{/test/unit/(.+ControllerTests\.(groovy))$}       then :controller_test
         when %r{/test/unit/(.+ServiceTests\.(groovy))$}          then :service_test

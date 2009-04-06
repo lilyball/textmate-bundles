@@ -17,9 +17,9 @@ class GrailsCommand
     @option_getter = option_getter
     @command = nil
     @colorisations = {
-      "green" => [/SUCCESS/,/Server running/, /Tests failed: 0/],
-      "red" => [/FAILURE/,/Tests failed: [1-9]/,/Compilation error/,/threw exception/, /Exception:/],
-      "blue" => [/Environment set to/]
+      "green" => [/SUCCESS/,/Server running/, /Tests PASSED/, /Running test (\w+)...PASSED/],
+      "red" => [/FAILURE/,/Tests FAILED/,/Compilation error/,/threw exception/, /Exception:/, /...FAILED/],
+      "blue" => [/Environment set to/],
     }
   end
 

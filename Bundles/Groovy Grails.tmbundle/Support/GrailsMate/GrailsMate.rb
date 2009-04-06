@@ -15,7 +15,7 @@ class GrailsCommand
     @location = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
     @task = task
     @option_getter = option_getter
-    @command = []
+    @command = nil
     @colorisations = {
       "green" => [/SUCCESS/,/Tests passed/,/Server running/],
       "red" => [/FAILURE/,/Tests failed/,/Compilation error/,/threw exception/, /Exception:/],
@@ -24,22 +24,27 @@ class GrailsCommand
   end
 
   def command
-    if @command.empty?
-      @command << @task unless @task.nil? or @task.empty?
+    if @command.nil?
+      option = nil
       unless @option_getter.nil?
         prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.grailsmate"))
         pref_key = "#{@location}::#{@task}"
         last_value = prefs.transaction(true) { prefs[pref_key] }
         option = @option_getter[last_value]
-        if option.nil?
-          return nil
-        else
-          prefs.transaction { prefs[pref_key] = option }
-          (Shellwords.shellwords(option).each { |option| @command << option }) unless option.empty?
-        end
+        prefs.transaction { prefs[pref_key] = option }
       end
+      @command = construct_command(@task, option)
     end
     @command
+  end
+  
+  def construct_command(task, option) 
+    command = []
+    command << task unless task.nil? or task.empty?
+    unless option.nil? or option.empty?
+      (Shellwords.shellwords(option).each { |option| command << option })
+    end
+    command
   end
       
   def run

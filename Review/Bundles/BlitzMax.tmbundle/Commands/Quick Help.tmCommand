@@ -5,66 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>export TM_SELECTED_TEXT
+export TM_CURRENT_WORD
+export TM_BLITZMAX
 
-if ENV['TM_BLITZMAX'].nil? then
-	print "TM_BLITZMAX shell variable not set.\n\nPlease see the Help (⌃⌘T Help) command for more information."
-	exit
-end
+out=$(ruby -wKU "$TM_BUNDLE_SUPPORT/documentation_for_sel.rb")
+status="$?"
 
-selection = ENV['TM_SELECTED_TEXT']
-if selection.nil? then
-	selection = ENV['TM_CURRENT_WORD']
-end
-
-CMD_REGEX=/(?ix)
-# name 1
-^(#{selection})
-(?:
-	(?:
-		# type name 2
-		\sExtends\s([a-zA-Z_]\w*)
-	|
-		# function and such
-		# return type 3
-		(?: ( [^\(]* )
-		# arguments 4
-		( \( .* \) (?:\sNoDebug)? )?
-		)
-		# description 5
-		(?: \s \: \s ( .*? ))?
-	)
-)
-# docpath 6
-\|(\/.+$)
-/
-
-bmaxPath = ENV['TM_BLITZMAX']
-cmdTxt = bmaxPath+"/docs/html/Modules/commands.txt"
-
-if File.exist?(cmdTxt) then
-	cmdTxtIO = File.new(cmdTxt, 'r')
-	
-	cmdTxtIO.each_line do |line|
-		if line =~ CMD_REGEX then
-			match = $~
-			# first off, handle the odd one out (e.g., EmitEventHook)
-			if match[3] and match[3] =~ /^=/ then
-				puts match[1]
-				puts match[5] unless match[5].nil? or match[5].empty?
-			elsif match[4] then
-				puts "#{match[1]}#{match[3].nil? || match[3].empty? ? "" : match[3]}#{match[4]}"
-				puts match[5] unless match[5].nil? or match[5].empty?
-			else
-				puts match[1]
-				puts match[5] unless match[5].nil? or match[5].empty?
-			end
-			break
-		end
-	end
+if [[ "$status" == 0 ]]; then
+	echo $out
+	exit_show_html
+elif [[ "$status" == 1 ]]; then
+	echo $out
+	exit_show_tool_tip
 else
-	puts "commands.txt not found\nPlease rebuild your documentation"
-end
+	exit_discard
+fi
 </string>
 	<key>fallbackInput</key>
 	<string>word</string>

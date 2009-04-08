@@ -157,7 +157,7 @@ module Maude
     def rx_message
       /^(#{colors.keys.join("|")}):       # type of the message
         (?:\s
-          ("[^"]+"|<[^>]+>)               # filename or stream
+          ("[^\"]+"|<[^>]+>)               # filename or stream
           (?:,\sline\s(\d+))?             # line number
           (?:\s\(([^)]+)\))?              # module name
           :)?\s

@@ -9,6 +9,8 @@ fi
 SOURCE="$1"
 shift
 
+PACKAGE="$1"
+
 output="$TMPDIR/tm_javamate.${TM_PID:-$LOGNAME}";
 mkdir -p "$output"
 
@@ -22,5 +24,11 @@ if [[ "$SOURCE" != $TM_JAVA_FILEGLOB ]]; then
   if (($rc >= 1)); then exit $rc; fi
 fi
 
-CLASSPATH="$output:$CLASSPATH" "$TM_JAVA" -Dfile.encoding=utf-8 $(basename -s .java "$SOURCE") $@;
+CLASS=$(basename -s .java "$SOURCE")
+if [ "$PACKAGE" ]
+then
+	CLASS="$PACKAGE.$CLASS"
+fi
+
+CLASSPATH="$output:$CLASSPATH" "$TM_JAVA" -Dfile.encoding=utf-8 "$CLASS" $@;
 exit $?;

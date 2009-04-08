@@ -1,4 +1,4 @@
-require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/executor"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/executor"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/save_current_document"
 require "pathname"
 require "ostruct"
@@ -293,7 +293,7 @@ module MaudeMate
 
     def run(input, opts = {})
       TextMate.save_current_document
-      Maude::Executor.run(*emit_options(input, opts)) { |str, type| 
+      TextMate::Executor.run(*emit_options(input, opts)) { |str, type|
         case type
         when :out
           filter_stdout(str)

@@ -32,16 +32,28 @@ module Graffiti
     #
     # TODO: check also the TM_PROJECT_FILEPATH variable.
     #
-    @@bundleName = "Graffiti"
-    @@ctags = "\"#{ENV['TM_BUNDLE_SUPPORT']}/bin/ctags\""
-    @@cscope = "\"#{ENV['TM_BUNDLE_SUPPORT']}/bin/cscope\""
-    @@projectDirPath = ENV['TM_PROJECT_DIRECTORY']
-    @@prefDirPath = @@projectDirPath + '/.graffiti'
-    @@ctagsTagFilePath = @@prefDirPath + '/ctags.tags'
-    @@cscopeTagFilePath = @@prefDirPath + '/cscope.out'
-    @@cscopeDbFilePath = @@prefDirPath + '/cscope.files'
-    @@historyFilePath = @@prefDirPath + '/history.yaml'
-    @@ctagsIdentifiers = "VOID=void"
+    @@bundleName             = "Graffiti"
+    @@ctags                  = "\"#{ENV['TM_BUNDLE_SUPPORT']}/bin/ctags\""
+    @@cscope                 = "\"#{ENV['TM_BUNDLE_SUPPORT']}/bin/cscope\""
+    @@projectDirPath         = ENV['TM_PROJECT_DIRECTORY']
+    @@prefDirName            = '.graffiti'
+    @@prefDirPath            = @@projectDirPath.to_s + "/" + @@prefDirName
+
+    @@ctagsTagFileName       = 'ctags.tags'
+    @@ctagsTagFilePath       = @@prefDirPath + "/" + @@ctagsTagFileName
+    @@ctagsTagFileShortPath  = @@prefDirName + "/" + @@ctagsTagFileName
+    @@ctagsIdentifiers       = "VOID=void"
+
+    @@cscopeTagFileName      = 'cscope.out'
+    @@cscopeTagFilePath      = @@prefDirPath + '/' + @@cscopeTagFileName
+    @@cscopeTagFileShortPath = @@prefDirName + '/' + @@cscopeTagFileName
+
+    @@cscopeDbFileName       = 'cscope.files'
+    @@cscopeDbFilePath       = @@prefDirPath + '/' + @@cscopeDbFileName
+    @@cscopeDbFileShortPath  = @@prefDirName + '/' + @@cscopeDbFileName
+    
+    @@historyFilePath        = @@prefDirPath + '/history.yaml'
+    @@debugFilePath          = @@prefDirPath + '/debug.log'
 
 
     ###############################################################################
@@ -63,13 +75,16 @@ module Graffiti
         # -d     Do not update the cross-reference.
         # -L     Do a single search with line-oriented output.
         # -q     Enable fast symbol lookup via an inverted index.
-        cscopeAskCmd = "cd '#{@@prefDirPath}' && " +
-        "#{@@cscope} -L -q -d -#{cmdId}\"#{symbol}\""
+        cscopeAskCmd = "cd '#{@@projectDirPath}' && " +
+        "#{@@cscope} -f #{@@cscopeTagFileShortPath} -L -d -q -#{cmdId}\"#{symbol}\""
+        debugPrint cscopeAskCmd #DEBUG
         cscopeCmdResult = `#{cscopeAskCmd}`
-        cscopeCmdResult.each_line { |line|
+        cscopeCmdResult.each_line do |line|
             lineArray = line.chop.split(" ")
-            tagsTable << [lineArray[0..2], lineArray[3..-1].join(" ")].flatten
-        }
+            tagsTable << [@@projectDirPath.to_s + "/" + lineArray[0],
+            lineArray[1..2],
+            lineArray[3..-1].join(" ")].flatten
+        end
 
         return tagsTable
     end
@@ -102,9 +117,9 @@ module Graffiti
             # Multiple occurrences, display a selection menu.
             # Build the array 'tagsMenu' containing only the paths.
             tagsMenu = []
-            tagsTable.each{ |tagsTableLine|
+            tagsTable.each do |tagsTableLine|
                 tagsMenu << tagsTableLine[0].sub(@@projectDirPath, '')
-            }
+            end
             selected = TextMate::UI.menu(tagsMenu)
             # Esc pressed.
             exit if (selected == nil)
@@ -127,23 +142,38 @@ module Graffiti
         html_header(title, @@bundleName)
         print "<ul>\n"
         
-        tagsTable.each{ |tagLine|
+        # Used to keep track of the previous filepath, to display or not the file name.
+        previousFilepath = ""
+        
+        tagsTable.each do |tagLine|
             filepath = tagLine[0]
             fileshortpath = tagLine[0].sub(@@projectDirPath, '')
             filename = File.basename(tagLine[0])
             symbol = tagLine[1]
             line = tagLine[2]
             text = tagLine[3]
-
-            print "<li>In <b>#{filename}</b> line #{line} - <code>"
+            
+            # Display the file name and path, only once per file.
+            unless (previousFilepath == filepath) then
+                print "<li>In <b>#{filename}</b> - <code>"
+                print "<a href='txmt://open?url=file://#{filepath}" +
+                "&line=#{line}&column=0'>#{fileshortpath}</a></code><br/><br/>\n"
+                previousFilepath = filepath
+            end
+            
+            # Display the line and code.
             print "<a href='txmt://open?url=file://#{filepath}" +
-            "&line=#{line}&column=0'>#{fileshortpath}</a></code><br/>\n"
+            "&line=#{line}&column=0'>Line #{line}</a> "
             print "<code><small><font color='grey'>#{text}</font></small></code><br/><br/>\n"
 #            print "<pre><font color='grey'>#{text}</font></pre>\n"
 #            print "<code><font color='grey'>#{text}</font></code><br/><br\>\n"
-        }
+        end
         
         print "</ul>\n"
+        
+        print "Done. Found <b>#{tagsTable.size}</b> " +
+        "instance#{"s" if (tagsTable.size > 1)}.<br/><br/>\n"
+        
         html_footer
         
         TextMate.exit_show_html
@@ -351,9 +381,9 @@ module Graffiti
         choices = []
         grepCmd = "grep '^#{currentWord}' #{@@ctagsTagFilePath} | " +
         "sed -e 's/^\\(#{currentWord}[[:alnum:]_]*\\).*/\\1/p' -e 'd' | sort -u"
-        `#{grepCmd}`.split("\n").each { |tagLine|
+        `#{grepCmd}`.split("\n").each do |tagLine|
             choices += [{'display' => tagLine, 'match' => tagLine.sub(currentWord, '')}]
-        }
+        end
 
         raise "Nothing found." if choices.size == 0
 
@@ -371,6 +401,7 @@ module Graffiti
     #
     # Create the prefDirPath if needed. Create ctags and cscope tag files
     # starting from projectDirPath. Display this in a nice HTML output.
+    # Check the existence of the project directory.
     #
     # TODO: Try the option "−L file" of ctags.
     # TODO: Try the option "−k" of cscope.
@@ -379,6 +410,21 @@ module Graffiti
     #
     def updateTagFiles()
         html_header("Updating Tags", @@bundleName)
+        
+        # Check that the project directory is defined.
+        unless (FileTest.directory?(@@projectDirPath.to_s)) then
+            print "The environment variable <code>TM_PROJECT_DIRECTORY</code> is " +
+            "not defined. For details, please see <b>First Steps</b> section of the " +
+            "Graffiti <b>Help</b> command.<br/><br/>\n"
+            return
+        end
+        
+        if (@@projectDirPath.to_s[' '] != nil) then
+            print "The environment variable <code>TM_PROJECT_DIRECTORY</code> contains " +
+            "spaces, sorry but this is not supported by the <code>cscope</code> tool.<br/><br/>\n"
+            return
+        end
+        
         print "Updating the tag files for <code>#{@@projectDirPath}</code>.<br/><br/>\n"
         print "<ul>\n"
 
@@ -390,10 +436,10 @@ module Graffiti
         ctagsUpdateCmd = "cd '#{@@projectDirPath}' && " +
         "time #{@@ctags} --recurse --extra=+f --fields=-a+i+k+l-m+S+z-s-n-f-K " +
         "--excmd=number -I #{@@ctagsIdentifiers} --c-kinds=+p+x " +
-        "-f '#{@@ctagsTagFilePath}'"
+        "-f \"#{@@ctagsTagFileShortPath}\"" # Ctags does not like the spaces, even escaped.
 
         print '<pre style="word-wrap: break-word;">'
-        #print ctagsUpdateCmd + "<br/>\n" #DEBUG
+        debugPrint ctagsUpdateCmd #DEBUG
         STDOUT.flush
         cmd = open("|#{ctagsUpdateCmd} 2>&1")
         cmd.each_line do |line|
@@ -405,13 +451,15 @@ module Graffiti
         # Generate the cscope tag file.
         print "<li>Updating cscope file...<br/>\n"
         
-        cscopeUpdateCmd = "cd '#{@@prefDirPath}' && " +
-        "find '#{@@projectDirPath}' -name \\*\.c -o -name \\*\.h -o -name \\*\.m -o -name \\*\.java " +
-        " > '#{@@cscopeDbFilePath}' && " +
-        "time #{@@cscope} -b -q"
+        cscopeUpdateCmd = "cd '#{@@projectDirPath}' && " +
+        "find . -name \\*\.c -o -name \\*\.cpp -o " +
+        "-name \\*\.h -o -name \\*\.m -o -name \\*\.java " +
+        "| sed 's/^/\"/; s/$/\"/' > " + # Escapes the spaces.
+        "'#{@@cscopeDbFileShortPath}' && " +
+        "time #{@@cscope} -i '#{@@cscopeDbFileShortPath}' -f '#{@@cscopeTagFileShortPath}' -b -q"
 
         print '<pre style="word-wrap: break-word;">'
-        #print cscopeUpdateCmd + "<br/>\n" #DEBUG
+        debugPrint cscopeUpdateCmd #DEBUG
         STDOUT.flush
         cmd = open("|#{cscopeUpdateCmd} 2>&1")
         cmd.each_line do |line|
@@ -466,10 +514,22 @@ module Graffiti
     #
     # Get the basename of the file currently opened, raise when empty (?).
     #
-    def getCurrentFileName
+    def getCurrentFileName()
         currentFile = File.basename(ENV['TM_FILEPATH']) # TM_SELECTED_FILE ?
         raise "No current file." if currentFile.nil?
         return currentFile
+    end
+
+
+    ###############################################################################
+    # debugPrint
+    #
+    # Print out the error message at a location accessible by the developer.
+    #
+    def debugPrint(msg)
+        File.open(@@debugFilePath, "w+") do |file|
+            file << msg
+        end
     end
 
 

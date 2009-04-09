@@ -16,7 +16,9 @@ The Graffiti TextMate bundle provides a set of commands to manipulate and browse
 
 # First Steps
 
-Before being able to use any other command of this bundle, you must create the tags, an index of the source code (for each one of your projects). To do so, call the command **Update tags**. This may take some time on very large projects.
+Before being able to use any other command of this bundle, you must create the tags, an index of the source code (for each one of your projects).
+
+To do so, open your project (Graffiti does not work on single documents), call the command **Update tags**. This may take some time on very large projects.
 
 Graffiti will create an index, recursively, for the source files found in the directory `TM_PROJECT_DIRECTORY`. If you have trouble with this command, check that your environment variable `TM_PROJECT_DIRECTORY` is well defined. This variable can be overwritten in the [Project Information][3] window.
 
@@ -63,7 +65,7 @@ starting from `TM_PROJECT_DIRECTORY`. Display this in a nice HTML output.
 # Configuration
 
 `TM_PROJECT_DIRECTORY` - 
-Graffiti create its tags index by recursively looking for all the source code files from the `TM_PROJECT_DIRECTORY` directory.
+Graffiti create its tags index by recursively looking for all the source code files from the `TM_PROJECT_DIRECTORY` directory. Note that the path to the source files shall not contain spaces (`cscope` seems to have trouble with the space character).
 
 `.graffiti` - 
 All the project related files (tag files, history, etc.) are located in this directory. It is created by Graffiti here: `TM_PROJECT_DIRECTORY/.graffiti`.
@@ -87,7 +89,7 @@ EOF</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>
-	<string>source.c, source.c++, source.objc, source.objc++, source.java, source.ruby, text.xml, source.makefile</string>
+	<string>source.c, source.c++, source.objc, source.objc++, source.java, source.ruby, text.xml, text.plain, source.makefile</string>
 	<key>uuid</key>
 	<string>04CD64C3-29E2-428B-BD66-6B5756740485</string>
 </dict>

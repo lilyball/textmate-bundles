@@ -826,7 +826,7 @@
 					<string>(?x)^\s*
 						(?:
 							(?: # or modifier and optional type
-								(?:(?:\b(public|private|protected)|(static)|(final)|(native|synchronized|abstract|threadsafe|transient))\b\s+)+\s* # modifier
+								(?:(?:\b(public|private|protected)|(static)|(final)|(native|synchronized|abstract|threadsafe|transient))\b\s*)+\s* # modifier
 								(?:\b 
 									(void)
 									|
@@ -854,7 +854,7 @@
 								)
 							)
 						)
-						\s*
+						\s+
 						(\w+) # method name
 						\s* 
 						(?=\() # opening parens 

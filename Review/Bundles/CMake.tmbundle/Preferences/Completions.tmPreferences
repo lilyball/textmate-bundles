@@ -13,7 +13,7 @@
 	# Commands are by convention written in all uppercase, but the command list is given in lowercase,
 	# so we print both to enable people to use either
 	# The first line is always the CMake executable version, so it gets stripped off
-	cmake --help-command-list | tail -n+2 | tee &gt;(tr "[a-z]" "[A-Z]") | grep "^$TM_CURRENT_WORD"
+	cmake --help-command-list &gt;( tail -n+2 | tee &gt;(tr "[a-z]" "[A-Z]") | grep "^$TM_CURRENT_WORD" )
 	</string>
 	</dict>
 	<key>uuid</key>

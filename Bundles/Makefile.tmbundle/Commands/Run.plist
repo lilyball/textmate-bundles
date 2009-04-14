@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>autoScrollOutput</key>
+	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
@@ -22,7 +24,8 @@ flags &lt;&lt; ENV["TM_MAKE_TARGET"] unless ENV["TM_MAKE_TARGET"].nil?
 ENV["TM_DISPLAYNAME"] = ENV["TM_MAKE_TARGET"].nil? ? "default" : ENV["TM_MAKE_TARGET"]
 
 # makefiles are always in the project directory.
-Dir.chdir(ENV["TM_PROJECT_DIRECTORY"]) unless ENV["TM_PROJECT_DIRECTORY"].nil?
+#Dir.chdir(ENV["TM_PROJECT_DIRECTORY"]) unless ENV["TM_PROJECT_DIRECTORY"].nil?
+Dir.chdir("/Users/duff/Oak/avian")
 
 TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|
   if line =~ /^(.*?):(?:(\d+):)?\s*(.*?)$/ and not $1.nil? and File.exists?($1)

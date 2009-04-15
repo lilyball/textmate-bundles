@@ -181,6 +181,23 @@ module Graffiti
     
     
     ###############################################################################
+    # findLocationsOfPromptedWord
+    #
+    # Display a prompt so that the user can enter a symbol,
+    # ask to cscope the locations where this symbol can be found,
+    # and print it out as a nice HTML list.
+    # 
+    def findLocationsOfPromptedWord()
+        promptedWord = askWordToUser()
+        exit if promptedWord.nil?
+        title = "Locations of \"#{promptedWord}\""
+        displayTagsTable(title, askCscope(0, promptedWord))
+    rescue => msg
+        toolTip(msg)
+    end
+
+
+    ###############################################################################
     # findLocationsOfCurrentSymbol
     #
     # Ask to cscope the locations where the symbol can be found,
@@ -202,6 +219,23 @@ module Graffiti
     # 
     def jumpToLocationOfCurrentSymbol()
         jumpToTagLine(askCscopePopupResults(0, getCurrentWord()))
+    rescue => msg
+        toolTip(msg)
+    end
+
+
+    ###############################################################################
+    # findDefinitionsOfPromptedWord
+    #
+    # Display a prompt so that the user can enter a symbol,
+    # ask to cscope where this symbol is defined,
+    # and print it out as a nice HTML list.
+    # 
+    def findDefinitionsOfPromptedWord()
+        promptedWord = askWordToUser()
+        exit if promptedWord.nil?
+        title = "Definitions of \"#{promptedWord}\""
+        displayTagsTable(title, askCscope(1, promptedWord))
     rescue => msg
         toolTip(msg)
     end
@@ -506,6 +540,20 @@ module Graffiti
         currentWord = ENV['TM_CURRENT_WORD']
         raise "Nothing under the cursor." if currentWord.nil?
         return currentWord
+    end
+
+
+    ###############################################################################
+    # askWordToUser
+    #
+    # Ask the user to provide a word.
+    #
+    # TODO: get the default value from the history.
+    #
+    def askWordToUser()
+        options = {:title => 'Symbol to find', :prompt => 'Symbol to find:', :default => ''}
+        word = TextMate::UI.request_string(options)      
+        return word
     end
 
 

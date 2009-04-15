@@ -14,6 +14,10 @@ html_header "Graffiti Help" "Graffiti"
 
 The Graffiti TextMate bundle provides a set of commands to manipulate and browse Ruby, C/C++ and Java source code. It is based on two commands famous in the Unix world: [CScope][1] and [Exuberant CTags][2].
 
+For example, it allows you to jump to the definition of a function and then to jump back, it finds all the locations where a symbol can be found, it provides a completion menu made up of all the class, function and variable names found in the code of your project...
+
+See the *Command List* section for more information on what Graffiti can do for you.
+
 # First Steps
 
 Before being able to use any other command of this bundle, you must create the tags, an index of the source code (for each one of your projects).
@@ -56,6 +60,16 @@ and print it out as a nice HTML list.
 
 **Find Files Including Current File** - 
 Ask to cscope where the current file is #included,
+and print it out as a nice HTML list.
+
+**Find Definitions of a Symbol...** -
+Display a prompt so that the user can enter a symbol,
+ask to cscope where this symbol is defined,
+and print it out as a nice HTML list.
+
+**Find Locations of a Symbol...** -
+Display a prompt so that the user can enter a symbol,
+ask to cscope the locations where this symbol can be found,
 and print it out as a nice HTML list.
 
 **Update Tags** - 

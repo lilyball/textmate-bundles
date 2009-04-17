@@ -3,16 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for (var ${1:property} in ${2:object}) {
-	${0:$2[$1]}
-}</string>
+	<string>if (typeof ${1:${TM_SELECTED_TEXT:myVar}} != 'undefined') $0</string>
 	<key>name</key>
-	<string>for (in) {…}</string>
+	<string>if !undefined</string>
 	<key>scope</key>
 	<string>source.js</string>
 	<key>tabTrigger</key>
-	<string>forin</string>
+	<string>ifu</string>
 	<key>uuid</key>
-	<string>3F4AB53B-210C-4E0C-8D04-12192DECC3D1</string>
+	<string>2831C11D-1907-4BC1-9A4D-BEE70EAFD0CF</string>
 </dict>
 </plist>

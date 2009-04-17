@@ -3,16 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>for (var ${1:property} in ${2:object}) {
-	${0:$2[$1]}
+	<string>switch(${10:/*Expression*/}){
+case ${20:/*Expression*/}:
+	${0:}
+	break;
+default:
+	
 }</string>
 	<key>name</key>
-	<string>for (in) {…}</string>
+	<string>switch … case</string>
 	<key>scope</key>
 	<string>source.js</string>
 	<key>tabTrigger</key>
-	<string>forin</string>
+	<string>switch</string>
 	<key>uuid</key>
-	<string>3F4AB53B-210C-4E0C-8D04-12192DECC3D1</string>
+	<string>65AAF33F-7706-4FC0-B5E0-E9AABEF0731E</string>
 </dict>
 </plist>

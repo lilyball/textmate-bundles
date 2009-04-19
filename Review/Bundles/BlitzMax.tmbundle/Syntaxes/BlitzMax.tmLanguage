@@ -154,15 +154,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_pi</string>
+					<string>#bmax_constants</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#bmax_null</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#bmax_boolean</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -288,15 +284,11 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#bmax_pi</string>
+							<string>#bmax_constants</string>
 						</dict>
 						<dict>
 							<key>include</key>
 							<string>#bmax_null</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_boolean</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -689,15 +681,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_pi</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#bmax_null</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#bmax_boolean</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -721,19 +705,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_num_bin</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#bmax_num_hex</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#bmax_num_float</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#bmax_num_int</string>
+					<string>#bmax_constants</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -957,15 +929,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#bmax_pi</string>
-		</dict>
-		<dict>
-			<key>include</key>
 			<string>#bmax_null</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#bmax_boolean</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -973,19 +937,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#bmax_num_hex</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#bmax_num_bin</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#bmax_num_float</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#bmax_num_int</string>
+			<string>#bmax_constants</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -1114,19 +1066,7 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#bmax_num_hex</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_bin</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_float</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_num_int</string>
+							<string>#bmax_numbers</string>
 						</dict>
 					</array>
 				</dict>
@@ -1199,6 +1139,24 @@
 			<string>(?i)\b(const)\b</string>
 			<key>name</key>
 			<string>meta.constant.blitzmax</string>
+		</dict>
+		<key>bmax_constants</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#bmax_pi</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_boolean</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_numbers</string>
+				</dict>
+			</array>
 		</dict>
 		<key>bmax_control_keywords</key>
 		<dict>
@@ -1281,36 +1239,38 @@
 			<key>name</key>
 			<string>constant.language.null.blitzmax</string>
 		</dict>
-		<key>bmax_num_bin</key>
+		<key>bmax_numbers</key>
 		<dict>
-			<key>match</key>
-			<string>(\%[01]{1,128})</string>
-			<key>name</key>
-			<string>constant.numeric.integer.binary.blitzmax</string>
-		</dict>
-		<key>bmax_num_float</key>
-		<dict>
-			<key>match</key>
-			<string>(?x) (?&lt;! % | \$ ) (
-					\b ([0-9]+ \. [0-9]+) |
-					(\. [0-9]+)
-				)</string>
-			<key>name</key>
-			<string>constant.numeric.float.blitzmax</string>
-		</dict>
-		<key>bmax_num_hex</key>
-		<dict>
-			<key>match</key>
-			<string>(\$[0-9a-fA-F]{1,16})</string>
-			<key>name</key>
-			<string>constant.numeric.integer.hexadecimal.blitzmax</string>
-		</dict>
-		<key>bmax_num_int</key>
-		<dict>
-			<key>match</key>
-			<string>(?x)\b(([0-9]+))</string>
-			<key>name</key>
-			<string>constant.numeric.integer.blitzmax</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(\$[0-9a-fA-F]{1,16})</string>
+					<key>name</key>
+					<string>constant.numeric.integer.hexadecimal.blitzmax</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(\%[01]{1,128})</string>
+					<key>name</key>
+					<string>constant.numeric.integer.binary.blitzmax</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x) (?&lt;! % | \$ ) (
+							\b ([0-9]+ \. [0-9]+) |
+							(\. [0-9]+)
+						)</string>
+					<key>name</key>
+					<string>constant.numeric.float.blitzmax</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?x)\b(([0-9]+))</string>
+					<key>name</key>
+					<string>constant.numeric.integer.blitzmax</string>
+				</dict>
+			</array>
 		</dict>
 		<key>bmax_pi</key>
 		<dict>

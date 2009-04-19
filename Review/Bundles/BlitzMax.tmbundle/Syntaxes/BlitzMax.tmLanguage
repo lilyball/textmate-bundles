@@ -284,6 +284,10 @@
 						</dict>
 						<dict>
 							<key>include</key>
+							<string>#bmax_string_quoted</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#bmax_pi</string>
 						</dict>
 						<dict>
@@ -305,10 +309,6 @@
 						<dict>
 							<key>include</key>
 							<string>#bmax_array</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#bmax_string_quoted</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -673,7 +673,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_comment_line</string>
+					<string>#bmax_comment_block</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bmax_string_quoted</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1152,9 +1156,9 @@
 		<key>bmax_comment_block</key>
 		<dict>
 			<key>begin</key>
-			<string>(?i)\b(?&lt;!end|end\s)rem\b</string>
+			<string>(?i)(?&lt;=\s|^|;)(?&lt;!end|end\s)rem\b</string>
 			<key>end</key>
-			<string>(?i)\bend\s?rem\b</string>
+			<string>(?i)(?&lt;=\s|^|;)end\s?rem\b</string>
 			<key>name</key>
 			<string>comment.block.rem.blitzmax</string>
 			<key>patterns</key>

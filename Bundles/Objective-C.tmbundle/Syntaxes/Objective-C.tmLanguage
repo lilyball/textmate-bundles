@@ -222,6 +222,20 @@
 				</dict>
 			</dict>
 			<key>match</key>
+			<string>(@)(required|optional)\b</string>
+			<key>name</key>
+			<string>keyword.control.protocol-specification.objc</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.keyword.objc</string>
+				</dict>
+			</dict>
+			<key>match</key>
 			<string>(@)(defs|encode)\b</string>
 			<key>name</key>
 			<string>keyword.other.objc</string>

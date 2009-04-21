@@ -155,15 +155,19 @@ module Graffiti
             
             # Display the file name and path, only once per file.
             unless (previousFilepath == filepath) then
-                print "<li>In <b>#{filename}</b> - <code>"
-                print "<a href='txmt://open?url=file://#{filepath}" +
-                "&line=#{line}&column=0'>#{fileshortpath}</a></code><br/><br/>\n"
+                print "<li>"
+#                print "In <b>#{filename}</b> - "
+#                print "<code><a href='txmt://open?url=file://#{filepath}"
+#                print "&line=#{line}&column=0'>#{fileshortpath}</a></code>"
+                print "In the file <code>#{File.dirname(fileshortpath)}/"
+                print "<b>#{File.basename(filename)}</b></code> :"
+                print "<br/><br/>\n"
                 previousFilepath = filepath
             end
             
             # Display the line and code.
-            print "<a href='txmt://open?url=file://#{filepath}" +
-            "&line=#{line}&column=0'>Line #{line}</a> "
+            print "<a href='txmt://open?url=file://#{filepath}"
+            print "&line=#{line}&column=0'>Line #{line}</a> "
             print "<code><small><font color='grey'>#{text}</font></small></code><br/><br/>\n"
 #            print "<pre><font color='grey'>#{text}</font></pre>\n"
 #            print "<code><font color='grey'>#{text}</font></code><br/><br\>\n"

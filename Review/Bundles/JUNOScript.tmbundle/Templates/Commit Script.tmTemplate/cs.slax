@@ -1,0 +1,44 @@
+version 1.0;
+
+/*
+ * Created by ${TM_FULLNAME}
+ * Current script version is:
+ * $Id$
+ */
+
+ns junos = "http://xml.juniper.net/junos/*/junos";
+ns xnm = "http://xml.juniper.net/xnm/1.1/xnm";
+ns jcs = "http://xml.juniper.net/junos/commit-scripts/1.0";
+ns ext = "http://xmlsoft.org/XSLT/namespace";
+
+import "../import/junos.xsl";
+
+match configuration {
+
+	var $re_status = {
+		call is_master();
+	}
+
+	if ($re_status == "master") {
+		/* add stuff here */
+	}
+}
+
+template is_master() {
+	var $command = "get-route-engine-information";
+	var $re = jcs:invoke($command);
+
+     /*
+      * if there is only one RE then is has to be master
+      */
+     if (count($re/route-engine) == 1) {
+     	<output> "master";
+     }
+     /* if there is more than one RE this XPath statement is only true on the master RE */
+     else if ($re/route-engine[mastership-state == "master"]/load-average-one) {
+     	<output> "master";
+     }
+     else {
+     	<output> "backup";
+     }
+}

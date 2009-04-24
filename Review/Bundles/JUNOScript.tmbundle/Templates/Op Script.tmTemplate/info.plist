@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>if [[ ! -f "$TM_NEW_FILE" ]]; then
+   perl -pe 's/\$\{([^}]*)\}/$ENV{$1}/g' \
+      &lt; op.slax &gt; "$TM_NEW_FILE"
+fi</string>
+	<key>extension</key>
+	<string>slax</string>
+	<key>name</key>
+	<string>Op Script</string>
+	<key>uuid</key>
+	<string>2E51B478-9667-4026-8634-0F6915D7BEDB</string>
+</dict>
+</plist>

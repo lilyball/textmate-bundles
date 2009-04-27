@@ -1,38 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
 	<string>require_cmd groovyConsole
-osascript -e 'on openGroovyConsole()
-	do shell script "groovyConsole &gt; /dev/null 2&gt;&amp;1 &amp;"
-end openGroovyConsole
-
-tell application "System Events"
-	set theProcesses to every process whose name is "java"
-	if (count of theProcesses) is 0 then
-		openGroovyConsole() of me
-	else
-		set foundIt to false
-		repeat with i from 1 to (count of theProcesses)
-			set thisProcess to item i of theProcesses
-			try
-				tell thisProcess
-					set theWindow to (the window "GroovyConsole")
-					set frontmost of thisProcess to true
-					set foundIt to true
-				end tell
-			on error number 1
-				-- do nothing
-			end try
-		end repeat
-		if foundIt is false then
-			openGroovyConsole() of me
-		end if
-	end if
-end tell' &gt; /dev/null 2&gt;&amp;1 &amp;</string>
+osascript -e 'on openGroovyConsole()	do shell script "groovyConsole &gt; /dev/null 2&gt;&amp;1 &amp;"end openGroovyConsoletell application "System Events"	set UI_enabled to UI elements enabledend tellif UI_enabled is false then	tell application "System Preferences"		activate		set current pane to ¬			pane "com.apple.preference.universalaccess"		set the dialog_message to "This script utilizes " &amp; ¬			"the built-in Graphic User Interface Scripting " &amp; ¬			"architecture of Mac OS X " &amp; ¬			"which is currently disabled." &amp; return &amp; return &amp; ¬			"You can activate GUI Scripting by selecting the " &amp; ¬			"checkbox “Enable access for assistive devices” " &amp; ¬			"in the Universal Access preference pane."		display dialog dialog_message buttons {"OK"} ¬			default button 1 with icon 1	end tellelse	tell application "System Events"		set theProcesses to every process whose name is "java"		if (count of theProcesses) is 0 then			openGroovyConsole() of me		else			set foundIt to false			repeat with i from 1 to (count of theProcesses)				set thisProcess to item i of theProcesses				try					tell thisProcess						set theWindow to (the window "GroovyConsole")						set frontmost of thisProcess to true						set foundIt to true					end tell				on error number 1					-- do nothing				end try			end repeat			if foundIt is false then				openGroovyConsole() of me			end if		end if	end tellend if' &gt; /dev/null 2&gt;&amp;1 &amp;</string>
 	<key>fallbackInput</key>
 	<string>none</string>
 	<key>input</key>

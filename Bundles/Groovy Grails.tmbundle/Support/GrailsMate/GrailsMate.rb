@@ -59,16 +59,14 @@ class GrailsCommand
           TextMate::Process.run(@grails, cmd) do |line|
             line.chomp!
             match = false
-            if line =~ /^(Running test )(\S+)(\.\.\.)$/
-              match = $1 + "<a href='txmt://open?url=file://#{@location}/test/reports/plain/TEST-#{$2}.txt'>#{$2}</a>" + $3 + "</br>"
-            else 
-              @colorisations.each do | color, patterns |
-                if match == false and patterns.detect { |pattern| line =~ pattern }
-                  match = "<span style=\"color: #{color}\">#{htmlize line}</span><br/>"
-                end
+            @colorisations.each do | color, patterns |
+              if match == false and patterns.detect { |pattern| line =~ pattern }
+                match = "<span style=\"color: #{color}\">#{htmlize line}</span><br/>"
               end
             end
-            io << (match ? match : "#{htmlize line}<br/>")
+            line = (match ? match : "#{htmlize line}<br/>")
+            line.sub!(/(Running test )(\S+)(\.\.\.)/, "\\1<a href='txmt://open?url=file://#{@location}/test/reports/plain/TEST-\\2.txt'>\\2</a>\\3")
+            io << line
           end
           io << "</pre>"
         end

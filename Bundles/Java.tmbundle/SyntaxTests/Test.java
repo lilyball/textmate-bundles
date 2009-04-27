@@ -85,6 +85,12 @@ class AnonymousClassExample {
     public Object m() {
         return new Object() { /* meta.anon-class.java */ };
     }  
+	public class Inner {
+		void method() throws  {
+			
+		}
+		
+	}
 }
 
 public class Ticket3D1E429A 
@@ -102,7 +108,7 @@ public class Foo
        Int[] int2 = new Int[10];
    }
    
-   void method() 
+   void method( ) 
    {
        method(new Integer[334]);
    }
@@ -129,4 +135,17 @@ class Foo
    {
        System.out.println("class name");
    }
+}
+
+class Ta {
+	/**
+	 * 
+	 */
+	private native void setInitValues(long modelPtr, double n1,
+	                                                       double n2,
+	                                                       double p2,
+	                                                       double p26,
+	                                                       double p3,
+	                                                       double wf,
+	                                                       double t44);
 }

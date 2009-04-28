@@ -741,15 +741,7 @@
 		<key>methods</key>
 		<dict>
 			<key>begin</key>
-			<string>(?!new)(?=\w)(?![^{]*;)(?!.*//)(?!.*=)(?=.*\()</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.java</string>
-				</dict>
-			</dict>
+			<string>(?!new)(?=\w)(?:(?=abstract|native)|(?![^{]*;))(?!.*//)(?!.*=)(?=.*\()</string>
 			<key>end</key>
 			<string>}|(?=;)</string>
 			<key>name</key>

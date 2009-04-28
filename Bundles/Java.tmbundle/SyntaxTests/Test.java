@@ -149,3 +149,15 @@ class Ta {
 	                                                       double wf,
 	                                                       double t44);
 }
+
+class NativeAndAbstractMethods {
+   private abstract long InitModel();
+   private native void Step(long modelPtr, int iterationsPerStep);
+   private native void Term(long modelPtr);
+   private native void setValue(long modelPtr, String Key, double  
+Value);
+   private native double getValue(long modelPtr, String Key);
+   private native void setInitValues(long modelPtr, double n1, double  
+											n2, double
+												p2, double p26, double p3, double wf, double t44);
+}

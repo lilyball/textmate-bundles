@@ -24,8 +24,7 @@ flags &lt;&lt; ENV["TM_MAKE_TARGET"] unless ENV["TM_MAKE_TARGET"].nil?
 ENV["TM_DISPLAYNAME"] = ENV["TM_MAKE_TARGET"].nil? ? "default" : ENV["TM_MAKE_TARGET"]
 
 # makefiles are always in the project directory.
-#Dir.chdir(ENV["TM_PROJECT_DIRECTORY"]) unless ENV["TM_PROJECT_DIRECTORY"].nil?
-Dir.chdir("/Users/duff/Oak/avian")
+Dir.chdir(ENV["TM_PROJECT_DIRECTORY"]) unless ENV["TM_PROJECT_DIRECTORY"].nil?
 
 TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|
   if line =~ /^(.*?):(?:(\d+):)?\s*(.*?)$/ and not $1.nil? and File.exists?($1)

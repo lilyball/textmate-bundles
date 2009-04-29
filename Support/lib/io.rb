@@ -55,7 +55,7 @@ module TextMate
                 when 2 then lines.each_line { |line| block.call(line, name) }
               end
             else
-              raise "Allan's regexp did not match #{str}" 
+              raise "Malformed script output (most likely not UTF-8): ‘#{data.to_s}’" 
             end
           
           elsif sync?

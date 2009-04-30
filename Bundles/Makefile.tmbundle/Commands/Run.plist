@@ -17,18 +17,31 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
 TextMate.save_current_document
 TextMate::Executor.make_project_master_current_document
 
-flags = []
+Dir.chdir(ENV["TM_PROJECT_DIRECTORY"])
+ENV["TM_MAKEFILE_MASTER"] = ENV["TM_PROJECT_DIRECTORY"] + "/Makefile" if ENV["TM_MAKEFILE_MASTER"].nil? or not File.file?(ENV["TM_MAKEFILE_MASTER"])
+
+flags = ["-w"]
+flags &lt;&lt; "-f" + File.basename(ENV["TM_MAKEFILE_MASTER"])
 flags &lt;&lt; ENV["TM_MAKE_FLAGS"] unless ENV["TM_MAKE_FLAGS"].nil?
 flags &lt;&lt; ENV["TM_MAKE_TARGET"] unless ENV["TM_MAKE_TARGET"].nil?
 
 ENV["TM_DISPLAYNAME"] = ENV["TM_MAKE_TARGET"].nil? ? "default" : ENV["TM_MAKE_TARGET"]
 
-# makefiles are always in the project directory.
-Dir.chdir(ENV["TM_PROJECT_DIRECTORY"]) unless ENV["TM_PROJECT_DIRECTORY"].nil?
+Dir.chdir(File.dirname(ENV["TM_MAKEFILE_MASTER"]))
 
+dirs = [ENV['TM_PROJECT_DIRECTORY']]
 TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|
-  if line =~ /^(.*?):(?:(\d+):)?\s*(.*?)$/ and not $1.nil? and File.exists?($1)
-    "&lt;a href=\"txmt://open?url=file://#{e_url File.expand_path($1)}#{$2.nil? ? '' : "&amp;line=" + $2}\"&gt;#{htmlize $3}&lt;/a&gt;&lt;br&gt;\n"
+  if line =~ /^make.*?: Entering directory `(.*?)'$/ and not $1.nil? and File.directory?($1)
+    dirs.unshift($1)
+    ""
+  elsif line =~ /^make.*?: Leaving directory `(.*?)'$/ and not $1.nil? and File.directory?($1)
+    dirs.delete($1)
+    ""
+  elsif line =~ /^(.*?):(?:(\d+):)?\s*(.*?)$/ and not $1.nil?
+    expanded_path = dirs.map{ |dir| File.expand_path($1, dir) }.find{ |path| File.file?path }
+    if !expanded_path.nil?
+      "&lt;a href=\"txmt://open?url=file://#{e_url expanded_path}#{$2.nil? ? '' : "&amp;line=" + $2}\"&gt;#{htmlize $3}&lt;/a&gt;&lt;br&gt;\n"
+    end
   end
 end
 </string>

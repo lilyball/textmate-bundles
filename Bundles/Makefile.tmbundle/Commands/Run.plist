@@ -5,7 +5,7 @@
 	<key>autoScrollOutput</key>
 	<true/>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveModifiedFiles</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 
@@ -18,16 +18,16 @@ TextMate.save_current_document
 TextMate::Executor.make_project_master_current_document
 
 Dir.chdir(ENV["TM_PROJECT_DIRECTORY"])
-ENV["TM_MAKEFILE_MASTER"] = ENV["TM_PROJECT_DIRECTORY"] + "/Makefile" if ENV["TM_MAKEFILE_MASTER"].nil? or not File.file?(ENV["TM_MAKEFILE_MASTER"])
+ENV["TM_MAKE_FILE"] = ENV["TM_PROJECT_DIRECTORY"] + "/Makefile" if ENV["TM_MAKE_FILE"].nil? or not File.file?(ENV["TM_MAKE_FILE"])
 
 flags = ["-w"]
-flags &lt;&lt; "-f" + File.basename(ENV["TM_MAKEFILE_MASTER"])
+flags &lt;&lt; "-f" + File.basename(ENV["TM_MAKE_FILE"])
 flags &lt;&lt; ENV["TM_MAKE_FLAGS"] unless ENV["TM_MAKE_FLAGS"].nil?
 flags &lt;&lt; ENV["TM_MAKE_TARGET"] unless ENV["TM_MAKE_TARGET"].nil?
 
 ENV["TM_DISPLAYNAME"] = ENV["TM_MAKE_TARGET"].nil? ? "default" : ENV["TM_MAKE_TARGET"]
 
-Dir.chdir(File.dirname(ENV["TM_MAKEFILE_MASTER"]))
+Dir.chdir(File.dirname(ENV["TM_MAKE_FILE"]))
 
 dirs = [ENV['TM_PROJECT_DIRECTORY']]
 TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|

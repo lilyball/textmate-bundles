@@ -28,7 +28,7 @@ class Ref
 							'func' => 'Function'}
 							
 	def url
-		docset + "/Contents/Resources/Documents/" + path
+		File.expand_path(path, docset + "/Contents/Resources/Documents/")
 	end
 	
 	# A '-' as a title in the popup menu not very useful so use the type field instead.
@@ -131,6 +131,8 @@ def search_docs_all(query)
   return nil if query.to_s.empty?
 
   results = search_docs(query)
+  results.reject! { |e| e.url =~ %r{^/usr/share/man/} }
+
   man = man_page(query)
   results << man if man
 

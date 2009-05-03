@@ -70,7 +70,7 @@ module TextMate
         args.flatten!
 
         options = {:version_args      => ['--version'],
-                   :version_regex     => /\A(.*)$/,
+                   :version_regex     => /\A(.*)$(?:\n.*)*/,
                    :version_replace   => '\1',
                    :verb              => "Running",
                    :env               => nil,

@@ -28,7 +28,7 @@ class Ref
 							'func' => 'Function'}
 							
 	def url
-		File.expand_path(path, docset + "/Contents/Resources/Documents/")
+		path[0] == ?/ ? path : docset + "/Contents/Resources/Documents/" + path
 	end
 	
 	# A '-' as a title in the popup menu not very useful so use the type field instead.

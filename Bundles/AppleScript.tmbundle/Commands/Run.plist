@@ -16,7 +16,7 @@ TextMate::Executor.make_project_master_current_document
 error_fd = nil
 document = File.read(ENV["TM_FILEPATH"])
 
-TextMate::Executor.run(ENV["TM_OSASCRIPT"] || "osascript", "-ss", ENV["TM_FILEPATH"], :version_args =&gt; ["-e", "'AppleScript ' &amp; (AppleScript's version as string)"]) do |str, type|
+TextMate::Executor.run(ENV["TM_OSASCRIPT"] || "osascript", "-ss", ENV["TM_FILEPATH"], :version_args =&gt; ["-e", "\"AppleScript \" &amp; (AppleScript's version as string)"]) do |str, type|
   error_fd ||= IO.for_fd(ENV["TM_ERROR_FD"].to_i)
   case type
   when :err    # 

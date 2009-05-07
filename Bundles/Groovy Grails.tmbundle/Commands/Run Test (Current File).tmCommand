@@ -7,13 +7,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>grailsmate_bootstrap.sh focussed_test "$TM_FILEPATH"</string>
+	<string>if [ "$TM_SELECTED_FILES" ]
+then
+	eval grailsmate_bootstrap.sh focussed_test "$TM_SELECTED_FILES"
+else
+	grailsmate_bootstrap.sh focussed_test "$TM_FILEPATH"
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@G</string>
 	<key>name</key>
-	<string>Run Test (Current File)</string>
+	<string>Run Tests (selected)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>scope</key>

@@ -93,7 +93,7 @@ module TextMate
   
       # Show Tooltip
       def tool_tip(content, options={}) # Possible options = {:format => :html|:text, :transparent => true}
-        command = %{"$DIALOG" tooltip}
+        command = %{"$DIALOG" tooltip < /dev/null}
         command << ' --transparent' if options[:transparent]
         format = options[:format] ? options[:format].to_s : 'text'
         command << ' --' << format << ' ' << e_sh(content)

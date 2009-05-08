@@ -19,4 +19,4 @@ ARGV.each do |t|
   testclasses << clazz.sub(/Tests$/, "")
 end
 
-GrailsCommand.new("test-app #{testclasses.join(' ')} #{phases.uniq.join(' ')}").run
+GrailsCommand.new("test-app #{testclasses.uniq.join(' ')} #{phases.uniq.join(' ')}").run

@@ -9,7 +9,7 @@ module TextMate
   
   class << self
     def notify(id, title, msg)
-        Notification.new(id, title, msg).notify
+      Notification.new(id, title, msg).notify
     end
   end
   
@@ -46,10 +46,12 @@ module TextMate
       growl = GrowlNotifier.new("TextMate", n_ids, n_ids, icon)
       growl.register
       growl.notify(id, title, msg)
+      self
     end
 
     def tooltip
       TextMate::UI.tool_tip("<strong>#{htmlize title}</strong><p>#{htmlize msg}</p>", :format => :html)
+      self
     end
     
     def icon

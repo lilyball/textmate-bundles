@@ -3,64 +3,106 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/growl'
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
-require "pstore"
+require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 
 module TextMate
+  
   class << self
     def notify(id, title, msg)
-      if Notification.growl_available?
-        Notification.growl_notify(id, title, msg)
-      else
-        Notification.tooltip_notify(id, title, msg)
-      end
+        Notification.new(id, title, msg).notify
     end
   end
   
-  module Notification
-    class << self
+  class Notification
 
-      @@prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.notifications"))
+    attr_reader :id, :title, :msg, :pref
+    
+    def initialize(id, title, msg)
+      @id = id
+      @title = title
+      @msg = msg
+      @pref = Preferences[id] # ensures that we are in the preferences (needed for Preferences.notification_ids)
+    end
+    
+    def growl_available?
+      %x{ps -xwwco "command" | grep -sq '^GrowlHelperApp$'}
+      $? == 0
+    end
+    
+    def prefers_growl?
+      @pref["growl"] == true
+    end
 
-      def get_pref(key) 
-        @@prefs.transaction { @@prefs[key] }
-      end
+    def should_growl?
+      prefers_growl? and growl_available?
+    end
+    
+    def notify
+      should_growl? ? growl : tooltip
+    end
+            
+    def growl
+      n_ids = Preferences.notification_ids
+      growl = GrowlNotifier.new("TextMate", n_ids, n_ids, icon)
+      growl.register
+      growl.notify(id, title, msg)
+    end
 
-      def set_pref(key, value) 
-        @@prefs.transaction { @@prefs[key] = value }
-      end
-      
-      def growl_available?
-        %x{ps -xwwco "command" | grep -sq '^GrowlHelperApp$'}
-        $? == 0
-      end
-      
-      def growl_notify(id, title, msg)
-        record_id(id)
-        n_ids = notification_ids
-        growl = GrowlNotifier.new("TextMate", n_ids, n_ids, tm_icon)
-        growl.register
-        growl.notify(id, title, msg)
-      end
-
-      def tooltip_notify(id, title, msg)
-        record_id(id)
-        TextMate::UI.tool_tip("<strong>#{htmlize title}</strong><p>#{htmlize msg}</p>", :format => :html)
-      end
-      
-      def record_id(id)
-        pref = get_pref(id)
-        if pref.nil?
-          set_pref(id, {})
+    def tooltip
+      TextMate::UI.tool_tip("<strong>#{htmlize title}</strong><p>#{htmlize msg}</p>", :format => :html)
+    end
+    
+    def icon
+      require 'osx/cocoa'
+      OSX::NSImage.alloc().initWithContentsOfFile_(TextMate.app_path + "/Contents/Resources/TextMate.icns")
+    end
+    
+    module Preferences
+      class  << self
+        
+        @@notifications_key = "notifications"
+        @@global_key = "global"
+        
+        @@filename = File.expand_path "~/Library/Preferences/com.macromates.textmate.notifications.plist"
+        
+        @@prefs = nil
+        
+        def read
+          if File.exists? @@filename
+            File.open(@@filename, "r") do |f|
+              @@prefs = OSX::PropertyList.load(f)
+            end
+          else
+            @@prefs = {
+              @@global_key => {
+                "growl" => true
+              },
+              @@notifications_key => {}
+            }
+          end
         end
-      end
-      
-      def notification_ids
-        @@prefs.transaction { @@prefs.roots }
-      end
-      
-      def tm_icon
-        require 'osx/cocoa'
-        OSX::NSImage.alloc().initWithContentsOfFile_(TextMate.app_path + "/Contents/Resources/TextMate.icns")
+        
+        def save
+          File.open(@@filename, "w+") do |f|
+            f << @@prefs.to_plist
+          end
+        end
+        
+        def [](key) 
+          n = @@prefs[@@notifications_key][key]
+          if n.nil?
+            n = {}
+            @@prefs[@@notifications_key][key] = n
+            save
+          end
+          @@prefs[@@global_key].merge n
+        end
+
+        def notification_ids 
+          @@prefs[@@notifications_key].keys
+        end
+        
+        Preferences.read
       end
     end
   end

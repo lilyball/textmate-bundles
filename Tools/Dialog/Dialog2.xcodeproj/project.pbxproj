@@ -13,7 +13,8 @@
 		172138970FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172138950FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm */; };
 		1721389C0FB6D359001D3EAA /* TMDHTMLTips.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721389A0FB6D359001D3EAA /* TMDHTMLTips.mm */; };
 		1721389D0FB6D359001D3EAA /* tooltip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721389B0FB6D359001D3EAA /* tooltip.mm */; };
-		172138A00FB6D385001D3EAA /* nib.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721389F0FB6D385001D3EAA /* nib.mm */; };
+		172138B10FB6D540001D3EAA /* nib.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172138AE0FB6D540001D3EAA /* nib.mm */; };
+		172138B20FB6D540001D3EAA /* TMDNibController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172138B00FB6D540001D3EAA /* TMDNibController.mm */; };
 		175614490EDEA3B80053AC52 /* images.mm in Sources */ = {isa = PBXBuildFile; fileRef = 175614480EDEA3B80053AC52 /* images.mm */; };
 		1756144D0EDEA96F0053AC52 /* defaults.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1756144C0EDEA96F0053AC52 /* defaults.mm */; };
 		177E4DA309132A0F0064163D /* Dialog2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 177E4DA209132A0F0064163D /* Dialog2.mm */; };
@@ -21,7 +22,6 @@
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		910713760D99768B0091C83C /* TextMate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 910713750D99768B0091C83C /* TextMate.mm */; };
 		91234F960D9A84E900E346BA /* insert.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91234F950D9A84E900E346BA /* insert.mm */; };
-		9192ECB50CF7AF39003D9967 /* TMDNibController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9192ECB40CF7AF39003D9967 /* TMDNibController.mm */; };
 		91BF40BA0D6792CB001834B3 /* CLIProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91BF40B90D6792CB001834B3 /* CLIProxy.mm */; };
 		91D6F89E0CF23B0D000F8170 /* TMDCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F89A0CF23B0D000F8170 /* TMDCommand.mm */; };
 		91D6F8A40CF23B71000F8170 /* OptionParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F8A30CF23B71000F8170 /* OptionParser.mm */; };
@@ -59,7 +59,9 @@
 		172138990FB6D359001D3EAA /* TMDHTMLTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDHTMLTips.h; path = Commands/tooltip/TMDHTMLTips.h; sourceTree = "<group>"; };
 		1721389A0FB6D359001D3EAA /* TMDHTMLTips.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDHTMLTips.mm; path = Commands/tooltip/TMDHTMLTips.mm; sourceTree = "<group>"; };
 		1721389B0FB6D359001D3EAA /* tooltip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tooltip.mm; path = Commands/tooltip/tooltip.mm; sourceTree = "<group>"; };
-		1721389F0FB6D385001D3EAA /* nib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = nib.mm; path = Commands/nib.mm; sourceTree = "<group>"; };
+		172138AE0FB6D540001D3EAA /* nib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = nib.mm; path = Commands/nib/nib.mm; sourceTree = "<group>"; };
+		172138AF0FB6D540001D3EAA /* TMDNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDNibController.h; path = Commands/nib/TMDNibController.h; sourceTree = "<group>"; };
+		172138B00FB6D540001D3EAA /* TMDNibController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDNibController.mm; path = Commands/nib/TMDNibController.mm; sourceTree = "<group>"; };
 		175614480EDEA3B80053AC52 /* images.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = images.mm; path = Commands/images.mm; sourceTree = "<group>"; };
 		1756144C0EDEA96F0053AC52 /* defaults.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = defaults.mm; path = Commands/defaults.mm; sourceTree = "<group>"; };
 		177E4DA109132A0F0064163D /* Dialog2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog2.h; sourceTree = "<group>"; };
@@ -69,8 +71,6 @@
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		910713750D99768B0091C83C /* TextMate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextMate.mm; path = Commands/Utilities/TextMate.mm; sourceTree = "<group>"; };
 		91234F950D9A84E900E346BA /* insert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = insert.mm; path = Commands/insert.mm; sourceTree = "<group>"; };
-		9192ECB30CF7AF39003D9967 /* TMDNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDNibController.h; path = Commands/Utilities/TMDNibController.h; sourceTree = "<group>"; };
-		9192ECB40CF7AF39003D9967 /* TMDNibController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDNibController.mm; path = Commands/Utilities/TMDNibController.mm; sourceTree = "<group>"; };
 		91BF40B80D6792CB001834B3 /* CLIProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIProxy.h; sourceTree = "<group>"; };
 		91BF40B90D6792CB001834B3 /* CLIProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CLIProxy.mm; sourceTree = "<group>"; };
 		91D6F89A0CF23B0D000F8170 /* TMDCommand.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = TMDCommand.mm; sourceTree = "<group>"; };
@@ -201,6 +201,16 @@
 			name = tooltip;
 			sourceTree = "<group>";
 		};
+		172138B30FB6D544001D3EAA /* nib */ = {
+			isa = PBXGroup;
+			children = (
+				172138B00FB6D540001D3EAA /* TMDNibController.mm */,
+				172138AF0FB6D540001D3EAA /* TMDNibController.h */,
+				172138AE0FB6D540001D3EAA /* nib.mm */,
+			);
+			name = nib;
+			sourceTree = "<group>";
+		};
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				91D6F95E0CF2BD26000F8170 /* Utilities */,
+				172138B30FB6D544001D3EAA /* nib */,
 				172138980FB6D338001D3EAA /* popup */,
 				172138740FB6C8EE001D3EAA /* prototype */,
 				1721389E0FB6D35C001D3EAA /* tooltip */,
@@ -244,7 +255,6 @@
 				175614480EDEA3B80053AC52 /* images.mm */,
 				91234F950D9A84E900E346BA /* insert.mm */,
 				91D6F9040CF23E7F000F8170 /* menu.mm */,
-				1721389F0FB6D385001D3EAA /* nib.mm */,
 			);
 			name = Commands;
 			sourceTree = "<group>";
@@ -256,8 +266,6 @@
 				91D6F9910CF33A7A000F8170 /* ValueTransformers.h */,
 				910713750D99768B0091C83C /* TextMate.mm */,
 				91D6F9670CF2C2B5000F8170 /* TextMate.h */,
-				9192ECB30CF7AF39003D9967 /* TMDNibController.h */,
-				9192ECB40CF7AF39003D9967 /* TMDNibController.mm */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -359,7 +367,6 @@
 				91D6F9020CF23E79000F8170 /* help.mm in Sources */,
 				91D6F9060CF23E7F000F8170 /* menu.mm in Sources */,
 				91D6F9950CF33A7A000F8170 /* ValueTransformers.mm in Sources */,
-				9192ECB50CF7AF39003D9967 /* TMDNibController.mm in Sources */,
 				91BF40BA0D6792CB001834B3 /* CLIProxy.mm in Sources */,
 				910713760D99768B0091C83C /* TextMate.mm in Sources */,
 				91234F960D9A84E900E346BA /* insert.mm in Sources */,
@@ -371,7 +378,8 @@
 				172138970FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm in Sources */,
 				1721389C0FB6D359001D3EAA /* TMDHTMLTips.mm in Sources */,
 				1721389D0FB6D359001D3EAA /* tooltip.mm in Sources */,
-				172138A00FB6D385001D3EAA /* nib.mm in Sources */,
+				172138B10FB6D540001D3EAA /* nib.mm in Sources */,
+				172138B20FB6D540001D3EAA /* TMDNibController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

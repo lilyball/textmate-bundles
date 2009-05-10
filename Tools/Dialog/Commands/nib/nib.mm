@@ -1,10 +1,10 @@
 #import <vector>
 #import <string>
 #import <sys/stat.h>
-#import "../Dialog2.h"
-#import "../TMDCommand.h"
-#import "../OptionParser.h"
-#import "Utilities/TMDNibController.h"
+#import "../../Dialog2.h"
+#import "../../TMDCommand.h"
+#import "../../OptionParser.h"
+#import "TMDNibController.h"
 
 // ==========
 // = Window =

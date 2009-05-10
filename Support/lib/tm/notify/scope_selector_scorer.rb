@@ -1,7 +1,7 @@
 # Taken from http://textpow.rubyforge.org/svn/lib/textpow/score_manager.rb
 
 module TextMate
-  module Notification
+  module Notify
     class ScopeSelectorScorer
 
       class ParsingError < Exception; end

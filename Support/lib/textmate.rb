@@ -11,14 +11,11 @@ module TextMate
 
   class << self
     def app_path
-      return %x{ps -xwwp "$TM_PID" -o "command"|tail -n1}.sub(%r{(.app)/Contents/MacOS/.*\n}, '\1') if ENV.has_key? 'TM_PID'
+      return %x{ps -xwwp "$TM_PID" -o "command="}.sub(%r{(.app)/Contents/MacOS/.*\n}, '\1')
+    end
 
-      # legacy code, required before TextMate r1466
-      apps = %x{ps -xwwco "pid command"}
-      apps.send(apps.respond_to?(:lines) ? :lines : :to_s).grep(/^\s*(\d+)\s+(TextMate)$/) do |match|
-        return %x{ps -xwwp #{$1} -o "command"|tail -n1}.sub(%r{(.app)/Contents/MacOS/TextMate.*\n}, '\1')
-      end
-      raise AppPathNotFoundException
+    def app_name
+      return %x{ps -cxwwp "$TM_PID" -o "command="}.chomp
     end
 
     def go_to(options = {})

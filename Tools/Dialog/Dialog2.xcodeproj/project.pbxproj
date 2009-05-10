@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		172138720FB6C8E9001D3EAA /* prototype.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721386F0FB6C8E9001D3EAA /* prototype.mm */; };
 		172138730FB6C8E9001D3EAA /* TMDChameleon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172138710FB6C8E9001D3EAA /* TMDChameleon.mm */; };
+		172138960FB6D334001D3EAA /* popup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172138930FB6D334001D3EAA /* popup.mm */; };
+		172138970FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 172138950FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm */; };
+		1721389C0FB6D359001D3EAA /* TMDHTMLTips.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721389A0FB6D359001D3EAA /* TMDHTMLTips.mm */; };
+		1721389D0FB6D359001D3EAA /* tooltip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721389B0FB6D359001D3EAA /* tooltip.mm */; };
+		172138A00FB6D385001D3EAA /* nib.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1721389F0FB6D385001D3EAA /* nib.mm */; };
 		175614490EDEA3B80053AC52 /* images.mm in Sources */ = {isa = PBXBuildFile; fileRef = 175614480EDEA3B80053AC52 /* images.mm */; };
 		1756144D0EDEA96F0053AC52 /* defaults.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1756144C0EDEA96F0053AC52 /* defaults.mm */; };
 		177E4DA309132A0F0064163D /* Dialog2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 177E4DA209132A0F0064163D /* Dialog2.mm */; };
@@ -26,13 +31,8 @@
 		91D6F9020CF23E79000F8170 /* help.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9010CF23E79000F8170 /* help.mm */; };
 		91D6F9060CF23E7F000F8170 /* menu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9040CF23E7F000F8170 /* menu.mm */; };
 		91D6F90B0CF23EAE000F8170 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D6F90A0CF23EAE000F8170 /* Carbon.framework */; };
-		91D6F95A0CF2BD16000F8170 /* extendedmenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9560CF2BD16000F8170 /* extendedmenu.mm */; };
-		91D6F95C0CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9590CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm */; };
-		91D6F9710CF2C803000F8170 /* htmltips.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F96E0CF2C803000F8170 /* htmltips.mm */; };
-		91D6F9730CF2C803000F8170 /* TMDHTMLTips.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9700CF2C803000F8170 /* TMDHTMLTips.mm */; };
 		91D6F97E0CF2C8EF000F8170 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D6F97D0CF2C8EF000F8170 /* WebKit.framework */; };
 		91D6F9950CF33A7A000F8170 /* ValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9920CF33A7A000F8170 /* ValueTransformers.mm */; };
-		91D6F9960CF33A7A000F8170 /* window.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91D6F9930CF33A7A000F8170 /* window.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +53,13 @@
 		1721386F0FB6C8E9001D3EAA /* prototype.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = prototype.mm; path = Commands/prototype/prototype.mm; sourceTree = "<group>"; };
 		172138700FB6C8E9001D3EAA /* TMDChameleon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDChameleon.h; path = Commands/prototype/TMDChameleon.h; sourceTree = "<group>"; };
 		172138710FB6C8E9001D3EAA /* TMDChameleon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDChameleon.mm; path = Commands/prototype/TMDChameleon.mm; sourceTree = "<group>"; };
+		172138930FB6D334001D3EAA /* popup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = popup.mm; path = Commands/popup/popup.mm; sourceTree = "<group>"; };
+		172138940FB6D334001D3EAA /* TMDIncrementalPopUpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDIncrementalPopUpMenu.h; path = Commands/popup/TMDIncrementalPopUpMenu.h; sourceTree = "<group>"; };
+		172138950FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDIncrementalPopUpMenu.mm; path = Commands/popup/TMDIncrementalPopUpMenu.mm; sourceTree = "<group>"; };
+		172138990FB6D359001D3EAA /* TMDHTMLTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDHTMLTips.h; path = Commands/tooltip/TMDHTMLTips.h; sourceTree = "<group>"; };
+		1721389A0FB6D359001D3EAA /* TMDHTMLTips.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDHTMLTips.mm; path = Commands/tooltip/TMDHTMLTips.mm; sourceTree = "<group>"; };
+		1721389B0FB6D359001D3EAA /* tooltip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = tooltip.mm; path = Commands/tooltip/tooltip.mm; sourceTree = "<group>"; };
+		1721389F0FB6D385001D3EAA /* nib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = nib.mm; path = Commands/nib.mm; sourceTree = "<group>"; };
 		175614480EDEA3B80053AC52 /* images.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = images.mm; path = Commands/images.mm; sourceTree = "<group>"; };
 		1756144C0EDEA96F0053AC52 /* defaults.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = defaults.mm; path = Commands/defaults.mm; sourceTree = "<group>"; };
 		177E4DA109132A0F0064163D /* Dialog2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dialog2.h; sourceTree = "<group>"; };
@@ -75,17 +82,10 @@
 		91D6F9010CF23E79000F8170 /* help.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = help.mm; path = Commands/help.mm; sourceTree = "<group>"; };
 		91D6F9040CF23E7F000F8170 /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = menu.mm; path = Commands/menu.mm; sourceTree = "<group>"; };
 		91D6F90A0CF23EAE000F8170 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		91D6F9560CF2BD16000F8170 /* extendedmenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = extendedmenu.mm; path = Commands/ExtendedPopUp/extendedmenu.mm; sourceTree = "<group>"; };
-		91D6F9570CF2BD16000F8170 /* TMDIncrementalPopUpMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDIncrementalPopUpMenu.h; path = Commands/ExtendedPopUp/TMDIncrementalPopUpMenu.h; sourceTree = "<group>"; };
-		91D6F9590CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDIncrementalPopUpMenu.mm; path = Commands/ExtendedPopUp/TMDIncrementalPopUpMenu.mm; sourceTree = "<group>"; };
 		91D6F9670CF2C2B5000F8170 /* TextMate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextMate.h; path = Commands/Utilities/TextMate.h; sourceTree = "<group>"; };
-		91D6F96D0CF2C803000F8170 /* TMDHTMLTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TMDHTMLTips.h; path = Commands/HTMLTips/TMDHTMLTips.h; sourceTree = "<group>"; };
-		91D6F96E0CF2C803000F8170 /* htmltips.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = htmltips.mm; path = Commands/HTMLTips/htmltips.mm; sourceTree = "<group>"; };
-		91D6F9700CF2C803000F8170 /* TMDHTMLTips.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TMDHTMLTips.mm; path = Commands/HTMLTips/TMDHTMLTips.mm; sourceTree = "<group>"; };
 		91D6F97D0CF2C8EF000F8170 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		91D6F9910CF33A7A000F8170 /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueTransformers.h; path = Commands/Utilities/ValueTransformers.h; sourceTree = "<group>"; };
 		91D6F9920CF33A7A000F8170 /* ValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ValueTransformers.mm; path = Commands/Utilities/ValueTransformers.mm; sourceTree = "<group>"; };
-		91D6F9930CF33A7A000F8170 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = Commands/window.mm; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -171,14 +171,34 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		172138740FB6C8EE001D3EAA /* Prototype */ = {
+		172138740FB6C8EE001D3EAA /* prototype */ = {
 			isa = PBXGroup;
 			children = (
 				172138710FB6C8E9001D3EAA /* TMDChameleon.mm */,
 				172138700FB6C8E9001D3EAA /* TMDChameleon.h */,
 				1721386F0FB6C8E9001D3EAA /* prototype.mm */,
 			);
-			name = Prototype;
+			name = prototype;
+			sourceTree = "<group>";
+		};
+		172138980FB6D338001D3EAA /* popup */ = {
+			isa = PBXGroup;
+			children = (
+				172138950FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm */,
+				172138940FB6D334001D3EAA /* TMDIncrementalPopUpMenu.h */,
+				172138930FB6D334001D3EAA /* popup.mm */,
+			);
+			name = popup;
+			sourceTree = "<group>";
+		};
+		1721389E0FB6D35C001D3EAA /* tooltip */ = {
+			isa = PBXGroup;
+			children = (
+				1721389A0FB6D359001D3EAA /* TMDHTMLTips.mm */,
+				172138990FB6D359001D3EAA /* TMDHTMLTips.h */,
+				1721389B0FB6D359001D3EAA /* tooltip.mm */,
+			);
+			name = tooltip;
 			sourceTree = "<group>";
 		};
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
@@ -193,12 +213,12 @@
 		32C88E010371C26100C91783 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				91BF40B90D6792CB001834B3 /* CLIProxy.mm */,
+				91BF40B80D6792CB001834B3 /* CLIProxy.h */,
 				91D6F8A30CF23B71000F8170 /* OptionParser.mm */,
 				91D6F89A0CF23B0D000F8170 /* TMDCommand.mm */,
 				91D6F89C0CF23B0D000F8170 /* TMDCommand.h */,
 				32DBCF630370AF2F00C91783 /* Dialog2_Prefix.pch */,
-				91BF40B80D6792CB001834B3 /* CLIProxy.h */,
-				91BF40B90D6792CB001834B3 /* CLIProxy.mm */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -214,52 +234,32 @@
 		91D6F8FC0CF23E46000F8170 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				91D6F94E0CF2BCEC000F8170 /* ExtendedPopUp */,
-				91D6F9680CF2C7E5000F8170 /* HTMLTips */,
-				172138740FB6C8EE001D3EAA /* Prototype */,
 				91D6F95E0CF2BD26000F8170 /* Utilities */,
-				1756144C0EDEA96F0053AC52 /* defaults.mm */,
-				175614480EDEA3B80053AC52 /* images.mm */,
-				91D6F9930CF33A7A000F8170 /* window.mm */,
-				91D6F9040CF23E7F000F8170 /* menu.mm */,
-				91D6F9010CF23E79000F8170 /* help.mm */,
+				172138980FB6D338001D3EAA /* popup */,
+				172138740FB6C8EE001D3EAA /* prototype */,
+				1721389E0FB6D35C001D3EAA /* tooltip */,
 				91D6F8FD0CF23E51000F8170 /* alert.mm */,
+				1756144C0EDEA96F0053AC52 /* defaults.mm */,
+				91D6F9010CF23E79000F8170 /* help.mm */,
+				175614480EDEA3B80053AC52 /* images.mm */,
 				91234F950D9A84E900E346BA /* insert.mm */,
+				91D6F9040CF23E7F000F8170 /* menu.mm */,
+				1721389F0FB6D385001D3EAA /* nib.mm */,
 			);
 			name = Commands;
-			sourceTree = "<group>";
-		};
-		91D6F94E0CF2BCEC000F8170 /* ExtendedPopUp */ = {
-			isa = PBXGroup;
-			children = (
-				91D6F9560CF2BD16000F8170 /* extendedmenu.mm */,
-				91D6F9570CF2BD16000F8170 /* TMDIncrementalPopUpMenu.h */,
-				91D6F9590CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm */,
-			);
-			name = ExtendedPopUp;
 			sourceTree = "<group>";
 		};
 		91D6F95E0CF2BD26000F8170 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				91D6F9910CF33A7A000F8170 /* ValueTransformers.h */,
 				91D6F9920CF33A7A000F8170 /* ValueTransformers.mm */,
-				91D6F9670CF2C2B5000F8170 /* TextMate.h */,
+				91D6F9910CF33A7A000F8170 /* ValueTransformers.h */,
 				910713750D99768B0091C83C /* TextMate.mm */,
+				91D6F9670CF2C2B5000F8170 /* TextMate.h */,
 				9192ECB30CF7AF39003D9967 /* TMDNibController.h */,
 				9192ECB40CF7AF39003D9967 /* TMDNibController.mm */,
 			);
 			name = Utilities;
-			sourceTree = "<group>";
-		};
-		91D6F9680CF2C7E5000F8170 /* HTMLTips */ = {
-			isa = PBXGroup;
-			children = (
-				91D6F96D0CF2C803000F8170 /* TMDHTMLTips.h */,
-				91D6F96E0CF2C803000F8170 /* htmltips.mm */,
-				91D6F9700CF2C803000F8170 /* TMDHTMLTips.mm */,
-			);
-			name = HTMLTips;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,12 +358,7 @@
 				91D6F8FE0CF23E51000F8170 /* alert.mm in Sources */,
 				91D6F9020CF23E79000F8170 /* help.mm in Sources */,
 				91D6F9060CF23E7F000F8170 /* menu.mm in Sources */,
-				91D6F95A0CF2BD16000F8170 /* extendedmenu.mm in Sources */,
-				91D6F95C0CF2BD16000F8170 /* TMDIncrementalPopUpMenu.mm in Sources */,
-				91D6F9710CF2C803000F8170 /* htmltips.mm in Sources */,
-				91D6F9730CF2C803000F8170 /* TMDHTMLTips.mm in Sources */,
 				91D6F9950CF33A7A000F8170 /* ValueTransformers.mm in Sources */,
-				91D6F9960CF33A7A000F8170 /* window.mm in Sources */,
 				9192ECB50CF7AF39003D9967 /* TMDNibController.mm in Sources */,
 				91BF40BA0D6792CB001834B3 /* CLIProxy.mm in Sources */,
 				910713760D99768B0091C83C /* TextMate.mm in Sources */,
@@ -372,6 +367,11 @@
 				1756144D0EDEA96F0053AC52 /* defaults.mm in Sources */,
 				172138720FB6C8E9001D3EAA /* prototype.mm in Sources */,
 				172138730FB6C8E9001D3EAA /* TMDChameleon.mm in Sources */,
+				172138960FB6D334001D3EAA /* popup.mm in Sources */,
+				172138970FB6D334001D3EAA /* TMDIncrementalPopUpMenu.mm in Sources */,
+				1721389C0FB6D359001D3EAA /* TMDHTMLTips.mm in Sources */,
+				1721389D0FB6D359001D3EAA /* tooltip.mm in Sources */,
+				172138A00FB6D385001D3EAA /* nib.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

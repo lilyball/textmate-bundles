@@ -1,5 +1,4 @@
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/process'
-require ENV['TM_SUPPORT_PATH'] + '/lib/growl'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/growl'
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
@@ -8,20 +7,20 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 module TextMate
   
   class << self
-    def notify(id, title, msg)
-      Notification.new(id, title, msg).notify
+    def notify(scope, title, msg)
+      Notification.new(scope, title, msg).notify
     end
   end
   
   class Notification
 
-    attr_reader :id, :title, :msg, :pref
+    attr_reader :scope, :title, :msg, :pref
     
-    def initialize(id, title, msg)
-      @id = id
+    def initialize(scope, title, msg)
+      @scope = scope
       @title = title
       @msg = msg
-      @pref = Preferences[id] # ensures that we are in the preferences (needed for Preferences.notification_ids)
+      @pref = Preferences[scope] # ensures that we are in the preferences (needed for Preferences.notification_ids)
     end
     
     def growl_available?
@@ -29,23 +28,19 @@ module TextMate
       $? == 0
     end
     
-    def prefers_growl?
-      @pref["growl"] == true
-    end
-
     def should_growl?
-      prefers_growl? and growl_available?
+      @pref.growl? and growl_available?
     end
     
     def notify
       should_growl? ? growl : tooltip
     end
-            
+
     def growl
-      n_ids = Preferences.notification_ids
+      n_ids = Preferences.growl_notifications
       growl = GrowlNotifier.new("TextMate", n_ids, n_ids, icon)
       growl.register
-      growl.notify(id, title, msg)
+      growl.notify(pref.name, title, msg)
       self
     end
 
@@ -59,14 +54,62 @@ module TextMate
       OSX::NSImage.alloc().initWithContentsOfFile_(TextMate.app_path + "/Contents/Resources/TextMate.icns")
     end
     
+    class Preference
+      
+      @@keys ={
+        :notifier => "notifier",
+        :name => "name"
+      } 
+      
+      def self.keys
+        @@keys
+      end
+      
+      @@notifiers = {
+        :growl => {"code" => "growl", "name" => "Growl"},
+        :tooltip => {"code" => "tooltip", "name" => "Tool Tip"},
+        :none => {"code" => "none", "name" => "None"}
+      }
+      
+      def self.notifiers
+        @@notifiers
+      end
+      
+      def initialize(data)
+        if data.nil?
+          @data = {
+            @@keys[:notifier] => Preference.notifiers[:tooltip]
+          }
+        else
+          @data = data
+        end
+      end
+      
+      def name
+        @data[Preference.keys[:name]]
+      end
+      
+      def none?
+        @data[Preference.keys[:notifier]] == Preference.notifiers[:none]
+      end
+      
+      def tooltip?
+        @data[Preference.keys[:notifier]] == Preference.notifiers[:tooltip]
+      end
+      
+      def growl?
+        @data[Preference.keys[:notifier]] == Preference.notifiers[:growl]
+      end
+      
+    end
+    
     module Preferences
       class  << self
         
         @@notifications_key = "notifications"
-        @@global_key = "global"
+        @@defaults_key = "defaults"
         
         @@filename = File.expand_path "~/Library/Preferences/com.macromates.textmate.notifications.plist"
-        
         @@prefs = nil
         
         def read
@@ -76,10 +119,7 @@ module TextMate
             end
           else
             @@prefs = {
-              @@global_key => {
-                "growl" => true
-              },
-              @@notifications_key => {}
+              @@notifications_key => []
             }
           end
         end
@@ -90,21 +130,38 @@ module TextMate
           end
         end
         
-        def [](key) 
-          n = @@prefs[@@notifications_key][key]
-          if n.nil?
-            n = {}
-            @@prefs[@@notifications_key][key] = n
-            save
-          end
-          @@prefs[@@global_key].merge n
+        def notifications
+          @@prefs[@@notifications_key]
         end
-
-        def notification_ids 
-          @@prefs[@@notifications_key].keys
+        
+        def [](scope_selector) 
+          n = notifications.find { |n| n["scope_selector"] == scope_selector }
+          Preference.new(n)
+        end
+        
+        def growl_notifications
+          notifications.find_all { |n| n[Preference.keys[:notifier]] == Preference.notifiers[:growl] }.collect { |n| n[Preference.keys[:name]] }
+        end
+        
+        def show
+          TextMate::UI.dialog(
+            :nib => ENV['TM_SUPPORT_PATH'] + '/nibs/NotificationPreferences.nib', 
+            :parameters => {
+              "preferences" => @@prefs,
+              "notifiers" => Preference.notifiers.values
+            }
+          ) do |dialog|
+            dialog.wait_for_input do |params|
+              @@prefs = params["preferences"]
+              puts @@prefs.inspect
+              save
+              false
+            end
+          end 
         end
         
         Preferences.read
+        
       end
     end
   end

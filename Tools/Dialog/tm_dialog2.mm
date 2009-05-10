@@ -60,8 +60,20 @@ int open_pipe (char const* name, int oflag)
 	return fd;
 }
 
+char const* revision ()
+{
+	char res[32];
+	return sscanf("$Revision$", "$%*[^:]: %s $", res) == 1 ? res : "???";
+}
+
 int main (int argc, char const* argv[])
 {
+	if(argc == 2 && strcmp(argv[1], "--version") == 0)
+	{
+		fprintf(stderr, "tm_dialog, version 2.1 (r%s)\n", revision());
+		return 0;
+	}
+
 	// If the argument list starts with a switch then assume it’s meant for trunk dialog
 	// and pass it off
 	if(argc > 1 && *argv[1] == '-')

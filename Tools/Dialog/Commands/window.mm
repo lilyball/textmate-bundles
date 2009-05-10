@@ -4,7 +4,6 @@
 #import "../Dialog2.h"
 #import "../TMDCommand.h"
 #import "../OptionParser.h"
-#import "Utilities/TMDChameleon.h"
 #import "Utilities/TMDNibController.h"
 
 // ==========
@@ -72,7 +71,7 @@ env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1=
 "$DIALOG" nib --dispose 1
 "$DIALOG" nib --list
 
-"$DIALOG" nib --load "$TM_SUPPORT_PATH/../Bundles/SQL.tmbundle/Support/nibs/connections.nib" --defaults "{'SQL Connections' = ( { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; } ); }" --prototypes "{ SQL_New_Connection = { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; }; }"
+"$DIALOG" nib --load "$TM_SUPPORT_PATH/../Bundles/SQL.tmbundle/Support/nibs/connections.nib" --defaults "{'SQL Connections' = ( { title = untitled; serverType = MySQL; hostName = localhost; userName = '$LOGNAME'; } ); }"
 
 "$DIALOG" help nib
 */
@@ -126,16 +125,6 @@ env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1=
 		}
 	}
 
-	if(NSDictionary* prototypes = [args objectForKey:@"prototypes"])
-	{
-		// FIXME this is needed only because we presently can’t express argument constraints (CLIProxy would otherwise correctly validate/convert CLI arguments)
-		if([prototypes isKindOfClass:[NSString class]])
-			prototypes = [NSPropertyListSerialization propertyListFromData:[(NSString*)prototypes dataUsingEncoding:NSUTF8StringEncoding] mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL];
-
-		enumerate([prototypes allKeys], id key)
-			[TMDChameleon createSubclassNamed:key withValues:[prototypes objectForKey:key]];
-	}
-
 	if(NSString* nibName = [args objectForKey:@"load"])
 	{
 		// TODO we should let an option type be ‘filename’ and have CLIProxy resolve these (and error when file does not exist)
@@ -171,8 +160,7 @@ env|egrep 'DIALOG|TM_SUPPORT'|grep -v DIALOG_1|perl -pe 's/(.*?)=(.*)/export $1=
 		@"%1$@ --list\n"
 		@"\nOptions:\n"
 		@"\t--center\n"
-		@"\t--model «plist»\n"
-		@"\t--prototypes «plist»\n",
+		@"\t--model «plist»\n",
 		invocation];
 }
 @end

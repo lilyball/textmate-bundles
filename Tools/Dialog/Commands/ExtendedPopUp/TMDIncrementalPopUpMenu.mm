@@ -64,7 +64,7 @@
 // =============================
 - (id)init
 {
-	if(self = [super initWithContentRect:NSZeroRect styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO])
+	if(self = [super initWithContentRect:NSMakeRect(0, 0, 1, 1) styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO])
 	{
 		mutablePrefix = [NSMutableString new];
 		textualInputCharacters = [[NSMutableCharacterSet alphanumericCharacterSet] retain];

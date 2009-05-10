@@ -45,7 +45,7 @@ const NSString* TMDTooltipPreferencesIdentifier = @"TM Tooltip";
 
 - (id)init;
 {
-	if(self = [self initWithContentRect:NSZeroRect styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO])
+	if(self = [self initWithContentRect:NSMakeRect(0, 0, 1, 1) styleMask:NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:NO])
 	{
 		[self setReleasedWhenClosed:YES];
 		[self setAlphaValue:0.97f];

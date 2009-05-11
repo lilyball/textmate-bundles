@@ -5,26 +5,26 @@ module TextMate
   
   class << self
     def notify(scope, title, msg)
-      configs = Notify::Notification.all
+      notifications = Notify::Notification.all
       
       max_score = -1
-      matches = []
+      applicable_notifications = []
       scorer = Notify::ScopeSelectorScorer.new
       
-      configs.each do |c|
-        score = scorer.score(c.scope_selector, scope)
-        if score > 0 or c.scope_selector.empty?
+      notifications.each do |notification|
+        score = scorer.score(notification.scope_selector, scope)
+        if score > 0 or notification.scope_selector.empty?
           if score == max_score
-            matches << c
+            applicable_notifications << notification
           elsif score > max_score
-            matches = [c]
+            applicable_notifications = [notification]
             max_score = score
           end
         end
       end
 
-      matches.each do |m|
-        m.fire(scope, title, msg)
+      applicable_notifications.each do |notification|
+        notification.fire(scope, title, msg)
       end
       
     end

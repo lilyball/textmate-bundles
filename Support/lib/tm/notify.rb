@@ -11,9 +11,14 @@ module TextMate
       applicable_notifications = []
       scorer = Notify::ScopeSelectorScorer.new
       
-      notifications.each do |notification|
+      notifications.each do |notification|  
         score = scorer.score(notification.scope_selector, scope)
-        if score > 0 or notification.scope_selector.empty?
+        if score == 0
+          if notification.scope_selector.empty? and (max_score <= 0)
+            applicable_notifications << notification
+            max_score = 0
+          end
+        else  
           if score == max_score
             applicable_notifications << notification
           elsif score > max_score

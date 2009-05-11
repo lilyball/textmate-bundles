@@ -1,8 +1,8 @@
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/mechanism/base'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_mechanism/base'
              
 module TextMate
-  module Notify
-    module Mechanism
+  module Event
+    module NotificationMechanism
       class Null < Base
     
         def self.name

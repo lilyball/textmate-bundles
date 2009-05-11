@@ -1,12 +1,12 @@
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/mechanism/base'
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/notification'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_mechanism/base'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification'
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require 'osx/cocoa'
              
 module TextMate
-  module Notify
-    module Mechanism
+  module Event
+    module NotificationMechanism
       class Growl < Base
           
         def self.name

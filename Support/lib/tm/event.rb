@@ -1,15 +1,15 @@
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/notification'
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/scope_selector_scorer'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/scope_selector_scorer'
 
 module TextMate
   
   class << self
-    def notify(scope, title, msg)
-      notifications = Notify::Notification.all
+    def event(scope, title, msg)
+      notifications = Event::Notification.all
       
       max_score = -1
       applicable_notifications = []
-      scorer = Notify::ScopeSelectorScorer.new
+      scorer = Event::ScopeSelectorScorer.new
       
       notifications.each do |notification|  
         score = scorer.score(notification.scope_selector, scope)

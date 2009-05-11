@@ -1,8 +1,8 @@
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/preferences'
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/mechanism'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_preferences'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_mechanism'
 
 module TextMate
-  module Notify
+  module Event
     class Notification
     
       def initialize(data)
@@ -14,7 +14,7 @@ module TextMate
       end
     
       def mechanism
-        Mechanism.all.find { |t| @data["mechanism"]["code"] == t.code }
+        NotificationMechanism.all.find { |t| @data["mechanism"]["code"] == t.code }
       end
     
       def scope_selector
@@ -26,7 +26,7 @@ module TextMate
       end
       
       def self.all
-        Notify::Preferences.notifications
+        NotificationPreferences.notifications
       end
       
     end

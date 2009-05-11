@@ -1,10 +1,10 @@
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/mechanism/tooltip'
-require ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/notification'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_mechanism'
 
 module TextMate
-  module Notify
-    module Preferences
+  module Event
+    module NotificationPreferences
        class  << self
          
          @@filename = File.expand_path "~/Library/Preferences/com.macromates.textmate.notifications.plist"
@@ -18,7 +18,7 @@ module TextMate
            else
              @@prefs = {
                "notifications" => [
-                 {"name" => "All", "mechanism" => Mechanism::Tooltip.notification_pref_hash, "scope_selector" => ""}
+                 {"name" => "All", "mechanism" => NotificationMechanism::Tooltip.notification_pref_hash, "scope_selector" => ""}
                 ]
              }
            end
@@ -36,10 +36,10 @@ module TextMate
 
          def show
            TextMate::UI.dialog(
-             :nib => ENV['TM_SUPPORT_PATH'] + '/lib/tm/notify/NotificationPreferences.nib', 
+             :nib => ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/NotificationPreferences.nib', 
              :parameters => {
                "preferences" => @@prefs,
-               "mechanisms" => Mechanism.all.collect { |m| m.notification_pref_hash }
+               "mechanisms" => NotificationMechanism.all.collect { |m| m.notification_pref_hash }
              }
            ) do |dialog|
              dialog.wait_for_input do |params|
@@ -51,7 +51,7 @@ module TextMate
            end 
          end
 
-         Preferences.read
+         NotificationPreferences.read
 
        end
      end

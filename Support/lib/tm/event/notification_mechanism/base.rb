@@ -1,6 +1,6 @@
 module TextMate
-  module Notify
-    module Mechanism
+  module Event
+    module NotificationMechanism
       class Base
       
         attr_reader :scope, :conf, :title, :msg

@@ -29,6 +29,9 @@ module TextMate
         NotificationPreferences.notifications
       end
       
+      def self.all_for_mechanism(mechanism)
+        all.find_all { |notification| notification.mechanism == mechanism }
+      end
     end
   end
 end

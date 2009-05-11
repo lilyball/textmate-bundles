@@ -29,18 +29,13 @@ module TextMate
           icon  = app_path + '/Contents/Resources/' + plist['CFBundleIconFile'] + ".icns"
           OSX::NSImage.alloc().initWithContentsOfFile_(icon).TIFFRepresentation
         end
-    
-        def self.all_growl_notifications
-          Notification.all.find_all { |n| n.mechanism == Growl }.collect { |n| n.name }
-        end
-    
-        def self.register
         
-            notifications = OSX::NSArray.arrayWithArray(Growl.all_growl_notifications)
+        def self.register
+            growl_notifications = Notification.all_for_mechanism(Growl).collect { |n| n.name }
             regData = {
                 'ApplicationName'=> TextMate.app_name,
-                'AllNotifications'=> notifications,
-                'DefaultNotifications'=> notifications,
+                'AllNotifications'=> growl_notifications,
+                'DefaultNotifications'=> growl_notifications,
                 'ApplicationIcon'=> Growl.icon
             }
                   

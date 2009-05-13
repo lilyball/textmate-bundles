@@ -99,7 +99,7 @@ module TextMate
         io[0][0].fcntl(6, ENV['TM_PID'].to_i) if ENV.has_key? 'TM_PID'
 
         pid = fork {
-          
+          ::Process.setpgid(0, ::Process.pid)
           at_exit { exit! }
           
           STDIN.reopen(io[0][0])
@@ -129,9 +129,9 @@ module TextMate
         %w[USR1].each do |signal|
           Signal.trap(signal) do
             begin
-              ::Process.kill("KILL", pid)
+              ::Process.kill("TERM", -pid)
               sleep 0.5
-              ::Process.kill("TERM", pid)
+              ::Process.kill("KILL", -pid)
             rescue
               # process doesn't exist anymore
             end

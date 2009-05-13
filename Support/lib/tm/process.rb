@@ -129,6 +129,8 @@ module TextMate
         %w[USR1].each do |signal|
           Signal.trap(signal) do
             begin
+              ::Process.kill("INT", -pid)
+              sleep 0.5
               ::Process.kill("TERM", -pid)
               sleep 0.5
               ::Process.kill("KILL", -pid)

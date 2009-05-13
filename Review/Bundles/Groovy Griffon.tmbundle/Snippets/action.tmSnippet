@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>action(id: '${1:name}Action',
+		name: '${2:name}',
+		closure: controller.&amp;${3:closure action},
+		mnemonic: '${4:mnemonic}',
+	    accelerator: '${5:F1}',
+		shortDescription: '${6:shortDescription}'
+		)
+</string>
+	<key>name</key>
+	<string>action</string>
+	<key>scope</key>
+	<string>source.groovy</string>
+	<key>tabTrigger</key>
+	<string>act</string>
+	<key>uuid</key>
+	<string>5B3B1235-FB16-46AF-AB5D-4559C56E6C7A</string>
+</dict>
+</plist>

@@ -228,7 +228,7 @@ def paste_stdin(priv, wrap)
         when :timeout then "Timeout pasting #{amount} after #{time_elapsed}\n"
         when :cancel  then "User cancelled pasting of #{amount} after #{time_elapsed}\n"
         when :error   then "Unknown error after #{time_elapsed} pasting #{amount}\n"
-        else           "Pasted #{amount} in #{time_elapsed}\n"
+        else           "Pasted #{amount} in #{time_elapsed}: #{res}\n"
       end
   end
 

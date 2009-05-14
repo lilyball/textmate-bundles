@@ -1,6 +1,7 @@
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification'
 require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_mechanism'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event/notification_mechanism/tooltip'
 
 module TextMate
   module Event
@@ -44,7 +45,6 @@ module TextMate
            ) do |dialog|
              dialog.wait_for_input do |params|
                @@prefs = params["preferences"]
-               puts @@prefs.inspect
                save
                false
              end

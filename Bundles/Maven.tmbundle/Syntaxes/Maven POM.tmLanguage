@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -808,6 +808,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#properties</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#maven-xml</string>
 				</dict>
 			</array>
@@ -949,6 +953,127 @@
 						<dict>
 							<key>include</key>
 							<string>#profile</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>properties</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(&lt;)(properties)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.properties.begin.xml.pom</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.pom</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(&lt;/)(properties)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.properties.end.xml.pom</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml.pom</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml.pom</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.properties.xml.pom</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(&lt;)(\w+)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.property.begin.xml.pom</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.xml.pom</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(&lt;/)(\w+)\s*(&gt;)(?!&lt;\s*/\2\s*&gt;)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.property.end.xml.pom</string>
+								</dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>entity.name.tag.xml.pom</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.tag.xml.pom</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.property.xml.pom</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#maven-xml</string>
 						</dict>
 					</array>
 				</dict>

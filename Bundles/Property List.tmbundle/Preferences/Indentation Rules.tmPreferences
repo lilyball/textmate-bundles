@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>name</key>
@@ -11,7 +11,7 @@
 		<key>decreaseIndentPattern</key>
 		<string>^\s*(\}|\))</string>
 		<key>increaseIndentPattern</key>
-		<string>^\s*([a-z_-]+ = )?[{(](?!.*[)}][;,]?\s*$)</string>
+		<string>^\s*((["']?)[A-Za-z._-]+\2\s+=\s+)?[{(](?!.*[)}][;,]?\s*$)</string>
 	</dict>
 	<key>uuid</key>
 	<string>0473E42E-A64E-4D3E-B20B-BA66E0145BC4</string>

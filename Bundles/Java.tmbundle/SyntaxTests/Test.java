@@ -73,6 +73,7 @@ interface Foo extends Bar // bar
 
 interface Foo extends Bar /* bar */
 {
+    Value<?> get();
 }
 
 class Assertion 

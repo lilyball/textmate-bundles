@@ -989,11 +989,14 @@
 					<string>(?x)
 					    (?&lt;!-)
 					    (?&lt;=&gt;)
-						( ( ((\\)breve)|        # Duration (groups 1-4)
-						    64|32|16|8|4|2|1
-						  )
-						  (\.+)?                  # Augmentation dot (group 5)
-						)?
+						(
+							( ( ((\\)breve)|        # Duration (groups 1-4)
+							    64|32|16|8|4|2|1
+							  )
+							  (\.+)?                  # Augmentation dot (group 5)
+							) |
+							(?![\s}~a-z]|$)
+						)
 					</string>
 					<key>beginCaptures</key>
 					<dict>

@@ -42,11 +42,16 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.package.groovy</string>
+					<string>storage.modifier.package.groovy</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.groovy</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(package)\s+([\w\.]*)</string>
+			<string>^\s*(package)\b(?:\s*([^ ;$]+)\s*(;)?)?</string>
 			<key>name</key>
 			<string>meta.package.groovy</string>
 		</dict>
@@ -61,11 +66,74 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.import.groovy</string>
+					<string>keyword.other.import.static.groovy</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.import.groovy</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.groovy</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(import)\s+([\w\.\*]*)</string>
+			<string>^\s*(import)(?:\s+(static)\s+)\b(?:\s*([^ ;$]+)\s*(;)?)?</string>
+			<key>name</key>
+			<string>meta.import.static.groovy</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.import.groovy</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.import.groovy</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.groovy</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(import)\b(?:\s*([^ ;$]+)\s*(;)?)?</string>
+			<key>name</key>
+			<string>meta.import.groovy</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.import.groovy</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.import.static.groovy</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.import.groovy</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.groovy</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(import)(?:\s+(static)\s+)\b(?:\s*([^ ;$]+)\s*(;)?)?</string>
 			<key>name</key>
 			<string>meta.import.groovy</string>
 		</dict>
@@ -76,22 +144,74 @@
 	</array>
 	<key>repository</key>
 	<dict>
-		<key>class-object</key>
+		<key>annotations</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>(?x)
-							\b(
-								(?:[a-z]\w*\.)* # Optional package specification
-								[A-Z]\w+\b # Class name
-								(?:&lt;(?:[\w, ]*)&gt;)? # Optional Generics
-								(?:\[\s*\])* # Optional brackets (array)
-							)\b
-					</string>
+					<key>begin</key>
+					<string>(@[^ (]+)(\()</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.annotation.groovy</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.annotation-arguments.begin.groovy</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.annotation-arguments.end.groovy</string>
+						</dict>
+					</dict>
 					<key>name</key>
-					<string>storage.type.class.groovy</string>
+					<string>meta.declaration.annotation.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>constant.other.key.groovy</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.groovy</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(\w*)\s*(=)</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#values</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.definition.seperator.groovy</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>@\S+</string>
+					<key>name</key>
+					<string>storage.type.annotation.groovy</string>
 				</dict>
 			</array>
 		</dict>
@@ -336,11 +456,15 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#storage-types</string>
+					<string>#types</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#storage-modifiers</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#parens</string>
 				</dict>
 			</array>
 		</dict>
@@ -676,20 +800,57 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>(?=.)</string>
+							<string>(?=[^,)])</string>
 							<key>end</key>
-							<string>(?=,|\))</string>
+							<string>(?=\,|\))</string>
 							<key>name</key>
 							<string>meta.definition.method.parameter.groovy</string>
 							<key>patterns</key>
 							<array>
 								<dict>
-									<key>match</key>
-									<string>,</string>
+									<key>include</key>
+									<string>#storage-modifiers</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#types</string>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>=</string>
+									<key>beginCaptures</key>
+									<dict>
+										<key>0</key>
+										<dict>
+											<key>name</key>
+											<string>keyword.operator.assignment.groovy</string>
+										</dict>
+									</dict>
+									<key>end</key>
+									<string>(?=\,|\))</string>
 									<key>name</key>
-									<string>blah</string>
+									<string>meta.definition.parameter.default.groovy</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#groovy</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>\w+</string>
+									<key>name</key>
+									<string>variable.parameter.groovy</string>
 								</dict>
 							</array>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>,</string>
+							<key>name</key>
+							<string>punctuation.definition.seperator.parameter.groovy</string>
 						</dict>
 					</array>
 				</dict>
@@ -938,6 +1099,113 @@
 				</dict>
 			</array>
 		</dict>
+		<key>object-types</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*)&lt;</string>
+					<key>end</key>
+					<string>&gt;|[^\w\s,\?&lt;\[\]]</string>
+					<key>name</key>
+					<string>storage.type.generic.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#object-types</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>&lt;</string>
+							<key>comment</key>
+							<string>This is just to support &lt;&gt;'s with no actual type prefix</string>
+							<key>end</key>
+							<string>&gt;|[^\w\s,\[\]&lt;]</string>
+							<key>name</key>
+							<string>storage.type.generic.groovy</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*)(?=\[)</string>
+					<key>end</key>
+					<string>(?=[^\]\s])</string>
+					<key>name</key>
+					<string>storage.type.object.array.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\[</string>
+							<key>end</key>
+							<string>\]</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#groovy</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.dereference.groovy</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*\b</string>
+					<key>name</key>
+					<string>storage.type.groovy</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parens</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#groovy</string>
+				</dict>
+			</array>
+		</dict>
+		<key>primitive-arrays</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(?:void|boolean|byte|char|short|int|float|long|double)(\[\])*\b</string>
+					<key>name</key>
+					<string>storage.type.primitive.array.groovy</string>
+				</dict>
+			</array>
+		</dict>
+		<key>primitive-types</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(?:void|boolean|byte|char|short|int|float|long|double)\b</string>
+					<key>name</key>
+					<string>storage.type.primitive.groovy</string>
+				</dict>
+			</array>
+		</dict>
 		<key>regexp</key>
 		<dict>
 			<key>patterns</key>
@@ -1004,89 +1272,6 @@
 					<string>\b(native|synchronized|abstract|threadsafe|transient)\b</string>
 					<key>name</key>
 					<string>storage.modifier.other.groovy</string>
-				</dict>
-			</array>
-		</dict>
-		<key>storage-types</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>(@[^ (]+)(\()</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>storage.type.annotation.groovy</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.annotation-arguments.begin.groovy</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(\))</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.annotation-arguments.end.groovy</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.declaration.annotation.groovy</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>captures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>constant.other.key.groovy</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
-									<string>keyword.operator.assignment.groovy</string>
-								</dict>
-							</dict>
-							<key>match</key>
-							<string>(\w*)\s*(=)</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#values</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>,</string>
-							<key>name</key>
-							<string>punctuation.definition.seperator.groovy</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>@\S+</string>
-					<key>name</key>
-					<string>storage.type.annotation.groovy</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b(def)\b</string>
-					<key>name</key>
-					<string>storage.type.def.groovy</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b(boolean|byte|char|short|int|float|long|double)(?:\[\s*\])*\b</string>
-					<key>name</key>
-					<string>storage.type.primitive.groovy</string>
 				</dict>
 			</array>
 		</dict>
@@ -1355,6 +1540,30 @@
 				</dict>
 			</array>
 		</dict>
+		<key>types</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\b(def)\b</string>
+					<key>name</key>
+					<string>storage.type.def.groovy</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#primitive-types</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#primitive-arrays</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#object-types</string>
+				</dict>
+			</array>
+		</dict>
 		<key>values</key>
 		<dict>
 			<key>patterns</key>
@@ -1377,7 +1586,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#class-object</string>
+					<string>#types</string>
 				</dict>
 				<dict>
 					<key>include</key>

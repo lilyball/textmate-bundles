@@ -1,5 +1,6 @@
 package test
 import java.util.Map
+import static java.util.Map
 
 /**
  * @author Luke Daley

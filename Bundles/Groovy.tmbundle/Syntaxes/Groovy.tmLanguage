@@ -215,70 +215,77 @@
 				</dict>
 			</array>
 		</dict>
-		<key>classes</key>
+		<key>class</key>
 		<dict>
 			<key>begin</key>
-			<string>(?x)^\s*
-					(?:(?:\b(?:(public|private|protected)|(static)|(final)|(native|synchronized|abstract|threadsafe|transient))\b\s*)*) # modifier
-					(class|@?interface)\s+
-					(\w+)\s* # identifier</string>
-			<key>captures</key>
+			<string>(?=\w?[\w\s]*(?:class|(?:@)?interface|enum)\s+\w+)</string>
+			<key>end</key>
+			<string>}</string>
+			<key>endCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>storage.modifier.access-control.groovy</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.static.groovy</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.final.groovy</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.other.groovy</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.class.groovy</string>
-				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.class.groovy</string>
+					<string>punctuation.section.class.end.groovy</string>
 				</dict>
 			</dict>
-			<key>end</key>
-			<string>$</string>
 			<key>name</key>
 			<string>meta.definition.class.groovy</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#storage-modifiers</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
 				<dict>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>storage.modifier.extends.groovy</string>
+							<string>storage.modifier.groovy</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.other.inherited-class.groovy</string>
+							<string>entity.name.type.class.groovy</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(extends)\s+([a-zA-Z0-9_\.]+(?:&lt;(?:[a-zA-Z0-9_, ])+&gt;)?)\s*</string>
+					<string>(class|(?:@)?interface|enum)\s+(\w+)</string>
+					<key>name</key>
+					<string>meta.class.identifier.groovy</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>extends</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.extends.groovy</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?={|implements)</string>
 					<key>name</key>
 					<string>meta.definition.class.inherited.classes.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#object-types-inherited</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -292,27 +299,33 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=\s*extends|$|\{)</string>
+					<string>(?=\s*extends|\{)</string>
 					<key>name</key>
 					<string>meta.definition.class.implemented.interfaces.groovy</string>
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>captures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>entity.other.inherited-class.interface.groovy</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.implemented.interfaces.separator.groovy</string>
-								</dict>
-							</dict>
-							<key>match</key>
-							<string>((?:[a-z]\w*.)*[A-Z]\w*)\s*(?:(,)|$|\{)</string>
+							<key>include</key>
+							<string>#object-types-inherited</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#comments</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>{</string>
+					<key>end</key>
+					<string>(?=})</string>
+					<key>name</key>
+					<string>meta.class.body.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#groovy</string>
 						</dict>
 					</array>
 				</dict>
@@ -401,7 +414,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#classes</string>
+					<string>#class</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1165,6 +1178,51 @@
 					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*\b</string>
 					<key>name</key>
 					<string>storage.type.groovy</string>
+				</dict>
+			</array>
+		</dict>
+		<key>object-types-inherited</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b((?:[a-z]\w*\.)*[A-Z]+\w*)&lt;</string>
+					<key>end</key>
+					<string>&gt;|[^\w\s,\?&lt;\[\]]</string>
+					<key>name</key>
+					<string>entity.other.inherited-class.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#object-types</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>&lt;</string>
+							<key>comment</key>
+							<string>This is just to support &lt;&gt;'s with no actual type prefix</string>
+							<key>end</key>
+							<string>&gt;|[^\w\s,\[\]&lt;]</string>
+							<key>name</key>
+							<string>storage.type.generic.groovy</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.dereference.groovy</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*\b</string>
+					<key>name</key>
+					<string>entity.other.inherited-class.groovy</string>
 				</dict>
 			</array>
 		</dict>

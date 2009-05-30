@@ -675,53 +675,21 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>captures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>storage.type.parameter.groovy</string>
-								</dict>
-								<key>2</key>
-								<dict>
-									<key>name</key>
-									<string>variable.parameter.groovy</string>
-								</dict>
-							</dict>
-							<key>match</key>
-							<string>(?x)\s*
-								(
-									(?:boolean|byte|char|short|int|float|long|double|(?:\w+\.)*[A-Z]\w*\b(?:&lt;(?:[\w, ]*)&gt;)?(?:\[\s*\])*)
-								)?
-								\s*
-								([a-z_][A-Za-z0-9_]*) # variable
-							</string>
+							<key>begin</key>
+							<string>(?=.)</string>
+							<key>end</key>
+							<string>(?=,|\))</string>
 							<key>name</key>
 							<string>meta.definition.method.parameter.groovy</string>
-						</dict>
-						<dict>
-							<key>captures</key>
-							<dict>
-								<key>1</key>
+							<key>patterns</key>
+							<array>
 								<dict>
+									<key>match</key>
+									<string>,</string>
 									<key>name</key>
-									<string>storage.type.parameter.groovy</string>
+									<string>blah</string>
 								</dict>
-							</dict>
-							<key>match</key>
-							<string>(boolean|byte|char|short|int|float|long|double|(?:\w+\.)*[A-Z]\w*\b(?:&lt;(?:[\w, ]*)&gt;)?(?:\[\s*\])*)</string>
-							<key>name</key>
-							<string>meta.definition.method.parameter.groovy</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>,</string>
-							<key>name</key>
-							<string>punctuation.definition.parameters.seperator.groovy</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comment-block</string>
+							</array>
 						</dict>
 					</array>
 				</dict>

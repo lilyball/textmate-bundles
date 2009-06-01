@@ -3,19 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>Symbol List: Methods</string>
+	<string>Symbol List: Variables</string>
 	<key>scope</key>
-	<string>source.groovy meta.definition.method.signature</string>
+	<string>source.groovy meta.definition.class-variable.name</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>
 		<integer>1</integer>
 		<key>symbolTransformation</key>
 		<string>
-		s/\s*.*\s+(\w+)\s*(\(.*\)).*/    $1$2/g
+		s/.+/$0/g
 	</string>
 	</dict>
 	<key>uuid</key>
-	<string>6AF1B177-1700-478F-808B-78D85403FC19</string>
+	<string>CF622434-558B-4333-8B57-76576354D6DC</string>
 </dict>
 </plist>

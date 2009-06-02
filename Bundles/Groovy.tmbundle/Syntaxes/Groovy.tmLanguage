@@ -1037,7 +1037,7 @@
 		<key>methods</key>
 		<dict>
 			<key>begin</key>
-			<string>(?!new)(?=\w[^=]*?\()</string>
+			<string>(?!new)(?=(?:\w|&lt;)[^=]*?\()</string>
 			<key>end</key>
 			<string>}|(?=;)</string>
 			<key>name</key>
@@ -1073,7 +1073,39 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?=\w.*\s+\w+\s*\()</string>
+					<string>(?=&lt;)</string>
+					<key>end</key>
+					<string>(?=\s)</string>
+					<key>name</key>
+					<string>meta.method.paramerised-type.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>&lt;</string>
+							<key>end</key>
+							<string>&gt;</string>
+							<key>name</key>
+							<string>storage.type.parameters.groovy</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#types</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>,</string>
+									<key>name</key>
+									<string>punctuation.definition.seperator.groovy</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=(?:\w|&lt;).*\s+(?:\w|&lt;)+\s*\()</string>
 					<key>end</key>
 					<string>(?=\w+\s*\()</string>
 					<key>name</key>

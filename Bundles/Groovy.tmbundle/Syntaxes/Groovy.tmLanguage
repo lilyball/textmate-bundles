@@ -368,7 +368,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(\w\S*)\s+(?=\=)</string>
+							<string>(\w[^\s,]*)\s+(?=\=)</string>
 						</dict>
 						<dict>
 							<key>begin</key>
@@ -564,6 +564,44 @@
 				</dict>
 			</array>
 		</dict>
+		<key>enum-values</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>[A-Z]\w*(?=\s*(?:,|;|}|\(|$))</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>constant.enum.name.groovy</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>,|;|(?=})</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\(</string>
+							<key>end</key>
+							<string>\)</string>
+							<key>name</key>
+							<string>meta.enum.value.groovy</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#values</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>groovy</key>
 		<dict>
 			<key>patterns</key>
@@ -571,6 +609,10 @@
 				<dict>
 					<key>include</key>
 					<string>#class</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#enum-values</string>
 				</dict>
 				<dict>
 					<key>include</key>

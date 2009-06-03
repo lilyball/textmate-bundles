@@ -115,39 +115,6 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>(^table([&lt;&gt;=()]+)?)(\([^)]*\)|{[^}]*})*(\.)</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.footnote.confluence</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.confluence</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.footnote.confluence</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>^$</string>
-			<key>name</key>
-			<string>markup.other.table.confluence</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#inline</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
 			<string>^(?=\S)</string>
 			<key>end</key>
 			<string>^$</string>
@@ -546,10 +513,28 @@
 				</dict>
 			</array>
 		</dict>
+		<key>comments</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>{HTMLComment:hidden}</string>
+					<key>end</key>
+					<string>{HTMLComment}</string>
+					<key>name</key>
+					<string>comment.block.text.html.confluence</string>
+				</dict>
+			</array>
+		</dict>
 		<key>inline</key>
 		<dict>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#macro</string>
@@ -724,18 +709,61 @@
 					<string>meta.image.inline.confluence</string>
 				</dict>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.type.confluence</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>\|(\([^)]*\)|{[^}]*})*(\\\||.)+\|</string>
+					<key>begin</key>
+					<string>^\s*(?=\|)</string>
+					<key>end</key>
+					<string>^(?!\s*\|)</string>
 					<key>name</key>
-					<string>markup.other.table.cell.confluence</string>
+					<string>markup.other.table.confluence</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\|\|</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.table.header.confluence</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=\|\||\n)</string>
+							<key>name</key>
+							<string>markup.other.table.header.confluence</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#inline</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>\|(?!\|)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.table.cell.confluence</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=\||\n)</string>
+							<key>name</key>
+							<string>markup.other.table.cell.confluence</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#inline</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>captures</key>

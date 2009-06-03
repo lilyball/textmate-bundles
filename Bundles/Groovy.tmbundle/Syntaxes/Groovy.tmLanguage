@@ -608,6 +608,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#class</string>
 				</dict>
 				<dict>
@@ -1039,7 +1043,7 @@
 			<key>begin</key>
 			<string>(?!new)(?=(?:\w|&lt;)[^=]*?\()</string>
 			<key>end</key>
-			<string>}|(?=;)</string>
+			<string>}|(?=;)|^(?=\s*(?:[^{\s]|$))</string>
 			<key>name</key>
 			<string>meta.definition.method.groovy</string>
 			<key>patterns</key>
@@ -1119,8 +1123,27 @@
 					</array>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#throws</string>
+					<key>begin</key>
+					<string>throws</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>storage.modifier.groovy</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?={|;)|^(?=\s*(?:[^{\s]|$))</string>
+					<key>name</key>
+					<string>meta.throwables.groovy</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#object-types</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -1656,30 +1679,6 @@
 					ArrayEquals)))\b</string>
 					<key>name</key>
 					<string>support.function.testing.groovy</string>
-				</dict>
-			</array>
-		</dict>
-		<key>throws</key>
-		<dict>
-			<key>begin</key>
-			<string>throws</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>storage.modifier.groovy</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?={|;)</string>
-			<key>name</key>
-			<string>meta.throwables.groovy</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#object-types</string>
 				</dict>
 			</array>
 		</dict>

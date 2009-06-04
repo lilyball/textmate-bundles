@@ -57,3 +57,7 @@ module TextMate
      end
   end
 end
+
+if __FILE__ == $PROGRAM_NAME
+  TextMate::Event::NotificationPreferences.show
+end

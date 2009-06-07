@@ -125,8 +125,7 @@ module TextMate
           exec(*cmd.compact)
         }
         
-        #%w[INT TERM].each do |signal|
-        %w[USR1].each do |signal|
+        %w[INT TERM USR1].each do |signal|
           Signal.trap(signal) do
             begin
               ::Process.kill("INT", -pid)

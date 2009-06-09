@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List</string>
+	<key>scope</key>
+	<string>source.cython meta.cextern.cython, source.cython meta.property.cython, source.cython meta.struct.cython, source.cython meta.union.cython, source.cython meta.enum.cython, source.cython meta.class.cython, source.cython meta.function.cython, source.cython meta.cfunction.cython</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>
+		s/cdef\s*//
+		s/^(\s*)([a-zA-Z_][a-zA-Z0-9_]*\s+)*(\s|\*)*([a-zA-Z_][a-zA-Z0-9_]*)(?=\s*(:|\()|$)/$1$4/
+		s/:\s*$//g
+		s/^(extern|import)\s+(from)\s+(['"]+)(.+)\3/$4/
+		s/\((?:(.{,40}?)|((.{40}).+?))\)/\((?1:$1)(?2:$3…))/g;
+	</string>
+	</dict>
+	<key>uuid</key>
+	<string>CC042955-DE82-405F-BF5C-EE8AFE12BB29</string>
+</dict>
+</plist>

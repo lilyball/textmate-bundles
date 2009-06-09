@@ -2,23 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>comment</key>
-	<string>
-	todo:
-		list comprehension / generator comprehension scope.
-		
-	</string>
+	<key>bundleUUID</key>
+	<string>E3BADC20-6B0E-11D9-9DC9-000D93589AF6</string>
 	<key>fileTypes</key>
 	<array>
 		<string>pyx</string>
 		<string>pxi</string>
+		<string>pxd</string>
 	</array>
-	<key>firstLineMatch</key>
-	<string>^#!/.*\bcython\b</string>
 	<key>foldingStartMarker</key>
-	<string>^\s*(def|class)\s+([.a-zA-Z0-9_ &lt;]+)\s*(\((.*)\))?\s*:|\{\s*$|\(\s*$|\[\s*$|^\s*"""(?=.)(?!.*""")</string>
+	<string>^\s*((cp?)?def|class|property|struct|enum|union)\s+([.a-zA-Z0-9_ &lt;]+)\s*(\((.*)\)|['"]+.+['"]+)?\s*:|\{\s*$|\(\s*$|\[\s*$|^\s*"""(?=.)(?!.*""")</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*$|^\s*\}|^\s*\]|^\s*\)|^\s*"""\s*$</string>
+	<key>keyEquivalent</key>
+	<string>^~C</string>
 	<key>name</key>
 	<string>Cython</string>
 	<key>patterns</key>
@@ -107,7 +104,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(global)\b</string>
+			<string>\b(global|readonly|public|api|nogil|gil)\b</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -124,7 +121,13 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>\b(?:(import|include)|(from))\b</string>
+			<string>\b(?:(c?import|include)|(from))\b</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bexcept\?</string>
+			<key>name</key>
+			<string>keyword.control.flow.cython</string>
 		</dict>
 		<dict>
 			<key>comment</key>
@@ -133,6 +136,12 @@
 			<string>\b(elif|else|except|finally|for|if|try|while|with|IF|ELIF|ELSE)\b</string>
 			<key>name</key>
 			<string>keyword.control.flow.cython</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\bDEF\b</string>
+			<key>name</key>
+			<string>keyword.control.define.cython</string>
 		</dict>
 		<dict>
 			<key>comment</key>
@@ -162,13 +171,27 @@
 			<key>comment</key>
 			<string>keywords that haven't fit into other groups (yet).</string>
 			<key>match</key>
-			<string>\b(as|assert|del|exec|print)\b</string>
+			<string>\b(as|assert|del|exec|print|by)\b</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(asm|__asm__|auto|bool|_Bool|char|_Complex|double|enum|float|_Imaginary|int|long|short|signed|struct|typedef|union|unsigned|void)\b</string>
+			<string>\b(extern|register|restrict|static|volatile|inline)\b</string>
 			<key>name</key>
-			<string>storage.type.cython</string>
+			<string>storage.modifier.cython</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(&lt;)\s*(([a-zA-Z_][a-zA-Z0-9_]*)(\s+[a-zA-Z_][a-zA-Z0-9_]*)*[ *]*)\s*\??\s*(&gt;)</string>
+			<key>name</key>
+			<string>operator.cast.cython</string>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -196,10 +219,206 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(class)\s+(?=[a-zA-Z_][a-zA-Z_0-9]*\s*\:)</string>
+			<string>^(cdef)\s+(extern|import)\s+(from)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.import.cython</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.import.from.cython</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>:</string>
+			<key>name</key>
+			<string>meta.cextern.cython</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#strings</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(cp?def\s+)?(?!(raise|return|yield|assert|del|print|exec|def|class|if|elif|for|while|except|with|IF|ELIF)\b)(([a-zA-Z_][a-zA-Z0-9_]*)(\s+[a-zA-Z_][a-zA-Z0-9_]*)*([ *]*))\s*(\b[a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\(|'|")(?=.*\()</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cython</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.cfunction.cython</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.cfunction.cython</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\)):?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.cfunction.cython</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.cfunction.cython</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#strings</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.property.cython</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.property.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(property)\s+([a-zA-Z_][a-zA-Z_0-9]*)</string>
+			<key>name</key>
+			<string>meta.property.cython</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.cython</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.struct.cython</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.struct.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(cdef\s+)?((extern|api|public)\s+)?(struct)\s+([a-zA-Z_][a-zA-Z_0-9]*)</string>
+			<key>name</key>
+			<string>meta.struct.cython</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.cython</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.union.cython</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.union.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(cdef\s+)?((extern|api|public)\s+)?(union)\s+([a-zA-Z_][a-zA-Z_0-9]*)</string>
+			<key>name</key>
+			<string>meta.union.cython</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>storage.modifier.cython</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.enum.cython</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.enum.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(cdef\s+)?((extern|api|public)\s+)?(enum)\s+([a-zA-Z_][a-zA-Z_0-9]*)</string>
+			<key>name</key>
+			<string>meta.enum.cython</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(object|asm|__asm__|auto|bool|_Bool|char|_Complex|double|enum|float|_Imaginary|int|long|short|signed|struct|ctypedef|typedef|union|unsigned|void)\b</string>
+			<key>name</key>
+			<string>storage.type.cython</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^\s*(cdef\s+)?(class)\s+(?=[a-zA-Z_][a-zA-Z_0-9]*\s*\:)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+				<key>2</key>
 				<dict>
 					<key>name</key>
 					<string>storage.type.class.cython</string>
@@ -218,7 +437,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.class.old-style.cython</string>
+			<string>meta.class.cython</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -229,36 +448,20 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(property)\s+(?=[a-zA-Z_][a-zA-Z_0-9]*\s*\:)</string>
+			<string>^\s*(cdef\s+)?((extern|api|public)\s+)?(class)\s+(?=[a-zA-Z_][a-zA-Z_0-9]*\s*\()</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.property.cython</string>
+					<string>storage.type.cdef.cython</string>
 				</dict>
-			</dict>
-			<key>contentName</key>
-			<string>entity.name.type.property.cython</string>
-			<key>end</key>
-			<string>\s*(:)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.section.property.begin.cython</string>
+					<string>storage.modifier.cython</string>
 				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.property.cython</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^\s*(class)\s+(?=[a-zA-Z_][a-zA-Z_0-9]*\s*\()</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>storage.type.class.cython</string>
@@ -464,6 +667,10 @@
 						<dict>
 							<key>include</key>
 							<string>#keyword_arguments</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#typed_arguments</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -916,6 +1123,18 @@
 			<string>\b(class)\b</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cdef.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b(cdef)\b</string>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>#line_continuation</string>
 		</dict>
@@ -1165,7 +1384,7 @@
                 divmod|eval|execfile|filter|getattr|globals|hasattr|hash|hex|id|
                 input|intern|isinstance|issubclass|iter|len|locals|map|max|min|oct|
                 ord|pow|range|raw_input|reduce|reload|repr|round|setattr|sorted|
-                sum|unichr|vars|zip
+                sum|unichr|vars|zip|sizeof
 			)\b</string>
 			<key>name</key>
 			<string>support.function.builtin.cython</string>
@@ -1175,11 +1394,16 @@
 			<key>match</key>
 			<string>(?x)\b(
 				basestring|bool|buffer|classmethod|complex|dict|enumerate|file|
-				float|frozenset|int|list|long|object|open|reversed|set|
+				float|frozenset|int|list|long|open|reversed|set|
 				slice|staticmethod|str|super|tuple|type|unicode|xrange
 			)\b</string>
 			<key>name</key>
 			<string>support.type.cython</string>
+		</dict>
+		<key>c_type</key>
+		<dict>
+			<key>match</key>
+			<string>([a-zA-Z_][a-zA-Z0-9_]*)(\s+[a-zA-Z_][a-zA-Z0-9_]*)*([ *]*)</string>
 		</dict>
 		<key>constant_placeholder</key>
 		<dict>
@@ -1473,15 +1697,20 @@
 		<key>keyword_arguments</key>
 		<dict>
 			<key>begin</key>
-			<string>\b([a-zA-Z_][a-zA-Z_0-9]*)\s*(=)(?!=)</string>
+			<string>\b(([a-zA-Z_][a-zA-Z0-9_]*)(\s+[a-zA-Z_][a-zA-Z0-9_]*)*([ *]+))?([a-zA-Z_][a-zA-Z_0-9]*)\s*(=)(?!=)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
+					<string>storage.type.cython</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
 					<string>variable.parameter.function.cython</string>
 				</dict>
-				<key>2</key>
+				<key>6</key>
 				<dict>
 					<key>name</key>
 					<string>keyword.operator.assignment.cython</string>
@@ -1537,14 +1766,15 @@
 			<key>match</key>
 			<string>(?x)\b(__(?:
 						abs|add|and|call|cmp|coerce|complex|contains|del|delattr|
-						delete|delitem|delslice|div|divmod|enter|eq|exit|float|
-						floordiv|ge|get|getattr|getattribute|getitem|getslice|gt|
+						delete|delitem|delslice|div|divmod|enter|exit|float|
+						floordiv|get|getattr|getattribute|getitem|getslice|
 						hash|hex|iadd|iand|idiv|ifloordiv|ilshift|imod|imul|init|
-						int|invert|ior|ipow|irshift|isub|iter|itruediv|ixor|le|len|
-						long|lshift|lt|mod|mul|ne|neg|new|nonzero|oct|or|pos|pow|
+						int|invert|ior|ipow|irshift|isub|iter|itruediv|ixor|len|
+						long|lshift|mod|mul|neg|new|nonzero|oct|or|pos|pow|
 						radd|rand|rdiv|rdivmod|repr|rfloordiv|rlshift|rmod|rmul|ror|
 						rpow|rrshift|rshift|rsub|rtruediv|rxor|set|setattr|setitem|
-						setslice|str|sub|truediv|unicode|xor
+						setslice|str|sub|truediv|unicode|xor|cinit|dealloc|richcmp|
+						next|index|getreadbuffer|getwritebuffer|getsegcount|getcharbuffer
 					)__)\b</string>
 			<key>name</key>
 			<string>support.function.magic.cython</string>
@@ -3028,6 +3258,29 @@
 					<string>#string_quoted_single</string>
 				</dict>
 			</array>
+		</dict>
+		<key>typed_arguments</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.cython</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.cython</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.conditional.cython</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(([a-zA-Z_][a-zA-Z0-9_]*)(\s+[a-zA-Z_][a-zA-Z0-9_]*)*([ *]+))(?!(not|None)\b)([a-zA-Z_][a-zA-Z0-9_]*)(\s+not\s*None)?</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

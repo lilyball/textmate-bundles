@@ -113,8 +113,9 @@ module PTree # Process Tree Construction
     end
 end
 
-def pid_exists?(pid) # There must be a better way to do this…
-    return "" != %x{ps -xp #{pid}|{ read header; cat; }}.chomp
+def pid_exists?(pid)
+    %x{ps >/dev/null -xp #{pid}}
+    $? == 0
 end
 
 def kill_and_wait(pid)

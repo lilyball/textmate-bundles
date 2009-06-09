@@ -38,15 +38,8 @@ function stringToArray($stringIn, $delimitter=" "){
     $stringIn  = trim($stringIn);
     return explode($delimitter, $stringIn);
 }
-function arrayToString($aVars, $suffix="1"){
-    $sep = "$suffix ";
-	if ( !is_array($aVars) ) {
-		echo("&lt;font color=\"red\"&gt;arrayToString got $aVars  when it expected an array&lt;/font&gt;&lt;br&gt;");
-		return "arrayToString got $aVars  when it expected an array";
-	}else{
-	    return implode($sep, $aVars). $sep;
-	}
-}
+
+
 
 $debug = 0;
 if ($debug) {

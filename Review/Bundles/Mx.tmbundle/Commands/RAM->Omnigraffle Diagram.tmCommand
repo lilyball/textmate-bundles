@@ -74,6 +74,7 @@ if ($debug) {
 	q15 &lt;-&gt; q15, e15,   NA
 	q16 &lt;-&gt; q16, e16,   NA
 	q17 &lt;-&gt; q17, e17,   NA
+	
 	F1 -&gt;  q1,    p1,   NA
 	F1 -&gt;  q2,    p2,   NA
 	F1 -&gt;  q3,    p3,   NA
@@ -101,26 +102,31 @@ if ($debug) {
 	q12 &lt;-&gt; q5,   c9,   NA
 	q15 &lt;-&gt; q6,   c10,  NA";
 }else{
-   $input = file_get_contents('php://stdin');
-   // $input = $_ENV["TM_SELECTED_TEXT"];	
+   // $input = file_get_contents('php://stdin');
+   $input = $_ENV["TM_SELECTED_TEXT"];	
 }
 
 $objects = array();
 $aPaths = stringTo2DArray($input, $delimitter=", ");
 $pathCreationString = "";
 foreach ($aPaths as $key =&gt; $value) {
-	$aPath = stringToArray($value[0], $delimitter=" "); // "q15 &lt;-&gt; q6"--&gt; array(q15,&lt;-&gt;, q6);
-	$pathCreationString .= "set line1 to make new line at end of graphics with properties {point list:{{5, 5}, {10, 10}}, head type:\"FilledArrow\", line type:curved}\n";
 
-	$pathCreationString .= "set alabel to make new shape at end of graphics with properties {draws stroke: false, origin: {10,10}, autosizing: full, size: {32,27}, text: {text: \"$value[1]\", size: 14, alignment: center}, draws shadow: false}\n";
-	$pathCreationString .= "set labelConnection of alabel to line1\n";
-	$pathCreationString .= "set labelPosition of alabel to 0.4\n";
+	if (count($value)&lt;2) {
+		// print_r($value);
+	}else{
+		$aPath = stringToArray($value[0], $delimitter=" "); // "q15 &lt;-&gt; q6"--&gt; array(q15,&lt;-&gt;, q6);
+		$pathCreationString .= "set line1 to make new line at end of graphics with properties {point list:{{5, 5}, {10, 10}}, head type:\"FilledArrow\", line type:curved}\n";
 
-	$pathCreationString .= "set source of line1 to $aPath[0]\n";
-	$pathCreationString .= "set destination of line1 to $aPath[2]\n";
+		$pathCreationString .= "set alabel to make new shape at end of graphics with properties {draws stroke: false, origin: {10,10}, autosizing: full, size: {32,27}, text: {text: \"$value[1]\", size: 14, alignment: center}, draws shadow: false}\n";
+		$pathCreationString .= "set labelConnection of alabel to line1\n";
+		$pathCreationString .= "set labelPosition of alabel to 0.4\n";
 
-	$objects[] = $aPath[0];
-	$objects[] = $aPath[2];
+		$pathCreationString .= "set source of line1 to $aPath[0]\n";
+		$pathCreationString .= "set destination of line1 to $aPath[2]\n";
+
+		$objects[] = $aPath[0];
+		$objects[] = $aPath[2];
+	}
 }
 $uniqueObjects = array_unique($objects);
 echo "&lt;pre&gt;\n";

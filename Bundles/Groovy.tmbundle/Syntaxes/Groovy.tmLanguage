@@ -996,14 +996,20 @@
 		</dict>
 		<key>methods</key>
 		<dict>
+			<key>applyEndPatternLast</key>
+			<integer>1</integer>
 			<key>begin</key>
 			<string>(?!new)(?=(?:\w|&lt;)[^=]*?\()</string>
 			<key>end</key>
-			<string>}|(?=;)|^(?=\s*(?:[^{\s]|$))</string>
+			<string>}|(?=(^\s*)?[^{])</string>
 			<key>name</key>
 			<string>meta.definition.method.groovy</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>match</key>
+					<string>\s</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#storage-modifiers</string>

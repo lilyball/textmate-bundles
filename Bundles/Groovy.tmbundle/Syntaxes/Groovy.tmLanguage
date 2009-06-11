@@ -994,38 +994,6 @@
 				</dict>
 			</array>
 		</dict>
-		<key>method-parameters</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>(?=[^)])</string>
-					<key>end</key>
-					<string>(?=\))</string>
-					<key>name</key>
-					<string>meta.method.parameters.groovy</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>begin</key>
-							<string>(?=[^,)])</string>
-							<key>end</key>
-							<string>(?=\))</string>
-							<key>name</key>
-							<string>meta.method.parameter.groovy</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>#parameters</string>
-								</dict>
-							</array>
-						</dict>
-					</array>
-				</dict>
-			</array>
-		</dict>
 		<key>methods</key>
 		<dict>
 			<key>begin</key>
@@ -1058,8 +1026,30 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>include</key>
-							<string>#method-parameters</string>
+							<key>begin</key>
+							<string>(?=[^)])</string>
+							<key>end</key>
+							<string>(?=\))</string>
+							<key>name</key>
+							<string>meta.method.parameters.groovy</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>(?=[^,)])</string>
+									<key>end</key>
+									<string>(?=\))</string>
+									<key>name</key>
+									<string>meta.method.parameter.groovy</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#parameters</string>
+										</dict>
+									</array>
+								</dict>
+							</array>
 						</dict>
 					</array>
 				</dict>

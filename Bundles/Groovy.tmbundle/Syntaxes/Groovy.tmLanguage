@@ -150,7 +150,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(@[^ (]+)(\()</string>
+					<string>(?&lt;!\.)(@[^ (]+)(\()</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -209,7 +209,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>@\S+</string>
+					<string>(?&lt;!\.)@\S+</string>
 					<key>name</key>
 					<string>storage.type.annotation.groovy</string>
 				</dict>

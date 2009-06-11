@@ -446,17 +446,7 @@
 									<array>
 										<dict>
 											<key>include</key>
-											<string>#storage-modifiers</string>
-										</dict>
-										<dict>
-											<key>include</key>
-											<string>#types</string>
-										</dict>
-										<dict>
-											<key>match</key>
-											<string>\w+</string>
-											<key>name</key>
-											<string>variable.parameter.closure.groovy</string>
+											<string>#parameters</string>
 										</dict>
 									</array>
 								</dict>
@@ -1028,17 +1018,7 @@
 							<array>
 								<dict>
 									<key>include</key>
-									<string>#storage-modifiers</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#types</string>
-								</dict>
-								<dict>
-									<key>match</key>
-									<string>\w+</string>
-									<key>name</key>
-									<string>variable.parameter.method.groovy</string>
+									<string>#parameters</string>
 								</dict>
 							</array>
 						</dict>
@@ -1315,6 +1295,26 @@
 					<string>\b(?:[a-z]\w*(\.))*[A-Z]+\w*\b</string>
 					<key>name</key>
 					<string>entity.other.inherited-class.groovy</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parameters</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#storage-modifiers</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#types</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\w+</string>
+					<key>name</key>
+					<string>variable.parameter.method.groovy</string>
 				</dict>
 			</array>
 		</dict>

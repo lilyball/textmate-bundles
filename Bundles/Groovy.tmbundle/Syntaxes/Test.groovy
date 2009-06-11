@@ -14,7 +14,11 @@ class Test extends Object implements Serializable {
     def p = /sdasd/
     def m = [key1: "value1", key2: "value2", (l): "value3"]
 
-    def testMethod(arg1, String typed) {
+    Test(args) {
+    	
+    }
+
+	def testMethod(arg1, String typed) {
         return 6
     }
     
@@ -48,3 +52,12 @@ private class PrivateTest {
     
 
 }
+
+public enum Blah {
+	THING1,
+	THING2(1,3),
+	THING3
+}
+
+	
+

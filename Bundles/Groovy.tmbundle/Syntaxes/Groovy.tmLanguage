@@ -999,7 +999,7 @@
 			<key>applyEndPatternLast</key>
 			<integer>1</integer>
 			<key>begin</key>
-			<string>(?!new)(?=(?:\w|&lt;)[^=]*?\()</string>
+			<string>(?&lt;!\.)\b(?!new)(?=(?:\w|&lt;)[^=\.]*?\()</string>
 			<key>end</key>
 			<string>}|(?=(^\s*)?[^{])</string>
 			<key>name</key>

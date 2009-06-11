@@ -1034,7 +1034,20 @@
 			<key>applyEndPatternLast</key>
 			<integer>1</integer>
 			<key>begin</key>
-			<string>(?&lt;!\.)\b(?!new)(?=(?:\w|&lt;)[^=\.]*?\()</string>
+			<string>(?x:
+			    (?&lt;!\.)\b # not preceeded by . (method call)
+			    (?!new) # not before new
+			    (?= # looking forward we see
+			        (?:
+			            (?:\w|&lt;)\S* # a word (modifier or return type) or a parameter type
+			            \s+ # some space
+			            (?:\w|&lt;)\S*[^=\.\s]*? # another word and anything but =, . or space
+			            | # or
+			            [A-Z_]\w* # a capitalised word (i.e. constructor name)
+			        )
+			        \( # and the leading parens of the params
+			    )
+			)</string>
 			<key>end</key>
 			<string>}|(?=(^\s*)?[^{])</string>
 			<key>name</key>

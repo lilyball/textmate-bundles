@@ -439,7 +439,7 @@
 									<key>begin</key>
 									<string>(?!,|-&gt;)</string>
 									<key>end</key>
-									<string>(?=-&gt;)</string>
+									<string>(?=,|-&gt;)</string>
 									<key>name</key>
 									<string>meta.closure.parameter.groovy</string>
 									<key>patterns</key>
@@ -456,7 +456,7 @@
 												</dict>
 											</dict>
 											<key>end</key>
-											<string>(?=\))</string>
+											<string>(?=,|-&gt;)</string>
 											<key>name</key>
 											<string>meta.parameter.default.groovy</string>
 											<key>patterns</key>
@@ -1067,11 +1067,17 @@
 									<key>begin</key>
 									<string>(?=[^,)])</string>
 									<key>end</key>
-									<string>(?=\))</string>
+									<string>(?=,|\))</string>
 									<key>name</key>
 									<string>meta.method.parameter.groovy</string>
 									<key>patterns</key>
 									<array>
+										<dict>
+											<key>match</key>
+											<string>,</string>
+											<key>name</key>
+											<string>punctuation.definition.separator.groovy</string>
+										</dict>
 										<dict>
 											<key>begin</key>
 											<string>=</string>
@@ -1084,7 +1090,7 @@
 												</dict>
 											</dict>
 											<key>end</key>
-											<string>(?=\))</string>
+											<string>(?=,|\))</string>
 											<key>name</key>
 											<string>meta.parameter.default.groovy</string>
 											<key>patterns</key>

@@ -21,6 +21,10 @@ class Test extends Object implements Serializable {
 	def testMethod(arg1, String typed) {
         return 6
     }
+
+	def methodName(args = String) {
+		{ String asdasd = "asdasd", Integer xx = 2 -> }
+	}
     
     static main(args) {
         def n = -234e12

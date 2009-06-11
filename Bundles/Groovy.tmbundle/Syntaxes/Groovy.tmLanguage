@@ -364,6 +364,18 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
+									<string>constant.class-variable.groovy</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>([A-Z_0-9]+)\s+(?=\=)</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
 									<string>meta.definition.class-variable.name.groovy</string>
 								</dict>
 							</dict>

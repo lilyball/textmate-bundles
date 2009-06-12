@@ -42,40 +42,46 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 		BMAX_COMPILE_PATH=`cygpath -m "$BMAX_COMPILE_PATH"`
 	fi
 
+	MODGREP=`grep -i -E -e "^[[:space:]]*module[[:space:]]+(\w+\.\w+)" "$BMAX_COMPILE_PATH" | grep -E -e "\w+\.\w+" -o | tr '[:upper:]' '[:lower:]'`
+
 	#scan for build options
-	BUILDTYPE="makeapp"
-	APPTYPE="console"
-	BUILDMODE="DEBUG"
-	WITHTHREADS="NO"
-	RUNAFTER="NO"
+	BUILDTYPE='makeapp'
+	APPTYPE='console'
+	BUILDMODE='DEBUG'
+	WITHTHREADS='NO'
+	RUNAFTER='NO'
+	VERBOSE=''
 
 	for BUILDOPT in `grep -hiE -e "^[^\\w\\d]*'[^\\w\\d]*buildopt:[^\\d\\w]*\\w+" "$BMAX_COMPILE_PATH" | \
 		ruby -w -e "puts STDIN.read().downcase().gsub(/^\s*'\s*buildopt:\s*/,\"\")"` ;
 	do
 		case "$BUILDOPT" in
 		'threads')
-			WITHTHREADS="YES"
+			WITHTHREADS='YES'
 		;;
 		'debug')
-			BUILDMODE="DEBUG"
+			BUILDMODE='DEBUG'
 		;;
 		'release')
-			BUILDMODE="RELEASE"
+			BUILDMODE='RELEASE'
 		;;
 		'library')
-			BUILDTYPE="makelib"
-			APPTYPE=""
+			BUILDTYPE='makelib'
+			APPTYPE=''
 		;;
 		'gui')
-			BUILDTYPE="makeapp"
-			APPTYPE="gui"
+			BUILDTYPE='makeapp'
+			APPTYPE='gui'
 		;;
 		'console')
-			BUILDTYPE="makeapp"
-			APPTYPE=""
+			BUILDTYPE='makeapp'
+			APPTYPE=''
 		;;
 		'execute')
 			RUNAFTER='YES'
+		;;
+		'verbose')
+			VERBOSE='-v'
 		;;
 		esac
 	done
@@ -83,7 +89,10 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 	echo "&lt;ul&gt;"
 
 	# application type (ignore if makelib)
-	if [[ "$APPTYPE" == "gui" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then
+	if [[ -n "$MODGREP" ]] ; then
+		BUILDTYPE="makemods"
+		echo "&lt;li&gt;Building module&lt;/li&gt;"
+	elif [[ "$APPTYPE" == "gui" &amp;&amp; "$BUILDTYPE" == "makeapp" ]] ; then
 		BUILDOPTS="$BUILDOPTS -t $APPTYPE"
 		echo "&lt;li&gt;Building app bundle&lt;/li&gt;"
 	elif [[ "$BUILDTYPE" == "makelib" ]] ; then
@@ -102,14 +111,31 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 
 	# threading
 	if [[ "$WITHTHREADS" == "YES" ]] ; then
-		BUILDOPTS="$BUILDOPTS -h"
+		if [[ -z "$MODGREP" ]] ; then
+			BUILDOPTS="$BUILDOPTS -h"
+		fi
 		echo "&lt;li&gt;Threading enabled&lt;/li&gt;"
 	fi
 
+	BUILDOPTS="$BUILDOPTS $VERBOSE"
+
 	echo "&lt;/ul&gt;"
 
+	#build module
+	if [[ -n "$MODGREP" ]] ; then
+		if [[ "$WITHTHREADS" == "YES" ]] ; then
+			echo "&lt;h3&gt;Building Threaded Module&lt;/h3&gt;"
+			echo "&lt;pre&gt;$ bmk $BUILDTYPE $BUILDOPTS -h $MODGREP&lt;/pre&gt;"
+			$BMK $BUILDTYPE $BUILDOPTS -h "$MODGREP" 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
+			echo "&lt;hr/&gt;"
+		fi
+		
+		echo "&lt;h3&gt;Building Regular Module&lt;/h3&gt;"
+		echo "&lt;pre&gt;$ bmk $BUILDTYPE $BUILDOPTS $MODGREP&lt;/pre&gt;"
+		$BMK $BUILDTYPE $BUILDOPTS "$MODGREP" 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
+		
 	# build/fail
-	if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
+	elif [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 		echo "&lt;pre&gt;$ bmk $BUILDTYPE $BUILDOPTS \"$BMAX_COMPILE_PATH\"&lt;/pre&gt;"
 		$BMK $BUILDTYPE $BUILDOPTS "$BMAX_COMPILE_PATH" 2&gt;&amp;1 | ruby -w "$TM_BUNDLE_SUPPORT/error2a.rb"
 		

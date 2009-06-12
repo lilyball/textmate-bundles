@@ -84,9 +84,9 @@ module PTree # Process Tree Construction
     end
 
     def build
-        tree = { :pid => 1, :cmd => 'System Startup', :children => [ ] }
+        tree = { :pid => 0, :cmd => 'System Startup', :children => [ ] }
 
-        list=%x{ps -xww -o "ppid,pid,command="|{ read header; sort -rnk2|sort -snk1; }}
+        list=%x{ps -axww -o "ppid,pid,command="|{ read header; sort -rnk2|sort -snk1; }}
         list.each do |line|
             abort "Syntax error: #{line}" unless line =~ /^\s*(\d+)\s+(\d+)\s+(.*)$/
             node = { :ppid => $1.to_i, :pid => $2.to_i, :cmd => $3, :children => [ ] }

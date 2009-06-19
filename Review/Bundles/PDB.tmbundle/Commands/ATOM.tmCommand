@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+
+# Get the location of the carret. Search back in the document for the first
+# occurance of an ATOM line and print it at the carret location.
+# If no ATOM line was found, print a default line
+
+import os, sys, re
+
+currLineNumber = (int(os.environ['TM_LINE_NUMBER']))-1
+lines = sys.stdin.readlines()
+atom = re.compile('ATOM')
+
+if currLineNumber &gt; len(lines): currLineNumber = (len(lines))-1
+
+found = False
+while currLineNumber != 0:
+	if len(lines[currLineNumber-1].strip()):
+		if atom.match(lines[currLineNumber-1]):
+			print(lines[currLineNumber-1].strip())
+			found = True
+			break
+		else:	
+			currLineNumber -= 1
+	else:
+		currLineNumber -= 1
+
+if not found:
+	print("ATOM    1    CA  MET A   1     -39.244 -12.997  68.045  1.00 43.32           C")</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>ATOM</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>tabTrigger</key>
+	<string>atom</string>
+	<key>uuid</key>
+	<string>43CF066E-8112-471D-AE1E-AC1947793A1A</string>
+</dict>
+</plist>

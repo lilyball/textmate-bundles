@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Convert nucleic acid 3 letter code to one letter code
+
+python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -b</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@B</string>
+	<key>name</key>
+	<string>Nucleic Acid 3 to 1</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>8C67AEC8-3CA3-490A-A7E7-4F727AEC8494</string>
+</dict>
+</plist>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Download a PDB file from the RCSB PDB database and open in a new document
+
+output=$(CocoaDialog inputbox --title "Download PDB file from RCSB" \
+    --informative-text "PDB ID:" \
+    --button1 "Fetch" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
+PDB=$(tail -n1 &lt;&lt;&lt; "$output")
+
+if [[ $PDB ]]; then	
+	lPDB=$(echo $PDB | tr "[:upper:]" "[:lower:]")
+	curl -s "http://www.rcsb.org/pdb/files/"$lPDB".pdb"
+fi</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@D</string>
+	<key>name</key>
+	<string>Fetch PDB</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>9C2ED6CF-3471-48F1-9AD5-FEC71F8115DD</string>
+</dict>
+</plist>

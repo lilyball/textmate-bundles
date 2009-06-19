@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Reformat the PDB file
+
+python "$TM_BUNDLE_SUPPORT"/PDBeditor.py</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@Z</string>
+	<key>name</key>
+	<string>Reformat PDB</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>55B98C27-208E-477E-9CD6-0100E31EA68D</string>
+</dict>
+</plist>

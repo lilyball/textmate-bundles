@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Join the selected files in the project drawer together to form and ensemble
+
+# create a named pipe
+rm -f /tmp/hpipe
+mkfifo /tmp/hpipe
+
+# create a background job which takes its input from the named pipe
+CocoaDialog progressbar --indeterminate --title "Join PDBs" --text "Please wait..." &lt; /tmp/hpipe &amp;
+
+# associate file descriptor 3 with that pipe and send a character through the pipe
+exec 3&lt;&gt; /tmp/hpipe
+echo -n . &gt;&amp;3
+
+# do all of your work here
+python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -j $TM_SELECTED_FILES
+
+# now turn off the progress bar by closing file descriptor 3
+exec 3&gt;&amp;-
+
+# wait for all background jobs to exit
+wait
+rm -f /tmp/hpipe
+exit 0</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@J</string>
+	<key>name</key>
+	<string>Join PDB files</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>21F80AA1-EDC6-4546-9693-09960A991608</string>
+</dict>
+</plist>

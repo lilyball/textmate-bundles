@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Set the segment ID
+
+output=$(CocoaDialog inputbox --title "Set segment ID to" \
+    --informative-text "ID:" --text "A"\
+    --button1 "OK" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
+SEGID=$(tail -n1 &lt;&lt;&lt; "$output")
+
+if [[ $SEGID ]]; then
+	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -s "$SEGID"
+fi</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@S</string>
+	<key>name</key>
+	<string>Set segment ID</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>9B7AA48F-A601-4416-8DB0-353107612EB5</string>
+</dict>
+</plist>

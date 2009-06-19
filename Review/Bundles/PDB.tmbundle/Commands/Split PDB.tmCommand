@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Split the PDB file into seperate files based on split command
+
+output=$(CocoaDialog inputbox --title "Split PDB based on split argument" \
+    --informative-text "argument:" --text "MODEL" \
+    --button1 "OK" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
+split=$(tail -n1 &lt;&lt;&lt; "$output")
+
+if [[ $split ]]; then
+	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -i $split -q $TM_FILEPATH
+fi
+
+# Open new files in new TextMate project
+newfiles=$( ls ${TM_FILEPATH%%.*}_*.pdb )
+mate $newfiles </string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>@I</string>
+	<key>name</key>
+	<string>Split PDB</string>
+	<key>output</key>
+	<string>openAsNewDocument</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>11FDFA18-B491-48AE-B693-682A1A14FD11</string>
+</dict>
+</plist>

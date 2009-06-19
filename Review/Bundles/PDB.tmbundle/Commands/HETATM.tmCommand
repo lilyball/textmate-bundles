@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+
+# Get the location of the carret. Search back in the document for the first
+# occurance of an HETATM line and print it at the carret location.
+# If no HETATM line was found, print a default line
+
+import os, sys, re
+
+currLineNumber = (int(os.environ['TM_LINE_NUMBER']))-1
+lines = sys.stdin.readlines()
+atom = re.compile('HETATM')
+
+if currLineNumber &gt; len(lines): currLineNumber = (len(lines))-1
+
+found = False
+while currLineNumber != 0:
+	if len(lines[currLineNumber-1].strip()):
+		if atom.match(lines[currLineNumber-1]):
+			print(lines[currLineNumber-1].strip())
+			found = True
+			break
+		else:	
+			currLineNumber -= 1
+	else:
+		currLineNumber -= 1
+
+if not found:
+	print("HETATM 1861  O   HOH     1     -26.069 -22.429  17.059  1.00 53.88           O")</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>HETATM</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>tabTrigger</key>
+	<string>hetatm</string>
+	<key>uuid</key>
+	<string>F0EFA359-048D-4C89-B948-87DA6A87C1CC</string>
+</dict>
+</plist>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
+html_header "About the PDB bundle"
+
+Markdown.pl &lt;&lt;'EOF'|SmartyPants.pl
+
+&lt;h2&gt;PDB Bundel&lt;/h2&gt;
+
+&lt;ul style='list-style: none'&gt;
+&lt;li&gt;1 &lt;a href="#sect_1"&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2 &lt;a href="#sect_2"&gt;Major commands&lt;/a&gt;
+&lt;ul style='list-style: none'&gt;
+&lt;li&gt;2.1 &lt;a href="#sect_2.1"&gt;Split/Join&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.2 &lt;a href="#sect_2.2"&gt;Segments&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.3 &lt;a href="#sect_2.3"&gt;Residues&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.4 &lt;a href="#sect_2.4"&gt;Atoms&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2.5 &lt;a href="#sect_2.5"&gt;Reformat&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;3 &lt;a href="#sect_3"&gt;Helper commands&lt;/a&gt;
+&lt;ul style='list-style: none'&gt;
+&lt;li&gt;3.1 &lt;a href="#sect_3.1"&gt;Fetch PDB&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;3.2 &lt;a href="#sect_3.2"&gt;Molecular mass&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;3.3 &lt;a href="#sect_3.3"&gt;Show sequence&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li
+&lt;li&gt;4 &lt;a href="#sect_4"&gt;Buildin functions/Syntax support&lt;/a&gt;&lt;/li&gt;
+&lt;ul style='list-style: none'&gt;
+&lt;li&gt;4.1 &lt;a href="#sect_4.1"&gt;Drag commands&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1&gt;&lt;a name="sect_1" style='text-decoration:none' class='uplink'&gt;1 Introduction&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;The PDB bundle was designed to assist in manipulation of RCSB or pseudo-RCSB PDB structure
+files. The main functions of the bundle are organised in catagories related to the hierarchy in which molecular structures are organized (models, segments/chains, residues and atoms).
+Many of the constants used in converting between naming conventions, calculating molecular
+masses and extracting data from PDB files can be changed if desired using the 'Edit constants' option.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1&gt;&lt;a name="sect_2" style='text-decoration:none' class='uplink'&gt;2 Major commands&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;a name="sect_2.1" style='text-decoration:none' class='uplink'&gt;2.1 Split/Join&lt;/a&gt;&lt;/h2&gt;
+&lt;li&gt;Split PDB:&lt;/li&gt;
+&lt;p&gt;Split ensemble PDB files based on a split argument like 'MODEL' for models or 'TER' for
+chains. Seperated parts are saved as seperate files in the same directory as the original and
+opened as a new project.&lt;/p&gt;
+&lt;li&gt;Join PDB files:&lt;/li&gt;
+&lt;p&gt;Select PDB files in the project drawer and join them together in a new PDB file
+as ensemble. The ensemble PDB will be displayed in a new TextMate document.&lt;/p&gt;
+&lt;h2&gt;&lt;a name="sect_2.2" style='text-decoration:none' class='uplink'&gt;2.2 Segments&lt;/a&gt;&lt;/h2&gt;
+&lt;li&gt;Set chain ID and/or segment ID:&lt;/li&gt;
+&lt;p&gt;Set the chain indentifier or segment indentifier to a new value. Blank character field are
+accepted to clear the chain or segment fields. For the chain indentifier only the first 
+character will be used for the segment indentifier multiple characters are allowed&lt;/p&gt;
+&lt;li&gt;Segment ID to chain ID:&lt;/li&gt;
+&lt;p&gt;Set the chain indentifier equal to (the first character of) the segment indentifier. If
+their are no chain indentifiers in the selection or the document the segment indentifier
+will be blank.&lt;/p&gt;
+&lt;li&gt;Chain ID to segment ID:&lt;/li&gt;
+&lt;p&gt;Set the segment indentifier equal to the chain identifier. If their are no segment
+indentifiers in the selection or the document the chain indentifier will be blank.&lt;/p&gt; 
+&lt;h2&gt;&lt;a name="sect_2.3" style='text-decoration:none' class='uplink'&gt;2.3 Residues&lt;/a&gt;&lt;/h2&gt;
+&lt;li&gt;Renumber residues:&lt;/li&gt;
+&lt;p&gt;Renumber residues starting from the user defined start number (default=1). Residues will be renumbered with every encounter of a new residue name, residue number or chain ID. If more models are encountered the renumbering process will be repeated for every model&lt;/p&gt;
+&lt;li&gt;Nucleic Acid 3 to 1:&lt;/li&gt;
+&lt;p&gt;Convert nucleic acid 3 letter code to nucleic acid 1 letter code. A check is made for the
+type of nucleic acid (DNA or RNA) to ajust the one letter code to the new pdb version 3
+naming recommendations&lt;/p&gt;
+&lt;li&gt;Nucleic Acid 1 to 3:&lt;/li&gt;
+&lt;p&gt;Convert nucleic acid 1 letter code to nucleic acid 3 letter code&lt;/p&gt;
+&lt;h2&gt;&lt;a name="sect_2.4" style='text-decoration:none' class='uplink'&gt;2.4 Atoms&lt;/a&gt;&lt;/h2&gt;
+&lt;li&gt;Renumber atoms:&lt;/li&gt;
+&lt;p&gt;Renumber atom and hetro-atom numbers starting from the user defined start number (default = 1). If more models are encountered the renumbering process will be repeated for every model.&lt;/p&gt;
+&lt;li&gt;Insert ATOM or HETATM line&lt;/li&gt;
+&lt;p&gt;Tab trigger to insert one propper formatted ATOM or HETATM line based on the previous line&lt;/p&gt;
+&lt;h2&gt;&lt;a name="sect_2.5" style='text-decoration:none' class='uplink'&gt;2.5 Reformat&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Reformat PDB will reformat the given document according to the RCSB PDB version 3 quidelines&lt;/p&gt;
+
+&lt;hr/&gt;
+&lt;h1&gt;&lt;a name="sect_3" style='text-decoration:none' class='uplink'&gt;3 Helper commands&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;a name='sect_3.1' style='text-decoration:none' class='uplink'&gt;3.1 Fetch PDB&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Retrieves the given PDB ID from the RCSB PDB databank and opens it as a new document.
+The PDB file is fetched from URL: http://www.rcsb.org/pdb/files/. If the server request
+could not be completed the new document will remain empty.&lt;/p&gt;
+&lt;h2&gt;&lt;a name='sect_3.2' style='text-decoration:none' class='uplink'&gt;3.2 Molecular mass&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Calculate the average molecular mass in g/mol for all atoms in the pdb or for the atoms
+in the selection&lt;/p&gt;
+&lt;h2&gt;&lt;a name='sect_3.3' style='text-decoration:none' class='uplink'&gt;3.3 Show sequence&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Exports the selection or the complete document as a FASTA like sequence table.&lt;/p&gt;
+
+&lt;hr/&gt;
+&lt;h1&gt;&lt;a name="sect_4" style='text-decoration:none' class='uplink'&gt;4 Buildin functions/Syntax support&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;a name="sect_4.1" style='text-decoration:none' class='uplink'&gt;4.1 Drag commands&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Upon draging a PDB file into a TextMate window the user can choose to either import all ATOM or
+HETATM line at the given cariage position&lt;/p&gt;
+
+EOF
+html_footer
+
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Help</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>2203715B-5B09-4615-A7B7-94BF31DA1D6F</string>
+</dict>
+</plist>

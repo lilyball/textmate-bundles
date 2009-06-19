@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Set the chain ID
+
+output=$(CocoaDialog inputbox --title "Set chain ID to" \
+    --informative-text "ID:" --text "A" \
+    --button1 "OK" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
+CHAIN=$(tail -n1 &lt;&lt;&lt; "$output")
+
+if [[ $CHAIN ]]; then
+	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -c "$CHAIN"
+fi</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@C</string>
+	<key>name</key>
+	<string>Set chain ID</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>0C2A5959-B963-48E9-8CDE-AB0FF52EC203</string>
+</dict>
+</plist>

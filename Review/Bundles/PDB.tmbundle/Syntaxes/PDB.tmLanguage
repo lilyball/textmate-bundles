@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>pdb</string>
+		<string>pdbw</string>
+		<string>pdb1</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>(TITLE|REMARK|HEADER|ATOM)</string>
+	<key>foldingStartMarker</key>
+	<string>^\s*MODEL</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*ENDMDL</string>
+	<key>keyEquivalent</key>
+	<string>^~P</string>
+	<key>name</key>
+	<string>PDB</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.first-match</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.second-match</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>hightlight amino-acids</string>
+			<key>match</key>
+			<string>^(ATOM).*\b(ALA|ARG|ASN|ASP|ASX|CYS|GLU|GLN|GLX|GLY|HIS|ILE|LEU|LYS|MET|
+				      |PHE|PRO|SER|THR|TRP|TRY|TYR|VAL)\b</string>
+			<key>name</key>
+			<string>meta.test</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.first-match</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.second-match</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>hightlight nucleotides</string>
+			<key>match</key>
+			<string>^(ATOM).*\b(ADE|THY|CYT|GUA|URI|DA|DT|DC|DG|RA|RC|RG|RU)\b</string>
+			<key>name</key>
+			<string>meta.test</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.first-match</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.second-match</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>hightlight hetro-atom records</string>
+			<key>match</key>
+			<string>^(HETATM).*\b(HOH)\b</string>
+			<key>name</key>
+			<string>meta.test</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>highlight remarks</string>
+			<key>match</key>
+			<string>^(REMARK|TITLE|HEADER|COMPND|SOURCE|KEYWDS|EXPDTA|AUTHOR|REVDAT|JRNL|NUMMDL|
+					 |DBREF|SEQRES|FORMUL|HELIX|CRYST1|ORIGX1|ORIGX2|ORIGX3|SCALE1|SCALE2|SCALE3|
+					 |CISPEP|SHEET)\b</string>
+			<key>name</key>
+			<string>comment</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>highlight in red lines that have incomplete ATOM/HETATM lines</string>
+			<key>match</key>
+			<string>^(ATOM|HETATM)</string>
+			<key>name</key>
+			<string>invalid.illegal</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>3C970438-9CAB-46E7-BBFB-BBA450BA7F5D</string>
+</dict>
+</plist>

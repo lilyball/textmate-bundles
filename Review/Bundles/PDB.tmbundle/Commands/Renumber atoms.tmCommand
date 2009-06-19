@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+# Renumber the ATOM and HETATM atoms.
+
+output=$(CocoaDialog inputbox --title "Renumber atoms starting from" \
+    --informative-text "number:" --text "1"\
+    --button1 "OK" --button2 "Cancel")
+
+[[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
+atnum=$(tail -n1 &lt;&lt;&lt; "$output")
+
+if [[ $atnum ]]; then
+	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -p $atnum
+fi</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@A</string>
+	<key>name</key>
+	<string>Renumber atoms</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.pdb</string>
+	<key>uuid</key>
+	<string>8076E4CA-499F-4DAF-B672-5799C6F3CA5F</string>
+</dict>
+</plist>

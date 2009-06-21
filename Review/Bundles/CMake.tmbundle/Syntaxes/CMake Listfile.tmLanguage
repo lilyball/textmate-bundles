@@ -156,6 +156,18 @@
 			<key>name</key>
 			<string>constant.language.boolean.cmake</string>
 		</dict>
+		<key>escapes</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\["()#$^ \\]</string>
+					<key>name</key>
+					<string>constant.character.escape.cmake</string>
+				</dict>
+			</array>
+		</dict>
 		<key>items</key>
 		<dict>
 			<key>patterns</key>
@@ -175,6 +187,10 @@
 				<dict>
 					<key>include</key>
 					<string>#variables</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#escapes</string>
 				</dict>
 			</array>
 		</dict>

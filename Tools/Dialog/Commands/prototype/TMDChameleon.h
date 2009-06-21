@@ -5,7 +5,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface TMDChameleon : NSObject
+@interface TMD2Chameleon : NSObject
 {
 }
 + (BOOL)createSubclassNamed:(NSString*)aName withValues:(NSDictionary*)values;

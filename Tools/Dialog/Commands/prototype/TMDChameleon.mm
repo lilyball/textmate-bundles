@@ -15,7 +15,7 @@ static Class find_root (Class cl)
 	return cl;
 }
 
-@implementation TMDChameleon
+@implementation TMD2Chameleon
 - (id)init
 {
 	id res = [DefaultValues objectForKey:NSStringFromClass([self class])];
@@ -28,7 +28,7 @@ static Class find_root (Class cl)
 	if(NSClassFromString(aName))
 		return YES;
 
-	Class super_cl       = [TMDChameleon class];
+	Class super_cl       = [TMD2Chameleon class];
 
 	Class sub_cl         = (Class)calloc(1, sizeof(objc_class));
 	Class meta_cl        = (Class)calloc(1, sizeof(objc_class));

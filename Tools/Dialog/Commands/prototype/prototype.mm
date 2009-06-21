@@ -24,7 +24,7 @@
 			values = [NSPropertyListSerialization propertyListFromData:[(NSString*)values dataUsingEncoding:NSUTF8StringEncoding] mutabilityOption:NSPropertyListImmutable format:nil errorDescription:NULL];
 
 		enumerate([values allKeys], id key)
-			[TMDChameleon createSubclassNamed:key withValues:[values objectForKey:key]];
+			[TMD2Chameleon createSubclassNamed:key withValues:[values objectForKey:key]];
 	}
 
 	if(NSString* show = [args objectForKey:@"show"])

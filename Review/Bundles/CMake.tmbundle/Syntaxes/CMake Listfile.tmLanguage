@@ -152,7 +152,7 @@
 		<key>constants</key>
 		<dict>
 			<key>match</key>
-			<string>(?i)\b(FALSE|OFF|NO|\w+-NOTFOUND)\b</string>
+			<string>(?i)\b(FALSE|OFF|NO|(\w+-)?NOTFOUND)\b</string>
 			<key>name</key>
 			<string>constant.language.boolean.cmake</string>
 		</dict>
@@ -208,7 +208,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?i)"(FALSE|OFF|NO|.+-NOTFOUND)"</string>
+					<string>(?i)"(FALSE|OFF|NO|(.+-)?NOTFOUND)"</string>
 					<key>name</key>
 					<string>string.quoted.double.cmake</string>
 				</dict>

@@ -11,7 +11,7 @@ module TextMate
 
   class << self
     def app_path
-      return %x{ps -xwwp "$TM_PID" -o "command="}.sub(%r{(.app)/Contents/MacOS/.*\n}, '\1')
+      ENV['TM_APP_PATH'] || %x{ps -xwwp "$TM_PID" -o "command="}.sub(%r{(.app)/Contents/MacOS/.*\n}, '\1')
     end
 
     def app_name

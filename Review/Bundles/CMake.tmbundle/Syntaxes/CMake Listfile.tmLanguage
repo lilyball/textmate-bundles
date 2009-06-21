@@ -237,23 +237,39 @@
 		</dict>
 		<key>variables</key>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>\$(ENV)?\{</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.variable.begin.cmake</string>
 				</dict>
-				<key>3</key>
+			</dict>
+			<key>end</key>
+			<string>\}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.variable.end.cmake</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>(\$(ENV)?\{)\w+(\})</string>
 			<key>name</key>
 			<string>variable.cmake</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#variables</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\w+</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// creator: tim.bates@ed.ac.uk 
+// license = GPL
+// TO-DO: Add a dialog call to ask for rounding precision
+/* Purpose: strip the title line, and reformat text to numerics
+
+ informative column headers
+ unemployed male    15   
+ unemployed male    15   
+ unemployed male    15   
+
+and returns it thus:
+
+ 1 2    15   
+ 1 2    15    
+ 1 2    15   
+*/
+
+// USEAGE notes: 
+// $padwidth sets the ... padding width :-)
+// Set $debug to 1 to let play with it in a TM window
+
+
+$debug = 0;
+$padWidth = 7;
+$nDecimals = 3;
+
+// takes mx matrix and returns formatted nicely into columns
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input ="SID sex age var 
+bingo12
+";
+}else{
+   $input = file_get_contents('php://stdin');
+   // $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+// make 2D array;
+$aMatrix = stringTo2DArray($input);
+$padWidth = getWidthFromFirstCellInString($input, $delimitter=" ");
+
+array_walk_recursive($aMatrix, 'array_round', $nDecimals);
+
+$n=0;
+$outStr= "";
+foreach ($aMatrix as $key =&gt; $value) {
+	if ($n==0) {
+		$row1Length = count($aMatrix[0]);
+	}else{
+		$aMatrix[$n]= array_pad($aMatrix[$n], -$row1Length, "");		
+	}
+	for ($i=0; $i &lt; $row1Length; $i++) { 
+		if ($i==0) {
+			$newValue = str_pad($aMatrix[$n][$i], $padWidth, " ", STR_PAD_RIGHT);
+		}else{
+			$newValue = str_pad($aMatrix[$n][$i], $padWidth, " ", STR_PAD_LEFT);
+		}
+		$aMatrix[$n][$i] = $newValue;
+		$outStr .= $newValue;
+	}
+	$outStr .= "\n";
+	$n++;
+}
+echo $outStr;
+?&gt;
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Format data for analysis</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.mx</string>
+	<key>uuid</key>
+	<string>1BDB44DF-85E9-40B0-9EA8-11050C48D144</string>
+</dict>
+</plist>

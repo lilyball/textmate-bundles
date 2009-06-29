@@ -7,15 +7,14 @@
 	<key>command</key>
 	<string>#!/bin/sh
 
-{ APP_PATH=$(ps -xwwp $PPID -o command|grep -o '.*.app')
-  osascript -e "tell app \"$(basename "$APP_PATH")\" to quit"
+{ osascript -e "tell app \"$(basename "$TM_APP_PATH")\" to quit"
 
   for (( i = 0; i &lt; 500 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
     sleep .2;
   done
 
   if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
-    open "$APP_PATH"
+    open "$TM_APP_PATH"
   else
     echo &gt;/dev/console "$(date +%Y-%m-%d\ %H:%M:%S): TextMate is still running. Relaunch aborted."
   fi

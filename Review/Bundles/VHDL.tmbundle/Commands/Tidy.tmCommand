@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/bin/bash
+# beautifies VHDL code using Emacs
+
+EMACS=emacs
+
+$EMACS --batch "$TM_FILEPATH" --eval="(setq-default vhdl-basic-offset $TM_TAB_SIZE)" --eval="(vhdl-beautify-buffer)"  -f save-buffer &amp;&gt; /dev/null
+
+cat "$TM_FILEPATH"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^H</string>
+	<key>name</key>
+	<string>Tidy</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source.vhdl</string>
+	<key>uuid</key>
+	<string>44B95BB0-70BB-45A6-A3D6-3FC8D7F33F21</string>
+</dict>
+</plist>

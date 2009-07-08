@@ -118,9 +118,9 @@ foreach ($aMatrix as $key =&gt; $row) {
 		$newRow[]  = str_pad($cell, $aPadWidth[$c]);
 		$c++;
 	}
-	$outStr.= implode(" || ", $newRow) . "\n";
+	$outStr.= trim( implode(" || ", $newRow) ) . "\n";
 }
-echo $outStr;
+echo str_replace("|| ~", "||~ ", $outStr);
 ?&gt;</string>
 	<key>input</key>
 	<string>selection</string>

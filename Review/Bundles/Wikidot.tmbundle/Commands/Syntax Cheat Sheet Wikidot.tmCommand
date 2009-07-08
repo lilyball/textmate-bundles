@@ -8,6 +8,68 @@
 	<string>D99E8C0C-792F-11D9-A212-000D93B3A10E</string>
 	<key>command</key>
 	<string>#!/usr/bin/env php
+
+ &lt;style type="text/css"&gt;
+	/* text_highlighter.css */
+.hl-default {
+    color: #000;
+}
+.hl-code {
+    color: #000;
+}
+.hl-brackets {
+    color: #000;
+}
+.hl-comment {
+    color: #494;
+}
+.hl-quotes {
+    color: #009;
+}
+.hl-string {
+    color: #009;
+}
+.hl-identifier {
+    color: #000;
+}
+.hl-builtin {
+    color: Teal;
+}
+.hl-reserved {
+    color: #55D;
+}
+.hl-inlinedoc {
+    color: Blue;
+}
+.hl-var {
+    color: #494;
+}
+.hl-url {
+    color: Blue;
+}
+.hl-special {
+    color: Navy;
+	font-weight: bold;
+}
+.hl-number {
+    color: Maroon;
+}
+.hl-inlinetags {
+    color: #949;
+	font-weight: bold;
+}
+.hl-main { 
+   /* background-color: White;*/
+}
+.hl-gutter {
+    background-color: #999999;
+    color: White
+}
+.hl-table {
+  
+}
+ &lt;/style&gt;
+
 &lt;h1&gt;Wikidot Syntax Help&lt;/h1&gt;
 
 &lt;p&gt;The Official Help Is &lt;a href="http://www.wikidot.com/doc:wiki-syntax" title="Wikidot - Free and Pro Wiki Hosting: Wiki Syntax"&gt;HERE&lt;/a&gt;
@@ -99,10 +161,27 @@
 &lt;/pre&gt;
 
 &lt;h3 id="blockquote"&gt;Block Quote&lt;/h3&gt;
+&lt;table border="1" cellspacing="5" cellpadding="5"&gt;
+	&lt;tr&gt;
+		&lt;td align="left"&gt;
 &lt;pre&gt;
 &gt; leading
 &gt;&gt; characters
 &lt;/pre&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;blockquote&gt;
+				&lt;p&gt;leading&lt;/p&gt;
+				&lt;blockquote&gt;
+				&lt;p&gt;characters&lt;/p&gt;
+				&lt;/blockquote&gt;
+			&lt;/blockquote&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+
+
+
 &lt;h3 id="image"&gt;Image&lt;/h3&gt;
 
 &lt;pre&gt;[[image image-source attribute1="value1" attribute2="value2"]]&lt;/pre&gt;
@@ -123,11 +202,35 @@
 	[[/gallery]]
 &lt;/pre&gt;
 &lt;h3 id="codeblock"&gt;Code Block&lt;/h3&gt;
+&lt;table border="0" cellspacing="5" cellpadding="5"&gt;
+	&lt;tr&gt;
+		&lt;td align="left"&gt;
 &lt;pre&gt;
-[[code type='php]]
-  your code in here
+[[code type="PHP"]]
+&lt;?php
+	for ($i=0; $i &lt; 10 ; $i++) { 
+		echo "I love tm $i times!&lt;br&gt;"
+	}
+?&gt;
 [[/code]]
-&lt;/pre&gt;
+	&lt;/pre&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;div class="code"&gt;
+				&lt;div class="hl-main"&gt;
+					&lt;pre&gt;
+						&lt;span class="hl-inlinetags"&gt;&amp;lt;?php&lt;/span&gt;&lt;span class="hl-code"&gt;&lt;/span&gt;
+						&lt;span class="hl-reserved"&gt;for&lt;/span&gt;&lt;span class="hl-code"&gt; &lt;/span&gt;&lt;span class="hl-brackets"&gt;(&lt;/span&gt;&lt;span class="hl-var"&gt;$i&lt;/span&gt;&lt;span class="hl-code"&gt;=&lt;/span&gt;&lt;span class="hl-number"&gt;0&lt;/span&gt;&lt;span class="hl-code"&gt;; &lt;/span&gt;&lt;span class="hl-var"&gt;$i&lt;/span&gt;&lt;span class="hl-code"&gt; &amp;lt; &lt;/span&gt;&lt;span class="hl-number"&gt;10&lt;/span&gt;&lt;span class="hl-code"&gt; ; &lt;/span&gt;&lt;span class="hl-var"&gt;$i&lt;/span&gt;&lt;span class="hl-code"&gt;++&lt;/span&gt;&lt;span class="hl-brackets"&gt;)&lt;/span&gt;&lt;span class="hl-code"&gt; &lt;/span&gt;&lt;span class="hl-brackets"&gt;{&lt;/span&gt;&lt;span class="hl-code"&gt; 
+						&lt;/span&gt;&lt;span class="hl-reserved"&gt;echo&lt;/span&gt;&lt;span class="hl-code"&gt; &lt;/span&gt;&lt;span class="hl-quotes"&gt;"&lt;/span&gt;&lt;span class="hl-string"&gt;I love tm &lt;/span&gt;&lt;span class="hl-var"&gt;$i&lt;/span&gt;&lt;span class="hl-string"&gt; times!&amp;lt;br&amp;gt;&lt;/span&gt;&lt;span class="hl-quotes"&gt;"&lt;/span&gt;&lt;span class="hl-code"&gt;
+						&lt;/span&gt;&lt;span class="hl-brackets"&gt;}&lt;/span&gt;&lt;span class="hl-code"&gt;
+						&lt;/span&gt;&lt;span class="hl-inlinetags"&gt;?&amp;gt;&lt;/span&gt;
+					&lt;/pre&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
 
 &lt;h3 id="tables"&gt;Tables&lt;/h3&gt;
 &lt;pre&gt;

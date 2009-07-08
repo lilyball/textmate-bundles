@@ -7,7 +7,7 @@
 		<string>wikidot</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^\s*={2,}(.*)={2,}\s*$</string>
+	<string>^\s*\+{1,}(.*)\s*$</string>
 	<key>foldingStartMarker</key>
 	<string>(&lt;(php|html|file|nowiki)&gt;|&lt;code(\s*.*)?&gt;)|/\*\*|\{\s*$</string>
 	<key>foldingStopMarker</key>
@@ -525,9 +525,35 @@
 					<key>comment</key>
 					<string>[((bibcite Ebstein1996))]</string>
 					<key>match</key>
-					<string>(\[\(\()(bibcite) (.+?)(\)\)\])</string>
+					<string>(\[\(\()(bibcite) +(.+)(\)\)\])</string>
 					<key>name</key>
 					<string>meta.link.bibcite.wikidot</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.wikidot</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.wikidot</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.wikidot</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>[[bibliography]]</string>
+					<key>match</key>
+					<string>(\[\[\(/?)(bibliography)(\]\])</string>
+					<key>name</key>
+					<string>meta.tag.bib.wikidot</string>
 				</dict>
 				<dict>
 					<key>captures</key>

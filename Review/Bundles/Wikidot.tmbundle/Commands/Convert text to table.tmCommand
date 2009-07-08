@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env php
+&lt;?php
+	// take some tab-seperated text, and return a wikidot table
+	// Created: july.09 Author: timothy.c.bates@gmail.com
+
+	if (1) { //set to 0 for debugging
+		$input = fread(STDIN, 1024);
+	}else{
+		$input = "SNP	P value	
+rs10507218	.37
+rs1323381	.87
+rs1556876 (proxy for rs10485609)	0.77
+rs1115535 (proxy for rs10485609)	0.94
+rs10505938	0.2100
+rs1160219	1.0000
+rs10495260 (proxy for rs1320490)	0.75";
+
+		echo "&lt;pre&gt;&lt;br&gt;started with:&lt;br&gt;&lt;font color=red&gt;$input&lt;/font&gt;&lt;br&gt;--&gt;&lt;br&gt;";
+	}
+$o = "";
+$lines = explode('
+', $input);
+
+// print_r($lines);
+foreach ($lines as $key =&gt; $line) {
+	$bits = explode('	', $line);
+	$o .=  "|| ". implode(" || ", $bits). "|| \n";
+}
+echo $o; 
+
+// ||~ ${1:head0} ||~ ${2:head1} ||~ ${3:head2} ||
+// || ${4:data}   || ${5:data}   || ${6:data}   || 
+// || ${7:data}   || ${8:data}   || ${9:data}   || 
+// || ${10:data}   || ${11:data}   || ${12:data}   ||
+
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Convert text to table</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>336C2D87-2E1C-4942-9EF7-E3525C61240A</string>
+</dict>
+</plist>

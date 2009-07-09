@@ -111,7 +111,7 @@
 			<key>comment</key>
 			<string>special-case regexp/regsub keyword in order to handle the expression</string>
 			<key>end</key>
-			<string>[\n;\]]</string>
+			<string>[\n;]|(?=\])</string>
 			<key>patterns</key>
 			<array>
 				<dict>

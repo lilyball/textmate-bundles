@@ -9,32 +9,30 @@
 &lt;?php
 	// Turn a line or selection into a heading
 	// Created: 23.12.08 Author: timothy.c.bates@gmail.com
-	// Overrides existing cmd-n
-	// Works on lines that already have + attributes
+	// nb: Overrides existing cmd-n
+	// Also Works on lines that already have a heading applied
 	
 	// ********* 
 	// Change this to alter the level being affected
 	// *********
 	
-	$level = '+++'; 	
-	if (1) { //set to 0 for debugging
-		$existing = fread(STDIN, 1024);
-	}else{
+	$level    = '+';
+	$newLevel = str_repeat ( $level, 3);
+
+	if (0) { //set to 1 for debugging
 		echo "&lt;pre&gt;";
-		$existing = " +++     Why is is this so badly formed?";
-		$existing = ""; //case of empty line
-		echo "started with:\n$existing\n--&gt;\n";
-	}
-	$bTagged  = ereg( "^ *\+",$existing);
-	// Change to $level strip leading and trailing spaces around the plus sign
-	if ($bTagged) {
-		echo ereg_replace("^ *(\++) *", "$level ", $existing);
+		$existing = "$level$level$level Why is is this so badly formed?";
+		$existing = ""; // test case of empty line
+		echo "started with:\n&lt;font color=red&gt;\"$existing\"&lt;/font&gt;\n--&gt;\n";
 	} else {
-		if (empty($existing)) {
-			echo "$level \${1:Level 3 heading}";
-		}else{
-			echo ereg_replace("^ *", "$level ", $existing);			
-		}
+		$existing = fread(STDIN, 1024);
+	}
+
+	if (empty($existing)) {
+		echo "$newLevel \${1:Level 1 heading}";
+	}else {
+		$new = trim ( $existing, " $level" ); //trim existing markers from either end
+		echo "$newLevel $new";
 	}
 ?&gt;</string>
 	<key>fallbackInput</key>

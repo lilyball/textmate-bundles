@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env php
+&lt;?php
+function stringTo2DArray($stringIn, $delimitter=" "){
+	// strips all white space, rows are lines
+	$stringIn = ereg_replace("[ \t]+", " ", $stringIn); // whitespace-runs --&gt; single space char 
+	$stringIn = trim($stringIn); // trim leading and trailing white space
+	$rows     = explode("\n", $stringIn); //break on lines
+	$o        = array();
+	foreach ($rows as $key =&gt; $row) {
+		$row  = trim($row);
+		$o[]  = explode($delimitter, $row);
+	}
+	return $o;
+}
+
+if (0) {
+	echo	"&lt;pre&gt;";
+	$in = "Marker	Chr Posn(Mb-B35)	Posn(cM)	Gene	NWR
+		rs851715	7	146964554	44.924034	CNTNAP2	0.0024
+		rs1177007	7	146984019	44.943499	CNTNAP2	0.0871
+		rs1186173	7	146984251	44.943731	CNTNAP2	0.0156
+		rs10246256	7	146992455	44.951935	CNTNAP2	0.0012
+		rs2710102	7	147012038	44.971518	CNTNAP2	0.0022
+		rs759178	7	147012760	44.97224	CNTNAP2	0.0016
+		rs1922892	7	147014059	44.973539	CNTNAP2	0.002
+		rs2538991	7	147017267	44.976747	CNTNAP2	0.0017
+		rs17236239	7	147019953	44.979433	CNTNAP2	5.00E-05
+		rs2538976	7	147023467	44.982947	CNTNAP2	0.0015
+		rs4431523	7	147034814	44.994294	CNTNAP2	0.0141
+		rs2538963	7	147037094	44.996574	CNTNAP2	0.5167
+		rs2710117	7	147039420	44.9989	CNTNAP2	0.0004";
+}else{
+   //$in = file_get_contents('php://stdin');
+    $in = $_ENV["TM_SELECTED_TEXT"];	
+}
+$in = stringTo2DArray($in, $delimitter=" ");
+$o = "&lt;table border=\"1\"&gt;";
+foreach ($in as $key =&gt; $row) {
+	$o .= "&lt;tr&gt;\n";
+	foreach ($row as $key =&gt; $cell) {
+		$o.="&lt;td&gt;$cell&lt;/td&gt;\n";
+	}
+	$o .= "&lt;/tr&gt;\n";
+}
+$o .= "&lt;/table&gt;";
+echo $o;
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Convert -&gt;HTML table</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>560DA592-0719-4469-B2F8-2EB497616702</string>
+</dict>
+</plist>

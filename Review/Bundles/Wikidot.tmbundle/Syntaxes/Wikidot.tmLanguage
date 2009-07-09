@@ -140,17 +140,27 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^([\t ]?)(\*)</string>
-			<key>captures</key>
+			<string>^([\t ]*\*)</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.list_item.wikidot</string>
 				</dict>
 			</dict>
+			<key>comment</key>
+			<string>* list item</string>
 			<key>end</key>
 			<string>$\n?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list_item.wikidot</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>markup.list.unnumbered.wikidot</string>
 			<key>patterns</key>
@@ -163,10 +173,10 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^([\t ]+)?(\#)</string>
-			<key>captures</key>
+			<string>^([\t ]*\#)</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.list_item.wikidot</string>
@@ -176,6 +186,14 @@
 			<string># list item</string>
 			<key>end</key>
 			<string>$\n?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list_item.wikidot</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>markup.list.numbered.wikidot</string>
 			<key>patterns</key>
@@ -187,27 +205,12 @@
 			</array>
 		</dict>
 		<dict>
-			<key>begin</key>
-			<string>^[|^]</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.table.wikidot</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>$</string>
+			<key>comment</key>
+			<string> || cell || cell ||</string>
+			<key>match</key>
+			<string>\|\|~?</string>
 			<key>name</key>
-			<string>markup.other.table.wikidot</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#inline</string>
-				</dict>
-			</array>
+			<string>markup.heading.table.wikidot</string>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -540,6 +543,32 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
+							<string>markup.underline.link.wikidot</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.wikidot</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>: name: reference</string>
+					<key>match</key>
+					<string>^(: )([^:]*)(:)</string>
+					<key>name</key>
+					<string>meta.link.bibEntry.wikidot</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.link.wikidot</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
 							<string>entity.name.tag.wikidot</string>
 						</dict>
 						<key>3</key>
@@ -551,7 +580,7 @@
 					<key>comment</key>
 					<string>[[bibliography]]</string>
 					<key>match</key>
-					<string>(\[\[\(/?)(bibliography)(\]\])</string>
+					<string>(\[\[/?)(bibliography)(\]\])</string>
 					<key>name</key>
 					<string>meta.tag.bib.wikidot</string>
 				</dict>

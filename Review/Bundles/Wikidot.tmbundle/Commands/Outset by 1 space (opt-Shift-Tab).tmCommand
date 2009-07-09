@@ -12,7 +12,7 @@
 	// Overrides existing option-tab
 
 	if (0) { //set to 1 for debugging
-		$input = "On the bump stops";
+		$input = "   Off the bump stops";
 		// $input = "1 On the bump stops
 		// 2 On the bump stops
 		// 3 On the bump stops
@@ -22,9 +22,7 @@
 	}else{
 		$input = fread(STDIN, 1024);
 	}
-	$lines = explode('
-', $input);
-echo " ". implode("\n ", $lines);
+	echo str_replace("\n ", "\n", $input);
 ?&gt;
 </string>
 	<key>fallbackInput</key>
@@ -32,14 +30,14 @@ echo " ". implode("\n ", $lines);
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>~	</string>
+	<string>~</string>
 	<key>name</key>
-	<string>Inset by 1 space (opt-Tab)</string>
+	<string>Outset by 1 space (opt-Shift-Tab)</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
-	<string>text.html.wikidot</string>
+	<string>text.html.wikidot</string>
 	<key>uuid</key>
-	<string>F7B5D23E-8258-4112-964E-2A2774BC6D0B</string>
+	<string>530034BB-34BB-4AF5-B481-24D24338FE17</string>
 </dict>
 </plist>

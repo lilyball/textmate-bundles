@@ -669,6 +669,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#bmax_constants</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#bmax_string_quoted</string>
 				</dict>
 				<dict>
@@ -705,11 +709,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_constants</string>
+					<string>#bmax_type_field</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#bmax_type_field</string>
+					<string>#bmax_constructor</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -956,23 +960,8 @@
 			<string>variable.language.super.blitzmax</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.new.blitzmax</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.class.blitzmax</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?i)\b(new)\s+([a-zA-Z_]\w*)\b</string>
-			<key>name</key>
-			<string>meta.call.constructor.blitzmax</string>
+			<key>include</key>
+			<string>#bmax_constructor</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -1157,6 +1146,26 @@
 					<string>#bmax_numbers</string>
 				</dict>
 			</array>
+		</dict>
+		<key>bmax_constructor</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.new.blitzmax</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.class.blitzmax</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?i)\b(new)\s+([a-zA-Z_]\w*)\b</string>
+			<key>name</key>
+			<string>meta.call.constructor.blitzmax</string>
 		</dict>
 		<key>bmax_control_keywords</key>
 		<dict>

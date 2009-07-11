@@ -10,30 +10,40 @@
 // Turn a line or selection into a heading
 // Created: 23.12.08 Author: timothy.c.bates@gmail.com
 // nb: Overrides existing cmd-n
-// Also Works on lines that already have a heading applied
-
-// ********* 
-// Change this to alter the level being affected
-// *********
+// Also Works on multiple lines and lines that already have a heading applied
 
 $level    = '=';
-$newLevel = str_repeat ( $level, 3);
+$newLevel = str_repeat ( $level, 3); // Change this to alter the level being affected
+$o        = array();
 
 if (0) { //set to 1 for debugging
 	echo "&lt;pre&gt;";
 	$existing = "$level$level$level     Why is is this so badly formed? $level$level$level";
+	$existing = "$level$level$level     Why is is this so badly formed? $level$level$level
+$level$level$level     Why is is this so badly formed? $level$level$level
+
+$level$level$level     Why is is this so badly formed? $level$level$level";
 	// $existing = ""; // test case of empty line
 	echo "started with:\n&lt;font color=red&gt;\"$existing\"&lt;/font&gt;\n--&gt;\n";
 } else {
 	$existing = fread(STDIN, 1024);
 }
-
-if (empty($existing)) {
-	echo "$level \${1:Level 1 heading} $level";
-}else {
-	$new = trim ( $existing, " $level" ); //trim existing markers from either end
-	echo "$newLevel $new $newLevel";
+$aLines = explode("\n", $existing);
+$l = count($aLines);
+foreach ($aLines as $key =&gt; $line) {
+	$line = trim ( $line);
+	if (empty($line)) {
+		if ($l&gt;1) {
+			$o[] = "";
+		}else{
+			$o[] = "$level \${1:Level 1 heading} $level";
+		}
+	} else {
+		$new = trim ( $line, " $level" ); //trim existing markers from either end
+		$o[] = "$newLevel $new $newLevel";
+	}
 }
+echo implode("\n", $o);
 ?&gt;</string>
 	<key>fallbackInput</key>
 	<string>line</string>

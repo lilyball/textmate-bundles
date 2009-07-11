@@ -7,7 +7,7 @@
 		<string>wikidot</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^\s*\+{1,}(.*)\s*$</string>
+	<string>(^\s*\+{1,}(.*)\s*$)|\[!-- wikidot --\]</string>
 	<key>foldingStartMarker</key>
 	<string>(&lt;(php|html|file|nowiki)&gt;|&lt;code(\s*.*)?&gt;)|/\*\*|\{\s*$</string>
 	<key>foldingStopMarker</key>
@@ -21,6 +21,30 @@
 		<dict>
 			<key>include</key>
 			<string>#php</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string> derived from html comment, using square brackets</string>
+			<key>match</key>
+			<string>(\[!--(.*)--\])</string>
+			<key>name</key>
+			<string>comment.line.documentation.wikidot</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>\[!--</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.documentation.wikidot</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>--\]</string>
+			<key>name</key>
+			<string>comment.block.documentation.wikidot</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -58,59 +82,6 @@
 					<string>constant.character.escape.wikidot</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string> derived from html comment, replacing angle brackets with square</string>
-			<key>match</key>
-			<string>\[!--.*--\]</string>
-			<key>name</key>
-			<string>punctuation.definition.comment.wikidot</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\[!--</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.wikidot</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>--\s*\]</string>
-			<key>name</key>
-			<string>comment.block.wikidot</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>--</string>
-					<key>name</key>
-					<string>invalid.illegal.bad-comments-or-CDATA.html</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#embedded-code</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>\[!--</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.wikidot</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>--\]</string>
-			<key>name</key>
-			<string>comment.block.documentation.wikidot</string>
 		</dict>
 		<dict>
 			<key>captures</key>

@@ -39,7 +39,7 @@
 				$o[] = "$level \${1:Level 1 heading}";
 			}
 		} else {
-			$new = trim ( $line, " $level" ); //trim existing markers from either end
+			$new = trim ( $line, "#* $level" ); //trim ends of existing markers
 			$o[] = "$newLevel $new";
 		}
 	}

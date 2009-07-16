@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// creator: tim.bates@ed.ac.uk 
+// license = GPL
+// created 8 July 2009
+// Purpose: Takes selected wikidot table like 
+/*
+
+|| a   ||e  || u  || 
+
+ and returns it formatted nicely into columns thus:
+
+||~ a ||~ e  ||~ u || 
+
+*/
+
+// USEAGE notes: 
+// Set $debug to 1 to let play with it in a TM window
+
+// *********************************************************
+
+$debug = 0;
+$padWidth = 7; //sea change :-)
+$delimitter = "\|\|";
+
+function getMaxWidths($aMatrix){
+	$o = array();
+	$n = 0;
+	foreach ($aMatrix as $key =&gt; $row) {
+		if ($n==0) {
+			foreach ($row as $key =&gt; $cell) {
+				$o[] = strlen($cell);
+			}
+		} else {
+			// Compare each to see which is longer
+			$c = 0;
+			foreach ($row as $key =&gt; $cell) {
+				if ($o[$c] &lt; strlen($cell)) { $o[$c] = strlen($cell); }
+				$c++;
+			}
+		}
+		$n++;
+	}
+	return $o;
+}
+
+function stringTo2DArray($stringIn, $delimitter="||"){
+   // rows are lines
+   // strips all white space either side of the delimitter
+	$o = array();
+	$stringIn  = trim($stringIn);
+   $rows = explode("\n", $stringIn);
+	// print_r($rows);
+	$find = " *". $delimitter . " *";
+	// echo "find = \"$find\"\n";
+
+	foreach ($rows as $key =&gt; $row) {
+	   $row  = trim($row);
+		// echo "row = $row\n";
+		$row = ereg_replace ( $find, $delimitter, $row);
+		$o[] = explode($delimitter, $row);
+	}
+    return $o;
+}
+function stringToArray($stringIn, $delimitter=" "){
+    // strips newlines and all white space
+    $stringIn  = ereg_replace("[ \t\n]{2,}", " ", $stringIn); //remove multiple spaces in case some present
+    $stringIn  = trim($stringIn);
+    return explode($delimitter, $stringIn);
+}
+function arrayToString($aVars, $suffix="1"){
+    $sep = "$suffix ";
+	if ( !is_array($aVars) ) {
+		echo("&lt;font color=\"red\"&gt;arrayToString got $aVars  when it expected an array&lt;/font&gt;&lt;br&gt;");
+		return "arrayToString got $aVars  when it expected an array";
+	}else{
+	    return implode($sep, $aVars). $sep;
+	}
+}
+
+if ($debug) {
+	echo "&lt;pre&gt;";
+	$input ="|| a   ||e  || u  || 
+	|| b || elephant  || prissy   || 
+	|| c   || minuet-in-g   || A   ||
+";
+	echo "&lt;font color=red&gt;$input &lt;/font&gt;&lt;br&gt;";
+}else{
+   $input = file_get_contents('php://stdin');
+   // $input = $_ENV["TM_SELECTED_TEXT"];	
+}
+
+// make 2D array;
+$aMatrix  = stringTo2DArray($input,$delimitter);
+
+// print_r($aMatrix);
+
+$aPadWidth = getMaxWidths($aMatrix);
+// print_r($aPadWidth);
+
+$outStr   = "";
+
+foreach ($aMatrix as $key =&gt; $row) {
+	$c = 0;
+	$newRow = array();
+	foreach ($row as $key =&gt; $cell) {
+		$newRow[]  = str_pad($cell, $aPadWidth[$c]);
+		$c++;
+	}
+	$outStr.= trim( implode(" || ", $newRow) ) . "\n";
+}
+echo str_replace("|| ~", "||~ ", $outStr);
+?&gt;</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>Reformat table heading row</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>6AF096A2-792F-479C-ADC3-0F81E09EDA14</string>
+</dict>
+</plist>

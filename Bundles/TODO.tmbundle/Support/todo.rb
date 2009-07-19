@@ -73,8 +73,8 @@ TextMate.each_text_file do |file|
           :type => tag[:label]
         }
         if tag[:label] == "RADAR" then
-          url = "rdar://" + $2
-          match[:match] = html_escape($1) + "<a href=\"" + url + "\">" + html_escape(url) + "</a>" + html_escape($3)
+          url, display = "http://openradar.appspot.com/" + $2, "rdar://" + $2
+          match[:match] = html_escape($1) + "<a href=\"" + url + "\" target=\"_blank\">" + html_escape(display) + "</a>" + html_escape($3)
         else
           match[:match] = html_escape($1)
         end

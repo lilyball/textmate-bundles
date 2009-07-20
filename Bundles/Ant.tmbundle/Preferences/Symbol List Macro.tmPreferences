@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List: Macro</string>
+	<key>scope</key>
+	<string>meta.tag.macrodef.xml.ant</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+		<string>		
+		s/.*name="([\w-]+)".*/$1/g;		# Keep macro name only.
+		s/^/macro: /;				# Add macro prefix.
+	</string>
+	</dict>
+	<key>uuid</key>
+	<string>250EA0F3-362B-406D-8FDD-D1EF8C3F2D88</string>
+</dict>
+</plist>

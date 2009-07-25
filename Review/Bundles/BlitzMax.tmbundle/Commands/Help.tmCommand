@@ -27,18 +27,22 @@ To set this variable, open the project drawer and deselect any files, then click
 
 When using the Build App and Run App commands, your main source file (either the file you have open or the one specified by TM\_BLITZMAX\_MAIN\_FILE) is quickly scanned for a set of build options to determine how to build and/or execute the results.  These build options are available under the Build Options snippets, and are as follows:
 
-* **Threaded**  
+* **Threaded** - *threads*  
 When building the application, include support for multithreading.  You must have compiled your modules with threading as well for this to work, otherwise you will receive linker errors.
-* **Release &amp; Debug**  
+* **Release &amp; Debug** - *release* &amp; *debug*  
 Specified whether or not to compile the program in debug mode.
-* **GUI Application**  
+* **GUI Application** - *gui*  
 Builds an application bundle instead of a simple executable file.
 * **Console Application**  
 Builds a simple executable application.  The opposite of GUI application, essentially.
-* **Library**  
+* **Library** - *library*  
 _Attempts_ to build a library.  This is currently unsupported in BlitzMax and is included for potential future support.  Currently passes the (accepted) makelib instruction to bmk, results may vary.
-* **Run After Build**  
+* **Run After Build** - *execute*  
 If included, executes the resulting output immediately after building it.
+* **Clean Build** - *clean*  
+Passes the '-a' option to bmk, which causes it to rebuild all source code for the project regardless of whether or not any code has been changed.
+* **Verbose** - *verbose*  
+Tells bmk to use verbose output.
 
 Build options are formatted as comments inside your source code and do not have any meaning outside of this bundle.  They are written as
    ' buildopt: option

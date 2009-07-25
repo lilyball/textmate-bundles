@@ -77,6 +77,9 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 			BUILDTYPE='makeapp'
 			APPTYPE=''
 		;;
+		'clean')
+			CLEANBUILD='YES'
+		;;
 		'execute')
 			RUNAFTER='YES'
 		;;
@@ -103,7 +106,7 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 
 	# build mode
 	if [[ "$BUILDMODE" == "DEBUG" ]] ; then
-		BUILDOPTS="$BUILDOPTS -d"
+#		BUILDOPTS="$BUILDOPTS -d"
 		echo "&lt;li&gt;Debug enabled&lt;/li&gt;"
 	elif [[ "$BUILDMODE" == "RELEASE" ]] ; then
 		BUILDOPTS="$BUILDOPTS -r"
@@ -115,6 +118,11 @@ if [[ -n "$BMAX_COMPILE_PATH" ]] ; then
 			BUILDOPTS="$BUILDOPTS -h"
 		fi
 		echo "&lt;li&gt;Threading enabled&lt;/li&gt;"
+	fi
+	
+	if [[ "$CLEANBUILD" == "YES" ]] ; then
+		BUILDOPTS="$BUILDOPTS -a"
+		echo "&lt;li&gt;Clean build&lt;/li&gt;"
 	fi
 
 	BUILDOPTS="$BUILDOPTS $VERBOSE"

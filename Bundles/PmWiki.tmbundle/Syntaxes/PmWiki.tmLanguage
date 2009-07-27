@@ -13,6 +13,60 @@
 	<key>patterns</key>
 	<array>
 		<dict>
+			<key>begin</key>
+			<string>&gt;&gt;comment&lt;&lt;</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.pmwiki</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>&gt;&gt;&lt;&lt;</string>
+			<key>name</key>
+			<string>comment.block.pmwiki</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>&gt;&gt;</string>
+					<key>name</key>
+					<string>invalid.illegal.bad-comments-or-CDATA.pmwiki</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#embedded-code</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>%comment%</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.pmwiki</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>$\n?</string>
+			<key>name</key>
+			<string>comment.line.pmwiki</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&gt;\\\s*\n)</string>
+					<key>name</key>
+					<string>punctuation.separator.continuation.pmwiki</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>\\\\$</string>
 			<key>name</key>

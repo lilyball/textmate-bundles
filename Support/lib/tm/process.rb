@@ -75,25 +75,24 @@ require 'fcntl'
 module PTree # Process Tree Construction
     module_function
 
-    def insert(tree, node)
-        if tree[:pid] == node[:ppid]
-            tree[:children] << node
-        else
-            tree[:children].find { |child| insert(child, node) }
-        end
-    end
-
     def build
-        tree = { :pid => 0, :cmd => 'System Startup', :children => [ ] }
+        list = %x{ps -axww -o "pid,ppid,command="}.sub(/^.*$\n/, '')
 
-        list=%x{ps -axww -o "ppid,pid,command="|{ read header; sort -rnk2|sort -snk1; }}
+    all_nodes = { }
+    all_nodes[0] = { :pid => 0, :cmd => 'System Startup', :children => [ ] }
+
         list.each do |line|
             abort "Syntax error: #{line}" unless line =~ /^\s*(\d+)\s+(\d+)\s+(.*)$/
-            node = { :ppid => $1.to_i, :pid => $2.to_i, :cmd => $3, :children => [ ] }
-            abort "Inconsistent Process Tree: #{line}" unless insert(tree, node)
+      all_nodes[$1.to_i] = { :pid => $1.to_i, :ppid => $2.to_i, :cmd => $3, :children => [ ] }
         end
 
-        tree
+    all_nodes.each do |pid, process|
+      next if pid == 0
+      abort "Inconsistent Process Tree: parent (#{process[:ppid]}) for pid #{pid} does not exist" unless all_nodes.has_key? process[:ppid]
+      all_nodes[process[:ppid]][:children] << process
+    end
+
+        all_nodes[0]
     end
 
     def find(tree, pid)

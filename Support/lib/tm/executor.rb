@@ -122,6 +122,7 @@ module TextMate
               str = "<span class=\"echo\">#{str}</span>" if type == :echo
               io << str
             end
+            sleep(0.001)
           end
           
           process_options = {:echo => true, :watch_fds => { :echo => tm_echo_fd_read }}

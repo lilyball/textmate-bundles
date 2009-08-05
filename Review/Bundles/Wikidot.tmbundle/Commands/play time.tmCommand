@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+// author tim.bates@ed.ac.uk
+// version .7
+// created: 22:10:2008
+// wraps the selection in open tags
+
+echo `$DIALOG tooltip hello`
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^~@w</string>
+	<key>name</key>
+	<string>tmp command</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.wikidot</string>
+	<key>uuid</key>
+	<string>B9888AE4-0810-46E3-8315-2B30E03193C7</string>
+</dict>
+</plist>

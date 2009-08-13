@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>Field ${1:name}${2/^([:\!\@\#\$\%].*)|^(:)|(.+)/(?3:\::)/}${2:Int}
+
+Method ${3:Set${1/^_*(.+)_*$/\u$1/}(${1/^_*(.+)_*$/$1/}}${2/^([:\!\@\#\$\%].*)|^(:)|(.+)/(?3:\:)/}$2)
+	Self.$1 = ${1/^_*(.+)_*$/$1/}
+End Method
+
+Method ${4:Get${1/^_*(.+)_*$/\u$1/}}${2/^([:\!\@\#\$\%].*)|^(:)|(.+)/(?3:\:)/}$2()
+	Return Self.$1
+End Method</string>
+	<key>name</key>
+	<string>Field with Getter and Setter</string>
+	<key>scope</key>
+	<string>source.blitzmax meta.type.blitzmax</string>
+	<key>tabTrigger</key>
+	<string>rw</string>
+	<key>uuid</key>
+	<string>47DFC6EF-6A3F-4406-8023-D8BFC0FCF861</string>
+</dict>
+</plist>

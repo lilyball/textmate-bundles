@@ -43,13 +43,13 @@ module TextMate
             res = yield(file)
 
             file.close
-            File.unlink(file.path)
+            File.unlink(file.path) if File.exists?(file.path)
             
             return res
           else
             at_exit {
               file.close
-              File.unlink(file.path)              
+              File.unlink(file.path) if File.exists?(file.path)
             }
             return file
           end

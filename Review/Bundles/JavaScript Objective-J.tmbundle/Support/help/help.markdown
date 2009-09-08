@@ -1,19 +1,9 @@
 
-<center><font color=red>Both this bundle and the Objective-J framework are still under constructions.
-
-Any feedback about bugs or improvements is highly welcomed!</font></center>
+<center><font color=red>Any feedback about bugs or improvements is highly welcomed!</font></center>
 
 # Introduction
 
-Cappuccino <a href="http://cappuccino.org">cappuccino.org</a>  is an open source framework that makes it easy to build desktop-caliber applications that run in a web browser or in TextMate's HTML output window.
-
-# Installation
-
-In order to use that bundle you have to download the cappuccino framework <a href="http://cappuccino.org/tools">cappuccino.org/tools</a> and follow the installation instructions. After the installation you have to set the global shell variable `OBJJ_HOME`. One way would be to insert 
-
-`export OBJJ_HOME=/path/to/the/framework` in `~/.profile`.
-
-Please make sure that the documentation folder `Documentation` will also be found in `OBJJ_HOME`.
+Cappuccino <a href="http://cappuccino.org">cappuccino.org</a> is an open source framework that makes it easy to build desktop-caliber applications that run in a web browser.
 
 # Commands
 
@@ -35,18 +25,14 @@ If the start HTML site differs you can set the shell variable `TM_OBJJ_MASTER_FI
 
 # Shell Variables #
 
-## OBJJ_HOME ##
-
-This variable must be set to the root path of the Objective-J framework (not to the subfolder `framework`) in order to work with this bundle properly. See more under [Installation…](#sect_2).
-
 ## TM&#95;OBJJ&#95;MASTER&#95;FILE ##
 
-This variable contains the path to the application's start HTML site. If not set 
+This variable contains the path to the application's start HTML site.
 
 
 # Main Bundle Maintainer
 
-***Date: Sep 23 2008***
+***Date: Sep 7 2009***
 
 <pre>
 -  Tom Robinson&nbsp;<a href="mailto:tom@280north.com">tom@280north.com</a>

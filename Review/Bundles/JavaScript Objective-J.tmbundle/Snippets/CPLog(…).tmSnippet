@@ -3,15 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@import "${1:`"$TM_BUNDLE_SUPPORT/bin/import_FileMenu.sh" ".j"`}"
-</string>
+	<string>CPLog("$1"${1/[^%]*(%)?.*/(?1:, :\);)/}$2${1/[^%]*(%)?.*/(?1:\);)/}</string>
 	<key>name</key>
-	<string>import "…" (with File Menu)</string>
+	<string>CPLog(…)</string>
 	<key>scope</key>
 	<string>source.js.objj</string>
 	<key>tabTrigger</key>
-	<string>impp</string>
+	<string>log</string>
 	<key>uuid</key>
-	<string>9BABD784-3DBE-4DA3-8A70-4E32FC7FDBB8</string>
+	<string>C268A928-5C8E-4284-9BAB-4FDFB07B983A</string>
 </dict>
 </plist>

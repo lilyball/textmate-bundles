@@ -3,15 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@import "${1:`"$TM_BUNDLE_SUPPORT/bin/import_FileMenu.sh" ".j"`}"
-</string>
+	<string>- (id)delegate
+{
+	return $1;
+}
+
+- (void)setDelegate:(id)aDelegate
+{
+	${1:delegate} = aDelegate;
+}</string>
 	<key>name</key>
-	<string>import "…" (with File Menu)</string>
+	<string>Delegate</string>
 	<key>scope</key>
 	<string>source.js.objj</string>
 	<key>tabTrigger</key>
-	<string>impp</string>
+	<string>delacc</string>
 	<key>uuid</key>
-	<string>9BABD784-3DBE-4DA3-8A70-4E32FC7FDBB8</string>
+	<string>0B3D4C4C-7D75-49E6-9CEC-E4BF4069223A</string>
 </dict>
 </plist>

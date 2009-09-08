@@ -3,15 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@import "${1:`"$TM_BUNDLE_SUPPORT/bin/import_FileMenu.sh" ".j"`}"
+	<string>if([${1:[self delegate]} respondsToSelector:@selector(${2:selfDidSomething:})])
+	[$1 ${3:${2/((^\s*([A-Za-z0-9_]*:)\s*)|(:\s*$)|(:\s*))/(?2:$2self :\:&lt;&gt;)(?4::)(?5: :)/g}}];
 </string>
 	<key>name</key>
-	<string>import "…" (with File Menu)</string>
+	<string>Delegate Responds to Selector</string>
 	<key>scope</key>
 	<string>source.js.objj</string>
 	<key>tabTrigger</key>
-	<string>impp</string>
+	<string>delegate</string>
 	<key>uuid</key>
-	<string>9BABD784-3DBE-4DA3-8A70-4E32FC7FDBB8</string>
+	<string>3B5B858C-645E-499C-813B-BBEEED943E9B</string>
 </dict>
 </plist>

@@ -129,13 +129,15 @@ def gitInfo(bundle)
 
   return if $close
 
+  commits = nil
   lastCommit = nil
 
   begin
     GBTimeout::timeout(10) do
       loop do
         begin
-          lastCommit = YAML.load(%x{curl -sSL "http://github.com/api/v1/json/#{info['username']}/#{projectName}/commits/master"})['commits'].first['committed_date']
+          commits = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/#{info['username']}/#{projectName}/commits/master"})['commits'].first
+          lastCommit = commits['committed_date']
         rescue
           lastCommit = nil
         end
@@ -190,6 +192,8 @@ def gitInfo(bundle)
   plist['contactName'] = "" if plist['contactName'].nil?
   plist['contactEmailRot13'] = "" if plist['contactEmailRot13'].nil?
 
+  
+
   # get Readme if available plus CSS for display
   readme = nil
   if data =~ /<div +id="readme".*?>/m
@@ -223,6 +227,22 @@ def gitInfo(bundle)
       <b>Description:</b><br />&nbsp;#{info['description']}<br />
       <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
       <b>Username:</b><br />&nbsp;<a href='http://github.com/#{info['username']}'>#{info['username']}</a><br />
+      HTML
+      
+      if ! commits.nil?
+        if ! commits["author"]["name"].nil? and ! commits["author"]["name"].empty?
+          io << <<-HTML
+          <b>Author:</b><br />&nbsp;#{commits["author"]["name"]}<br />
+          HTML
+        end
+        if ! commits["author"]["email"].nil? and ! commits["author"]["email"].empty?
+          io << <<-HTML
+          <b>Email:</b><br />&nbsp;<a href='mailto:#{commits["author"]["email"]}'>#{commits["author"]["email"]}</a><br />        
+          HTML
+        end
+      end
+      
+      io << <<-HTML
       <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
       <b>Last Modified:</b><br />&nbsp;#{Time.parse(lastCommit).getutc.to_s}<br />
       HTML

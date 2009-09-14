@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
@@ -56,8 +56,32 @@
 			</array>
 		</dict>
 		<dict>
-			<key>include</key>
-			<string>#sigexp</string>
+			<key>begin</key>
+			<string>\b(sig)\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.delimiter.ml</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.delimiter.ml</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\b(end)\b</string>
+			<key>name</key>
+			<string>meta.module.sigdec.ml</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#spec</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -176,7 +200,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?==|:|:&gt;|\()</string>
+			<string>(?==|:|\()</string>
 			<key>name</key>
 			<string>meta.module.dec.ml</string>
 		</dict>
@@ -194,7 +218,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>\b(eqtype|type)\s+([a-zA-Z][a-zA-Z0-9'_]*)\s+=</string>
+			<string>\s*(type|eqtype) .* =</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -209,11 +233,18 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?==|end|fun|structure|functor|val|type|eqtype|where|datatype|exception)</string>
+			<string>$</string>
 			<key>name</key>
 			<string>meta.typeabbrev.ml</string>
 			<key>patterns</key>
-			<array/>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(([a-zA-Z0-9\.\* ]|(\-&gt;))*)</string>
+					<key>name</key>
+					<string>meta.typeexp.ml</string>
+				</dict>
+			</array>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -261,44 +292,6 @@
 				</dict>
 			</array>
 		</dict>
-		<key>sigexp</key>
-		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>begin</key>
-					<string>\b(sig)\b</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.delimiter.ml</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.delimiter.ml</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\b(end)\b</string>
-					<key>name</key>
-					<string>meta.module.sigdec.ml</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#spec</string>
-						</dict>
-					</array>
-				</dict>
-			</array>
-		</dict>
 		<key>spec</key>
 		<dict>
 			<key>patterns</key>
@@ -318,13 +311,13 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(type)\s+([a-zA-Z][a-zA-Z0-9'_]*)</string>
+					<string>\b(exception|type)\s+([a-zA-Z][a-zA-Z0-9'_]*)</string>
 					<key>name</key>
 					<string>meta.spec.ml.type</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(datatype)\s+(\(.*\))?\s*([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
+					<string>\b(datatype)\s+([a-zA-Z][a-zA-Z0-9'_]*)\s*(?==)</string>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -332,14 +325,14 @@
 							<key>name</key>
 							<string>keyword.other.ml</string>
 						</dict>
-						<key>3</key>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>entity.name.type.datatype.ml</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=val|type|eqtype|datatype|structure|include|\(\*)</string>
+					<string>(?=val|type|eqtype|datatype|structure|include|exception)</string>
 					<key>name</key>
 					<string>meta.spec.ml.datatype</string>
 					<key>patterns</key>
@@ -420,27 +413,6 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b(exception)\s*(\w+)\s*</string>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.ml</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>entity.name.type.exception.ml</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(?=val|type|eqtype|datatype|structure|include|exception|end)</string>
-					<key>name</key>
-					<string>meta.spec.ml.exception</string>
-				</dict>
-				<dict>
-					<key>begin</key>
 					<string>\b(structure)\s*(\w+)\s*:</string>
 					<key>captures</key>
 					<dict>
@@ -456,36 +428,16 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=val|type|eqtype|datatype|structure|include|exception|end)</string>
+					<string>(?=val|type|eqtype|datatype|structure|include)</string>
 					<key>name</key>
 					<string>meta.spec.ml.structure</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\b(sharing type)\b</string>
-							<key>name</key>
-							<string>keyword.other.ml</string>
-						</dict>
-						<dict>
-							<key>match</key>
 							<string>\b(sharing)\b</string>
 							<key>name</key>
 							<string>keyword.other.ml</string>
-						</dict>
-						<dict>
-							<key>match</key>
-							<string>\b(where)\b</string>
-							<key>name</key>
-							<string>keyword.other.ml</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#sigexp</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
 						</dict>
 					</array>
 				</dict>

@@ -41,7 +41,8 @@ File.open(ENV['TM_FILEPATH'], "r") do |f|
   end
 end
 
-cmd << package if package
+#cmd << package if package
+ENV["TM_JAVA_PACKAGE"] = package
 
 TextMate::Executor.run(cmd, :version_args => ["--version"], :script_args => script_args) do |line, type|
   case type

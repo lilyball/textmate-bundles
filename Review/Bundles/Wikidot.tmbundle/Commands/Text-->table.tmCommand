@@ -43,13 +43,15 @@ if (0) {
 $in = stringTo2DArray($in, $delimitter=" ");
 $o = "&lt;table border=\"1\"&gt;";
 foreach ($in as $key =&gt; $row) {
-	$o .= "&lt;tr&gt;\n";
+	$o .= "&lt;tr&gt;";
 	foreach ($row as $key =&gt; $cell) {
-		$o.="&lt;td&gt;$cell&lt;/td&gt;\n";
+		$o.="&lt;td&gt;$cell&lt;/td&gt;";
 	}
 	$o .= "&lt;/tr&gt;\n";
 }
+
 $o .= "&lt;/table&gt;";
+$o = ereg_replace("&lt;td&gt;[0\.]+&lt;/td&gt;", "&lt;/td&gt;&lt;td&gt;", $o); // delete zeros
 echo $o;
 ?&gt;</string>
 	<key>input</key>

@@ -119,7 +119,7 @@ STDIN.each_line do |line|
 
 	
 	# remember the current line for later
-	last_line = line
+  last_line = line if line.chomp.length > 0
 		
 	case line
 		

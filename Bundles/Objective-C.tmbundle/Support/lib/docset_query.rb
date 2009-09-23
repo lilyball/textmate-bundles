@@ -7,10 +7,7 @@ require SUPPORT + '/lib/ui'
 
 DOCSET_CMD = "/Developer/usr/bin/docsetutil search -skip-text -query "
 
-DOCSETS =  [
- "/Developer/Documentation/DocSets/com.apple.ADC_Reference_Library.CoreReference.docset",
- "/Developer/Platforms/iPhoneOS.platform/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleiPhone2_0.iPhoneLibrary.docset"
-]
+DOCSETS = Dir.glob("/Developer/Documentation/DocSets/*.docset")
 
 
 Man = Struct.new(:url, :language, :klass)
@@ -67,9 +64,7 @@ end
 	
 def search_docs (query)
 	results = []
-	DOCSETS.each do |docset|
-		next unless File.exists? docset
-		
+	DOCSETS.each do |docset|		
 		cmd = DOCSET_CMD + query + ' ' + docset
 		response = `#{cmd}`
 			

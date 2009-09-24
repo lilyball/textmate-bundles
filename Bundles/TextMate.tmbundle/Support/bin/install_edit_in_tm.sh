@@ -1,7 +1,7 @@
-SRC="$TM_APP_PATH/Contents/Resources/Edit in TextMate"
+SRC="$TM_BUNDLE_SUPPORT/Edit in TextMate"
 
 # check if we have the input manager in TextMate.app
-[[ ! -d "$SRC" ]] && { echo "<h2>Error</h2><p>The input manager (<tt>$SRC</tt>) was not found in the TextMate application bundle.</p><p>You may need a newer version of TextMate.</p>"; exit; }
+[[ ! -d "$SRC" ]] && { echo "<h2>Error</h2><p>The input manager (<tt>$SRC</tt>) was not found in the TextMate bundle.</p><p>You may need a newer version of TextMate.</p>"; exit; }
 
 osascript 2>&1 <<-APPLESCRIPT
 	do shell script "mkdir -p /Library/InputManagers &&

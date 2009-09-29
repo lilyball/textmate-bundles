@@ -5,7 +5,18 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>"$TM_BUNDLE_SUPPORT/bin/Textile.rb"</string>
+	<string>#!/usr/bin/env ruby
+begin 
+  require 'rubygems'
+  require 'redcloth'
+rescue LoadError
+  require "#{ENV['TM_SUPPORT_PATH']/lib/redcloth"
+end
+
+contents = []
+$stdin.each_line { |line| contents &lt;&lt; line }
+
+puts(RedCloth.new(contents.join()).to_html(:textile))</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>

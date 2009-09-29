@@ -5,29 +5,26 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_SUPPORT_PATH/lib/html.sh"
+	<string>#!/usr/bin/env ruby
+begin 
+  require 'rubygems'
+  require 'redcloth'
+rescue LoadError
+  require "#{ENV['TM_SUPPORT_PATH']/lib/redcloth"
+end
 
-if [[ -z $TM_FILENAME ]]
-  then title="Textile as HTML"
-  else title="${TM_FILENAME%.*} as HTML"
-fi
+require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/htmloutput"
 
-htmlHeader "$title" '&lt;style type="text/css"&gt;
-	body {	
-		background-color: #eee;
-	}
-	.contents {	
-		background: white;
-		font-family: Verdena, sans-serif;
-		font-size: 13px;
-		border: 1px #888 solid;
-		padding: 0 1em;
-	}
-	&lt;/style&gt;'
-beginTag div 'contents'
-	"$TM_BUNDLE_SUPPORT/bin/Textile.rb"
-endTag
-htmlFooter</string>
+contents = []
+$stdin.each_line { |line| contents &lt;&lt; line }
+
+output = RedCloth.new(contents.join()).to_html(:textile)
+
+TextMate::HTMLOutput.show(:title =&gt; "Textile Preview", :sub_title =&gt; ENV['TM_FILENAME']) do |io|
+  io &lt;&lt; output
+ end
+
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

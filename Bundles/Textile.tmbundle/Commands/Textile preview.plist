@@ -10,7 +10,7 @@ begin
   require 'rubygems'
   require 'redcloth'
 rescue LoadError
-  require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth"
+  require ENV['TM_BUNDLE_SUPPORT'] + '/lib/redcloth'
 end
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/htmloutput"

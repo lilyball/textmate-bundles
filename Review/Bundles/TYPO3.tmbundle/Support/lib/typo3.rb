@@ -624,7 +624,7 @@ TEXT
     html = `. "${TM_SUPPORT_PATH}/lib/webpreview.sh"; html_header Preview Blogging`
     case format
       when /\.textile/
-        require "#{ENV['TM_SUPPORT_PATH']}/lib/redcloth.rb"
+        require ENV['TM_BUNDLE_SUPPORT'] + '/lib/redcloth'
         html += RedCloth.new(doc).to_html
       when /\.markdown/
         require "#{ENV['TM_SUPPORT_PATH']}/lib/bluecloth.rb"

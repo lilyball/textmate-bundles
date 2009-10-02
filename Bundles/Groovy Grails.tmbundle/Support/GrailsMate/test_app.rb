@@ -1,1 +1,0 @@
-GrailsCommand.new("test-app").run

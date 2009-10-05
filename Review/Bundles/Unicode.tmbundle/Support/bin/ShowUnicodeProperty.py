@@ -12,13 +12,18 @@ from UniTools import *
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 sys.stdin  = codecs.getreader('utf-8')(sys.stdin)
 
-source1 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
-CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/kanji.db"
-source2 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
-CharPaletteServer.app/Contents/Resources/Radical.plist"
-source3 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
-CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/\
-Resources/CharPaletteRelatedChar.charDict"
+if os.uname()[2].split(".")[0] == "10":
+	source1 = "/System/Library/Input Methods/CharacterPalette.app/Contents/Frameworks/CharacterPaletteFramework.framework/Resources/kanji.db"
+	source2 = "/System/Library/Input Methods/CharacterPalette.app/Contents/Resources/Radical.plist"
+	source3 = "/System/Library/Input Methods/CharacterPalette.app/Contents/Frameworks/CharacterPaletteFramework.framework/Resources/CharPaletteRelatedChar.charDict"
+else:
+	source1 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
+	CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/Resources/kanji.db"
+	source2 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
+	CharPaletteServer.app/Contents/Resources/Radical.plist"
+	source3 = "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/\
+	CharPaletteServer.app/Contents/Frameworks/CharacterPaletteFramework.framework/Versions/A/\
+	Resources/CharPaletteRelatedChar.charDict"
 
 bundleLibPath = os.environ["TM_BUNDLE_SUPPORT"] + "/lib/"
 
@@ -116,7 +121,7 @@ if "CJK" in name and ("IDEO" in name or "Ideo" in name):
         outDict['Strokes (trad.)'] = str(int(RadStrokeCnt) + int(ExtStrokeCnt))
 
     # get all data from Apple's internal UniDict
-    cmd = "sqlite3 " + source1 + " 'select * from unihan_dict where uchr=\"" + char + "\";'"
+    cmd = "sqlite3 '" + source1 + "' 'select * from unihan_dict where uchr=\"" + char + "\";'"
     udata = os.popen(cmd.encode("UTF-8")).read().decode("UTF-8")
     if udata:
         (uChar, a1, readings, hangul_name_sound, pinyin, zhWubiXing, 

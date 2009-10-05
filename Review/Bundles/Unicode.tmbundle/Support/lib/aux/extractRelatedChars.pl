@@ -5,11 +5,17 @@
 
 use bytes;
 
-open F, '/System/Library/Components/CharacterPalette.component/'
-	. 'Contents/SharedSupport/CharPaletteServer.app/'
-	. 'Contents/Frameworks/CharacterPaletteFramework.framework/'
-	. 'Versions/A/Resources/CharPaletteRelatedChar.charDict'
-							or die "couldn't open charDict file";
+## MacOSX 10.5.x
+# open F, '/System/Library/Components/CharacterPalette.component/'
+# 	. 'Contents/SharedSupport/CharPaletteServer.app/'
+# 	. 'Contents/Frameworks/CharacterPaletteFramework.framework/'
+# 	. 'Versions/A/Resources/CharPaletteRelatedChar.charDict'
+# 							or die "couldn't open charDict file";
+
+## MacOSX 10.6.x
+open F, "/System/Library/Input Methods/CharacterPalette.app/Contents/Frameworks/CharacterPaletteFramework.framework/Resources/CharPaletteRelatedChar.charDict"
+or die "couldn't open charDict file";
+
 
 print "\xFE\xFF";	#print BOM
 

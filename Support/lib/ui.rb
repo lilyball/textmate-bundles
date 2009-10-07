@@ -130,6 +130,8 @@ module TextMate
           STDOUT.reopen(open('/dev/null'))
           STDERR.reopen(open('/dev/null'))
 
+          `"$DIALOG" x-insert --snippet #{e_sh options[:key_pressed]}` unless options[:key_pressed].nil?
+          
           unless options.has_key? :initial_filter
             require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
             characters = "a-zA-Z0-9" # Hard-coded into D2
@@ -137,8 +139,9 @@ module TextMate
             options[:initial_filter] = Word.current_word characters, :left
           end
 
-          command =  "#{TM_DIALOG} popup --returnChoice"
-          command << " --alreadyTyped #{e_sh options[:initial_filter]}"
+          command =  "#{TM_DIALOG} popup"
+          command << " --returnChoice"                                           if options[:dont_return_choice].nil?
+          command << " --alreadyTyped #{e_sh options[:initial_filter]}"          if options[:initial_filter]
           command << " --staticPrefix #{e_sh options[:static_prefix]}"           if options[:static_prefix]
           command << " --additionalWordCharacters #{e_sh options[:extra_chars]}" if options[:extra_chars]
           command << " --caseInsensitive"                                        if options[:case_insensitive]
@@ -160,6 +163,7 @@ module TextMate
           to_insert = block.call(result).to_s
 
           # Insert the snippet if necessary
+
           `"$DIALOG" x-insert --snippet #{e_sh to_insert}` unless to_insert.empty?
         end
       end

@@ -24,7 +24,7 @@ struct tokenizer_t
 		enum type_t { option, value, literal, end } type;
 		string word;
 
-		token_t (type_t type = end, NSString* word) : type(type), word([word UTF8String]) { }
+		token_t (type_t type, NSString* word) : type(type), word([word UTF8String]) { }
 		token_t (type_t type = end, string word = "") : type(type), word(word) { }
 	};
 

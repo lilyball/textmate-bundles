@@ -308,7 +308,15 @@
 			}
 			else if(key == NSCarriageReturnCharacter)
 			{
-				[self completeAndInsertSnippet];
+				if([filtered count] == 0)
+				{
+					[NSApp sendEvent:event];
+					break;
+				}
+				else
+				{
+					[self completeAndInsertSnippet];
+				}
 			}
 			else if(key == NSBackspaceCharacter || key == NSDeleteCharacter)
 			{

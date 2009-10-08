@@ -81,50 +81,28 @@ def gitInfo(bundle)
   url =~ /.*?com\/(.*?)\/(.*)/
   owner = $1
   projectName = url.gsub(/.*?com\/(.*?)\/(.*)/, '\2')
-  unless projectName =~ /\./
 
-    begin
-      GBTimeout::timeout($timeout) do
-        d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{projectName}"})
-        if d.has_key?('repositories') and d['repositories'].size > 0
-          d['repositories'].each do |r|
-            if r['username'] == owner
-              info = r
-              break
-            end
-          end
-        else
-          # if .../search/foo-bar-foo1 fails try .../search/foo+bar+foo1
-          d = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/search/#{path.gsub('-','+')}"})
-          if d.has_key?('repositories') and d['repositories'].size > 0
-            d['repositories'].each do |r|
-              if r['username'] == owner
-                info = r
-                break
-              end
-            end
-          # if .../search/foo+bar+foo1 fails init an empty dict
-          else
-            info = {}
-          end
-        end
+  begin
+    GBTimeout::timeout($timeout) do
+      d = YAML.load(%x{curl -sSL "http://github.com/api/v2/yaml/repos/show/#{owner}/#{projectName}"})
+      if d.has_key?('repository')
+        info = d['repository']
+      else
+        info = {}
+        info[:description] = "<font color=silver><small>no data available</small></font>"
+        info[:watchers] = "<font color=silver><small>no data available</small></font>"
+        info[:private] = "<font color=silver><small>no data available</small></font>"
+        info[:forks] = "<font color=silver><small>no data available</small></font>"
+        info[:fork] = "<font color=silver><small>no data available</small></font>"
+        info[:owner] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
       end
-    rescue GBTimeout::Error
-      $params['isBusy'] = false
-      updateDIALOG
-      removeTempDir
-      writeToLogFile("Timeout error while fetching information") if ! $close
-      return
     end
-
-  else # github project contains a dot => due to a bug of github's API no info
-    namehasdot = true
-    info = {}
-    info['description'] = "<font color=silver><small>no data available</small></font>"
-    info['watchers'] = "<font color=silver><small>no data available</small></font>"
-    info['private'] = "<font color=silver><small>no data available</small></font>"
-    info['forks'] = "<font color=silver><small>no data available</small></font>"
-    info['username'] = url.gsub(/.*?com\/(.*?)\/.*/,'\1')
+  rescue GBTimeout::Error
+    $params['isBusy'] = false
+    updateDIALOG
+    removeTempDir
+    writeToLogFile("Timeout error while fetching information") if ! $close
+    return
   end
 
   return if $close
@@ -136,7 +114,7 @@ def gitInfo(bundle)
     GBTimeout::timeout(10) do
       loop do
         begin
-          commits = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/#{info['username']}/#{projectName}/commits/master"})['commits'].first
+          commits = YAML.load(%x{curl -sSL "http://github.com/api/v1/yaml/#{info[:owner]}/#{projectName}/commits/master"})['commits'].first
           lastCommit = commits['committed_date']
         rescue
           lastCommit = nil
@@ -224,9 +202,9 @@ def gitInfo(bundle)
       <font color='blue' size=12pt>#{plist['name']}</font><br /><br />
       #{updateinfo}
       <h3><u>git Information:</u></h3>#{gitbugreport}
-      <b>Description:</b><br />&nbsp;#{info['description']}<br />
+      <b>Description:</b><br />&nbsp;#{info[:description]}<br />
       <b>URL:</b><br />&nbsp;<a href='#{url}'>#{url}</a><br />
-      <b>Username:</b><br />&nbsp;<a href='http://github.com/#{info['username']}'>#{info['username']}</a><br />
+      <b>Username:</b><br />&nbsp;<a href='http://github.com/#{info[:owner]}'>#{info[:owner]}</a><br />
       HTML
       
       if ! commits.nil?
@@ -243,7 +221,8 @@ def gitInfo(bundle)
       end
       
       io << <<-HTML
-      <b>Forks:</b><br />&nbsp;#{info['forks']}<br />
+      <b>Forks:</b><br />&nbsp;#{info[:forks]}<br />
+      <b>Forked:</b><br />&nbsp;#{info[:fork]}<br />
       <b>Last Modified:</b><br />&nbsp;#{Time.parse(lastCommit).getutc.to_s}<br />
       HTML
 

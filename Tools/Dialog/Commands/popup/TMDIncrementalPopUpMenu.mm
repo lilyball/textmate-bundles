@@ -151,7 +151,8 @@
 	[theTableView setFocusRingType:NSFocusRingTypeNone];
 	[theTableView setAllowsEmptySelection:NO];
 	[theTableView setHeaderView:nil];
-
+	//[theTableView setBackgroundColor:[NSColor blackColor]];
+	 
 	NSTableColumn *column = [[[NSTableColumn alloc] initWithIdentifier:@"foo"] autorelease];
 	[column setDataCell:[NSClassFromString(@"OakImageAndTextCell") new]];
 	[column setEditable:NO];
@@ -159,10 +160,16 @@
 	[column setWidth:[theTableView bounds].size.width];
 
 	[theTableView setDataSource:self];
+	//[theTableView setDelegate:self];
 	[scrollView setDocumentView:theTableView];
 
 	[self setContentView:scrollView];
 }
+
+//- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
+//	[aCell setTextColor:[NSColor blueColor]];
+//}
+
 
 // ========================
 // = TableView DataSource =
@@ -192,14 +199,25 @@
 	NSRect mainScreen = [self rectOfMainScreen];
 	
 	NSArray* newFiltered;
+	NSArray* itemsWithChildren;
 	if([mutablePrefix length] > 0)
 	{
-		NSPredicate* predicate;
+		NSPredicate* matchesFilter;
+		NSPredicate* hasChildren;
 		if(caseSensitive)
-			predicate = [NSPredicate predicateWithFormat:@"match BEGINSWITH %@ OR (match == NULL AND display BEGINSWITH %@)", [self filterString], [self filterString]];
+			matchesFilter = [NSPredicate predicateWithFormat:@"match BEGINSWITH %@ OR (match == NULL AND display BEGINSWITH %@)", [self filterString], [self filterString]];
 		else
-			predicate = [NSPredicate predicateWithFormat:@"match BEGINSWITH[c] %@ OR (match == NULL AND display BEGINSWITH[c] %@)", [self filterString], [self filterString]];
-		newFiltered = [suggestions filteredArrayUsingPredicate:predicate];
+			matchesFilter = [NSPredicate predicateWithFormat:@"match BEGINSWITH[c] %@ OR (match == NULL AND display BEGINSWITH[c] %@)", [self filterString], [self filterString]];
+		newFiltered = [suggestions filteredArrayUsingPredicate:matchesFilter];
+		if ([newFiltered count] == 1){
+			newFiltered = [newFiltered arrayByAddingObjectsFromArray:[[newFiltered lastObject] objectForKey:@"children"]];
+		} else if ([newFiltered count] == 0) {
+			hasChildren =  [NSPredicate predicateWithFormat:@"children != NULL"];
+			itemsWithChildren = [suggestions filteredArrayUsingPredicate:hasChildren];
+			for (i=0; i<[itemsWithChildren count]; i++) {
+				newFiltered=[newFiltered arrayByAddingObjectsFromArray:[[[itemsWithChildren objectAtIndex:i] objectForKey:@"children"] filteredArrayUsingPredicate:matchesFilter]];
+			}
+		}
 	}
 	else
 	{

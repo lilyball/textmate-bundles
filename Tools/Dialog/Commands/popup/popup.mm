@@ -4,7 +4,7 @@
 #import "../Utilities/TextMate.h" // -positionForWindowUnderCaret
 
 /*
-"$DIALOG" popup --suggestions '( { display = "**law**"; image = NSRefreshTemplate; match = "law"; }, { display = "**laws**"; match = "laws"; insert = "(${1:hello}, ${2:again})"; } )'
+"$DIALOG" popup --suggestions '( { display = "**law**"; image = NSRefreshTemplate; match = "law"; }, { display = "**laws**"; match = "laws"; insert = "(${1:hello}, ${2:again})"; children=({display="lawsless";}); } )'
 */
 
 // ==================

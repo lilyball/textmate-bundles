@@ -198,6 +198,7 @@
 {
 	NSRect mainScreen = [self rectOfMainScreen];
 	
+	int i;
 	NSArray* newFiltered;
 	NSArray* itemsWithChildren;
 	if([mutablePrefix length] > 0)
@@ -230,7 +231,7 @@
 	
 	float maxLen = 1;
 	NSString* item;
-	int i;
+
 	float maxWidth = [self frame].size.width;
 	if([newFiltered count]>0)
 	{

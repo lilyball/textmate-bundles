@@ -187,7 +187,15 @@ module TextMate
     project_dir = ENV['TM_PROJECT_DIRECTORY']
     current_file = ENV['TM_FILEPATH']
 
-    if project_dir then
+    if selected_files then
+      selected_files.each do |path|
+        if File.directory? path
+          scan_dir(path, block, ProjectFileFilter.new)
+        else
+          block.call(path)
+        end
+      end
+    elsif project_dir then
       TextMate.scan_dir(project_dir, block, ProjectFileFilter.new)
     elsif current_file then
       block.call(current_file)

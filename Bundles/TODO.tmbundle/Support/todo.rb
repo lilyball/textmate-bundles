@@ -13,6 +13,14 @@ end
 
 require "#{ENV['TM_SUPPORT_PATH']}/lib/web_preview"
 
+if ARGV.size > 0
+  if ARGV[0] == 'file'
+   ENV.delete 'TM_PROJECT_DIRECTORY'
+  elsif ARGV[0] == 'dir'
+   ENV['TM_PROJECT_DIRECTORY'] = File.dirname ENV['TM_FILEPATH']
+  end
+end
+
 if ENV['TM_PROJECT_DIRECTORY'] == '/'
   puts html_head(:window_title => "TODO", :page_title => "TODO List", :sub_title => "Error")
   puts <<-HTML
@@ -57,6 +65,7 @@ puts ERB.new(File.read("#{ENV['TM_BUNDLE_SUPPORT']}/template_head.rhtml"), 0, '<
 
 STDOUT.flush
 
+project_dir = ENV['TM_PROJECT_DIRECTORY']
 home_dir = /^#{Regexp.escape ENV['HOME']}/
 total = 0
 TextMate.each_text_file do |file|
@@ -70,7 +79,9 @@ TextMate.each_text_file do |file|
           :file => file,
           :line => io.lineno,
           :content => content,
-          :type => tag[:label]
+          :type => tag[:label],
+          :rendered => '',
+          :index => tag[:matches].length
         }
         if tag[:label] == "RADAR" then
           url, display = "http://openradar.appspot.com/" + $2, "rdar://" + $2
@@ -78,11 +89,14 @@ TextMate.each_text_file do |file|
         else
           match[:match] = html_escape($1)
         end
+        match[:clean] = match[:content].gsub(/\s+/, " ").gsub(/[^\w@`~!@#\$%\^&*\(\)-=+\[\]|\\\'\"\{\}<>,.\/\? ]/i, "")
+        
         tag[:matches] << match
         count = tag[:matches].length
         total += 1
         puts ERB.new(File.read("#{ENV['TM_BUNDLE_SUPPORT']}/template_update.rhtml"), 0, '<>').result(binding)
-        tag[:rendered] += ERB.new(File.read("#{ENV['TM_BUNDLE_SUPPORT']}/template_item.rhtml"), 0, '<>').result binding
+        match[:rendered] = ERB.new(File.read("#{ENV['TM_BUNDLE_SUPPORT']}/template_item.rhtml"), 0, '<>').result binding
+        tag[:rendered] += match[:rendered]
         STDOUT.flush
       end
     end if File.readable?(file)

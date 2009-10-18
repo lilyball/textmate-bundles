@@ -70,6 +70,15 @@
 	padding: 2px;
 }
 
+#todo_list .todo_hidden {
+  display: none;
+}
+
+/* TODO: alternate row bg colors don't work anymore with filtering */
+/*#todo_list table.todo_content tr[class=""]:nth-child(even) {
+  background-color: rgba(127,127,127,0.15);
+}*/
+
 #toplink {
 	position: fixed;
 	bottom: 1em;

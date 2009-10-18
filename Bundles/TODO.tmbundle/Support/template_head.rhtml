@@ -2,10 +2,15 @@
 	function goTo(id) {
 	  document.body.scrollTop = document.getElementById(id).offsetTop + 8;
 	}
+	window["_todo"] = {};
+	window["_tags"] = [];
+	<% tags.each do |tag| %>
+		window["_tags"].push("<%= tag[:label] %>");
+		window["_todo"]["<%= tag[:label] %>"] = [];
+	<% end %>
 </script>
 
 <div id="todo_list">
-
 	<ul class="counters">
 		<% tags.each do |tag| %>
 			<li id="counter_tab_<%= tag[:label].sub(/\W/, '_') %>" class="bg_<%= tag[:label].sub(/\W/, '_') %>" <% if tag[:trim_if_empty] then %>style="display: none;"<% end %>><a onclick="goTo('jump_to_<%= tag[:label].sub(/\W/, '_') %>'); return false;" href="#jump_to_<%= tag[:label].sub(/\W/, '_') %>" accesskey="<%= tag[:label][0..0] %>"><%= tag[:label] %></a>: <span id="count_<%= tag[:label].sub(/\W/, '_') %>">0</span></li>

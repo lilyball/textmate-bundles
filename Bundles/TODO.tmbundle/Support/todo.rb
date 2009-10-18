@@ -83,13 +83,14 @@ TextMate.each_text_file do |file|
           :rendered => '',
           :index => tag[:matches].length
         }
+        part = $1
         if tag[:label] == "RADAR" then
           url, display = "http://openradar.appspot.com/" + $2, "rdar://" + $2
           match[:match] = html_escape($1) + "<a href=\"" + url + "\" target=\"_blank\">" + html_escape(display) + "</a>" + html_escape($3)
         else
-          match[:match] = html_escape($1)
+          match[:match] = html_escape(part)
         end
-        match[:clean] = match[:content].gsub(/\s+/, " ").gsub(/[^\w@`~!@#\$%\^&*\(\)-=+\[\]|\\\'\"\{\}<>,.\/\? ]/i, "")
+        match[:clean] = part.gsub(/\s+/, " ").gsub(/[^\w@`~!@#\$%\^&*\(\)-=+\[\]|\\\'\"\{\}<>,.\/\? ]/i, "")
         
         tag[:matches] << match
         count = tag[:matches].length

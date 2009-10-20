@@ -1,22 +1,5 @@
-# This script simulates the behavior of a login shell
-# This is done to give the user a full PATH
-
 unset BASH_ENV # avoid recursively running this script
 export LC_CTYPE="en_US.UTF-8"
-
-: ${TM_BASH_INIT:=$HOME/Library/Application Support/TextMate/bash_init.sh}
-if [ ! -f "$TM_BASH_INIT" ]; then
-
-	# First read the system-wide profile
-	[ -f /etc/profile ] && . /etc/profile               &>/dev/null
-
-	# Now find the first local profile, just like a normal login shell
-	if   [ -f ~/.bash_profile ]; then . ~/.bash_profile &>/dev/null
-	elif [ -f ~/.bash_login ];   then . ~/.bash_login   &>/dev/null
-	elif [ -f ~/.profile ];      then . ~/.profile      &>/dev/null
-	fi
-
-fi
 
 set +u # avoid warning when we use unset variables (if user had ‘set -u’ in his profile)
 
@@ -33,6 +16,7 @@ fi
 
 export PATH
 
+: ${TM_BASH_INIT:=$HOME/Library/Application Support/TextMate/bash_init.sh}
 if [[ -f "$TM_BASH_INIT" ]]; then
 	. "$TM_BASH_INIT"
 fi

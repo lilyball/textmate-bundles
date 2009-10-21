@@ -3,14 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>include "${1:path/filename.as}";</string>
+	<string>with ($1)
+{
+	$0
+}
+
+</string>
 	<key>name</key>
-	<string>include</string>
-	<key>scope</key>
-	<string>source.actionscript.3</string>
+	<string>with</string>
 	<key>tabTrigger</key>
-	<string>include</string>
+	<string>with</string>
 	<key>uuid</key>
-	<string>CA4C97D5-48C1-4BEC-9F29-9C2C36E0D344</string>
+	<string>997A416B-40F3-4BDB-B33A-6B8D9C9220EC</string>
 </dict>
 </plist>

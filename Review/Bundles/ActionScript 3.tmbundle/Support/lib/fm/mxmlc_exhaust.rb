@@ -6,121 +6,169 @@
 #
 class MxmlcExhaust
 
-	# Constants to track switches in matches (to prettify output).
-	CONFIGURATION_MATCH    = "configuration_match"
-	ERROR_WARN_MATCH       = "error_warn_match"
-	RECOMPILE_REASON_MATCH = "recompile_reason_match"
+  attr_accessor :print_output
+  attr_reader :error_count
+  attr_reader :line_count
+  
+  # Constants to track switches in matches (to prettify output).
+  CONFIGURATION_MATCH    = "configuration_match"
+  ERROR_WARN_MATCH       = "error_warn_match"
+  RECOMPILE_REASON_MATCH = "recompile_reason_match"
 
-	# Instance initialisation. Creates the regex objects once, and set's the
-	# error counter to 0. One instance should be created per mxmlc compile
-	# otherwise the error counter will be inaccurate.
-	#
-	def initialize()
+  # Instance initialisation. Creates the regex objects once, and set's the
+  # error counter to 0. One instance should be created per mxmlc compile
+  # otherwise the error counter will be inaccurate.
+  #
+  def initialize()
+    
+    @line_count = 0
+    @error_count = 0
+    @last_match = ""
+    @print_output = false
 
-		@error_count = 0
-		@last_match = ""
+    @error_and_warn_regex = /(\/.*?)(\(([0-9]+)\)|):.*(Error|Warning):\s*(.*)$/
+    @config_file_regex    = /(^Loading configuration file )(.*)$/
+    @recompile_file_regex = /(^Recompile: )(.*)$/
+    @reason_file_regex    = /(^.*, )(.*,)(.*)$/
 
-		@error_and_warn_regex = /(\/.*?)(\(([0-9]+)\)|):.*(Error|Warning):\s*(.*)$/
-		@config_file_regex    = /(^Loading configuration file )(.*)$/
-		@recompile_file_regex = /(^Recompile: )(.*)$/
-		@reason_file_regex    = /(^.*, )(.*,)(.*)$/
+  end
 
-	end
+  # Processes a single line of mxmlc compiler output. HTML is generated with
+  # links back to source and configuration files where appropriate.
+  #
+  def line(str)
+    output = parse_line(str)
+    print output if print_output
+    output
+  end
 
-	# Processes a single line of mxmlc compiler output. HTML is generated with
-	# links back to source and configuration files where appropriate.
-	#
-	def line(str)
+  # This method should be called once compilations is complete. It outputs
+  # formatted html that describes the number of errors encountered.
+  #
+  def complete
+    output = ""
+    output << "<br/> WARNING no output recieved" if @line_count == 0
+    err = (@error_count == 1) ?  "error" : "errors"
+    output << "<br/>Build complete, #{ @error_count.to_s } #{err} occured."
+    print output if print_output
+    output
+  end
+  
+  protected
+  
+  def parse_line(str)
+    @line_count += 1
+    match = @error_and_warn_regex.match(str)
+    out = ""
+    
+    begin
 
-		match = @error_and_warn_regex.match(str)
+      unless match === nil
+        out << "<br/>" if @last_match != ERROR_WARN_MATCH
+        if match[3] == nil
+          out << 'Error ' + match[5] +
+                ' in <a title="'+match[1] +
+                '" href="txmt://open?url=file://' + match[1] + '">' +
+                File.basename( match[1] ) + '</a><br/>'
+        else
+          out << 'Error <a title="Click to show error." href="txmt://open?url=file://' + match[1] +
+                '&line='+ match[3] +
+                '" >' + match[5] +
+                '</a> at line ' + match[3] +
+                ' in <a title="'+match[1] +
+                '" href="txmt://open?url=file://' + match[1] + '">' +
+                File.basename( match[1] ) + '</a><br/>'
+        end
+        @error_count += 1
+        @last_match = ERROR_WARN_MATCH
+        return out
+      end
 
-		begin
+      match = @config_file_regex.match(str)
+      unless match === nil
+          out << "<br/>" if @last_match != CONFIGURATION_MATCH
+          out << 'Loading configuration file: <a title="Click to open ' + match[2] +
+          '" href="txmt://open?url=file://' + match[2] + '" >' + File.basename( match[2] ) +'</a><br/>'
+          @last_match = CONFIGURATION_MATCH
+          return out
+      end
 
-			unless match === nil
-				print "<br/>" if @last_match != ERROR_WARN_MATCH
-				if match[3] == nil
-					print 'Error ' + match[5] +
-					      ' in <a title="'+match[1] +
-					      '" href="txmt://open?url=file://' + match[1] + '">' +
-					      File.basename( match[1] ) + '</a><br/>'
-				else
-					print 'Error <a title="Click to show error." href="txmt://open?url=file://' + match[1] +
-					      '&line='+ match[3] +
-					      '" >' + match[5] +
-					      '</a> at line ' + match[3] +
-					      ' in <a title="'+match[1] +
-					      '" href="txmt://open?url=file://' + match[1] + '">' +
-					      File.basename( match[1] ) + '</a><br/>'
-				end
-				@error_count += 1
-				@last_match = ERROR_WARN_MATCH
-				return
-			end
+      match = @recompile_file_regex.match(str)
+      unless match === nil
+          out << "<br/>" if @last_match != RECOMPILE_REASON_MATCH
+          out << 'Recompiling: <a title="Click to open ' + match[2] +
+          '" href="txmt://open?url=file://' + match[2] + '" >' + File.basename( match[2] )+'</a><br/>'
+          @last_match = RECOMPILE_REASON_MATCH
+          return out
+      end
 
-			match = @config_file_regex.match(str)
-			unless match === nil
-			    print "<br/>" if @last_match != CONFIGURATION_MATCH
-			    print 'Loading configuration file: <a title="Click to open ' + match[2] +
-			    '" href="txmt://open?url=file://' + match[2] + '" >' + File.basename( match[2] ) +'</a><br/>'
-			    @last_match = CONFIGURATION_MATCH
-			    return
-			end
+      match = @reason_file_regex.match(str)
+      unless match === nil
+          out << "<br/>" if @last_match != RECOMPILE_REASON_MATCH
+          out << match[1]+'<a title="Click to open ' + match[2] + '" href="txmt://open?url=file://' + match[2] +
+          '" >' + File.basename( match[2] )+'</a> ' + match[3] + '<br/>'
+          @last_match = RECOMPILE_REASON_MATCH
+          return out
+      end
 
-			match = @recompile_file_regex.match(str)
-			unless match === nil
-			    print "<br/>" if @last_match != RECOMPILE_REASON_MATCH
-			    print 'Recompiling: <a title="Click to open ' + match[2] +
-			    '" href="txmt://open?url=file://' + match[2] + '" >' + File.basename( match[2] )+'</a><br/>'
-			    @last_match = RECOMPILE_REASON_MATCH
-			    return
-			end
+      if str =~ /^(.*\.swf)( \([0-9].*$)/
+          cmd = "open #{e_sh($1)}"
+          out << '<script type="text/javascript" charset="utf-8">function openSwf(){TextMate.system(\''+cmd+'\', null);}</script>'
+          out << "<br/><a href='javascript:openSwf()' title='Click to run (if there is space in the file path this may not work).'>#{$1}</a>#{$2}<br/>"
+      end
 
-			match = @reason_file_regex.match(str)
-			unless match === nil
-			    print "<br/>" if @last_match != RECOMPILE_REASON_MATCH
-			    print match[1]+'<a title="Click to open ' + match[2] + '" href="txmt://open?url=file://' + match[2] +
-			    '" >' + File.basename( match[2] )+'</a> ' + match[3] + '<br/>'
-			    @last_match = RECOMPILE_REASON_MATCH
-			    return
-			end
+    rescue TypeError
 
-			if str =~ /^(.*\.swf)( \([0-9].*$)/
-			    cmd = "open #{e_sh($1)}"
-          puts '<script type="text/javascript" charset="utf-8">function openSwf(){TextMate.system(\''+cmd+'\', null);}</script>'
-			    puts "<br/><a href='javascript:openSwf()' title='Click to run (if there is space in the file path this may not work).'>#{$1}</a>#{$2}<br/>"
-			end
+        out << "WARNING, TextMate ActionScript 3 Bundle Error, Unable to parse mxmlc output: <br/><br/>"
+        out << "#{str}<br/>"
 
-		rescue TypeError
+        @error_count += 1
 
-				puts "WARNING, TextMate ActionScript 3 Bundle Error, Unable to parse mxmlc output: <br/><br/>"
-				puts "#{str}<br/>"
-
-				@error_count += 1
-
-		end
-
-	end
-
-	# This method should be called once compilations is complete. It outputs
-	# formatted html that describes the number of errors encountered.
-	#
-	def complete
-		err = (@error_count == 1) ?  "error" : "errors"
-		print "<br/>Build complete, #{ @error_count.to_s } #{err} occured."
-	end
+    end
+    
+    out
+    
+  end
 
 end
 
 if __FILE__ == $0
 
-	exhaust = MxmlcExhaust.new
-	exhaust.line("Loading configuration file /Developer/SDKs/flex_sdk_3.1.0/frameworks/flex-config.xml")
-	exhaust.line("Loading configuration file /Users/simon/Documents/Code2/textmate/as3_bundle_tests/compiler/src/CompileTest-config.xml")
-	exhaust.line("deploy/CompileTest.swf (417 bytes)")
-	exhaust.complete
+  require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+  
+  require "test/unit"
+  
+  class TestSettings < Test::Unit::TestCase
+    
+    def in_out
+      [
+        { :in => 'Loading configuration file /Developer/SDKs/flex_sdk_3.1.0/frameworks/flex-config.xml',
+          :out => '<br/>Loading configuration file: <a title="Click to open /Developer/SDKs/flex_sdk_3.1.0/frameworks/flex-config.xml" href="txmt://open?url=file:///Developer/SDKs/flex_sdk_3.1.0/frameworks/flex-config.xml" >flex-config.xml</a><br/>'
+        },
+        {
+          :in => "/Users/simon/Documents/code/actionscript_3/flex_unit/trunk/FlexUnitTest/src/FlexUnitTestRunner.mxml: Error: Unable to locate specified base class 'FlexUnitTestRunnerApplication' for component class 'FlexUnitTestRunner'.",
+          :out => "<br/>Error Unable to locate specified base class 'FlexUnitTestRunnerApplication' for component class 'FlexUnitTestRunner'. in <a title=\"/Users/simon/Documents/code/actionscript_3/flex_unit/trunk/FlexUnitTest/src/FlexUnitTestRunner.mxml\" href=\"txmt://open?url=file:///Users/simon/Documents/code/actionscript_3/flex_unit/trunk/FlexUnitTest/src/FlexUnitTestRunner.mxml\">FlexUnitTestRunner.mxml</a><br/>", 
+        },
+        {
+          :in => "deploy/CompileTest.swf (417 bytes)",
+          :out => "<script type=\"text/javascript\" charset=\"utf-8\">function openSwf(){TextMate.system('open deploy/CompileTest.swf', null);}</script><br/><a href='javascript:openSwf()' title='Click to run (if there is space in the file path this may not work).'>deploy/CompileTest.swf</a> (417 bytes)<br/>"
+        }
+      ]
+    end
+    
+    def test_exhaust
+      
+      exhaust = MxmlcExhaust.new
 
-	puts "\n\n"
-
-	exhaust.line("/Users/simon/Documents/code/actionscript_3/flex_unit/trunk/FlexUnitTest/src/FlexUnitTestRunner.mxml: Error: Unable to locate specified base class 'FlexUnitTestRunnerApplication' for component class 'FlexUnitTestRunner'.")
-
+      in_out.each { |e|
+        assert_equal(e[:out], exhaust.line(e[:in])) 
+      }
+      
+      assert_equal(1, exhaust.error_count)
+      assert_equal(in_out.length, exhaust.line_count)
+      
+    end
+    
+  end
+  
 end

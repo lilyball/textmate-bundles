@@ -1,54 +1,45 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-if ENV['TM_PROJECT_DIRECTORY']
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/process'
 
-  SUPPORT = ENV['TM_SUPPORT_PATH']
-  BUN_SUP = ENV['TM_BUNDLE_SUPPORT']
+require File.expand_path(File.dirname(__FILE__)) + '/../lib/add_lib'
 
-  require SUPPORT + '/lib/exit_codes'
-  require SUPPORT + '/lib/escape'
-  require SUPPORT + '/lib/textmate'
-  require SUPPORT + '/lib/web_preview'
-  require SUPPORT + '/lib/tm/htmloutput'
+require 'fm/flex_mate'
+require 'fm/sdk'
+require 'fm/compiler'
+require 'fm/settings'
+require 'as3/source_tools'
 
-  require BUN_SUP + '/lib/fm/flex_mate'
-  require BUN_SUP + '/lib/fm/sdk'
-
-  # Start by trying to add the Flex SDK bin to $PATH then testing for fcsh.
-  FlexMate::SDK.add_flex_bin_to_path
-
-  TextMate.require_cmd "fcsh"
-
-  bp = ENV['TM_PROJECT_DIRECTORY']
+#Check for custom build files and execute them where they exist.
+custom = "#{ENV['TM_PROJECT_DIRECTORY']}/#{ENV['TM_FLEX_BUILD_FILE']}"
+if File.file?(custom)
+  if File.executable?(custom)
+    TextMate::Process.run(custom) do |str|
+      STDOUT << str
+    end
+  else
+    puts "WARNING: #{custom} not executable."  
+  end
+  TextMate.exit_show_html
+end
   
-  # TODO check for custom build files and execute them where they exist.
-  #custom = "#{bp}/#{ENV['TM_FLEX_BUILD_FILE']}"  
-  #if File.executable?(custom)
-  # `#{e_sh(custom)}`
-  #end
+if ENV['TM_PROJECT_DIRECTORY'] && ENV['TM_FLEX_USE_FCSH']
   
-  s = { :files => ['TM_FLEX_FILE_SPECS'], 
-        :evars => ['TM_FLEX_OUTPUT'],
-        :base_path => bp }
+  #Requires are needed by FlexMate.required_settings + check_valid_paths
+  require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
+  require ENV['TM_SUPPORT_PATH'] + '/lib/tm/htmloutput'
 
-  FlexMate.required_settings(s)
-
-  file_specs  = bp + '/' + ENV['TM_FLEX_FILE_SPECS']
-  flex_output = bp + '/' + ENV['TM_FLEX_OUTPUT']
-  fcsh       = e_sh(ENV['TM_FLEX_PATH'] + '/bin/fcsh')
-
-  FlexMate.check_valid_paths([file_specs,flex_output,fcsh])
-
-  mxmlc_args="mxmlc -o=#{flex_output} -file-specs=#{file_specs}"
+  c = FlexMate::FcshCompiler.new
+  c.build
   
-  `osascript -e 'tell application "Terminal" to activate'` unless ENV['TM_FLEX_BACKGROUND_TERMINAL']
-  `#{e_sh ENV['TM_BUNDLE_SUPPORT']}/lib/fcsh_terminal \"#{fcsh}\" \"#{mxmlc_args}\" >/dev/null;`
+  TextMate.exit_discard
   
 else
   
-  require ENV['TM_BUNDLE_SUPPORT']+'/lib/flex_env'
-
   STDOUT.sync = true
 
   c = FlexMate::Compiler.new
@@ -57,4 +48,4 @@ else
   #TODO: Get the html window to show immediately.
   TextMate.exit_show_html
 
-end  
+end

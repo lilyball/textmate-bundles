@@ -3,143 +3,147 @@
 
 module FlexMate
 
-	class Compiler
+  class Compiler
 
-		require SUPPORT + '/lib/web_preview'
+    def initialize
+      FlexMate::SDK.add_flex_bin_to_path
+    end
+
+    # Run mxmlc to compile a swf adapting to the current environment as
+    # necessary.
+    #
+    def build
+      
+      bin = 'mxmlc'
+      
+      TextMate.require_cmd(bin)
+      
+      s = FlexMate::Settings.new
+      
+      cmd = MxmlcCommand.new
+      cmd.file_specs = s.file_specs
+      cmd.o = s.flex_output
+      
+      init_html(bin,cmd)
+      
+      exhaust = get_exhaust
+
+      TextMate::Process.run(cmd.line) do |str|
+        STDOUT << exhaust.line(str)
+      end
+
+      STDOUT << exhaust.complete
+
+      html_footer
+
+    end
+    
+    protected
+    
+    # Print initial html header.
+    #
+    def init_html(bin,cmd)
+      
+      require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
+
+      puts html_head( :window_title => "ActionScript 3 Build Command",
+                      :page_title => "Build (#{bin})",
+                      :sub_title => cmd.file_specs_name )
+
+      puts "<h2>Building...</h2>"
+      puts "<p><pre>-file-specs=#{cmd.file_specs}"
+      puts "-o=#{cmd.o}</pre></p>"      
+      
+    end
+    
+    # Create the object responsible for parsing the compiler output.
+    #
+    def get_exhaust
+      require 'fm/mxmlc_exhaust'
+      MxmlcExhaust.new
+    end
+
+  end
+  
+  class FcshCompiler < Compiler
+    def initialize
+      super
+    end
+    
+    # Run mxmlc inside the fcsh wrapper to compile.
+    #
+    def build
+      
+      bin = 'fcsh'
+      
+      TextMate.require_cmd(bin)
+      
+      s = FlexMate::Settings.new
 			
-		# Run mxmlc to compile a swf adapting to the current environment as 
-		# necessary.
-		#
-		def build
+      ENV['TM_FLEX_FILE_SPECS'] = s.file_specs
+      ENV['TM_FLEX_OUTPUT'] = s.flex_output
 
-			FlexMate::SDK.add_flex_bin_to_path
-			TextMate.require_cmd('mxmlc')
+			#WARN: Access s.flex_output after this point will fail. This is because 
+			#      settings expects TM_FLEX_OUTPUT to be relative to the project root
+			#      + we've just set it to a full path.
+      
+      FlexMate.required_settings({ :files => ['TM_FLEX_FILE_SPECS'],
+                                   :evars => ['TM_FLEX_OUTPUT'] })
+      
+      cmd = MxmlcCommand.new
+      cmd.file_specs = ENV['TM_FLEX_FILE_SPECS']
+      cmd.o = ENV['TM_FLEX_OUTPUT']
+      
+      fcsh = e_sh(ENV['TM_FLEX_PATH'] + '/bin/fcsh')
 
-			cmd = MxmlcCommand.new
-			cmd.file_specs = get_file_specs
-			cmd.o = get_flex_output(cmd.file_specs)
-
-			puts html_head( :window_title => "ActionScript 3 Build Command",
-											:page_title => "Build (mxmlc)",
-											:sub_title => cmd.file_specs_name )
-
-			puts "<h2>Building...</h2>"
-			puts "<p><pre>-file-specs=#{cmd.file_specs}"
-			puts "-o=#{cmd.o}</pre></p>"
-
-			exhaust = get_exhaust
-			
-			TextMate::Process.run(cmd.line) do |str|
-				STDOUT << exhaust.line(str)
-			end
-
-			exhaust.complete
-
-			html_footer
-
-		end
-		
-		# Create the object responsible for parsing the compiler output.
-		#
-		def get_exhaust
-			MxmlcExhaust.new
-		end
-		
-		private
-		
-		# Inspects the available environmental variables and gathers the settings 
-		# necessary for the compiler to run. 
-		#
-		def get_file_specs
-
-			proj_dir = ENV['TM_PROJECT_DIRECTORY']
-			file_specs = ENV['TM_FLEX_FILE_SPECS']
-
-			if proj_dir && file_specs
-				file_specs = proj_dir + '/' + file_specs
-				return file_specs if File.exist?(file_specs)
-			end
-
-			if proj_dir
-				file_specs = guess_file_specs(proj_dir)
-				return file_specs unless file_specs.nil? 
-			end
-
-			file_specs = ENV['TM_FILEPATH']
-
-		end
-
-		# When TM_FLEX_OUTPUT and TM_PROJECT_DIRECTORY are defined use them to 
-		# build flex output. Otherwise derive the output from the file specs.
-		#
-		def get_flex_output(fs)
-			
-			flex_output = ENV['TM_FLEX_OUTPUT']
-			proj_dir = ENV['TM_PROJECT_DIRECTORY']
-			
-			if flex_output && proj_dir
-				return proj_dir + '/' + flex_output
-			end
-			
-			fs.sub(/\.(mxml|as)/, ".swf")
-			
-		end
-
-		# Where we have Project Directory but no TM_FLEX_FILE_SPECS set take a look
-		# inside the src/ dir and see if we can work out which file should be
-		# compiled.
-		#
-		def guess_file_specs(proj_dir)
-
-			#TODO: Link to src dir list.
-			possible_src_dirs = ['src','source']
-
-			src_dir = ""
-			fs = []
-
-			possible_src_dirs.each do |d|
-
-				src_dir = proj_dir + '/' + d
-
-				if File.exist?(src_dir)
-
-					Dir.foreach(src_dir) do |f|
-						fs << src_dir + '/' + f if f =~ /\.(as|mxml)$/
-					end
-
-				end
-
-			end
-
-			return fs[0] if fs.size == 1
-
-		end
-
-	end
-
+      #Make sure there are no spaces for fcsh to trip up on.
+      FlexMate.check_valid_paths([cmd.file_specs,cmd.o,fcsh])
+      
+      init_html(bin,cmd)
+      
+      `osascript -e 'tell application "Terminal" to activate'` unless ENV['TM_FLEX_BACKGROUND_TERMINAL']
+      `#{e_sh ENV['TM_BUNDLE_SUPPORT']}/lib/fcsh_terminal \"#{fcsh}\" \"#{cmd.line}\" >/dev/null;`
+      
+      html_footer
+      
+    end
+    
+  end
 end
 
 # Object to encapsulate a mxmlc command with arguments.
 #
 class MxmlcCommand
+  
+  attr_accessor :file_specs
+  attr_accessor :o
 
-	attr_accessor :file_specs
-	attr_accessor :o	
+  def line
+    "mxmlc -file-specs=#{e_sh file_specs} -o=#{e_sh o}"
+  end
 
-	def line
-		"mxmlc -file-specs=#{e_sh file_specs} -o=#{e_sh o}"
-	end
+  def file_specs_name
+    File.basename(file_specs)
+  end
 
-	def file_specs_name
-		File.basename(file_specs)
-	end
-	
 end
 
 if __FILE__ == $0
 
-	require "../flex_env"
+  require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+  require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+  require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+  require ENV['TM_SUPPORT_PATH'] + '/lib/tm/process'
 
-	FlexMate::Compiler.build
+  require '../add_lib'
+  require 'fm/sdk'
+  require 'fm/settings'
+  require 'as3/source_tools'
+  
+  #There's no error checking at any point so we fall back on TM_CURRENT_FILE 
+  #and mxmlc is perfectly happy to compile some ruby! If only :)
+  FlexMate::Compiler.new.build
+  
+  #FlexMate::FcshCompiler.new.build
 
 end

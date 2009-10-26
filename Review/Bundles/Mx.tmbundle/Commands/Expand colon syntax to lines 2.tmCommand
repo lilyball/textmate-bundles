@@ -46,54 +46,72 @@ if (empty($input)) {
 
 $aInput = explode("\n", $input);
 $o = "";
-foreach ($aInput as $key =&gt; $input) {
-	if (ereg ("c\((.*)\)", $input, $equalsMarker) ) { // handle collection syntax
-		// F2 c(q1,q2,q3), n, NA
-		// print_r($equalsMarker);
-		$cPhraseToDelete = $equalsMarker[0]; // i.e., "n=1:12"
-		$aList           = explode(",", $equalsMarker[1]); // i.e., "n=1:12"
-		ereg("(^.*) +(c\(.*\)), *(.*), *(.*$)\n?", $input, $aFound);
-		// print_r($aFound);
-		$o    .= "\n";
-		foreach ($aList as $key =&gt; $value) {
+
+function F_BY_cList($o,$input, $equalsMarker ){
+	// F2 BY c(q1,q2,q3), n
+	// print_r($equalsMarker);
+	$cPhraseToDelete = $equalsMarker[0]; // i.e., "n=1:12"
+	$aList           = explode(",", $equalsMarker[1]); // i.e., "n=1:12"
+	ereg("(^.*) +(c\(.*\)), *(.*), *(.*$)\n?", $input, $aFound);
+	// print_r($aFound);
+	$o    .= "\n";
+	foreach ($aList as $key =&gt; $value) {
 		ereg("(^.*)(n$)", $aFound[3], $aParts);
 		// print_r($aParts);
-			if ( 	$aParts[2]=='n' ) {
-				$o.= "$aFound[1] $value, $aParts[1]$value, $aFound[4]\n";
-			} else {
-				$o.= "$aFound[1], $value, $aFound[3], $aFound[4]\n";
-			}
+		if ( 	$aParts[2]=='n' ) {
+			$o.= "$aFound[1] $value, $aParts[1]$value, $aFound[4]\n";
+		} else {
+			$o.= "$aFound[1], $value, $aFound[3], $aFound[4]\n";
 		}
-	} elseif (ereg ("([a-zA-Z])=[0-9]+:[0-9]+", $input, $equalsMarker) ) {
-		// print_r($equalsMarker);
-		// Array (
-		//     [0] =&gt; n=1:17
-		//     [1] =&gt; n
-		// )
-		$replacePhrase   = $equalsMarker[0]; // i.e., "n=1:12"
-		$replaceConstant = $equalsMarker[1]; // i.e., "n"
-		// get from and to
-		ereg("^(.*=)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
-		//print_r($aFound);
-		$from  = $aFound[2];
-		$to    = ($aFound[3])+1;
-		$o     .= "\n";
-		$input = str_replace($replacePhrase, $replaceConstant, $input);
-		for ($i = $from; $i &lt; $to; $i++) { 
-			$o.= str_replace($replaceConstant, $i, $input) . "\n";
-		}
+	}
+		return $o;
+}
+
+function X_by_Y_with_colon_n($input, $equalsMarker){
+	// print_r($equalsMarker);
+	// Array (
+	//     [0] =&gt; n=1:17
+	//     [1] =&gt; n
+	// )
+	$replacePhrase   = $equalsMarker[0]; // i.e., "n=1:12"
+	$replaceConstant = $equalsMarker[1]; // i.e., "n"
+	// get from and to
+	ereg("^(.*=)([0-9]+):([0-9]+)(.*$)", $input, $aPartsFound);
+	//print_r($aPartsFound);
+	$from  = $aPartsFound[2];
+	$to    = ($aPartsFound[3])+1;
+	$o     .= "\n";
+	$input = str_replace($replacePhrase, $replaceConstant, $input);
+	for ($i = $from; $i &lt; $to; $i++) { 
+		$o.= str_replace($replaceConstant, $i, $input) . "\n";
+	}
+		return $o;
+}
+
+function F1_BY_A_colon_B($input){
+	// F1 BY  q1:17
+	ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
+	if (empty($aFound)){
+		echo "this input is bad:&lt;br&gt;$input&lt;br&gt;";
+		die();
+	}
+	$from = $aFound[2];
+	$to   = ($aFound[3])+1;
+	$o   .= "\n";
+	for ($i = $from; $i &lt; $to; $i++) { 
+		$o.= $aFound[1]. $i. $aFound[4]. "\n";
+	}
+	return $o;
+}
+
+foreach ($aInput as $key =&gt; $input) {
+	if (ereg ("c\((.*)\)", $input, $equalsMarker) ) { // handle collection syntax. 
+		// F2 BY c(q1,q2,q3), n
+		$o = F_BY_cList($o,$input, $equalsMarker);
+	} elseif (ereg ("([a-zA-Z])=[0-9]+:[0-9]+", $input, $equalsMarker) ) { //handle n=1:10 syntax
+		$o = X_by_Y_with_colon_n($input, $equalsMarker);
 	} else {
-		ereg("(^.*)([0-9]+):([0-9]+)(.*$)", $input, $aFound);
-		if (empty($aFound)){
-			echo "this input is bad:&lt;br&gt;$input&lt;br&gt;";
-			die();
-		}
-		$from = $aFound[2];
-		$to   = ($aFound[3])+1;
-		$o   .= "\n";
-		for ($i = $from; $i &lt; $to; $i++) { 
-			$o.= $aFound[1]. $i. $aFound[4]. "\n";
-		}
+		$o = F1_BY_A_colon_B($input);
 	}
 }
 echo $o;

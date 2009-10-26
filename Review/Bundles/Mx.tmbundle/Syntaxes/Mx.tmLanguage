@@ -9,7 +9,7 @@
 		<string>mxo</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>(?i)^[ \t]*(G(roup)? *[0-9]|Begin|matrices)</string>
+	<string>(?i)^[ \t]*(Title +)?(G(roup)? *[0-9]|Begin|matrices)</string>
 	<key>foldingStopMarker</key>
 	<string>(?i)^[ \t]*(END|!end)</string>
 	<key>keyEquivalent</key>
@@ -82,7 +82,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i)(Boundary|Calculation|CMatrix|Constraint|Covariance|Covariances|CTable|Data|Define|Definition[a-zA-Z_]*|Drop|Else|End|Endif|Fixed|Equate|Free|Unique|If|Intervals?|Labels?|Matrices|Matrix|Mean|Means|Missing|NGroups?|Options?|Ordinal|Rectangular|Select if|Select|Specify|STart?|TO|GET|SAVE)\b</string>
+			<string>\b(?i)(Boundary|Calculation|CMatrix|Constraint|Covariance|Covariances|CTable|Data|Define|Definition[a-zA-Z_]*|Drop|Else|End|Endif|Fix(ed)?|Equate|Free|Unique|If|Intervals?|Labels?|Matrices|Matrix|Mean|Means|Missing|NGroups?|Options?|Ordinal|Rectangular|Select( if)?|Specify|ST(art)?|TO|GET|SAVE)\b</string>
 			<key>name</key>
 			<string>keyword.control.mx</string>
 		</dict>

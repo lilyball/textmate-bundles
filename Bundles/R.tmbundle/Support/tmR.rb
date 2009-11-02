@@ -43,13 +43,13 @@ def my_popen3(*cmd) # returns [stdin, stdout, strerr, pid]
     pe[1].close
 
     # maybe there is a way to support this in future ;)
-    tm_interactive_input = SUPPORT_LIB + '/tm_interactive_input.dylib'
-    if (File.exists? tm_interactive_input) 
-      dil = ENV['DYLD_INSERT_LIBRARIES']
-      ENV['DYLD_INSERT_LIBRARIES'] = (dil) ? "#{tm_interactive_input}:#{dil}" : tm_interactive_input unless (dil =~ /#{tm_interactive_input}/)
-      ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
-      ENV['TM_INTERACTIVE_INPUT'] = 'AUTO'
-    end
+    # tm_interactive_input = SUPPORT_LIB + '/tm_interactive_input.dylib'
+    # if (File.exists? tm_interactive_input) 
+    #   dil = ENV['DYLD_INSERT_LIBRARIES']
+    #   ENV['DYLD_INSERT_LIBRARIES'] = (dil) ? "#{tm_interactive_input}:#{dil}" : tm_interactive_input unless (dil =~ /#{tm_interactive_input}/)
+    #   ENV['DYLD_FORCE_FLAT_NAMESPACE'] = "1"
+    #   ENV['TM_INTERACTIVE_INPUT'] = 'AUTO'
+    # end
     
     exec(*cmd)
   }

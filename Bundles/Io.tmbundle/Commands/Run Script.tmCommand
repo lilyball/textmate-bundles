@@ -5,14 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>$(type -p "${TM_RUBY:-ruby}") -e'
+	<string>#!/usr/bin/env ruby
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/executor"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/save_current_document"
 
 TextMate.save_current_document
 TextMate::Executor.make_project_master_current_document
 
-TextMate::Executor.run(ENV["TM_IO"] || "io", ENV["TM_FILEPATH"], :version_args =&gt; ["2&gt;&amp;1", "&lt;&lt;&lt; \"System version; System exit;\""])'&lt;&amp;0</string>
+TextMate::Executor.run(ENV["TM_IO"] || "io", ENV["TM_FILEPATH"], :version_args =&gt; ["2&gt;&amp;1", '&lt;&lt;&lt; "System version; System exit;"'])
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

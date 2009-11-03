@@ -3,9 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
-	<string>saveActiveFile</string>
+	<string>nop</string>
 	<key>command</key>
-	<string>TM_JAVAMATE_GET_ARGS=1 javamate_bootstrap.sh</string>
+	<string>#!/bin/sh
+TM_JAVAMATE_GET_ARGS=1 "$TM_BUNDLE_SUPPORT/bin/javamate_bootstrap.sh"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

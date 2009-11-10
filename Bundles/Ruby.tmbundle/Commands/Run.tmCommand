@@ -10,7 +10,6 @@
 	<string>#!/bin/sh
 
 export RUBYLIB="$TM_BUNDLE_SUPPORT/RubyMate${RUBYLIB:+:$RUBYLIB}"
-export TM_RUBY=$(type -p "${TM_RUBY:-ruby}")
 
 /usr/bin/env ruby -KU -- "$TM_BUNDLE_SUPPORT/RubyMate/run_script.rb"
 </string>

@@ -3,10 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>array date(${1:\$array}; 0)
-set array($1; ${2:date})</string>
+	<string>array date(${1:\$array}; *; ${2:date})$0</string>
 	<key>name</key>
-	<string>array date .. set array ..</string>
+	<string>array date * ..</string>
 	<key>scope</key>
 	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>

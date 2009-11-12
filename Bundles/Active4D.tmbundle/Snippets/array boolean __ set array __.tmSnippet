@@ -3,10 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>array boolean(${1:\$array}; 0)
-set array($1; ${2:true/false})</string>
+	<string>array boolean(${1:\$array}; *; ${2:true/false})$0</string>
 	<key>name</key>
-	<string>array boolean .. set array ..</string>
+	<string>array boolean * ..</string>
 	<key>scope</key>
 	<string>source.active4d - text.xml</string>
 	<key>tabTrigger</key>

@@ -9,15 +9,15 @@
 
 { osascript -e "tell app \"$(basename "$TM_APP_PATH")\" to quit"
 
-  for (( i = 0; i &lt; 500 &amp;&amp; $(echo $(ps -xp $PPID|wc -l))-1; i++ )); do
+  while ps &gt;/dev/null -xp "$PPID"; do
+    if (( ++n == 10 )); then
+      "$DIALOG" &lt;/dev/null alert --title "Relaunch Timed Out" --body "Unable to exit TextMate." --button1 OK
+      exit
+    fi
     sleep .2;
   done
 
-  if [[ $(ps -xp $PPID|wc -l) -ne 2 ]]; then
-    open "$TM_APP_PATH"
-  else
-    echo &gt;/dev/console "$(date +%Y-%m-%d\ %H:%M:%S): TextMate is still running. Relaunch aborted."
-  fi
+  open "$TM_APP_PATH"
 
 } &amp;&gt;/dev/null &amp;</string>
 	<key>input</key>

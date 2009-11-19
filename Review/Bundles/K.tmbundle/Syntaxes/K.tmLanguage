@@ -57,7 +57,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(\_bin|\_di|\_dv|\_draw|\_gtime|\_ic|\_jd|\_lsq|\_dot|\_mul|\_inv|\_in|\_sv|\_sm|\_sm|\_ss|\_ssr|\_vs)\b</string>
+			<string>\b(\_getenv|\_bin|\_di|\_dv|\_draw|\_gtime|\_ic|\_jd|\_lsq|\_dot|\_mul|\_inv|\_in|\_sv|\_sm|\_sm|\_ss|\_ssr|\_vs)\b</string>
 			<key>name</key>
 			<string>support.function.system.k</string>
 		</dict>
@@ -77,7 +77,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>((\`)[a-zA-Z_]\w+)\b</string>
+			<string>(\`[a-zA-Z_]\w+)\b</string>
 			<key>name</key>
 			<string>entity.name.tag.k</string>
 		</dict>
@@ -94,23 +94,53 @@
 			<string>support.function.io.k</string>
 		</dict>
 		<dict>
+			<key>match</key>
+			<string>([\s]+/.*$\n?)|(^/.*$\n?)</string>
+			<key>name</key>
+			<string>comment.line.slash.k</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.k</string>
+				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.k</string>
+					<string>punctuation.definition.parameters.begin.k</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.k</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.k</string>
+					<string>punctuation.definition.parameters.end.k</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>([\s]+(/).*$\n?)|(^(/).*$\n?)</string>
+			<string>\s*(\w+)\:\s*\{\s*(\[)(.*?)(\])</string>
 			<key>name</key>
-			<string>comment.line.slash.k</string>
+			<string>meta.function.k</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.k</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\s*(\w+)\:\s*\{</string>
+			<key>name</key>
+			<string>meta.function.k</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

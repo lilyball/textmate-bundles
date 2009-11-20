@@ -7,20 +7,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string># osascript &lt;&lt;-AS1 &amp;&gt;/dev/null
-# 	try
-# 		tell application "Finder"
-# 			set the Preview_app to (application file id "com.apple.Preview") as alias
-# 		end tell
-# 		set the plist_filepath to the quoted form of ((POSIX path of the Preview_app) &amp; "Contents/Info")
-# 		do shell script "defaults write " &amp; the plist_filepath &amp; space &amp; "NSAppleScriptEnabled -bool YES"
-# 	end try
-# 	tell application "Preview"
-# 		close every window
-# 	end tell
-# AS1
-
-
+	<string>
 #only for Mac OSX 10.4 X11
 OS=$(uname -r | perl -pe 's/(\d+)\..*/$1/')
 [[ $OS -eq 8 ]] &amp;&amp; export DISPLAY=:0.0

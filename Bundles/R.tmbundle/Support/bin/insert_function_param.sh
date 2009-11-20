@@ -84,16 +84,20 @@ else
 		if [ -z "$FILE" ]; then # try to find a local declaration
 				OUT=$(echo -en "$TEXT" | egrep -A 10 "${WORD//./\\.} *<\- *function *\(" | perl -e 'undef($/);$a=<>;$a=~s/.*?<\- *function *(\(.*?\)) *[\t\n\{\w].*/$1/s;$a=~s/\t//sg;print "$a" if($a=~m/^\(/ && $a=~m/\)$/s)')
 		else
-			OUT=$(cat "$FILE" | perl -e '
-				undef($/);$w=$ENV{"WORD"};$a=<>;
-				$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\))\n.*?\\end\{verbatim\}/s;
-				if(length($1)) {
-					print $1;
-				} else {
-					$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\)).*?\\end\{verbatim\}/s;
-					print "$1";
-				}
-			')
+			if [ -e "$FILE" ]; then
+				OUT=$(cat "$FILE" | perl -e '
+					undef($/);$w=$ENV{"WORD"};$a=<>;
+					$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\))\n.*?\\end\{verbatim\}/s;
+					if(length($1)) {
+						print $1;
+					} else {
+						$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\)).*?\\end\{verbatim\}/s;
+						print "$1";
+					}
+				')
+			else
+				echo "Sorry! For R 2.10 - offline mode not yet implemented. PLease be patient." && exit 206
+			fi
 		fi
 		#if no usage is found quit
 		[[ -z "$OUT" ]] && echo "Nothing found" && exit 206

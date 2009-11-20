@@ -14,7 +14,6 @@ do
 done
 } &amp;
 
-
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	export WORD=$(ruby -- &lt;&lt;-SCR1 
 		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
@@ -55,14 +54,128 @@ fi
 
 . "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
 
+IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
+PORT=0
+HELPPIPE_IN=""
+HELPPIPE_OUT=""
+
+if [ "$IS_HELPSERVER" == "TRUE" ]; then
+	## Find or start a Help Server 
+	# Check if Rdaemon runs, if so use that http help server
+	RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
+	RDOFF=$(echo -n "$TM_SCOPE" | grep -c -F 'source.r')
+	[[ "${TM_CURRENT_LINE:0:1}" == "+" ]] &amp;&amp; RD="0"
+	if [ $RD -gt 0 -o $RDOFF -gt 0 ]; then
+		#get R's PID
+		RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+		#check whether Rdaemon runs
+		if [ ! -z $RPID ]; then
+			RDHOME="$HOME/Rdaemon"
+			if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+				RDRAMDISK="/tmp/TMRramdisk1"
+			else
+				RDRAMDISK="$HOME"/Rdaemon
+			fi
+			[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
+			TASK="@|sink('$RDRAMDISK/r_tmp')"
+			echo "$TASK" &gt; "$RDHOME"/r_in
+			TASK="@|ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)"
+			echo "$TASK" &gt; "$RDHOME"/r_in
+			TASK="@|sink(file=NULL)"
+			echo "$TASK" &gt; "$RDHOME"/r_in
+			while [ 1 ]
+			do
+				RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+				[[ "$RES" == "&gt; " ]] &amp;&amp; break
+				[[ "$RES" == ": " ]] &amp;&amp; break
+				[[ "$RES" == "+ " ]] &amp;&amp; break
+				sleep 0.02
+			done
+			PORT=$(cat "$RDRAMDISK"/r_tmp | tail -n 1 | sed 's/.* //;')
+			HELPPIPE_IN="$RDHOME/r_in"
+			HELPPIPE_OUT="$RDRAMDISK/r_tmp"
+		fi
+	fi
+	# If no Rdaemon runs start a dummy helper daemon
+	if [ $RDOFF -gt 0 ]; then
+		RPID=$(ps aw | grep '[0-9] /Lib.*TMRHelperDaemon' | awk '{print $1;}' )
+		#check whether dummy daemon runs if not start it
+		if [ -z $RPID ]; then
+			WDIR="$TM_BUNDLE_SUPPORT"/bin
+			cd "$WDIR"
+			if [ ! -e /tmp/r_helper_dummy ]; then
+				mkfifo /tmp/r_helper_dummy
+			else
+				if [ ! -p /tmp/r_helper_dummy ]; then
+					rm /tmp/r_helper_dummy
+					mkfifo /tmp/r_helper_dummy
+				fi
+			fi
+			ruby Rhelperbuilder.rb &amp;&gt; /dev/null &amp;
+			### wait for Rhelper
+			#safety counter
+			SAFECNT=0
+			while [ ! -f /tmp/r_helper_dummy_out ]
+			do
+				SAFECNT=$(($SAFECNT+1))
+				if [ $SAFECNT -gt 50000 ]; then
+					echo -en "Start failed! No response from R Helper server!"
+					exit 206
+				fi
+				sleep 0.01
+			done
+
+			#wait for Rdaemon's output is ready
+			SAFECNT=0
+			while [ 1 ]
+			do
+				ST=$(tail -n 1 /tmp/r_helper_dummy_out )
+				[[ "$ST" == "&gt; " ]] &amp;&amp; break
+				SAFECNT=$(($SAFECNT+1))
+				if [ $SAFECNT -gt 50000 ]; then
+					echo -en "Start failed! No response from R Helper server!"
+					exit 206
+				fi
+				sleep 0.05
+			done
+		fi
+		echo "ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)" &gt; /tmp/r_helper_dummy
+		while [ 1 ]
+		do
+			RES=$(tail -c 2 /tmp/r_helper_dummy_out)
+			[[ "$RES" == "&gt; " ]] &amp;&amp; break
+			[[ "$RES" == ": " ]] &amp;&amp; break
+			[[ "$RES" == "+ " ]] &amp;&amp; break
+			sleep 0.02
+		done
+		PORT=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;')
+		HELPPIPE_IN="/tmp/r_helper_dummy"
+		HELPPIPE_OUT="/tmp/r_helper_dummy_out"
+	fi
+	if [ "$PORT" == "0" -o -z "$PORT" ]; then
+		echo -en "No Help Server found."
+		exit_show_tool_tip
+	fi
+	echo "$PORT" &gt; "$TM_BUNDLE_SUPPORT"/httpPort
+fi
+
 #get the reference for WORD
 FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
 
 CNT=$(echo -e "$FILE" | wc -l)
 [[ -z "$FILE" ]] &amp;&amp; CNT=0
 if [ $CNT == 1 ]; then
-	cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
-	echo "&lt;base href='tm-file://$FILE'&gt;"
+	if [ $"IS_HELPSERVER" != "TRUE" -a -e "$FILE" ]; then
+		cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
+		echo "&lt;base href='tm-file://$FILE'&gt;"
+	else
+		LINK=$(egrep "/(00)?${WORD//./\\.}$" "$TM_BUNDLE_SUPPORT"/helpshort.index)
+		LIB=$(echo -n "$LINK" | cut -d '/' -f1)
+		FUN=$(echo -n "$LINK" | cut -d '/' -f2)
+		echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
+		curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
+		# echo -en "$HTML"
+	fi
 	exit_show_html
 fi
 
@@ -100,12 +213,22 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 		function Search(term) {
 			var w = (document.sform.where[0].checked) ? '1':'0';
 			if (term.length &gt; 0) {
-			TextMate.isBusy = true;
-			TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" ' + w, null);
-			parent.head.location.reload();
-			TextMate.isBusy = false;
-			TextMate.system('sleep 0.9', null);
-			parent.data.location.reload();
+				TextMate.isBusy = true;
+				TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" ' + w, null);
+				parent.head.location.reload();
+				TextMate.isBusy = false;
+				TextMate.system('sleep 0.9', null);
+				parent.data.location.reload();
+			}
+		}
+		function SearchServer(term) {
+			if (term.length &gt; 0) {
+				TextMate.isBusy = true;
+				TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 1', null);
+				parent.head.location.reload();
+				//TextMate.system('sleep 0.9', null);
+				parent.data.location.reload();
+				TextMate.isBusy = false;
 			}
 		}
 		function Rdoc() {
@@ -117,14 +240,33 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 	&lt;table&gt;
 		&lt;tr&gt;
 			&lt;td&gt;
-			&lt;form name='sform'&gt;
-			&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;
-			&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='Search(this.value)'&gt;
+HFS
+
+if [ "$IS_HELPSERVER" != "TRUE" ]; then
+	echo "&lt;form name='sform' onsubmit='Search(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='Search(this.value)'&gt;" &gt;&gt; "$SEARCH"
+else
+	echo "&lt;form name='sform' onsubmit='SearchServer(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='SearchServer(this.value)'&gt;" &gt;&gt; "$SEARCH"
+fi
+
+cat &lt;&lt;-"HFS1" &gt;&gt; "$SEARCH"
 			&lt;/td&gt;
 			&lt;td&gt;
 			&lt;font style='font-size:7pt'&gt;
-			&lt;input type='radio' id='where' name='where' value='key' checked  onclick='Search(document.sform.search.value)'&gt;keywords&lt;br /&gt;&lt;input type='radio' id='where' name='where' value='full' onclick='Search(document.sform.search.value)'&gt;full&amp;nbsp;text
+HFS1
+
+if [ "$IS_HELPSERVER" != "TRUE" ]; then
+	echo "&lt;input type='radio' id='where' name='where' value='key' checked  onclick='Search(document.sform.search.value)'&gt;keywords&lt;br /&gt;&lt;input type='radio' id='where' name='where' value='full' onclick='Search(document.sform.search.value)'&gt;full&amp;nbsp;text" &gt;&gt; "$SEARCH"
+else
+	echo "&lt;br /&gt;&lt;button onclick='SearchServer(document.sform.search.value);parent.data.location.reload();'&gt;Search&lt;/button&gt;" &gt;&gt; "$SEARCH"
+fi
+
+cat &lt;&lt;-"HFS2" &gt;&gt; "$SEARCH"
 			&lt;/font&gt;
+			&lt;/td&gt;
 			&lt;/form&gt;
 			&lt;/td&gt;
 		&lt;/tr&gt;
@@ -136,7 +278,7 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 	&lt;/table&gt;
 	&lt;/body&gt;
 &lt;/html&gt;
-HFS
+HFS2
 
 echo "&lt;html&gt;&lt;body style='margin-top:5mm'&gt;" &gt; "$HEAD"
 echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padding-right:1cm;border-bottom:1px solid black'&gt;&lt;b&gt;Package&lt;/b&gt;&lt;/td&gt;&lt;td style='border-bottom:1px solid black'&gt;&lt;b&gt;Topic&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
@@ -144,30 +286,48 @@ echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padd
 CNT=$(echo -en "$FILE" | wc -l)
 HCNT=0
 export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
-for i in `echo $FILE`
-do
-	echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
-	echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/' &gt;&gt; "$HEAD"
-	echo "&lt;/td&gt;&lt;td&gt;&lt;a href='$i' target='data'&gt;" &gt;&gt; "$HEAD"
-	echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/' &gt;&gt; "$HEAD"
-	echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
-#	HCNT=$(($HCNT + 1))
-#	PCNT=$(echo  $HCNT-$CNT | perl -e '@a=split(/-/,&lt;&gt;);printf("%3.0f",$a[0]*100/$a[1]);')
-#	echo "$PCNT $(($CNT - $HCNT)) files left. Please wait…";
-done
+if [ "$IS_HELPSERVER" == "TRUE" ]; then
+	for i in `echo $FILE`
+	do
+		echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
+		lib=$(echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/')
+		echo "$lib" &gt;&gt; "$HEAD"
+		fun=$(echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/')
+		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'&gt;" &gt;&gt; "$HEAD"
+		echo "$fun" &gt;&gt; "$HEAD"
+		echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+	done
+else
+	for i in `echo $FILE`
+	do
+		echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
+		echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/' &gt;&gt; "$HEAD"
+		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='$i' target='data'&gt;" &gt;&gt; "$HEAD"
+		echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/' &gt;&gt; "$HEAD"
+		echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+	done
+fi
 
 echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
 
-if [ "$CNT" -lt "2" ]; then
-	cat "$FILE" &gt; "$DATA"
-	echo "&lt;base href='tm-file://$FILE'&gt;" &gt;&gt; "$DATA"
+if [ "$CNT" -eq "1" ]; then
+	if [ "$IS_HELPSERVER" == "TRUE" ]; then
+		lib=$(echo "$FILE" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/')
+		fun=$(echo "$FILE" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/')
+		curl -sS "http://127.0.0.1:$PORT/library/$lib/html/$fun.html" &gt; "$DATA"
+		echo "&lt;base href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html'&gt;" &gt;&gt; "$DATA"
+	else
+		[[ -e "$FILE" ]] &amp;&amp; cat "$FILE" &gt; "$DATA"
+		echo "&lt;base href='tm-file://$FILE'&gt;" &gt;&gt; "$DATA"
+	fi
 else
 	echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
 fi
 
 printframe 340
+
 if [ $CNT -eq 0 ]; then
-	. "$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "$WORD" 1
+	. "$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "$WORD" 1 "$PORT"
 fi
 "$DIALOG" -x $token 2&amp;&gt;/dev/null
 exit_show_html

@@ -10,11 +10,11 @@ cat "$TM_BUNDLE_SUPPORT"/help.pkgs | sort -f | ruby -e '
 		TextMate::UI.complete(words)
 	else
 		index=TextMate::UI.menu(words)
+	end
 		if index != nil
 			print words[index]
 		else
 			TextMate.exit_discard()
 		end
-	end
 	exit 203
 '

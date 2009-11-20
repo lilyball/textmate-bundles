@@ -192,6 +192,11 @@ As default TextMate displays an inline menu if there is only one suggestion foun
 
 # Troubleshooting &amp; FAQ
 
+
+-   __I click at a hyperlink in the Help window but nothing happens except for the spinning wheel__
+
+    It's very likely that this only can occur for R versions >= 2.10. The new introduced help system - an httpd server - has to run for querying the help pages. Such a server will be started in the background (if Rdaemon doesn't run). If the server wasn't used for 10 minutes the server will be terminated automatically. If an help window was opened and the server was terminated an hyperlink will be broken. Simply close the window and start your search again.
+
 -   __`'re-encoding is not available on this system'` or `'object ".PSenv" not found'`__
 
     If you see one of these messages then you are most likely using an older version of R. In this case you should upgrade to the latest (currently, version 2.6.1) by downloading the pre-built universal R.app installer from <a href="http://www.r-project.org">r-project.org</a>.
@@ -220,7 +225,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Feb 06 2008***
+***Date: Nov 20 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

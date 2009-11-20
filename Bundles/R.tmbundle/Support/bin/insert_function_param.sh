@@ -77,26 +77,136 @@ else
 	else
 		. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
 
+		IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
+		PORT=0
+		HELPPIPE_IN=""
+		HELPPIPE_OUT=""
+
+		if [ "$IS_HELPSERVER" == "TRUE" ]; then
+			## Find or start a Help Server 
+			# Check if Rdaemon runs, if so use that http help server
+			RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
+			RDOFF=$(echo -n "$TM_SCOPE" | grep -c -F 'source.r')
+			[[ "${TM_CURRENT_LINE:0:1}" == "+" ]] && RD="0"
+			if [ $RD -gt 0 -o $RDOFF -gt 0 ]; then
+				#get R's PID
+				RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+				#check whether Rdaemon runs
+				if [ ! -z $RPID ]; then
+					RDHOME="$HOME/Rdaemon"
+					if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+						RDRAMDISK="/tmp/TMRramdisk1"
+					else
+						RDRAMDISK="$HOME"/Rdaemon
+					fi
+					[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
+					TASK="@|sink('$RDRAMDISK/r_tmp')"
+					echo "$TASK" > "$RDHOME"/r_in
+					TASK="@|ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)"
+					echo "$TASK" > "$RDHOME"/r_in
+					TASK="@|sink(file=NULL)"
+					echo "$TASK" > "$RDHOME"/r_in
+					while [ 1 ]
+					do
+						RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+						[[ "$RES" == "> " ]] && break
+						[[ "$RES" == ": " ]] && break
+						[[ "$RES" == "+ " ]] && break
+						sleep 0.02
+					done
+					PORT=$(cat "$RDRAMDISK"/r_tmp | tail -n 1 | sed 's/.* //;')
+					HELPPIPE_IN="$RDHOME/r_in"
+					HELPPIPE_OUT="$RDRAMDISK/r_tmp"
+				fi
+			fi
+			# If no Rdaemon runs start a dummy helper daemon
+			if [ $RDOFF -gt 0 ]; then
+				RPID=$(ps aw | grep '[0-9] /Lib.*TMRHelperDaemon' | awk '{print $1;}' )
+				#check whether dummy daemon runs if not start it
+				if [ -z $RPID ]; then
+					WDIR="$TM_BUNDLE_SUPPORT"/bin
+					cd "$WDIR"
+					if [ ! -e /tmp/r_helper_dummy ]; then
+						mkfifo /tmp/r_helper_dummy
+					else
+						if [ ! -p /tmp/r_helper_dummy ]; then
+							rm /tmp/r_helper_dummy
+							mkfifo /tmp/r_helper_dummy
+						fi
+					fi
+					ruby Rhelperbuilder.rb &> /dev/null &
+					### wait for Rhelper
+					#safety counter
+					SAFECNT=0
+					while [ ! -f /tmp/r_helper_dummy_out ]
+					do
+						SAFECNT=$(($SAFECNT+1))
+						if [ $SAFECNT -gt 50000 ]; then
+							echo -en "Start failed! No response from R Helper server!"
+							exit 206
+						fi
+						sleep 0.01
+					done
+
+					#wait for Rdaemon's output is ready
+					SAFECNT=0
+					while [ 1 ]
+					do
+						ST=$(tail -n 1 /tmp/r_helper_dummy_out )
+						[[ "$ST" == "> " ]] && break
+						SAFECNT=$(($SAFECNT+1))
+						if [ $SAFECNT -gt 50000 ]; then
+							echo -en "Start failed! No response from R Helper server!"
+							exit 206
+						fi
+						sleep 0.05
+					done
+				fi
+				echo "ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)" > /tmp/r_helper_dummy
+				while [ 1 ]
+				do
+					RES=$(tail -c 2 /tmp/r_helper_dummy_out)
+					[[ "$RES" == "> " ]] && break
+					[[ "$RES" == ": " ]] && break
+					[[ "$RES" == "+ " ]] && break
+					sleep 0.02
+				done
+				PORT=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;')
+				HELPPIPE_IN="/tmp/r_helper_dummy"
+				HELPPIPE_OUT="/tmp/r_helper_dummy_out"
+			fi
+			if [ "$PORT" == "0" -o -z "$PORT" ]; then
+				echo -en "No Help Server found."
+				exit_show_tool_tip
+			fi
+			echo "$PORT" > "$TM_BUNDLE_SUPPORT"/httpPort
+		fi
+
+
 		#get the reference for WORD
 		FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}')
 
-		#get the usage from the latex file
-		if [ -z "$FILE" ]; then # try to find a local declaration
-				OUT=$(echo -en "$TEXT" | egrep -A 10 "${WORD//./\\.} *<\- *function *\(" | perl -e 'undef($/);$a=<>;$a=~s/.*?<\- *function *(\(.*?\)) *[\t\n\{\w].*/$1/s;$a=~s/\t//sg;print "$a" if($a=~m/^\(/ && $a=~m/\)$/s)')
+		if [ "$IS_HELPSERVER" == "TRUE" ]; then
+			FUN=$(echo -n "$FILE" | perl -pe 's!.*/library/(.*?)/latex/(.*?)\.tex$!$2!')
+			LIB=$(echo -n "$FILE" | perl -pe 's!.*/library/(.*?)/latex/(.*?)\.tex$!$1!')
+			OUT=$(curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html" | perl -e 'undef($/);$w=$ENV{"WORD"};$a=<>;$a=~m!.*?<h\d>Usage</h\d>\s*<pre>.*?($w\(.*?\)).*?</pre>.*!s;print $1')
 		else
-			if [ -e "$FILE" ]; then
-				OUT=$(cat "$FILE" | perl -e '
-					undef($/);$w=$ENV{"WORD"};$a=<>;
-					$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\))\n.*?\\end\{verbatim\}/s;
-					if(length($1)) {
-						print $1;
-					} else {
-						$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\)).*?\\end\{verbatim\}/s;
-						print "$1";
-					}
-				')
+			#get the usage from the latex file
+			if [ -z "$FILE" ]; then # try to find a local declaration
+					OUT=$(echo -en "$TEXT" | egrep -A 10 "${WORD//./\\.} *<\- *function *\(" | perl -e 'undef($/);$a=<>;$a=~s/.*?<\- *function *(\(.*?\)) *[\t\n\{\w].*/$1/s;$a=~s/\t//sg;print "$a" if($a=~m/^\(/ && $a=~m/\)$/s)')
 			else
-				echo "Sorry! For R 2.10 - offline mode not yet implemented. PLease be patient." && exit 206
+				if [ -e "$FILE" ]; then
+					OUT=$(cat "$FILE" | perl -e '
+						undef($/);$w=$ENV{"WORD"};$a=<>;
+						$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\))\n.*?\\end\{verbatim\}/s;
+						if(length($1)) {
+							print $1;
+						} else {
+							$a=~m/\\begin\{Usage\}\n\\begin\{verbatim\}\n?.*?($w *\(.*?\)).*?\\end\{verbatim\}/s;
+							print "$1";
+						}
+					')
+				fi
 			fi
 		fi
 		#if no usage is found quit
@@ -127,14 +237,14 @@ else
 	fi
 
 fi
-#echo "$RES" && exit 206
+
 #if no parameter quit
 if [ -z "$RES" ]; then
 	echo -n "Nothing found"
 	[[ $RD -gt 0 ]] && echo " or library not yet loaded"
 	exit 206
 fi
-#echo -en "$RES" && exit 207
+
 #show all parameters as inline menu and insert the parameter as snippet (if '=' is found only the value)
 ruby -- <<-SCRIPT
 # 2> /dev/null

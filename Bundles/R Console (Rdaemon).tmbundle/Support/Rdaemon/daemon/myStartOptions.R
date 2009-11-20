@@ -56,6 +56,40 @@ readline <- function(prompt = "",  alert=FALSE) {
 	return(res)
 }
 
+chooseCRANmirror <- function (graphics = getOption("menu.graphics")) 
+{
+	if (!interactive()) 
+	stop("cannot choose a CRAN mirror non-interactively")
+	m <- getCRANmirrors(all = FALSE, local.only = FALSE)
+	res <- menu(m[, 1L], graphics, "CRAN mirror")
+	if (res > 0L) {
+		URL <- m[res, "URL"]
+		repos <- getOption("repos")
+		repos["CRAN"] <- gsub("/$", "", URL[1L])
+		options(repos = repos)
+		cat(paste("options(repos = list(CRAN='",repos,"'))\n",sep=""), file='~/Rdaemon/startOptions.R', append = TRUE)
+	}
+	invisible()
+}
+
+install.packages <- function (pkgs, lib, repos = getOption("repos"), contriburl = contrib.url(repos, 
+    type), method, available = NULL, destdir = NULL, dependencies = NA, 
+    type = getOption("pkgType"), configure.args = getOption("configure.args"), 
+    configure.vars = getOption("configure.vars"), clean = FALSE, 
+    Ncpus = getOption("Ncpus"), ...) {
+	
+	if (missing(pkgs) || !length(pkgs)) {
+		pkgs <- select.list(available.packages()[,1], multiple = TRUE)
+		if(!length(pkgs)) return(0)
+	}
+	utils::install.packages(pkgs, lib, repos = getOption("repos"), contriburl = contrib.url(repos, 
+	    type), method, available = NULL, destdir = NULL, dependencies = NA, 
+	    type = getOption("pkgType"), configure.args = getOption("configure.args"), 
+	    configure.vars = getOption("configure.vars"), clean = FALSE, 
+	    Ncpus = getOption("Ncpus"), ...)
+}
+
+
 demo <- function (topic, package = NULL, lib.loc = NULL, character.only = FALSE, 
     verbose = getOption("verbose")) 
 {

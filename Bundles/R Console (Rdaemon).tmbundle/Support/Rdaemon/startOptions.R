@@ -18,7 +18,6 @@ options(editor = "mate -w")
 options(htmlhelp = T)
 options(help_type = "html")
 options(menu.graphics = F)
-options(repos = list(CRAN="http://cran.cnr.Berkeley.edu"))
 options(width = 100)
 options(device = "quartz")
 options(keep.source = FALSE)
@@ -28,4 +27,5 @@ formals(pdf)[c("file", "width", "height")] <- list("./plots/Rplot%03d.pdf", 10, 
 formals(png)[c("filename", "width", "height", "bg", "res")] <- list("./plots/Rplot%03d.png", 700, 700, "transparent", 150)
 formals(jpeg)[c("filename", "width", "height")] <- list("./plots/Rplot%03d.jpeg", 700, 700)
 
+# at the end Rdaemon will append further options which should be peristent like the CRAN repo etc.
 

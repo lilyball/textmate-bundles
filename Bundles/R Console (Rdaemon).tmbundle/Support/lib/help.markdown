@@ -91,7 +91,7 @@ This command must be executed if you want to use the R commands `fix()` or `edit
 
 ## Evaluate Line/Selection and Copy into Pasteboard
 <button>⇧&#x2305;</button>
-It executes the selection or the current line and copies the result into the pasteboard.
+It executes the selection or the current line and copies the result into the pasteboard. If the result has a dimension like a matrix write.table(sep='\t') will be used.
 
 ## Completion… (R.bundle)
 <blockquote><small>This command is defined within the R.bundle, but it differs a bit if it will be invoked from the Rdaemon scope.</small></blockquote>
@@ -420,7 +420,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Feb 04 2009***
+***Date: Nov 20 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

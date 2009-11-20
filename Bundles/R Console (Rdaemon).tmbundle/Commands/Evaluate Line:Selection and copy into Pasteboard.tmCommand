@@ -5,7 +5,14 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>. "$TM_BUNDLE_SUPPORT"/bin/execute.sh | sed '1d;$d' | pbcopy</string>
+	<string>TASK=$(cat)
+TASK="ifelse(is.null(dim($TASK)),
+		write($TASK, '|pbcopy'),
+		write.table($TASK, file=pipe('pbcopy'),quote=F,row.names=F, sep='\t'))"
+
+echo "$TASK" | "$TM_BUNDLE_SUPPORT"/bin/execute.sh &gt; /dev/null &amp;
+
+# | sed '1d;$d' | pbcopy</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>

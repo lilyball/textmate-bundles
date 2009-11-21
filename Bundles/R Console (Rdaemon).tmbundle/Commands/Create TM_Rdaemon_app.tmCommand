@@ -8,7 +8,7 @@
 	<string>n=$'\n'
 
 cat &lt;&lt;-AS | iconv -f UTF-8 -t MACROMAN | osascript --
-  tell application "Script Editor"
+  tell application "AppleScript Editor"
       activate
       set theDocument to make new document
       tell theDocument

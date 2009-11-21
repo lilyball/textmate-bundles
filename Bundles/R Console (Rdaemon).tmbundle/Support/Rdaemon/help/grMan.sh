@@ -1,17 +1,17 @@
 RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 
+RDHOME="$HOME/Library/Application Support/Rdaemon"
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$RDHOME"
 fi
 
-RDHOME="$HOME/Rdaemon"
-[[ ! -d "$HOME"/Rdaemon/plots/tmp ]] && mkdir "$HOME"/Rdaemon/plots/tmp > /dev/null
-rm -f "$HOME"/Rdaemon/plots/tmp/*.* > /dev/null
+[[ ! -d "$RDHOME"/plots/tmp ]] && mkdir "$RDHOME"/plots/tmp > /dev/null
+rm -f "$RDHOME"/plots/tmp/*.* > /dev/null
 
 POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
-echo "@|sink('$RDRAMDISK/r_tmp');.chooseActiveScreenDevice();sink(file=NULL)" > ~/Rdaemon/r_in
+echo "@|sink('$RDRAMDISK/r_tmp');.chooseActiveScreenDevice();sink(file=NULL)" > "$RDHOME"/r_in
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFF=$(($POSNEW - $POS + 2))
 
@@ -36,7 +36,7 @@ do
 done
 "$DIALOG" -x $token 2&>/dev/null
 
-cat <<-H1 > "$HOME/Rdaemon/plots/tmp/grMan.html"
+cat <<-H1 > "$RDHOME/plots/tmp/grMan.html"
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -58,19 +58,19 @@ function setAct(obj) {
 			btns[i].style.visibility = 'hidden';
 		}
 	}
-	var cmd = 'echo -e \"@|dev.set(' + id + ')\n\" > \"$HOME/Rdaemon/r_in\"';
+	var cmd = 'echo -e \"@|dev.set(' + id + ')\n\" > \"$HOME/Library/Application Support/Rdaemon/r_in\"';
 	myCommand = TextMate.system(cmd, function(task) { });
 }
 function closeMe(obj){
 	var id = obj.split('_')[0];
 	var index = obj.split('_')[1];
 	document.getElementById('dev'+id).style.display = 'none';
-	var cmd = 'echo -e \"@|dev.off(' + id + ')\n\" > \"$HOME/Rdaemon/r_in\"';
+	var cmd = 'echo -e \"@|dev.off(' + id + ')\n\" > \"$HOME/Library/Application Support/Rdaemon/r_in\"';
 	myCommand = TextMate.system(cmd, function(task) { });
 
 }
 function closeAll(){
-	var cmd = 'echo -e \"@|graphics.off()\n\" > \"$HOME/Rdaemon/r_in\"';
+	var cmd = 'echo -e \"@|graphics.off()\n\" > \"$HOME/Library/Application Support/Rdaemon/r_in\"';
 	myCommand = TextMate.system(cmd, function(task) { });
 	window.close();
 }
@@ -78,11 +78,11 @@ function saveMe(obj){
 	var id = obj.split('_')[0];
 	var index = obj.split('_')[1];
 	var plots = document.getElementsByTagName('img');
-	var cmd = "$HOME/Rdaemon/help/savePlotAs.sh '" + plots[index].src + "' " + id;
+	var cmd = "$HOME/Library/Application Support/Rdaemon/help/savePlotAs.sh '" + plots[index].src + "' " + id;
 	myCommand = TextMate.system(cmd, function(task) { });
 }
 function refresh(){
-	var cmd = "$HOME/Rdaemon/help/grMan2.sh";
+	var cmd = "$HOME/Library/Application Support/Rdaemon/help/grMan2.sh";
 	myCommand = TextMate.system(cmd, function(task) { });
 	myCommand.onreadoutput = output;
 }
@@ -98,12 +98,12 @@ H1
 
 OUT=$(cat "$RDRAMDISK/r_tmp")
 if [ "${#OUT}" -gt "30" ]; then
-	echo "$OUT" | sed 's/^\[1\] "//;s/"$//' >> "$HOME/Rdaemon/plots/tmp/grMan.html"
+	echo "$OUT" | sed 's/^\[1\] "//;s/"$//' >> "$RDHOME/plots/tmp/grMan.html"
 else
-	echo "<small>No Graphic Devices found or press 'Refresh'.</small>" >> "$HOME/Rdaemon/plots/tmp/grMan.html"
+	echo "<small>No Graphic Devices found or press 'Refresh'.</small>" >> "$RDHOME/plots/tmp/grMan.html"
 fi
 
-cat<<-H2 >> "$HOME/Rdaemon/plots/tmp/grMan.html"
+cat<<-H2 >> "$RDHOME/plots/tmp/grMan.html"
 </div>
 <hr />
 <button onclick='javascript:closeAll()'>Close All Devices</button><br /><br />
@@ -111,5 +111,5 @@ cat<<-H2 >> "$HOME/Rdaemon/plots/tmp/grMan.html"
 </body></html>
 H2
 
-cat "$HOME"/Rdaemon/plots/tmp/grMan.html
+cat "$RDHOME"/plots/tmp/grMan.html
 exit 205

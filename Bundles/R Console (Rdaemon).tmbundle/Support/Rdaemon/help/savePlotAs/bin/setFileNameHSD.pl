@@ -5,7 +5,7 @@
 binmode STDIN, ':utf8';
 binmode STDOUT, ':utf8';
 
-$out_temp = $ENV{'HOME'}."/Rdaemon/help/savePlotAs/bin/icf.plist";
+$out_temp = $ENV{'HOME'}."/Library/Application Support/Rdaemon/help/savePlotAs/bin/icf.plist";
 
 open(DIALOG,"<$out_temp");
 binmode DIALOG, ':utf8';

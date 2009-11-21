@@ -14,10 +14,10 @@
 	$a=~s/\x07//sg;
 	$a .= "\n&gt; " if ($a!~/&gt; $/ &amp;&amp; $a!~/\+ $/);
 	print "$a";
-' &gt; "$HOME"/Rdaemon/r_out.R
-	mate "$HOME"/Rdaemon/r_out.R
+' &gt; "$HOME/Library/Application Support/Rdaemon"/r_out.R
+	mate "$HOME/Library/Application Support/Rdaemon"/r_out.R
 else
-	cat "$HOME"/Rdaemon/r_out| perl -e '
+	cat "$HOME/Library/Application Support/Rdaemon"/r_out| perl -e '
 	undef($/); $a=&lt;&gt;;
 	$a=~s/\x0D{1,}/\x0D/sg;
 	while($a=~m/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/) { $a=~s/(.*?)\x0D&lt;.{50}(.) +\x08+(.*)/$1$2$3/sg; }
@@ -25,8 +25,8 @@ else
 	$a=~s/\x07//sg;
 	$a .= "\n&gt; " if ($a!~/&gt; $/ &amp;&amp; $a!~/\+ $/);
 	print "$a";
-' &gt; "$HOME"/Rdaemon/r_out.R
-	mate "$HOME"/Rdaemon/r_out.R
+' &gt; "$HOME/Library/Application Support/Rdaemon"/r_out.R
+	mate "$HOME/Library/Application Support/Rdaemon"/r_out.R
 fi</string>
 	<key>input</key>
 	<string>none</string>

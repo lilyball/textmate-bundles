@@ -11,7 +11,7 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-echo -e "@|quartz();plot.new\n" &gt; "$HOME/Rdaemon/r_in"</string>
+echo -e "@|quartz();plot.new\n" &gt; "$HOME/Library/Application Support/Rdaemon/r_in"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

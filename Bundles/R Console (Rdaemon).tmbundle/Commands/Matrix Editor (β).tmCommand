@@ -19,15 +19,15 @@ SCR1
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$HOME/Library/Application Support/Rdaemon"
 fi
 
 TASK="@|cat(is.matrix($VAR))"
-RES=$("$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" | tail -n 1)
+RES=$("$HOME/Library/Application Support/Rdaemon"/daemon/execRStr.sh "$TASK" | tail -n 1)
 [[ "$RES" != "TRUE&gt; " ]] &amp;&amp; echo "'$VAR' is not a matrix." &amp;&amp; exit_show_tool_tip
 
 TASK="@|sink('$RDRAMDISK/r_tmp');cat(dim($VAR)[1], sep='\\\\\\\n');cat(dim($VAR)[2], sep='\\\\\\\n');if(is.null(dimnames($VAR)[1]) || length(dimnames($VAR)[[1]])==0) cat(paste('[', c(1:dim($VAR)[1]), ',]', sep=''),sep='\\\\\\\n') else cat(dimnames($VAR)[[1]], sep='\\\\\\\n');if(is.null(dimnames($VAR)[2]) || length(dimnames($VAR)[[2]])==0) cat(paste('[,', c(1:dim($VAR)[2]), ']', sep=''),sep='\\\\\\\n') else cat(dimnames($VAR)[[2]], sep='\\\\\\\n');cat(t($VAR), sep='\\\\\\\n');sink(file=NULL);"
-"$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" &gt; /dev/null
+"$HOME/Library/Application Support/Rdaemon"/daemon/execRStr.sh "$TASK" &gt; /dev/null
 
 RES=$(cat "$RDRAMDISK/r_tmp")
 ROWS=$(echo -e "$RES" | head -n 1 )
@@ -110,7 +110,7 @@ font-size:8pt;
 				}
 			}
 		}
-		var cmd = "echo '" + document.getElementById("varname").value +"&lt;-matrix(c(" + data.join(",") + "),ncol=$COLS,byrow=T,dimnames=list(" + rnames + "," + cnames + "))' &gt; ~/Rdaemon/r_tmp;echo -e '@|source(\"$HOME/Rdaemon/r_tmp\")' &gt; ~/Rdaemon/r_in";
+		var cmd = "echo '" + document.getElementById("varname").value +"&lt;-matrix(c(" + data.join(",") + "),ncol=$COLS,byrow=T,dimnames=list(" + rnames + "," + cnames + "))' &gt; "$HOME/Library/Application Support/Rdaemon"/r_tmp;echo -e '@|source(\"$HOME/Library/Application Support/Rdaemon/r_tmp\")' &gt; "$HOME/Library/Application Support/Rdaemon"/r_in";
 		TextMate.system(cmd,null);
 		TextMate.isBusy = false;
 		window.close();

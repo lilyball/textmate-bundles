@@ -1,15 +1,17 @@
+
+RDHOME="$HOME/Library/Application Support/Rdaemon"
+
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$RDHOME"
 fi
 
-RDHOME="$HOME/Rdaemon"
-[[ ! -d "$HOME"/Rdaemon/plots/tmp ]] && mkdir "$HOME"/Rdaemon/plots/tmp > /dev/null
-rm -f "$HOME"/Rdaemon/plots/tmp/*.* > /dev/null
+[[ ! -d "$RDHOME"/plots/tmp ]] && mkdir "$RDHOME"/plots/tmp > /dev/null
+rm -f "$RDHOME"/plots/tmp/*.* > /dev/null
 
 POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
-echo "@|sink('$RDRAMDISK/r_tmp');.chooseActiveScreenDevice();sink(file=NULL)" > ~/Rdaemon/r_in
+echo "@|sink('$RDRAMDISK/r_tmp');.chooseActiveScreenDevice();sink(file=NULL)" > "$RDHOME"/r_in
 POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFF=$(($POSNEW - $POS + 2))
 

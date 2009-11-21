@@ -12,7 +12,7 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
 
-echo "@|save.image()" &gt; ~/Rdaemon/r_in</string>
+echo "@|save.image()" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

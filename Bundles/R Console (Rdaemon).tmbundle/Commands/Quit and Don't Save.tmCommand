@@ -12,9 +12,9 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-echo -e "@|q()\n@|n\n" &gt; "$HOME/Rdaemon/r_in"
+echo -e "@|q()\n@|n\n" &gt; "$HOME/Library/Application Support/Rdaemon/r_in"
 
-if [ ! -e "$HOME"/Rdaemon/daemon/x11runs ]; then
+if [ ! -e "$HOME/Library/Application Support/Rdaemon"/daemon/x11runs ]; then
 osascript &lt;&lt;-AS &amp;&gt;/dev/null
  	tell application "X11"
  		quit

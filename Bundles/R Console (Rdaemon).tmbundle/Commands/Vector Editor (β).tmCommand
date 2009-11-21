@@ -19,15 +19,15 @@ SCR1
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$HOME/Library/Application Support/Rdaemon"
 fi
 
 TASK="@|cat(is.vector($VAR))"
-RES=$("$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" | tail -n 1)
+RES=$("$HOME/Library/Application Support/Rdaemon"/daemon/execRStr.sh "$TASK" | tail -n 1)
 [[ "$RES" != "TRUE&gt; " ]] &amp;&amp; echo "'$VAR' is not a vector." &amp;&amp; exit_show_tool_tip
 
 TASK="@|sink('$RDRAMDISK/r_tmp');cat($VAR, sep='\\\\\\\n');sink(file=NULL);"
-"$HOME"/Rdaemon/daemon/execRStr.sh "$TASK" &gt; /dev/null
+"$HOME/Library/Application Support/Rdaemon"/daemon/execRStr.sh "$TASK" &gt; /dev/null
 
 RES=$(cat "$RDRAMDISK/r_tmp")
 
@@ -76,7 +76,7 @@ font-size:11pt;
 				}
 			}
 		}
-		var cmd = "echo '" + inp[0].value +"&lt;-c(" + accu.join(", ") + ")' &gt; ~/Rdaemon/r_tmp;echo -e '@|source(\"$HOME/Rdaemon/r_tmp\")' &gt; ~/Rdaemon/r_in";
+		var cmd = "echo '" + inp[0].value +"&lt;-c(" + accu.join(", ") + ")' &gt; "$HOME/Library/Application Support/Rdaemon"/r_tmp;echo -e '@|source(\"$HOME/Library/Application Support/Rdaemon/r_tmp\")' &gt; "$HOME/Library/Application Support/Rdaemon"/r_in";
 		TextMate.system(cmd,null);
 		TextMate.isBusy = false;
 		window.close();

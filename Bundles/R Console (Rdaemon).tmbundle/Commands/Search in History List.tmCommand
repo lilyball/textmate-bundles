@@ -10,7 +10,7 @@
 [[ -z "$WORD" ]] &amp;&amp; exit_discard
 
 #show Rhistory as inline menu in reversed order grepped
-L=$(tail -r "$HOME/Rdaemon"/history/Rhistory.txt | egrep -i "$WORD" | uniq | ruby -e '
+L=$(tail -r "$HOME/Library/Application Support/Rdaemon"/history/Rhistory.txt | egrep -i "$WORD" | uniq | ruby -e '
 	require File.join(ENV["TM_SUPPORT_PATH"], "lib/ui.rb")
 	words = STDIN.read().split("\n")
 	index=TextMate::UI.menu(words)

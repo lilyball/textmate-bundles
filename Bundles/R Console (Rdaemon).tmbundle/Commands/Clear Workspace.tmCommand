@@ -14,7 +14,7 @@ test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
 ANS=$("$DIALOG" -e -p '{messageTitle="Rdaemon";alertStyle="critical";informativeText="Do you really want to clear the entire workspace?";buttonTitles=("Clear","Cancel");}')
 if [ "$ANS" == "0" ]; then
-	echo "@|rm(list=ls());gc(reset=TRUE)" &gt; ~/Rdaemon/r_in
+	echo "@|rm(list=ls());gc(reset=TRUE)" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
 	echo "Workspace is empty."
 else
 	echo "Task was cancelled."

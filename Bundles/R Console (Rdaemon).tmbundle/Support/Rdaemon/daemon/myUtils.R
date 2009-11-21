@@ -9,7 +9,7 @@
 
 unlockBinding("menu", environment(menu))
 menu <- function(choises, graphics=FALSE, title="Rdaemon") {
-	res=system(paste("~/Rdaemon/daemon/menu.sh", " '", paste('"', choises, '"', sep='', collapse=','), "' '", title, "'",  sep=''), intern=T)
+	res=system(paste("\"$HOME/Library/Application Support/Rdaemon/daemon/menu.sh\"", " '", paste('"', choises, '"', sep='', collapse=','), "' '", title, "'",  sep=''), intern=T)
 	return(ifelse(length(which(choises==res))>0, which(choises==res),  0))
 }
 lockBinding("menu", environment(menu))
@@ -22,7 +22,7 @@ select.list <- function(list, preselect = NULL, multiple = FALSE, title="Rdaemon
 		multipleArg <- ""
 		if(!is.null(preselect)) preselect <- preselect[1]
 	}
-	res=system(paste("~/Rdaemon/daemon/selectlist.sh", " '", paste('"', list, '"', sep='', collapse=','), "' '", title, "' '", paste('"', preselect, '"', sep='', collapse=','), "' '", multipleArg, "'", sep=''), intern=T)
+	res=system(paste("\"$HOME/Library/Application Support/Rdaemon/daemon/selectlist.sh\"", " '", paste('"', list, '"', sep='', collapse=','), "' '", title, "' '", paste('"', preselect, '"', sep='', collapse=','), "' '", multipleArg, "'", sep=''), intern=T)
 	res <- unlist(strsplit(res, "!@#@!"))[-1]
 	if(!length(res)) return(character(0))
 	return(res)

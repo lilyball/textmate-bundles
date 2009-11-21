@@ -8,15 +8,15 @@
 
 ######### global variables #########
 
+RDHOME="$HOME/Library/Application Support/Rdaemon"
+
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$HOME/Library/Application Support/Rdaemon"
 fi
 
-RDHOME="$HOME/Rdaemon"
 RAMSIZE=${TM_RdaemonRAMSIZE:-50}
-
 
 ######### functions #########
 
@@ -63,7 +63,7 @@ if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 		ramDiskSize=`echo "${RAMSIZE}*2048" | bc`
 		ramDiskPath=`hdid -nomount ram://${ramDiskSize}`
 		#save /dev/disk? for detaching
-		echo -n "$ramDiskPath" > ~/Rdaemon/daemon/ramDiskPath
+		echo -n "$ramDiskPath" > "$RDHOME"/daemon/ramDiskPath
 		newfs_hfs -v 'TMRdaemon' $ramDiskPath
 		[[ ! -d "$RDRAMDISK" ]] && mkdir "$RDRAMDISK"
 		mount -t hfs $ramDiskPath "$RDRAMDISK"
@@ -96,16 +96,31 @@ fi
 
 #copy startOptions.R if not exists 
 if [ ! -f "$RDHOME"/startOptions.R ]; then
-	cp "$TM_BUNDLE_SUPPORT"/bin/startOptions.R "$RDHOME"/startOptions.R
+	cp "$TM_BUNDLE_SUPPORT"/Rdaemon/startOptions.R "$RDHOME"/startOptions.R
 fi
+
 #copy Rhistory.txt if not exists 
 if [ ! -f "$RDHOME"/history/Rhistory.txt ]; then
 	touch "$RDHOME"/history/Rhistory.txt
 fi
 
-#remove duplicated lines of /Rhistory.txt
+#remove duplicated lines and date entries of /Rhistory.txt
 if [ -f "$RDHOME"/history/Rhistory.txt ]; then
-	cat "$RDHOME"/history/Rhistory.txt | uniq > "$RDHOME"/history/Rhistory.temp
+	cat "$RDHOME"/history/Rhistory.txt | uniq | perl -e '
+	@l = <>;
+	$flag=0;
+	$dateline="";
+	foreach $a (@l) {
+		if ($a=~m/^----# /) {
+			$flag = 1;
+			$dateline = $a;
+		} else {
+			if($flag) {print "$dateline";}
+			print "$a";
+			$flag = 0;
+		}
+	}
+	' > "$RDHOME"/history/Rhistory.temp
 	rm "$RDHOME"/history/Rhistory.txt
 	cat "$RDHOME"/history/Rhistory.temp > "$RDHOME"/history/Rhistory.txt
 	rm "$RDHOME"/history/Rhistory.temp
@@ -118,7 +133,7 @@ echo " #----" >> "$RDHOME"/history/Rhistory.txt
 "$RDHOME"/daemon/startR.sh &> /dev/null &
 
 #reset history counter
-echo -n 0 > "$HOME"/Rdaemon/history/Rhistcounter.txt
+echo -n 0 > "$RDHOME"/history/Rhistcounter.txt
 
 #safety counter
 SAFECNT=0
@@ -153,7 +168,7 @@ if [ $? == 1 ]; then
 	# check for R errors while starting
 	"$DIALOG" -t $token -p "{summary='Waiting for respond…';progressValue=90;}" 2&>/dev/null
 	POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
-	echo "@|sink('$RDRAMDISK/r_tmp');cat(geterrmessage());sink(file=NULL)" > ~/Rdaemon/r_in
+	echo "@|sink('$RDRAMDISK/r_tmp');cat(geterrmessage());sink(file=NULL)" > "$RDHOME"/r_in
 	POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 	OFF=$(($POSNEW - $POS + 2))
 	while [ 1 ]

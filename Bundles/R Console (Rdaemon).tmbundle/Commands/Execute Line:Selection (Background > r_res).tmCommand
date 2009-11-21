@@ -9,11 +9,11 @@
 	<key>command</key>
 	<string>######### global variables #########
 
-RDHOME="$HOME/Rdaemon"
+RDHOME="$HOME/Library/Application Support/Rdaemon"
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$RDHOME"
 fi
 
 
@@ -57,12 +57,12 @@ if [ "$QTASK" == "q()" -o "$QTASK" == "quit()" ]; then
 		exit 204
 	else
 		if [ "$ANS" == "0" ]; then
-			echo -e "@|q()\n@|y\n" &gt; "$HOME/Rdaemon/r_in"
+			echo -e "@|q()\n@|y\n" &gt; "$RDHOME/r_in"
 		fi
 		if [ "$ANS" == "2" ]; then
-			echo -e "@|q()\n@|n\n" &gt; "$HOME/Rdaemon/r_in"
+			echo -e "@|q()\n@|n\n" &gt; "$RDHOME/r_in"
 		fi
-		if [ ! -e "$HOME"/Rdaemon/daemon/x11runs ]; then
+		if [ ! -e "$RDHOME"/daemon/x11runs ]; then
 			osascript &lt;&lt;-AS &amp;&gt;/dev/null
 	 			ignoring application responses
 	 			tell application "X11" to quit
@@ -74,10 +74,10 @@ if [ "$QTASK" == "q()" -o "$QTASK" == "quit()" ]; then
 fi
 
 #set history counter to 0
-echo -n 0 &gt; "$HOME/Rdaemon/history"/Rhistcounter.txt
+echo -n 0 &gt; "$RDHOME/history"/Rhistcounter.txt
 
 #send task to Rdaemon and give Rdaemon the chance to read from the pipe
-echo -e "@|sink('~/Rdaemon/r_res')"  &gt; "$RDHOME"/r_in
+echo -e "@|sink('$RDHOME/r_res')"  &gt; "$RDHOME"/r_in
 #send task to Rdaemon
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	echo -e "$TASK" &gt; "$RDHOME"/r_in
@@ -91,7 +91,7 @@ else
 	done
 	"$DIALOG" -x $token 2&amp;&gt;/dev/null
 fi
-echo "@|sink(file=NULL)" &gt; ~/Rdaemon/r_in
+echo "@|sink(file=NULL)" &gt; "$RDHOME"/r_in
 
 echo "Result is being written into 'r_res'"
 exit_show_tool_tip

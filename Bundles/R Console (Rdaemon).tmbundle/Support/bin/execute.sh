@@ -1,10 +1,10 @@
 ######### global variables #########
 
-RDHOME="$HOME/Rdaemon"
+RDHOME="$HOME/Library/Application Support/Rdaemon"
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$RDHOME"
 fi
 
 
@@ -58,12 +58,12 @@ if [ "$QTASK" == "q()" -o "$QTASK" == "quit()" ]; then
 		exit 204
 	else
 		if [ "$ANS" == "0" ]; then
-			echo -e "@|q()\n@|y\n" > "$HOME/Rdaemon/r_in"
+			echo -e "@|q()\n@|y\n" > "$HOME/Library/Application Support/Rdaemon/r_in"
 		fi
 		if [ "$ANS" == "2" ]; then
-			echo -e "@|q()\n@|n\n" > "$HOME/Rdaemon/r_in"
+			echo -e "@|q()\n@|n\n" > "$HOME/Library/Application Support/Rdaemon/r_in"
 		fi
-		if [ ! -e "$HOME"/Rdaemon/daemon/x11runs ]; then
+		if [ ! -e "$HOME/Library/Application Support/Rdaemon"/daemon/x11runs ]; then
 			osascript <<-AS &>/dev/null
 	 			ignoring application responses
 	 			tell application "X11" to quit
@@ -82,14 +82,14 @@ if [ "$QTASK" == "fix" -o "$QTASK" == "edit" ]; then
 fi
 
 #set history counter to 0
-echo -n 0 > "$HOME/Rdaemon/history"/Rhistcounter.txt
+echo -n 0 > "$RDHOME"/history/Rhistcounter.txt
 
 #get current position of r_out
 POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 PROMPT=$(tail -n 1 "$RDRAMDISK"/r_out | sed 's/> $//')
 
 #send task to Rdaemon and give Rdaemon the chance to read from the pipe
-#[[ -f "$HOME/Rdaemon/status.txt" ]] && rm "$HOME/Rdaemon/status.txt"
+
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	echo -e "$TASK" > "$RDHOME"/r_in
 else

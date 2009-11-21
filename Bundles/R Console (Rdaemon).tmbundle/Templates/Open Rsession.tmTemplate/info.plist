@@ -11,19 +11,19 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs - if not start it
 if [ -z $RPID ]; then
 
-  if [ -f "$HOME"/Rdaemon/daemon/startScript.sh ]; then
-  	rm -rf "$HOME"/Rdaemon/daemon
-  	rm -rf "$HOME"/Rdaemon/help
-  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon/daemon "$HOME"/Rdaemon
-  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon/help "$HOME"/Rdaemon 
-  	"$HOME"/Rdaemon/daemon/startScript.sh
+  if [ -f "$HOME/Library/Application Support/Rdaemon"/daemon/startScript.sh ]; then
+  	rm -rf "$HOME/Library/Application Support/Rdaemon"/daemon
+  	rm -rf "$HOME/Library/Application Support/Rdaemon"/help
+  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon/daemon "$HOME/Library/Application Support/Rdaemon"
+  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon/help "$HOME/Library/Application Support/Rdaemon" 
+  	"$HOME/Library/Application Support/Rdaemon"/daemon/startScript.sh
   	echo -en "&gt; "
   else
-  	[[ -d "$HOME"/Rdaemon ]] &amp;&amp; echo -e "The folder '$HOME/Rdaemon' already exists! Please remove or rename it first." &amp;&amp; exit_show_tool_tip
-  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon "$HOME"/Rdaemon
-  	echo -e "Rdaemon was installed in:\n'$HOME/Rdaemon'"
-  	if [ -f "$HOME"/Rdaemon/daemon/startScript.sh ]; then
-  		"$HOME"/Rdaemon/daemon/startScript.sh
+  	[[ -d "$HOME/Library/Application Support/Rdaemon" ]] &amp;&amp; echo -e "The folder '$HOME/Library/Application Support/Rdaemon' already exists! Please remove or rename it first." &amp;&amp; exit_show_tool_tip
+  	cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon "$HOME/Library/Application Support/Rdaemon"
+  	echo -e "Rdaemon was installed in:\n'$HOME/Library/Application Support/Rdaemon'"
+  	if [ -f "$HOME/Library/Application Support/Rdaemon"/daemon/startScript.sh ]; then
+  		"$HOME/Library/Application Support/Rdaemon"/daemon/startScript.sh
   		echo -en "&gt; "
   	else
   		echo "Error while installing Rdaemon!"
@@ -36,8 +36,8 @@ else
 fi
 
 
-open "$HOME"/Rdaemon/Rsession.tmproj
-mate "$HOME"/Rdaemon/console.Rcon
+open "$HOME/Library/Application Support/Rdaemon"/Rsession.tmproj
+mate "$HOME/Library/Application Support/Rdaemon"/console.Rcon
 open "txmt://open?line=1000000&amp;column=10000000"
 </string>
 	<key>extension</key>

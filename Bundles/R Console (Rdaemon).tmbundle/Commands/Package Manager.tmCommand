@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -8,7 +8,7 @@
 	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$HOME/Library/Application Support/Rdaemon"
 fi
 #get R's PID
 RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
@@ -44,7 +44,7 @@ cat&lt;&lt;END &gt; "$HEAD"
 	cursor:pointer;
 }
 tr {
-	-webkit-transition: all 200ms ease-out;
+	-webkit-transition: all 20ms ease-out;
 }
 tr:hover {
 	background-color:lightblue;
@@ -53,18 +53,18 @@ tr:hover {
 &lt;/style&gt;
 &lt;script type="text/javascript"&gt;
 		function getR(Rcmd) {
-		    var cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
+		    var cmd = '"$HOME/Library/Application Support/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
 		    document.getElementById("main").innerHTML = "&lt;pre&gt;&lt;font style='font-size:8pt'&gt;" + TextMate.system(cmd, null).outputString
 		}
         function pkgMan(pkg) {
 		    var cmd; var Rcmd;
 			if(pkg.checked == true) {
 				Rcmd = 'library(' + pkg.name + ')';
-			    cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
+			    cmd = '"$HOME/Library/Application Support/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
 			    myCommand = TextMate.system(cmd, function (task) { });
 			} else {
 				Rcmd = 'detach(package:' + pkg.name + ')';
-				cmd = '"$HOME/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
+				cmd = '"$HOME/Library/Application Support/Rdaemon/daemon/execRStr.sh" "@|'+Rcmd+'"';
 				myCommand = TextMate.system(cmd, function (task) { });
 			}
 		}
@@ -76,7 +76,7 @@ tr:hover {
 &lt;/head&gt;
 &lt;body&gt;
 END
-"$HOME/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');source('~/Rdaemon/help/pkgMan.R');sink(file=NULL);" &gt; /dev/null
+"$HOME/Library/Application Support/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');source('~/Library/Application Support/Rdaemon/help/pkgMan.R');sink(file=NULL);" &gt; /dev/null
 cat "$RDRAMDISK"/r_tmp &gt;&gt; "$HEAD"
 echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
 printframe

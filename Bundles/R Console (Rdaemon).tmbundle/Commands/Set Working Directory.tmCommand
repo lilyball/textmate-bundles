@@ -13,7 +13,7 @@ test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
 PATH=$(osascript -e 'tell application "TextMate"' -e 'activate' -e 'POSIX path of (choose folder with prompt "Set the working directory of the current Rdaemon session")' -e 'end tell' 2&gt;/dev/null)
 
-[[ ! -z $PATH ]] &amp;&amp; echo "@|setwd('$PATH')" &gt; "$HOME"/Rdaemon/r_in</string>
+[[ ! -z $PATH ]] &amp;&amp; echo "@|setwd('$PATH')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

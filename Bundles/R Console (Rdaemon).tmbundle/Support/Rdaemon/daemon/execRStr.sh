@@ -1,10 +1,10 @@
 ######### global variables #########
 
-RDHOME="$HOME/Rdaemon"
+RDHOME="$HOME/Library/Application Support/Rdaemon"
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$RDHOME"
 fi
 
 ######### begin script #########
@@ -27,7 +27,7 @@ if [ ! -p "$RDHOME"/r_in ]; then
 fi
 
 #set history counter to 0
-echo -n 0 > "$HOME/Rdaemon/history"/Rhistcounter.txt
+echo -n 0 > "$RDHOME/history"/Rhistcounter.txt
 
 #get current position of r_out
 POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')

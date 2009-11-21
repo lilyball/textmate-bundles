@@ -8,7 +8,7 @@
 	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$HOME/Library/Application Support/Rdaemon"
 fi
 
 #get R's PID
@@ -66,12 +66,12 @@ cat&lt;&lt;HTML
 		}
 		function exec() {
 			askForRemoveHide();
-			var cmd = 'echo "@|rm('+item+');gc(reset(TRUE))" &gt; "$HOME"/Rdaemon/r_in';
+			var cmd = 'echo "@|rm('+item+');gc(reset(TRUE))" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in';
 			TextMate.system(cmd, null);
 			document.getElementById(item).className = "nonVisible";
 		}
 		function edit(item) {
-			var cmd = 'echo "@|fix('+item+')" &gt; "$HOME"/Rdaemon/r_in';
+			var cmd = 'echo "@|fix('+item+')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in';
 			TextMate.system(cmd, null);
 			window.close();
 		}
@@ -93,7 +93,7 @@ cat&lt;&lt;HTML
 &lt;table border=1 cellpadding="5" style='border-collapse:collapse;'&gt;
 HTML
 
-"$HOME/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');try({ifelse((length(ls())&gt;0),{for(ü in 1:(length(ls()))){cat('&lt;tr id=\"');cat(ls()[ü]);cat('\"&gt;&lt;td align=right bgcolor=#EEEEEE&gt;&lt;b&gt;');cat(ls()[ü]);cat('&lt;/b&gt;&lt;td&gt;');cat(str(get(ls()[ü])));cat('&lt;/td&gt;&lt;td&gt;&lt;span onclick=\"edit(\'');cat(ls()[ü]);cat('\')\" class=\"helpSym\"&gt;&amp;nbsp;edit&amp;nbsp;&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span onclick=\"askForRemove(\'');cat(ls()[ü]);cat('\')\" class=\"helpSym\"&gt;&amp;nbsp;remove&amp;nbsp;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;');rm(ü)}},{cat('Workspace is empty.')})});sink(file=NULL);" &gt; /dev/null
+"$HOME/Library/Application Support/Rdaemon/daemon/execRStr.sh" "@|sink('$RDRAMDISK/r_tmp');try({ifelse((length(ls())&gt;0),{for(ü in 1:(length(ls()))){cat('&lt;tr id=\"');cat(ls()[ü]);cat('\"&gt;&lt;td align=right bgcolor=#EEEEEE&gt;&lt;b&gt;');cat(ls()[ü]);cat('&lt;/b&gt;&lt;td&gt;');cat(str(get(ls()[ü])));cat('&lt;/td&gt;&lt;td&gt;&lt;span onclick=\"edit(\'');cat(ls()[ü]);cat('\')\" class=\"helpSym\"&gt;&amp;nbsp;edit&amp;nbsp;&lt;/span&gt;&lt;/td&gt;&lt;td&gt;&lt;span onclick=\"askForRemove(\'');cat(ls()[ü]);cat('\')\" class=\"helpSym\"&gt;&amp;nbsp;remove&amp;nbsp;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;');rm(ü)}},{cat('Workspace is empty.')})});sink(file=NULL);" &gt; /dev/null
 cat "$RDRAMDISK"/r_tmp | sed 's/\$/&lt;br&gt;&lt;font color=blue&gt;\$&lt;\/font&gt;/g'
 echo "&lt;/table&gt;"
 

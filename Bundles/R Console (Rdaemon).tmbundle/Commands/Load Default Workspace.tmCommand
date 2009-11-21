@@ -11,10 +11,10 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-if [ ! -f "$HOME"/Rdaemon/.RData ]; then
+if [ ! -f "$HOME/Library/Application Support/Rdaemon"/.RData ]; then
 	echo "No .RData file found."
 else
-	echo "@|load('.RData')" &gt; ~/Rdaemon/r_in
+	echo "@|load('.RData')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
 fi</string>
 	<key>input</key>
 	<string>none</string>

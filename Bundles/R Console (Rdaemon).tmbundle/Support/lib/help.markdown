@@ -9,11 +9,11 @@ The entire source code is written in scripting languages (Ruby, Perl, HTML (Java
 
 # Installation
 
-In order to work with the Rdaemon it is necessary to install the Rdaemon in `~/Rdaemon`.
+In order to work with the Rdaemon it is necessary to install the Rdaemon in `~/Library/Application Support/Rdaemon`.
 
 Simply do execute the command "Install Rdaemon" (Bundle Menu > Rdaemon Tools > Install Rdaemon) or set the language of the current document to `R Console (Rdaemon)`, type "installrd", and press "&#x21E5;".
 
-***Please note that the folder `~/Rdaemon` may not yet exist.***
+***Please note that the folder `~/Library/Application Support/Rdaemon` may not yet exist.***
 
 # General Usage
 
@@ -85,7 +85,7 @@ It executes the selection line by line or the current line.
 
 ## Execute Line/Selection (Background > r_res)
 <button>⇧&#x2305;</button>
-It sends the current line or the selection line by line to the Rdaemon and does not wait for the result. The result will be written into `~/Rdaemon/r_res`. This is useful if one knows that the task will take some minutes, thus one does not block TextMate.
+It sends the current line or the selection line by line to the Rdaemon and does not wait for the result. The result will be written into `~/Library/Application Support/Rdaemon/r_res`. This is useful if one knows that the task will take some minutes, thus one does not block TextMate.
 
 This command must be executed if you want to use the R commands `fix()` or `edit()`!
 
@@ -109,7 +109,7 @@ As default it also displays an inline menu if there is only one suggestion found
 ***Hint*** This command works case-sensitively. E.g. if you type `math` (without selection and there is no command beginning with `math`) and invoke this command it lists all case-insensitive matched commands like `Math.fraction`, etc. as a tooltip caused by the chosen "Insert as Snippet" mechanism.
 
 ## Open Rsession
-<button>&#x2303;&#x2325;&#x2318;R</button> Opens the Rsession project which is stored as `~/Rdaemon/Rsession.tmproj`. If Rdaemon is not running it will start it.
+<button>&#x2303;&#x2325;&#x2318;R</button> Opens the Rsession project which is stored as `~/Library/Application Support/Rdaemon/Rsession.tmproj`. If Rdaemon is not running it will start it.
 # Command Menus
 
 ## General Control
@@ -125,7 +125,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Quit and Save__
 
-      Quits the Rdaemon session and saves the workspace in the working directory `~/Rdaemon`.
+      Quits the Rdaemon session and saves the workspace in the working directory `~/Library/Application Support/Rdaemon`.
 
 -    __History__
 
@@ -137,7 +137,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Edit StartOptions__
 
-      Opens the file `~/Rdaemon/startOptions.R`. This file will be execute while starting Rdaemon.
+      Opens the file `~/Library/Application Support/Rdaemon/startOptions.R`. This file will be execute while starting Rdaemon.
 
 -    __Start X11__
 
@@ -160,7 +160,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Save/Load Default Workspace__
 
-      Saves the workspace into `~/Rdaemon` or loads it.
+      Saves the workspace into the current working directory (default: `~/Library/Application Support/Rdaemon`) or loads it.
 
 -    __Clear Workspace__
 
@@ -230,7 +230,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Reveal "Rdaemon" in Finder/as TM Project__
 
-      Opens the folder `~/Rdaemon` in Finder or as a TextMate project.
+      Opens the folder `~/Library/Application Support/Rdaemon` in Finder or as a TextMate project.
 
 -    __Show End of r_out__
 
@@ -272,7 +272,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -   __Internal File Structure__
 
-    All needed files are stored in the folder `~/Rdaemon`.
+    All needed files are stored in the folder `~/Library/Application Support/Rdaemon`.
 
     * console.Rcon [console file used by the Rsession]
     * __daemon__
@@ -329,7 +329,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -   __Rdaemon runs in the background__
 
-    This means that you can quit TextMate (without quitting the Rdaemon) and restart TextMate without loosing the current Rdaemon session. Furthermore you have access to the Rdaemon also from other applications by using the pipe `~/Rdaemon/r_in` for sending tasks to the Rdaemon, or you can use the bash script `~/Rdaemon/daemon/execRStr.sh TASKS` which will output the result on stdout.
+    This means that you can quit TextMate (without quitting the Rdaemon) and restart TextMate without loosing the current Rdaemon session. Furthermore you have access to the Rdaemon also from other applications by using the pipe `~/Library/Application Support/Rdaemon/r_in` for sending tasks to the Rdaemon, or you can use the bash script `~/Library/Application Support/Rdaemon/daemon/execRStr.sh TASKS` which will output the result on stdout.
 
 -   __Different TextMate documents are set to "R Console (Rdaemon)"__
 
@@ -420,7 +420,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Nov 20 2009***
+***Date: Nov 21 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

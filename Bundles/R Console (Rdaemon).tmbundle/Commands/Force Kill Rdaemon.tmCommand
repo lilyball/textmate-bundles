@@ -17,7 +17,7 @@ else
 	echo -e "Rdaemon is not running!"
 fi
 
-if [ ! -e "$HOME"/Rdaemon/daemon/x11runs ]; then
+if [ ! -e "$HOME/Library/Application Support/Rdaemon/daemon/x11runs" ]; then
 osascript &lt;&lt;-AS &amp;&gt;/dev/null
  	tell application "X11"
  		quit

@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#show Rhistory as inline menu in reversed order
 
-RDHOME="$HOME/Rdaemon"
+RDHOME="$HOME/Library/Application Support/Rdaemon"
 
 L=$(tail -r "$RDHOME"/history/Rhistory.txt | uniq | ruby -e '
 	require File.join(ENV["TM_SUPPORT_PATH"], "lib/ui.rb")

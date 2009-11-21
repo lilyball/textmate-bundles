@@ -1,4 +1,4 @@
-MYDIR="$HOME/Rdaemon/help/savePlotAs"
+MYDIR="$HOME/Library/Application Support/Rdaemon/help/savePlotAs"
 SOURCE=${1//file:\/\//}
 DEV=$2
 if [ -f "$MYDIR"/bin/icf.plist ]; then
@@ -59,7 +59,7 @@ do
 					cat "$SOURCE" > "$TMD_filename.$TMD_outfmtValue"
 				fi
 				if [ "$TMD_outfmtValue" == "eps" ]; then
-					echo "@|.act0815<-dev.cur();dev.set($2);dev.copy2eps(file='"$TMD_filename".eps');dev.set(.act0815);rm(.act0815);" > ~/Rdaemon/r_in
+					echo "@|.act0815<-dev.cur();dev.set($2);dev.copy2eps(file='"$TMD_filename".eps');dev.set(.act0815);rm(.act0815);" > "$HOME/Library/Application Support/Rdaemon"/r_in
 				fi
 			else
 #				width=$(sips -g pixelWidth "$SOURCE" | awk '{print $2}')
@@ -68,7 +68,7 @@ do
 #				new_height=$(echo "$height*$TMD_resValue/150" | bc)
 				formatOptions=""
 				match=""
-				grayicc="$HOME/Rdaemon/help/savePlotAs/BlackWhite.icc"
+				grayicc="$HOME/Library/Application Support/Rdaemon/help/savePlotAs/BlackWhite.icc"
 				[[ "$TMD_gray" == "1" ]] && match="-m $grayicc"
 				[[ "$TMD_outfmtValue" == "tiff" ]] && formatOptions="-s formatOptions $TMD_tiffcompValue"
 				[[ "${TMD_outfmtValue:0:2}" == "jp" ]] && formatOptions="-s formatOptions $TMD_qualityValue"

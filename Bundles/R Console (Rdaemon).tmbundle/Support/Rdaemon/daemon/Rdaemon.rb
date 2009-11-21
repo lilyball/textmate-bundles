@@ -12,7 +12,7 @@
 
 require 'pty'
 
-$rdout = File.join(ENV['HOME'], "Rdaemon")
+$rdout = File.join(ENV['HOME'], "/Library/Application Support/Rdaemon")
 
 $fhist = File.open($rdout + '/history/Rhistory.txt', "a")
 
@@ -21,7 +21,7 @@ $fhist = File.open($rdout + '/history/Rhistory.txt', "a")
 if ENV['TM_RdaemonRAMDRIVE'] == "1"
 	cmd = "R -q --encoding=UTF-8 --TMRdaemon 2&> /tmp/TMRramdisk1/r_out"
 else
-	cmd = "R -q --encoding=UTF-8 --TMRdaemon 2&> " + $rdout + "/r_out"
+	cmd = "R -q --encoding=UTF-8 --TMRdaemon 2&> '" + $rdout + "/r_out'"
 end
 
 PTY.spawn(cmd) { |r,w,pid|

@@ -32,7 +32,7 @@ file.choose <- function() {
 }
 
 menu <- function(choises, graphics=FALSE,  title="Rdaemon") {
-	res=system(paste("~/Rdaemon/daemon/menu.sh", " '", paste('"', choises, '"', sep='', collapse=','), "' '", title, "'",  sep=''), intern=T)
+	res=system(paste("\"$HOME/Library/Application Support/Rdaemon/daemon/menu.sh\"", " '", paste('"', choises, '"', sep='', collapse=','), "' '", title, "'",  sep=''), intern=T)
 	return(ifelse(length(which(choises==res))>0, which(choises==res),  0))
 }
 
@@ -43,7 +43,7 @@ select.list <- function(list, preselect = NULL, multiple = FALSE, title="Rdaemon
 		multipleArg <- ""
 		if(!is.null(preselect)) preselect <- preselect[1]
 	}
-	res=system(paste("~/Rdaemon/daemon/selectlist.sh", " '", paste('"', list, '"', sep='', collapse=','), "' '", title, "' '", paste('"', preselect, '"', sep='', collapse=','), "' '", multipleArg, "'", sep=''), intern=T)
+	res=system(paste("\"$HOME/Library/Application Support/Rdaemon/daemon/selectlist.sh\"", " '", paste('"', list, '"', sep='', collapse=','), "' '", title, "' '", paste('"', preselect, '"', sep='', collapse=','), "' '", multipleArg, "'", sep=''), intern=T)
 	res <- unlist(strsplit(res, "!@#@!"))[-1]
 	if(!length(res)) return(character(0))
 	return(res)
@@ -52,7 +52,7 @@ select.list <- function(list, preselect = NULL, multiple = FALSE, title="Rdaemon
 readline <- function(prompt = "",  alert=FALSE) {
 	input <- "default answer \"\""
 	if(alert) input <- ""
-	res=system(paste("~/Rdaemon/daemon/readline.sh", " '", prompt, "' '", input , "'", sep=''), intern=T)
+	res=system(paste("\"$HOME/Library/Application Support/Rdaemon/daemon/readline.sh\"", " '", prompt, "' '", input , "'", sep=''), intern=T)
 	return(res)
 }
 
@@ -67,7 +67,7 @@ chooseCRANmirror <- function (graphics = getOption("menu.graphics"))
 		repos <- getOption("repos")
 		repos["CRAN"] <- gsub("/$", "", URL[1L])
 		options(repos = repos)
-		cat(paste("options(repos = list(CRAN='",repos,"'))\n",sep=""), file='~/Rdaemon/startOptions.R', append = TRUE)
+		cat(paste("options(repos = list(CRAN='",repos,"'))\n",sep=""), file='~/Library/Application Support/Rdaemon/startOptions.R', append = TRUE)
 	}
 	invisible()
 }
@@ -185,7 +185,7 @@ prompt <- function(object, filename = NULL, name = NULL, ...) {
 		actPlot <- dev.cur()
 		randomNum <- rnorm(1, mean = 10) * 1e+05
 		plotPathPref <- paste("file://", Sys.getenv("HOME"), 
-			"/Rdaemon/plots/tmp/Rplot_", randomNum, "_", 
+			"/Library/Application Support/Rdaemon/plots/tmp/Rplot_", randomNum, "_", 
 			sep = "", collapse = "")
 		for (i in 1:(length(plots))) {
 			borderCol <- ifelse(actPlot == plots[i], "red", 
@@ -202,7 +202,7 @@ prompt <- function(object, filename = NULL, name = NULL, ...) {
 				borderCol, "' width=90% src='", plotPathPref, 
 				sprintf("%03d", plots[i]), ".pdf", "'/><br>", 
 				sep = "", collapse = "")
-			  dev.print(pdf, file = paste("~/Rdaemon/plots/tmp/Rplot_", 
+			  dev.print(pdf, file = paste("~/Library/Application Support/Rdaemon/plots/tmp/Rplot_", 
 				randomNum, "_", sprintf("%03d", plots[i]), 
 				".pdf", sep = "", collapse = ""))
 			  out <- paste(out, "<button style='visibility:", 
@@ -222,7 +222,7 @@ prompt <- function(object, filename = NULL, name = NULL, ...) {
 			  out <- paste(out, "<img onclick='setAct(this.id)' id=", 
 				plots[i], "_", (i - 1), " style='border:3px solid ", 
 				borderCol, "' width=90% src='file://", Sys.getenv("HOME"), 
-				"/Rdaemon/daemon/dummy_noimage.pdf'/><br>", 
+				"/Library/Application Support/Rdaemon/daemon/dummy_noimage.pdf'/><br>", 
 				sep = "", collapse = "")
 			  out <- paste(out, "<button style='visibility:", 
 				btnVisibility, "' id=", plots[i], "_", (i - 

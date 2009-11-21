@@ -5,13 +5,13 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>C=$(cat "$HOME/Rdaemon"/history/Rhistcounter.txt)
+	<string>C=$(cat "$HOME/Library/Application Support/Rdaemon"/history/Rhistcounter.txt)
 [[ "$C" == "1" ]] &amp;&amp; exit_discard
 C=$(($C-1))
 
-L=$(tail -r "$HOME/Rdaemon"/history/Rhistory.txt | uniq | cat -n | egrep "^ *$C	" | sed 's/^.*	//' )
+L=$(tail -r "$HOME/Library/Application Support/Rdaemon"/history/Rhistory.txt | uniq | cat -n | egrep "^ *$C	" | sed 's/^.*	//' )
 
-echo -n $C &gt; "$HOME/Rdaemon"/history/Rhistcounter.txt
+echo -n $C &gt; "$HOME/Library/Application Support/Rdaemon"/history/Rhistcounter.txt
 L=$(echo "$L" | sed 's/\\/\\\\/g')
 L=${L//$/\\$}
 L=${L//\`/\\\`}

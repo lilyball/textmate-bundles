@@ -5,9 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>[[ -d "$HOME"/Rdaemon ]] &amp;&amp; echo -e "'$HOME/Rdaemon' already exists! Please remove it first." &amp;&amp; exit_show_tool_tip
-cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon "$HOME"/Rdaemon
-echo -e "Rdaemon was installed in:\n'$HOME/Rdaemon'"</string>
+	<string>[[ -d "$HOME/Library/Application Support/Rdaemon" ]] &amp;&amp; echo -e "'$HOME/Library/Application Support/Rdaemon' already exists! Please remove it first." &amp;&amp; exit_show_tool_tip
+cp -R "$TM_BUNDLE_SUPPORT"/Rdaemon "$HOME/Library/Application Support/Rdaemon"
+echo -e "Rdaemon was installed in:\n'$HOME/Library/Application Support/Rdaemon'"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>name</key>

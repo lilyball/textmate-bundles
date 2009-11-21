@@ -110,7 +110,7 @@ It shows all installed packages as an inline menu.
 <button>&nbsp;^F12&nbsp;</button>
 This is an auxiliary tool command with these two different tasks based on a selection:
 
-* It negates the logical value if the selection is "FALSE" or "TRUE".
+* It negates the logical value if the selection is "FALSE" or "TRUE" and "F" or "T" resp.
 * It shows an inline menu of all values which are selected and delimited by "|" and replaces the selection by the chosen one.
 
   For instance this is useful after inserting the parameter `method` of the R function `dist`.<br>The selected value is:<br>
@@ -190,6 +190,14 @@ It inserts:<br><pre>	x <- function(var) {
 
 As default TextMate displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the shell variable `R_AUTOCOMPLETE` to `1`. See also [Completion…](#sect_2.5).
 
+## TM&#95;RMATE&#95;OUTPUT&#95;FONT
+
+Set the font of Rmate's output window. Default is set to “Monaco”.
+
+## TM&#95;RMATE&#95;OUTPUT&#95;FONTSIZE
+
+Set the font size of Rmate's output window. Default is set to “10”.
+
 # Troubleshooting &amp; FAQ
 
 
@@ -225,7 +233,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Nov 20 2009***
+***Date: Nov 21 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

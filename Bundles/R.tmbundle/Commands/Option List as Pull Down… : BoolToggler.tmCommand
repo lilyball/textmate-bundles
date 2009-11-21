@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -12,9 +12,11 @@ echo -en "$LIST"  | ruby -e '
 	require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
 	words = STDIN.read().split("|")
 	if words.size == 1
-		if  words[0] == "TRUE" ||  words[0] == "FALSE"
+		if  words[0] == "TRUE" ||  words[0] == "FALSE" || words[0] == "T" || words[0] == "F"
 			print "FALSE" if words[0] == "TRUE"
 			print "TRUE" if words[0] == "FALSE"
+			print "F" if words[0] == "T"
+			print "T" if words[0] == "F"
 		else
 			TextMate.exit_discard()
 		end

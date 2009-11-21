@@ -68,8 +68,9 @@ def recursive_delete(path)
   %x{rm -rf #{path}}
 end
 
-# allow the user to define its own output font
+# allow the user to define its own output font and size
 outputFont = (ENV['TM_RMATE_OUTPUT_FONT'] == nil) ? "Monaco" : ENV['TM_RMATE_OUTPUT_FONT']
+outputFontSize = (ENV['TM_RMATE_OUTPUT_FONTSIZE'] == nil) ? "10pt" : "#{ENV['TM_RMATE_OUTPUT_FONTSIZE']}pt"
 
 # what comes in
 what = (ENV['TM_SELECTED_TEXT'] == nil) ? "document" : "selection"
@@ -85,7 +86,7 @@ EOS
 myFile = __FILE__
 myDir = File.dirname(myFile) + '/'
 # include pastel.css and substitute some placeholder
-File.open(File.join(myDir, 'pastel.css')) {|f| f.each_line {|l| print l.gsub('FONTPLACEHOLDER',outputFont)} }
+File.open(File.join(myDir, 'pastel.css')) {|f| f.each_line {|l| print l.gsub('FONTPLACEHOLDER',outputFont).gsub('FONTSIZEPLACEHOLDER',outputFontSize)} }
 print <<-HTML
 </style>
 <script type="text/javascript">
@@ -181,14 +182,14 @@ STDOUT.flush
 # check for generated plots; if yes, embed them into the HTML output as PDF images
 if !Dir::glob("#{tmpDir}/*.pdf").empty?
   width = (Dir::glob("#{tmpDir}/*.pdf").size > 1) ? "50%" : "100%"
-  puts '<br /><strong><i>click on image to open or drag the image to a location as PDF</i></strong><hr />'
+  puts '<br /><strong><i style="font-size:9pt">Click on image to open it in the default application for PDF files.</i></strong><hr />'
   counter = 0
   Dir::glob("#{tmpDir}/*.pdf") { |f| 
     counter +=  1
     print "<img width=#{width} onclick=\"TextMate.system(\'open \\'#{f}\\'\',null);\" src='file://#{f}' />"
     print "<br>" if (counter % 2 == 0)
   }
-  puts "<hr /><input type=button onclick=\"TextMate.system(\'open -a Preview \\'#{tmpDir}\\'\',null);\" value='Open all Images in Preview' />&nbsp;&nbsp;&nbsp;<input type=button onclick=\"TextMate.system(\'open -a Finder \\'#{tmpDir}\\'\',null);\" value='Reveal all Images in Finder' />"
+  puts "<hr /><center><input type=button onclick=\"TextMate.system(\'open -a Preview \\'#{tmpDir}\\'\',null);\" value='Open all Images in Preview' />&nbsp;&nbsp;&nbsp;<input type=button onclick=\"TextMate.system(\'open -a Finder \\'#{tmpDir}\\'\',null);\" value='Reveal all Images in Finder' /></center>"
 end
 
 puts '</div></pre></div>'

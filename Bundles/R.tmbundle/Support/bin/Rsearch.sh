@@ -21,7 +21,7 @@ IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
 echo "<html><body style='margin-top:5mm'><table style='border-collapse:collapse'><tr><td style='padding-right:1cm;border-bottom:1px solid black'><b>Package</b></td><td style='border-bottom:1px solid black'><b>Topic</b></td></tr>" > "$HEAD"
 
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	echo "write.table(help.search('$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+	echo "write.table(help.search('$TERM',agrep=1)[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
 	sleep 0.5
 	TAB=$(head -n 1 /tmp/r_help_result_dummy | egrep '	' | wc -l)
 	if [ "$TAB" -eq 0 ]; then

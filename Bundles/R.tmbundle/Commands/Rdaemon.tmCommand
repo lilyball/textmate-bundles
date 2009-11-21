@@ -9,11 +9,11 @@
 	<key>command</key>
 	<string>######### global variables #########
 
-RDHOME="$HOME/Rdaemon"
+RDHOME="$HOME/Library/Application Support/Rdaemon"
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	RDRAMDISK="$HOME"/Rdaemon
+	RDRAMDISK="$RDHOME"
 fi
 
 [[ ! -d "$RDHOME" ]] &amp;&amp; echo "Please install Rdaemon first." &amp;&amp; exit 206
@@ -25,13 +25,13 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 RdaemonWASrunning=1
 #check whether Rdaemon runs - if not start it
 if [ -z $RPID ]; then
-	[[ -e "$HOME"/Rdaemon/daemon/x11runs ]] &amp;&amp; rm "$HOME"/Rdaemon/daemon/x11runs
+	[[ -e "$RDHOME"/daemon/x11runs ]] &amp;&amp; rm "$RDHOME"/daemon/x11runs
 	X=$(ps -ax | grep X11 | wc -l)
 	if [ "$X" -gt "1" ]; then
-		touch "$HOME"/Rdaemon/daemon/x11runs
+		touch "$RDHOME"/daemon/x11runs
 	fi
-	if [ -f "$HOME"/Rdaemon/daemon/startScript.sh ]; then
-		"$HOME"/Rdaemon/daemon/startScript.sh
+	if [ -f "$RDHOME"/daemon/startScript.sh ]; then
+		"$RDHOME"/daemon/startScript.sh
 	else
 		echo "You have to install Rdaemon first!"
 		exit_show_tool_tip
@@ -63,7 +63,7 @@ if [ ! -p "$RDHOME"/r_in ]; then
 fi
 
 #set history counter to 0
-echo -n 0 &gt; "$HOME/Rdaemon/history"/Rhistcounter.txt
+echo -n 0 &gt; "$RDHOME/history"/Rhistcounter.txt
 
 #get current position of r_out
 POS=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
@@ -128,7 +128,7 @@ if [ $ERR -gt 0 ]; then
 	mate /tmp/TMRdaemon_error.Rcon
 	exit
 # else
-  # echo -en "$RES" &gt;&gt; "$HOME"/Rdaemon/console.Rcon
+  # echo -en "$RES" &gt;&gt; "$RDHOME"/console.Rcon
 fi
 
 
@@ -147,14 +147,14 @@ OFF=$(($POSNEW - $POS + 2))
 #   #$a=~s/\`/\\\`/sg;$a=~s/\$/\\\$/sg;
 #   $a .= "\n&gt; " if ($a!~/&gt; $/ &amp;&amp; $a!~/\+ $/);
 #   print "$a";
-# ' &gt;&gt; "$HOME"/Rdaemon/console.Rcon
+# ' &gt;&gt; "$RDHOME"/console.Rcon
 
 osascript &amp;&gt;/dev/null \
 	   -e 'tell app "SystemUIServer" to activate' \
 	   -e 'tell app "TextMate" to activate' &amp;
 
-open "$HOME/Rdaemon/Rsession.tmproj"
-mate "$HOME"/Rdaemon/console.Rcon
+open "$RDHOME/Rsession.tmproj"
+mate "$RDHOME"/console.Rcon
 sleep 0.3
 open "txmt://open?line=1000000&amp;column=10000000"
 fi

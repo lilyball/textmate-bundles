@@ -20,7 +20,7 @@ It executes the current document or selection in a self-sufficient environment o
 
 ## Send Selection/Document to Rdaemon
 <button>&nbsp;&#x21E7;&#x2318;R&nbsp;</button>
-It sends the current document or selection line by line to the Rdaemon. If Rdaemon is not yet running it will start it, it opens the Rsession project, and the file `~/Rdaemon/console.Rcon` will contain the output.
+It sends the current document or selection line by line to the Rdaemon. If Rdaemon is not yet running it will start it, it opens the Rsession project, and the file `~/Library/Application Support/Rdaemon/console.Rcon` will contain the output.
 
 ***Hint*** To use that command you have to install the Rdaemon Bundle in beforehand.
 

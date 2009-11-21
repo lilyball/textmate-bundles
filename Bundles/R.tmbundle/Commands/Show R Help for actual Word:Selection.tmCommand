@@ -70,11 +70,11 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 		RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 		#check whether Rdaemon runs
 		if [ ! -z $RPID ]; then
-			RDHOME="$HOME/Rdaemon"
+			RDHOME="$HOME/Library/Application Support/Rdaemon"
 			if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 				RDRAMDISK="/tmp/TMRramdisk1"
 			else
-				RDRAMDISK="$HOME"/Rdaemon
+				RDRAMDISK="$RDHOME"
 			fi
 			[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
 			TASK="@|sink('$RDRAMDISK/r_tmp')"
@@ -232,7 +232,15 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 			}
 		}
 		function Rdoc() {
-			TextMate.system('open "${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}/doc/html/index.html"', null);
+HFS
+
+if [ "$IS_HELPSERVER" != "TRUE" ]; then
+			echo "TextMate.system('open \"${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}/doc/html/index.html\"', null);" &gt;&gt; "$SEARCH"
+else
+			echo "TextMate.system('open \"http://127.0.0.1:$PORT/doc/html/index.html\"', null);" &gt;&gt; "$SEARCH"
+fi
+
+cat &lt;&lt;-"HFS01" &gt;&gt; "$SEARCH"
 		}
 	&lt;/script&gt;
 	&lt;/head&gt;
@@ -240,7 +248,7 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 	&lt;table&gt;
 		&lt;tr&gt;
 			&lt;td&gt;
-HFS
+HFS01
 
 if [ "$IS_HELPSERVER" != "TRUE" ]; then
 	echo "&lt;form name='sform' onsubmit='Search(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"

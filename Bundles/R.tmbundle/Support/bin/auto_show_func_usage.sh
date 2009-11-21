@@ -12,11 +12,11 @@ SCR1
 RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
 [[ "${TM_CURRENT_LINE:0:1}" == "+" ]] && RD="0"
 if [ $RD -gt 0 ]; then
-	RDHOME="$HOME/Rdaemon"
+	RDHOME="$HOME/Library/Application Support/Rdaemon"
 	if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 		RDRAMDISK="/tmp/TMRramdisk1"
 	else
-		RDRAMDISK="$HOME"/Rdaemon
+		RDRAMDISK="$RDHOME"
 	fi
 	#get R's PID
 	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
@@ -66,11 +66,11 @@ if [ ! -z "$FILE" -a ! -e "$FILE" ]; then
 	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 	#check whether Rdaemon runs
 	if [ ! -z $RPID ]; then
-		RDHOME="$HOME/Rdaemon"
+		RDHOME="$HOME/Library/Application Support/Rdaemon"
 		if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 			RDRAMDISK="/tmp/TMRramdisk1"
 		else
-			RDRAMDISK="$HOME"/Rdaemon
+			RDRAMDISK="$RDHOME"
 		fi
 		[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
 		TASK="@|sink('$RDRAMDISK/r_tmp')"

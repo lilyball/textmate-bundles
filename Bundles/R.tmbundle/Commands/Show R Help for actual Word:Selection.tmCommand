@@ -229,6 +229,7 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 				//TextMate.system('sleep 0.9', null);
 				parent.data.location.reload();
 				TextMate.isBusy = false;
+				parent.search.sform.search.value = term;
 			}
 		}
 		function Rdoc() {
@@ -257,7 +258,7 @@ if [ "$IS_HELPSERVER" != "TRUE" ]; then
 else
 	echo "&lt;form name='sform' onsubmit='SearchServer(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"
 	echo "&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;" &gt;&gt; "$SEARCH"
-	echo "&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='SearchServer(this.value)'&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' onsearch='SearchServer(this.value)'&gt;" &gt;&gt; "$SEARCH"
 fi
 
 cat &lt;&lt;-"HFS1" &gt;&gt; "$SEARCH"

@@ -21,7 +21,7 @@ IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
 echo "<html><body style='margin-top:5mm'><table style='border-collapse:collapse'><tr><td style='padding-right:1cm;border-bottom:1px solid black'><b>Package</b></td><td style='border-bottom:1px solid black'><b>Topic</b></td></tr>" > "$HEAD"
 
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	echo "write.table(help.search('$TERM',agrep=1)[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+	echo "write.table(help.search('^$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
 	sleep 0.5
 	TAB=$(head -n 1 /tmp/r_help_result_dummy | egrep '	' | wc -l)
 	if [ "$TAB" -eq 0 ]; then
@@ -30,16 +30,20 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 	else
 		exec</tmp/r_help_result_dummy
 	fi
-	while read i
-	do
-		lib=$(echo "$i" | cut -f2)
-		fun=$(echo "$i" | cut -f1)
-		echo "<tr><td>$lib</td><td>" >> "$HEAD"
-		[[ ! -z "$PORT" ]] && echo "<a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'>$fun</a></td></tr>" >> "$HEAD"
-	done
-	if [ "$TAB" -eq 0 ]; then
-		curl -sS "http://127.0.0.1:$PORT/library/$lib/html/$fun.html" > "$DATA"
-		echo "<base href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html'>" >> "$DATA"
+	if [ `cat /tmp/r_help_result_dummy | wc -l` -gt 300 ]; then
+		echo "<br><i>too much matches...</i>"
+	else
+		while read i
+		do
+			lib=$(echo "$i" | cut -f2)
+			fun=$(echo "$i" | cut -f1)
+			echo "<tr><td>$lib</td><td>" >> "$HEAD"
+			[[ ! -z "$PORT" ]] && echo "<a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'>$fun</a></td></tr>" >> "$HEAD"
+		done
+		if [ "$TAB" -eq 0 ]; then
+			curl -sS "http://127.0.0.1:$PORT/library/$lib/html/$fun.html" > "$DATA"
+			echo "<base href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html'>" >> "$DATA"
+		fi
 	fi
 	rm /tmp/r_help_result_dummy 2>/dev/null
 	rm /tmp/r_help_result_dummy1 2>/dev/null

@@ -94,7 +94,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			done
 			PORT=$(cat "$RDRAMDISK"/r_tmp | tail -n 1 | sed 's/.* //;')
 			if [ "$PORT" == "0" -o -z "$PORT" ]; then
-				echo -en "No Help Server found. Please try to redo your search. It this should fail plaease inform the bundle maintainer."
+				echo -en "No Help Server found. Please try it again.\nIf this should fail again, please inform the bundle maintainer."
 				exit_show_tool_tip
 			fi
 			#get the reference for WORD
@@ -108,21 +108,39 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 				sleep 0.01
 			done
 			FILE=$(cat "$RDRAMDISK"/r_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
-			if [ "$FILE" != "NA" -a $"IS_HELPSERVER" != "TRUE" ]; then
+			[[ "${FILE:0:6}" == "help('" ]] &amp;&amp; FILE="NA"
+			if [ "$FILE" != "NA" -a "$IS_HELPSERVER" == "TRUE" ]; then
+				# No package named
+				echo "$FILE" &amp;&amp; exit 206
+				
 				LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
 				LIB=$(echo -n "$LINK" | cut -d '/' -f1)
 				FUN=$(echo -n "$LINK" | cut -d '/' -f2)
 				FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
 				echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
-				curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
+				curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
 				exit_show_html
+			fi
+			if [ "$FILE" == "NA" -a "$IS_HELPSERVER" == "TRUE" ]; then
+				echo "@|sink('/tmp/Rdaemon_r_help_tmp');cat(apply(help.search('^$WORD')[[4]][,c(3,1)],1,function(x) paste(x,collapse='/')),sep='\n');sink(file=NULL)" &gt; "$RDHOME"/r_in
+				while [ 1 ]
+				do
+					RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+					[[ "$RES" == "&gt; " ]] &amp;&amp; break
+					[[ "$RES" == ": " ]] &amp;&amp; break
+					[[ "$RES" == "+ " ]] &amp;&amp; break
+					sleep 0.01
+				done
+				FILE=$(cat /tmp/Rdaemon_r_help_tmp | sort | uniq)
+				[[ "$FILE" == "sink(file=NULL)" ]] &amp;&amp; FILE=""
+				rm /tmp/Rdaemon_r_help_tmp
 			fi
 			HELPPIPE_IN="$RDHOME/r_in"
 			HELPPIPE_OUT="$RDRAMDISK/r_tmp"
 		fi
 	fi
 	# If no Rdaemon runs start a dummy helper daemon
-	if [ $RDOFF -gt 0 ]; then
+	if [ $RDOFF -gt 0 -a -z "$FILE" ]; then
 		RPID=$(ps aw | grep '[0-9] /Lib.*TMRHelperDaemon' | awk '{print $1;}' )
 		#check whether dummy daemon runs if not start it
 		if [ -z $RPID ]; then
@@ -175,7 +193,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 		done
 		PORT=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;')
 		if [ "$PORT" == "0" -o -z "$PORT" ]; then
-			echo -en "No Help Server found. Please try to redo your search. It this should fail plaease inform the bundle maintainer."
+			echo -en "No Help Server found. Please try it again.\nIf this should fail again, please inform the bundle maintainer."
 			exit_show_tool_tip
 		fi
 		#get the reference for WORD
@@ -195,7 +213,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			FUN=$(echo -n "$LINK" | cut -d '/' -f2)
 			FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
 			echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
-			curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
+			curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
 			exit_show_html
 		fi
 		HELPPIPE_IN="/tmp/r_helper_dummy"
@@ -204,15 +222,17 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 	echo "$PORT" &gt; "$TM_BUNDLE_SUPPORT"/httpPort
 fi
 
-#get the reference for WORD
-CNT=1
 
+CNT=$(echo -e "$FILE" | wc -l)
+
+# Fallback if FILE is empty execute "help(WORD)" in “R --slave”
 [[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD',try.all.packages=T)[1])" | R --slave)
-[[ "$FILE" == "NA" ]] &amp;&amp; CNT=0
-#FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+# FILE == NA means no single help file found
+if [ "$FILE" == "NA" -o -z "$FILE" ];then
+	CNT=0
+fi
 
-#CNT=$(echo -e "$FILE" | wc -l)
-[[ -z "$FILE" ]] &amp;&amp; CNT=0
+# If only one help page is found display it and exit
 if [ $CNT == 1 ]; then
 	if [ $"IS_HELPSERVER" != "TRUE" -a -e "$FILE" ]; then
 		RFILE=$(echo "$FILE" | perl -pe 's!(.*?)/library/(.*?)/help/(.*)!$1/library/$2/html/$3.html!')
@@ -223,14 +243,12 @@ if [ $CNT == 1 ]; then
 		LIB=$(echo -n "$LINK" | cut -d '/' -f1)
 		FUN=$(echo -n "$LINK" | cut -d '/' -f2)
 		echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
-		curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
-		# echo -en "$HTML"
+		curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
 	fi
 	exit_show_html
 fi
 
-[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
-
+# Function to output the HTML frame set
 printframe() {
 	ROWSIZE=$1
 	cat &lt;&lt;-HF
@@ -342,36 +360,48 @@ HFS2
 echo "&lt;html&gt;&lt;body style='margin-top:5mm'&gt;" &gt; "$HEAD"
 echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padding-right:1cm;border-bottom:1px solid black'&gt;&lt;b&gt;Package&lt;/b&gt;&lt;/td&gt;&lt;td style='border-bottom:1px solid black'&gt;&lt;b&gt;Topic&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 
-CNT=$(echo -e "$FILE" | wc -l)
+
 HCNT=0
 export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
+
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	for i in $FILE
-	do
-		echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
-		lib=$(echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$2!')
-		echo "$lib" &gt;&gt; "$HEAD"
-		fun=$(echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$3!')
-		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
-	done
+	[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!.*?/library/(.*?)/.*?/(.*?)\.tex!$1/$2!')
+	CNT=$(echo -e "$FILE" | wc -l)
+	if [ $CNT -gt 300 ]; then
+		echo "&lt;br&gt;&lt;i&gt;too much matches...&lt;/i&gt;"
+	else
+		for i in $FILE
+		do
+			lib=$(echo "$i" | cut -d '/' -f 1)
+			fun=$(echo "$i" | cut -d '/' -f 2)
+			echo "&lt;tr&gt;&lt;td&gt;$lib&lt;/td&gt;&lt;td&gt;&lt;a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+		done
+	fi
 else
-	for i in $FILE
-	do
-		echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
-		echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$2!' &gt;&gt; "$HEAD"
-		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='tm-file://$i' target='data'&gt;" &gt;&gt; "$HEAD"
-		echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$3!' &gt;&gt; "$HEAD"
-		echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
-	done
+	# If no single page was found look for ^WORD in the index help file
+	[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+	CNT=$(echo -e "$FILE" | wc -l)
+	if [ $CNT -gt 300 ]; then
+		echo "&lt;br&gt;&lt;i&gt;too much matches...&lt;/i&gt;"
+	else
+		for i in $FILE
+		do
+			echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
+			echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$2!' &gt;&gt; "$HEAD"
+			echo "&lt;/td&gt;&lt;td&gt;&lt;a href='tm-file://$i' target='data'&gt;" &gt;&gt; "$HEAD"
+			echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$3!' &gt;&gt; "$HEAD"
+			echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+		done
+	fi
 fi
 
 echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
 
 if [ $CNT -eq 1 ]; then
 	if [ "$IS_HELPSERVER" == "TRUE" ]; then
-		lib=$(echo "$FILE" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/')
-		fun=$(echo "$FILE" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/')
-		curl -sS "http://127.0.0.1:$PORT/library/$lib/html/$fun.html" &gt; "$DATA"
+		lib=$(echo "$FILE" | cut -d '/' -f 1)
+		fun=$(echo "$FILE" | cut -d '/' -f 2)
+		curl -gsS "http://127.0.0.1:$PORT/library/$lib/html/$fun.html" &gt; "$DATA"
 		echo "&lt;base href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html'&gt;" &gt;&gt; "$DATA"
 	else
 		[[ -e "$FILE" ]] &amp;&amp; cat "$FILE" &gt; "$DATA"

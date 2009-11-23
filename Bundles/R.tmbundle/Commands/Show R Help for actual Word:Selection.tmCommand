@@ -207,7 +207,7 @@ fi
 #get the reference for WORD
 CNT=1
 
-[[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD')[1])" | R --slave)
+[[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD',try.all.packages=T)[1])" | R --slave)
 [[ "$FILE" == "NA" ]] &amp;&amp; CNT=0
 #FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
 
@@ -267,7 +267,7 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 				TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" ' + w, null);
 				parent.head.location.reload();
 				TextMate.isBusy = false;
-				TextMate.system('sleep 0.9', null);
+				//TextMate.system('sleep 0.9', null);
 				parent.data.location.reload();
 			}
 		}
@@ -276,7 +276,7 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 				TextMate.isBusy = true;
 				TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 1', null);
 				parent.head.location.reload();
-				//TextMate.system('sleep 0.9', null);
+				TextMate.system('sleep 0.1', null);
 				parent.data.location.reload();
 				TextMate.isBusy = false;
 				parent.search.sform.search.value = term;
@@ -342,34 +342,32 @@ HFS2
 echo "&lt;html&gt;&lt;body style='margin-top:5mm'&gt;" &gt; "$HEAD"
 echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padding-right:1cm;border-bottom:1px solid black'&gt;&lt;b&gt;Package&lt;/b&gt;&lt;/td&gt;&lt;td style='border-bottom:1px solid black'&gt;&lt;b&gt;Topic&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 
-CNT=$(echo -en "$FILE" | wc -l)
+CNT=$(echo -e "$FILE" | wc -l)
 HCNT=0
 export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	for i in `echo $FILE`
+	for i in $FILE
 	do
 		echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
-		lib=$(echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/')
+		lib=$(echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$2!')
 		echo "$lib" &gt;&gt; "$HEAD"
-		fun=$(echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/')
-		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'&gt;" &gt;&gt; "$HEAD"
-		echo "$fun" &gt;&gt; "$HEAD"
-		echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+		fun=$(echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$3!')
+		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 	done
 else
-	for i in `echo $FILE`
+	for i in $FILE
 	do
 		echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
-		echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/' &gt;&gt; "$HEAD"
-		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='$i' target='data'&gt;" &gt;&gt; "$HEAD"
-		echo "$i" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/' &gt;&gt; "$HEAD"
+		echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$2!' &gt;&gt; "$HEAD"
+		echo "&lt;/td&gt;&lt;td&gt;&lt;a href='tm-file://$i' target='data'&gt;" &gt;&gt; "$HEAD"
+		echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$3!' &gt;&gt; "$HEAD"
 		echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 	done
 fi
 
 echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
 
-if [ "$CNT" -eq "1" ]; then
+if [ $CNT -eq 1 ]; then
 	if [ "$IS_HELPSERVER" == "TRUE" ]; then
 		lib=$(echo "$FILE" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\2/')
 		fun=$(echo "$FILE" | sed 's/\(.*\)library\/\(.*\)\/html\/\(.*\)\.html/\3/')

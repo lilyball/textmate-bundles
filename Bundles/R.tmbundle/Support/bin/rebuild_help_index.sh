@@ -53,9 +53,9 @@ if [ ! -e "$INDEX" -o ! -e "$INDEXSHORT" ]; then
 	for lpath in $LIBPATHS
 	do
 		CNT=0
-		if [[ -d "$lpath" ]]; then
+		if [ -d "$lpath" ]; then
 			ls "$lpath" | grep -v -F . >> "$PKGS"
-			FILE=$(find -f "$lpath"/*/help/* -name AnIndex 2>/dev/null)
+			FILE=$(find -f "$lpath"/*//* -name AnIndex 2>/dev/null)
 			LCNT=$(echo "$FILE" | wc -l)
 			for f in $FILE
 			do

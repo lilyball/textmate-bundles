@@ -112,8 +112,9 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 				LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
 				LIB=$(echo -n "$LINK" | cut -d '/' -f1)
 				FUN=$(echo -n "$LINK" | cut -d '/' -f2)
-				echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
-				curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
+				FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
+				echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
+				curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
 				exit_show_html
 			fi
 			HELPPIPE_IN="$RDHOME/r_in"
@@ -192,8 +193,9 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
 			LIB=$(echo -n "$LINK" | cut -d '/' -f1)
 			FUN=$(echo -n "$LINK" | cut -d '/' -f2)
-			echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
-			curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
+			FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
+			echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
+			curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
 			exit_show_html
 		fi
 		HELPPIPE_IN="/tmp/r_helper_dummy"

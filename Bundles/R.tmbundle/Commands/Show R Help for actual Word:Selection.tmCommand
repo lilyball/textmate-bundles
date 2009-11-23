@@ -58,6 +58,7 @@ IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
 PORT=0
 HELPPIPE_IN=""
 HELPPIPE_OUT=""
+FILE=""
 
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
 	## Find or start a Help Server 
@@ -89,9 +90,32 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 				[[ "$RES" == "&gt; " ]] &amp;&amp; break
 				[[ "$RES" == ": " ]] &amp;&amp; break
 				[[ "$RES" == "+ " ]] &amp;&amp; break
-				sleep 0.02
+				sleep 0.01
 			done
 			PORT=$(cat "$RDRAMDISK"/r_tmp | tail -n 1 | sed 's/.* //;')
+			if [ "$PORT" == "0" -o -z "$PORT" ]; then
+				echo -en "No Help Server found. Please try to redo your search. It this should fail plaease inform the bundle maintainer."
+				exit_show_tool_tip
+			fi
+			#get the reference for WORD
+			echo "@|help('$WORD',try.all.packages=T)[1]" &gt; "$RDHOME"/r_in
+			while [ 1 ]
+			do
+				RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+				[[ "$RES" == "&gt; " ]] &amp;&amp; break
+				[[ "$RES" == ": " ]] &amp;&amp; break
+				[[ "$RES" == "+ " ]] &amp;&amp; break
+				sleep 0.01
+			done
+			FILE=$(cat "$RDRAMDISK"/r_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
+			if [ "$FILE" != "NA" -a $"IS_HELPSERVER" != "TRUE" ]; then
+				LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
+				LIB=$(echo -n "$LINK" | cut -d '/' -f1)
+				FUN=$(echo -n "$LINK" | cut -d '/' -f2)
+				echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
+				curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
+				exit_show_html
+			fi
 			HELPPIPE_IN="$RDHOME/r_in"
 			HELPPIPE_OUT="$RDRAMDISK/r_tmp"
 		fi
@@ -149,27 +173,50 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			sleep 0.02
 		done
 		PORT=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;')
+		if [ "$PORT" == "0" -o -z "$PORT" ]; then
+			echo -en "No Help Server found. Please try to redo your search. It this should fail plaease inform the bundle maintainer."
+			exit_show_tool_tip
+		fi
+		#get the reference for WORD
+		echo "help('$WORD',try.all.packages=T)[1]" &gt; /tmp/r_helper_dummy
+		while [ 1 ]
+		do
+			RES=$(tail -c 2 /tmp/r_helper_dummy_out)
+			[[ "$RES" == "&gt; " ]] &amp;&amp; break
+			[[ "$RES" == ": " ]] &amp;&amp; break
+			[[ "$RES" == "+ " ]] &amp;&amp; break
+			sleep 0.02
+		done
+		FILE=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
+		if [ "$FILE" != "NA" -a $"IS_HELPSERVER" != "TRUE" ]; then
+			LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
+			LIB=$(echo -n "$LINK" | cut -d '/' -f1)
+			FUN=$(echo -n "$LINK" | cut -d '/' -f2)
+			echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
+			curl -sS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
+			exit_show_html
+		fi
 		HELPPIPE_IN="/tmp/r_helper_dummy"
 		HELPPIPE_OUT="/tmp/r_helper_dummy_out"
-	fi
-	if [ "$PORT" == "0" -o -z "$PORT" ]; then
-		echo -en "No Help Server found."
-		exit_show_tool_tip
 	fi
 	echo "$PORT" &gt; "$TM_BUNDLE_SUPPORT"/httpPort
 fi
 
 #get the reference for WORD
-FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+CNT=1
 
-CNT=$(echo -e "$FILE" | wc -l)
+[[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD')[1])" | R --slave)
+[[ "$FILE" == "NA" ]] &amp;&amp; CNT=0
+#FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}' | perl -pe 's!/latex/!/html/!;s!tex$!html!')
+
+#CNT=$(echo -e "$FILE" | wc -l)
 [[ -z "$FILE" ]] &amp;&amp; CNT=0
 if [ $CNT == 1 ]; then
 	if [ $"IS_HELPSERVER" != "TRUE" -a -e "$FILE" ]; then
 		cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
 		echo "&lt;base href='tm-file://$FILE'&gt;"
 	else
-		LINK=$(egrep "/(00)?${WORD//./\\.}$" "$TM_BUNDLE_SUPPORT"/helpshort.index)
+		LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
 		LIB=$(echo -n "$LINK" | cut -d '/' -f1)
 		FUN=$(echo -n "$LINK" | cut -d '/' -f2)
 		echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"

@@ -355,6 +355,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
     XXXXX specifies the different locales:
     * LC_ALL
+    * LC_LANG
     * LC_TIME
     * LC_COLLATE
     * LC_CTYPE

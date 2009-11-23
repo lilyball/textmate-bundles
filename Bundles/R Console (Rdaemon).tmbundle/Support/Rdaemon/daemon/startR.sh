@@ -3,6 +3,7 @@
 # this starts the daemon
 cd "$HOME/Library/Application Support/Rdaemon"
 export LC_ALL=${TM_RdaemonLC_ALL:-en_US.UTF-8}
+export LC_LANG=${TM_RdaemonLC_LANG:-}
 export LC_TIME=${TM_RdaemonLC_TIME:-}
 export LC_COLLATE=${TM_RdaemonLC_COLLATE:-}
 export LC_CTYPE=${TM_RdaemonLC_CTYPE:-en_US.UTF-8}

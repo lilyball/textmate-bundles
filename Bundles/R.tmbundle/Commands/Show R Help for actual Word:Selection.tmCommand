@@ -110,9 +110,6 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			FILE=$(cat "$RDRAMDISK"/r_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
 			[[ "${FILE:0:6}" == "help('" ]] &amp;&amp; FILE="NA"
 			if [ "$FILE" != "NA" -a "$IS_HELPSERVER" == "TRUE" ]; then
-				# No package named
-				echo "$FILE" &amp;&amp; exit 206
-				
 				LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
 				LIB=$(echo -n "$LINK" | cut -d '/' -f1)
 				FUN=$(echo -n "$LINK" | cut -d '/' -f2)

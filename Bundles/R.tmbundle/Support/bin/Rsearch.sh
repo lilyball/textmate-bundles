@@ -21,7 +21,13 @@ IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
 echo "<html><body style='margin-top:5mm'><table style='border-collapse:collapse'><tr><td style='padding-right:1cm;border-bottom:1px solid black'><b>Package</b></td><td style='border-bottom:1px solid black'><b>Topic</b></td></tr>" > "$HEAD"
 
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	echo "write.table(help.search('^$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+	if [ "$AS" == "1" ]; then
+		echo "write.table(help.search('^$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+		AS="checked"
+	else
+		echo "write.table(help.search('$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+		AS=""
+	fi
 	sleep 0.5
 	TAB=$(head -n 1 /tmp/r_help_result_dummy | egrep '	' | wc -l)
 	if [ "$TAB" -eq 0 ]; then
@@ -31,7 +37,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 		exec</tmp/r_help_result_dummy
 	fi
 	if [ `cat /tmp/r_help_result_dummy | wc -l` -gt 300 ]; then
-		echo "<br><i>too much matches...</i>"
+		echo "<tr colspan=2><td><i>too much matches...</i></td></tr>" >> "$HEAD"
 	else
 		while read i
 		do
@@ -47,8 +53,58 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 	fi
 	rm /tmp/r_help_result_dummy 2>/dev/null
 	rm /tmp/r_help_result_dummy1 2>/dev/null
+	SEARCH="$TM_BUNDLE_SUPPORT/lib/search.html"
+	cat <<-HFS > "$SEARCH"
+	<html>
+		<head>
+		<script type='text/javascript' charset='utf-8'>
+			function SearchServer(term) {
+				if (term.length > 0) {
+					TextMate.isBusy = true;
+					if(document.sform.where.checked == true) {
+						TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 1', null);
+					} else {
+						TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 0', null);
+					}
+					parent.head.location.reload();
+					TextMate.system('sleep 0.1', null);
+					parent.data.location.reload();
+					TextMate.isBusy = false;
+					parent.search.sform.search.value = term;
+				}
+			}
+			function Rdoc() {
+				TextMate.system('open \"http://127.0.0.1:$PORT/doc/html/index.html\"', null);	
+			}
+		</script>
+		</head>
+		<body bgcolor='#ECECEC''>
+		<table>
+			<tr>
+				<td>
+				<form name='sform' onsubmit='SearchServer(document.sform.search.value)'>
+				<small><small><i>Search for</i><br /></small></small>
+				<input tabindex='0' id='search' type='search' placeholder='regexp' results='20' onsearch='SearchServer(this.value)' value="$TERM">
+				</td>
+				<td>
+				<font style='font-size:7pt'>
+				<br /><button onclick='SearchServer(document.sform.search.value)'>Search</button>
+				<br /><input type='checkbox' name='where' value='key' $AS><i>&nbsp;begins&nbsp;with</i>
+				</font>
+				</td>
+				</form>
+				</td>
+			</tr>
+			<tr>
+				<td align=center colspan=3>
+				<input onclick='Rdoc()' type=button value='R documentation'>
+				</td>
+			</tr>
+		</table>
+		</body>
+	</html>
+	HFS
 else
-
 	if [ "$AS" == "1" ]; then
 		REFS=$(cat `find -f "${R_HOME:-/Library/Frameworks/R.framework/Resources}"/library/* -name INDEX` | egrep -m 260 -i "$TERM" | awk '{print $1;}' | sort | uniq | perl -pe 's/\n/|/g;s/\[/\\[/g;s/\-/\\-/g;s/\./\\./g;s/\(/\\(/g;s/\)/\\)/g')
 		# 

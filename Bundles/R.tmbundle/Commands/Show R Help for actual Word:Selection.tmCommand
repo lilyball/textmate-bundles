@@ -90,7 +90,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 				[[ "$RES" == "&gt; " ]] &amp;&amp; break
 				[[ "$RES" == ": " ]] &amp;&amp; break
 				[[ "$RES" == "+ " ]] &amp;&amp; break
-				sleep 0.01
+				sleep 0.03
 			done
 			PORT=$(cat "$RDRAMDISK"/r_tmp | tail -n 1 | sed 's/.* //;')
 			if [ "$PORT" == "0" -o -z "$PORT" ]; then
@@ -105,7 +105,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 				[[ "$RES" == "&gt; " ]] &amp;&amp; break
 				[[ "$RES" == ": " ]] &amp;&amp; break
 				[[ "$RES" == "+ " ]] &amp;&amp; break
-				sleep 0.01
+				sleep 0.03
 			done
 			FILE=$(cat "$RDRAMDISK"/r_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
 			[[ "${FILE:0:6}" == "help('" ]] &amp;&amp; FILE="NA"
@@ -126,7 +126,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 					[[ "$RES" == "&gt; " ]] &amp;&amp; break
 					[[ "$RES" == ": " ]] &amp;&amp; break
 					[[ "$RES" == "+ " ]] &amp;&amp; break
-					sleep 0.01
+					sleep 0.03
 				done
 				FILE=$(cat /tmp/Rdaemon_r_help_tmp | sort | uniq)
 				[[ "$FILE" == "sink(file=NULL)" ]] &amp;&amp; FILE=""
@@ -162,7 +162,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 					echo -en "Start failed! No response from R Helper server!"
 					exit 206
 				fi
-				sleep 0.01
+				sleep 0.03
 			done
 
 			#wait for Rdaemon's output is ready
@@ -176,7 +176,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 					echo -en "Start failed! No response from R Helper server!"
 					exit 206
 				fi
-				sleep 0.05
+				sleep 0.03
 			done
 		fi
 		echo "ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)" &gt; /tmp/r_helper_dummy
@@ -186,7 +186,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			[[ "$RES" == "&gt; " ]] &amp;&amp; break
 			[[ "$RES" == ": " ]] &amp;&amp; break
 			[[ "$RES" == "+ " ]] &amp;&amp; break
-			sleep 0.02
+			sleep 0.03
 		done
 		PORT=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;')
 		if [ "$PORT" == "0" -o -z "$PORT" ]; then
@@ -201,7 +201,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			[[ "$RES" == "&gt; " ]] &amp;&amp; break
 			[[ "$RES" == ": " ]] &amp;&amp; break
 			[[ "$RES" == "+ " ]] &amp;&amp; break
-			sleep 0.02
+			sleep 0.03
 		done
 		FILE=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
 		if [ "$FILE" != "NA" -a $"IS_HELPSERVER" != "TRUE" ]; then
@@ -255,7 +255,7 @@ printframe() {
 	&lt;TITLE&gt;TextMate&amp;apos;s R Help&lt;/TITLE&gt;
 	&lt;/HEAD&gt;
 	&lt;FRAMESET COLS="$ROWSIZE,*" FRAMEBORDER="5" FRAMESPACING="5" BORDER="7" FRAMEBORDER="YES" onload='parent.search.sform.search.value="$WORD";parent.search.sform.search.select();parent.search.sform.search.focus()'&gt;
-		&lt;FRAMESET ROWS="*,80" FRAMEBORDER="1" FRAMESPACING="0" BORDER="1" FRAMEBORDER="NO"&gt;
+		&lt;FRAMESET ROWS="*,90" FRAMEBORDER="1" FRAMESPACING="0" BORDER="1" FRAMEBORDER="NO"&gt;
 			&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/head.html" NAME="head" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
 			&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/search.html" NAME="search" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="NO"&gt;
 		&lt;/FRAMESET&gt;
@@ -289,7 +289,11 @@ cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 		function SearchServer(term) {
 			if (term.length &gt; 0) {
 				TextMate.isBusy = true;
-				TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 1', null);
+				if(document.sform.where.checked == true) {
+					TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 1', null);
+				} else {
+					TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 0', null);
+				}
 				parent.head.location.reload();
 				TextMate.system('sleep 0.1', null);
 				parent.data.location.reload();
@@ -323,7 +327,7 @@ if [ "$IS_HELPSERVER" != "TRUE" ]; then
 else
 	echo "&lt;form name='sform' onsubmit='SearchServer(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"
 	echo "&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;" &gt;&gt; "$SEARCH"
-	echo "&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' onsearch='SearchServer(this.value)'&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;input tabindex='0' id='search' type='search' placeholder='regexp' results='20' onsearch='SearchServer(this.value)'&gt;" &gt;&gt; "$SEARCH"
 fi
 
 cat &lt;&lt;-"HFS1" &gt;&gt; "$SEARCH"
@@ -335,7 +339,7 @@ HFS1
 if [ "$IS_HELPSERVER" != "TRUE" ]; then
 	echo "&lt;input type='radio' id='where' name='where' value='key' checked  onclick='Search(document.sform.search.value)'&gt;keywords&lt;br /&gt;&lt;input type='radio' id='where' name='where' value='full' onclick='Search(document.sform.search.value)'&gt;full&amp;nbsp;text" &gt;&gt; "$SEARCH"
 else
-	echo "&lt;br /&gt;&lt;button onclick='SearchServer(document.sform.search.value);parent.data.location.reload();'&gt;Search&lt;/button&gt;" &gt;&gt; "$SEARCH"
+	echo "&lt;br /&gt;&lt;button onclick='SearchServer(document.sform.search.value)'&gt;Search&lt;/button&gt;&lt;br /&gt;&lt;input type='checkbox' name='where' value='key' checked&gt;&lt;i&gt; begins with&lt;/i&gt;" &gt;&gt; "$SEARCH"
 fi
 
 cat &lt;&lt;-"HFS2" &gt;&gt; "$SEARCH"
@@ -346,7 +350,7 @@ cat &lt;&lt;-"HFS2" &gt;&gt; "$SEARCH"
 		&lt;/tr&gt;
 		&lt;tr&gt;
 			&lt;td align=center colspan=3&gt;
-			&lt;input onclick='Rdoc()' type=button value='R documentation'&gt;
+			&lt;input onclick='Rdoc()' type=button value='R documentation'&gt;&lt;br/&gt;
 			&lt;/td&gt;
 		&lt;/tr&gt;
 	&lt;/table&gt;
@@ -362,10 +366,12 @@ HCNT=0
 export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
 
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!.*?/library/(.*?)/.*?/(.*?)\.tex!$1/$2!')
+	if [ $CNT -eq 0 ]; then 
+		FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!.*?/library/(.*?)/.*?/(.*?)\.tex!$1/$2!')
+	fi
 	CNT=$(echo -e "$FILE" | wc -l)
 	if [ $CNT -gt 300 ]; then
-		echo "&lt;br&gt;&lt;i&gt;too much matches...&lt;/i&gt;"
+		echo "&lt;tr&gt;&lt;td&gt;&lt;i&gt;too much matches...&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;"
 	else
 		for i in $FILE
 		do
@@ -379,7 +385,7 @@ else
 	[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
 	CNT=$(echo -e "$FILE" | wc -l)
 	if [ $CNT -gt 300 ]; then
-		echo "&lt;br&gt;&lt;i&gt;too much matches...&lt;/i&gt;"
+		echo "&lt;tr colspan=2&gt;&lt;td&gt;&lt;i&gt;too much matches...&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 	else
 		for i in $FILE
 		do

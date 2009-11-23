@@ -213,8 +213,9 @@ CNT=1
 [[ -z "$FILE" ]] &amp;&amp; CNT=0
 if [ $CNT == 1 ]; then
 	if [ $"IS_HELPSERVER" != "TRUE" -a -e "$FILE" ]; then
-		cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
-		echo "&lt;base href='tm-file://$FILE'&gt;"
+		RFILE=$(echo "$FILE" | perl -pe 's!(.*?)/library/(.*?)/help/(.*)!$1/library/$2/html/$3.html!')
+		cat "$RFILE" | iconv -s -f ISO8859-1 -t UTF-8
+		echo "&lt;base href='tm-file://$FILE.html'&gt;"
 	else
 		LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
 		LIB=$(echo -n "$LINK" | cut -d '/' -f1)

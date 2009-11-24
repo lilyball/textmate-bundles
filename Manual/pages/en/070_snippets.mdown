@@ -89,7 +89,9 @@ There are situations where we want our placeholder text mirrored but with slight
 
 We can accomplish this by doing a regular expression substitution on the placeholder text (when mirroring it). The syntax for this is: `${«tab stop»/«regexp»/«format»/«options»}`.
 
-As an example, the Objective-C getter/setter methods often look like this:
+As an example, the Objective-C getter/setter methods (prior to the `@property` keyword) often look like this (in the [thread-unsafe form][]):
+
+[thread-unsafe form]: http://ticket.macromates.com/show?ticket_id=E11D9EAF
 
     - (id)foo
     {

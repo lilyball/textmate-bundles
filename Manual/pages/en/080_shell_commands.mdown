@@ -27,43 +27,11 @@ TextMate allows shell commands to be executed in different contexts. Some of the
 
 When running a command from Terminal, the shell will use the value of the `PATH` variable to locate it (when it is specified without an absolute location). For example `ruby` is located in `/usr/bin/ruby` and `svn` is (for me) located in `/opt/local/bin/svn`.
 
-TextMate would normally [inherit the value of `PATH` from Finder][1], which has only a few search locations specified, so this is not very useful.
+TextMate [inherits the value of `PATH` from Finder][1], which has only a few search locations specified, so for many users, it is necessary to augment this PATH if they need TextMate to find `git`, `pdflatex`, or similar commands not included with Mac OS X.
 
-Instead TextMate runs a custom script (named `bash_init.sh` located in `$TM_SUPPORT_PATH/lib`) before executing the actual shell command(s). This custom script contains the following code:
+There are two ways to setup `PATH` for TextMate. Either via Preferences → Advanced → Shell Variables or by editing [`~/.MacOSX/environment.plist`][2].
 
-    if [ ! -f "$TM_BASH_INIT" ]; then
-
-       # First read system-wide profile
-       [ -f /etc/profile ] && . /etc/profile
-
-       # Then find the first local profile
-       if   [ -f ~/.bash_profile ]; then . ~/.bash_profile
-       elif [ -f ~/.bash_login   ]; then . ~/.bash_login
-       elif [ -f ~/.profile      ]; then . ~/.profile
-       fi
-
-    fi
-
-What this means is that unless you create your own custom `bash_init.sh` script then TextMate will get the path which would occur by first sourcing (executing) `/etc/profile` and then the first bash initialization file found in your home folder.
-
-If you do not normally use the bash shell, you may have to setup the path you normally have (in `tcsh`, `zsh`, or similar). For example create a `~/.bash_profile` file containing these lines:
-
-    [ -f /etc/profile ] && . /etc/profile
-    [ -f ~/.bashrc ]    && . ~/.bashrc
-
-    export PATH="$HOME/bin:/opt/local/bin:$PATH"
-
-This will add `~/bin` and `/opt/local/bin` to the path. Notice that `$HOME` is used instead of `~`, that is because inside double-quoted strings `~` is not expanded but `$HOME` is.
-
-**Important:** commands which use the shell shebang syntax to call a specific interpreter (e.g. `#!/usr/bin/ruby` or `#!/usr/bin/env ruby` on the first line of the command) do not go through this startup procedure, so these will not get the extended path. For these it is possible to augment the path by setting `PATH` in [`~/.MacOSX/environment.plist`][2] which is a property list that contains key/value pairs corresponding to [environment variables read by Finder when you login][3].
-
-So if you want to add `/opt/local/bin` to the path then create `~/.MacOSX/environment.plist` and add the following:
-
-    { PATH = "/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"; }
-
-After having created (or edited) this file you will need to re-login to your user account for the change to take effect.
-
-Note that in this file you are not able to refer to `$HOME` so you will instead have to use something like `/Users/allan/bin` for `$HOME/bin` (substituting `allan` with the name of your user).
+The former is by far the simplest, the latter is a property list with [environment variables read by Finder when you login][3], so values set here should affect all applications.
 
 [1]: http://developer.apple.com/qa/qa2001/qa1255.html
 [2]: http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/EnvironmentVars.html#//apple_ref/doc/uid/20002093-113982

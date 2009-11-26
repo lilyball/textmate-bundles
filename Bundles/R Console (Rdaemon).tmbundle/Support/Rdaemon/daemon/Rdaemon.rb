@@ -12,7 +12,7 @@
 
 require 'pty'
 
-$rdout = File.join(ENV['HOME'], "/Library/Application Support/Rdaemon")
+$rdout = File.join(ENV['HOME'], "Library/Application Support/Rdaemon")
 
 $fhist = File.open($rdout + '/history/Rhistory.txt', "a")
 

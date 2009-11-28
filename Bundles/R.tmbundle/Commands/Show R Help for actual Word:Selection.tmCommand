@@ -99,6 +99,7 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			fi
 			#get the reference for WORD
 			echo "@|help('$WORD',try.all.packages=T)[1]" &gt; "$RDHOME"/r_in
+			sleep 0.001
 			while [ 1 ]
 			do
 				RES=$(tail -c 2 "$RDRAMDISK"/r_out)
@@ -111,8 +112,8 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 			[[ "${FILE:0:6}" == "help('" ]] &amp;&amp; FILE="NA"
 			if [ "$FILE" != "NA" -a "$IS_HELPSERVER" == "TRUE" ]; then
 				LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
-				LIB=$(echo -n "$LINK" | cut -d '/' -f1)
-				FUN=$(echo -n "$LINK" | cut -d '/' -f2)
+				LIB=$(echo "$LINK" | cut -d '/' -f1)
+				FUN=$(echo "$LINK" | cut -d '/' -f2)
 				FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
 				echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
 				curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
@@ -206,8 +207,8 @@ if [ "$IS_HELPSERVER" == "TRUE" ]; then
 		FILE=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
 		if [ "$FILE" != "NA" -a $"IS_HELPSERVER" != "TRUE" ]; then
 			LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
-			LIB=$(echo -n "$LINK" | cut -d '/' -f1)
-			FUN=$(echo -n "$LINK" | cut -d '/' -f2)
+			LIB=$(echo "$LINK" | cut -d '/' -f1)
+			FUN=$(echo "$LINK" | cut -d '/' -f2)
 			FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
 			echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
 			curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
@@ -223,7 +224,7 @@ fi
 CNT=$(echo -e "$FILE" | wc -l)
 
 # Fallback if FILE is empty execute "help(WORD)" in “R --slave”
-[[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD',try.all.packages=T)[1])" | R --slave)
+[[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD',try.all.packages=T)[1])" | R --vanilla --slave --no-readline --encoding=UTF-8)
 # FILE == NA means no single help file found
 if [ "$FILE" == "NA" -o -z "$FILE" ];then
 	CNT=0
@@ -237,8 +238,8 @@ if [ $CNT == 1 ]; then
 		echo "&lt;base href='tm-file://$FILE.html'&gt;"
 	else
 		LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
-		LIB=$(echo -n "$LINK" | cut -d '/' -f1)
-		FUN=$(echo -n "$LINK" | cut -d '/' -f2)
+		LIB=$(echo "$LINK" | cut -d '/' -f1)
+		FUN=$(echo "$LINK" | cut -d '/' -f2)
 		echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
 		curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
 	fi

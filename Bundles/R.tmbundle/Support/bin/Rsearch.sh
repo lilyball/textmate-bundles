@@ -13,7 +13,7 @@ DATA="$BPATH"/lib/data.html
 LIBPATHSFILE="$TM_BUNDLE_SUPPORT"/libpaths
 # get LIB paths from R
 if [ ! -e "$LIBPATHSFILE" ]; then
-	echo "cat(.libPaths())" | R --slave > "$LIBPATHSFILE"
+	echo "cat(.libPaths())" | R --vanilla --slave --no-readline --encoding=UTF-8 > "$LIBPATHSFILE"
 fi
 LIBPATHS=$(cat "$LIBPATHSFILE")
 IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
@@ -22,10 +22,10 @@ echo "<html><body style='margin-top:5mm'><table style='border-collapse:collapse'
 
 if [ "$IS_HELPSERVER" == "TRUE" ]; then
 	if [ "$AS" == "1" ]; then
-		echo "write.table(help.search('^$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+		echo "write.table(help.search('^$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --vanilla --slave --no-readline --encoding=UTF-8
 		AS="checked"
 	else
-		echo "write.table(help.search('$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --slave
+		echo "write.table(help.search('$TERM')[[4]][,c(1,3)],file='/tmp/r_help_result_dummy',sep='\t',quote=F,col.names=F,row.names=F)" | R --vanilla --slave --no-readline --encoding=UTF-8
 		AS=""
 	fi
 	sleep 0.5

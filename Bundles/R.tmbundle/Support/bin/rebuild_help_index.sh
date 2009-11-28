@@ -17,7 +17,7 @@ IS_HELPSERVERPATH="$TM_BUNDLE_SUPPORT"/isHelpserver
 LIBPATHSFILE="$TM_BUNDLE_SUPPORT"/libpaths
 
 # get LIB paths from R
-LIBPATHS=$(echo "cat(paste(.libPaths(),collapse='\n'));cat('\n');cat(getRversion() >= '2.10.0')" | R --slave)
+LIBPATHS=$(echo "cat(paste(.libPaths(),collapse='\n'));cat('\n');cat(getRversion() >= '2.10.0')" | R --vanilla --slave --no-readline --encoding=UTF-8)
 IS_HELPSERVER=$(echo -e "$LIBPATHS" | tail -n1)
 LIBPATHS=$(echo -e "$LIBPATHS" | sed '$d')
 echo "$IS_HELPSERVER" > "$IS_HELPSERVERPATH"

@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>cat | R --slave | pbcopy</string>
+	<string>cat | R --vanilla --slave --no-readline --encoding=UTF-8 | pbcopy</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>

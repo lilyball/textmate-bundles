@@ -7,9 +7,9 @@
 	<key>command</key>
 	<string>if [ -z "$TM_SELECTED_TEXT" ]; then
 	echo
-	cat | R --slave
+	cat | R --vanilla --slave --no-readline --encoding=UTF-8
 else
-	cat | R --slave
+	cat | R --vanilla --slave --no-readline --encoding=UTF-8
 	exit_replace_text
 fi</string>
 	<key>input</key>

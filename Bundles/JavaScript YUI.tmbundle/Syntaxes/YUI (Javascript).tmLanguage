@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string>Yahoo User Interface Library</string>
+	<string>Yahoo User Interface Library 2.8.0</string>
 	<key>foldingStartMarker</key>
 	<string>(^.*{[^}]*$|^.*\([^\)]*$|^.*/\*(?!.*\*/).*$)</string>
 	<key>foldingStopMarker</key>
@@ -28,13 +28,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(CustomEvent|Subscriber|Event|EventProvider|Dom|Point|Region|Connect|DD|DDProxy|DDTarget|DragDrop|DragDropMgr|DDM|Anim|AnimMgr|Bezier|ColorAnim|Easing|Motion|Scroll|AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Config|KeyListener|Attribute|AttributeProvider|Element|History)\b</string>
+			<string>\.(CustomEvent|Subscriber|Event|EventProvider|Dom|Point|Region|Connect|DD|DDProxy|DDTarget|DragDrop|DragDropMgr|DDM|Anim|AnimMgr|Bezier|ColorAnim|Easing|Motion|Scroll|AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Config|KeyListener|Attribute|AttributeProvider|Element|History|Cookie|Get|ImageLoader|Resize|Selector|Storage|StorageEngineGears|StorageEngineHTML5|StorageEngineKeyed|StorageEngineSWF|StorageEvent|StorageManager|SWFStore|StyleSheet|YUILoader)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut|Column|ColumnEditor|ColumnSet|DataTable|Record|RecordSet|Sort|WidthResizer|Button|ButtonGroup)\b</string>
+			<string>\.(AutoComplete|DataSource|DS_JSArray|DS_JSFunction|DS_XHR|Calendar|Calendar2up|Calendar_Core|CalendarGroup|DateMath|Module|Overlay|OverlayManager|Tooltip|Panel|Dialog|SimpleDialog|ContainerEffect|Logger|LogMsg|LogReader|LogWriter|Menu|MenuItem|Menubar|MenuBarItem|MenuManager|MenuModule|MenuModuleItem|ContextMenu|ContextMenuItem|Slider|SliderThumb|Tab|TabView|TreeView|Node|HTMLNode|MenuNode|TextNode|RootNode|TVAnim|TVFadeIn|TVFadeOut|Column|ColumnEditor|ColumnSet|DataTable|Record|RecordSet|Sort|WidthResizer|SWF|DateCellEditor|DropdownCellEditor|RadioCellEditor|ScrollingDataTable|TextareaCellEditor|TextboxCellEditor)\b</string>
 			<key>name</key>
 			<string>support.class.js.yui</string>
 		</dict>
@@ -46,7 +46,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(augment|extend|hasOwnProperty|isArray|isBoolean|isFunction|isNull|isNumber|isObject|isString|isUndefined)\b(?=\()</string>
+			<string>\.(augment|augmentObject|augmentProto|dump|extend|hasOwnProperty|isArray|isBoolean|isFunction|isNull|isNumber|isObject|isString|isUndefined|isValue|later|merge|substitute|trim|JSON)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.lang.js.yui</string>
 		</dict>
@@ -64,7 +64,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(addListener|clearCache|fireLegacyEvent|generateId|getCharCode|getEl|getEvent|getLegacyIndex|getListeners|getPageX|getPageY|getRelatedTarget|getTarget|getTime|getXY|on|onAvailable|onContentReady|preventDefault|purgeElement|removeListener|resolveTextNode|startInterval|stopEvent|stopPropagation|useLegacyEvent)\b(?=\()</string>
+			<string>\.(addListener|clearCache|delegate|fireLegacyEvent|generateId|getCharCode|getEl|getEvent|getLegacyIndex|getListeners|getPageX|getPageY|getRelatedTarget|getTarget|getTime|getXY|on|onAvailable|onContentReady|onDOMReady|preventDefault|purgeElement|removeListener|resolveTextNode|startInterval|stopEvent|stopPropagation|useLegacyEvent)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Event.js.yui</string>
 		</dict>
@@ -76,7 +76,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(addClass|batch|generateId|get|getClientHeight|getClientWidth|getDocumentHeight|getDocumentWidth|getElementsBy|getElementsByClassName|getRegion|getStyle|getViewportHeight|getViewportWidth|getX|getXY|getY|hasClass|inDocument|isAncestor|removeClass|replaceClass|setStyle|setX|setXY|setY)\b(?=\()</string>
+			<string>\.(addClass|batch|generateId|get|getAncestorBy|getAncestorByClassName|getAncestorByTagName|getAttribute|getChildren|getChildrenBy|getClientHeight|getClientWidth|getClientRegion|getDocumentHeight|getDocumentScrollLeft|getDocumentScrollTop|getDocumentWidth|getElementBy|getElementsBy|getElementsByClassName|getFirstChild|getFirstChildBy|getLastChild|getLastChildBy|getNextSibling|getNextSiblingBy|getPreviousSibling|getPreviousSiblingBy|getRegion|getStyle|getViewportHeight|getViewportWidth|getX|getXY|getY|hasClass|inDocument|insertAfter|insertBefore|isAncestor|removeClass|replaceClass|setAttribute|setStyle|setX|setXY|setY)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Dom.js.yui</string>
 		</dict>
@@ -88,13 +88,13 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(abort|appendPostData|asyncRequest|createExceptionObject|createFrame|createResponseObject|createXhrObject|getConnectionObject|handleReadyState|handleTransactionResponse|initHeader|isCallInProgress|releaseObject|resetFormState|setDefaultPostHeader|setForm|setHeader|setPollingInterval|setProgId|uploadFile)\b(?=\()</string>
+			<string>\.(abort|appendPostData|asyncRequest|createExceptionObject|createFrame|createResponseObject|createXhrObject|getConnectionObject|handleReadyState|handleTransactionResponse|initHeader|isCallInProgress|releaseObject|resetDefaultHeaders|resetFormState|setDefaultPostHeader|setDefaultXhrHeader|setForm|setHeader|setPollingInterval|setProgId|uploadFile)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Connect.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(animate|doMethod|getAttribute|getDefaultUnit|getEl|getStartTime|init|isAnimated|onTween|setAttribute|setRuntimeAttribute|stop)\b(?=\()</string>
+			<string>\.(animate|doMethod|getAttribute|getDefaultUnit|getEl|getStartTime|init|isAnimated|onTween|setAttribute|setEl|setRuntimeAttribute|stop|toString)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.Anim.js.yui</string>
 		</dict>
@@ -166,7 +166,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(getBookmarkedState|getCurrentState|initialize|navigate|register)\b(?=\()</string>
+			<string>\.(getBookmarkedState|getCurrentState|getQueryStringParameter|initialize|multiNavigate|navigate|onReady|register)\b(?=\()</string>
 			<key>name</key>
 			<string>support.function.History.js.yui</string>
 		</dict>
@@ -502,15 +502,111 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(addHiddenFieldsToForm|blur|createHiddenField|createInputElement|destroy|focus|getFirstElement|getForm|getMenu|hasFocus|init|initAttributes|initConfig|isActive|setAttributeFromDOMAttribute|setAttributesFromSrcElement|setFormElementProperties)\b(?=\()</string>
+			<string>\.(exists|get|getSub|getSubs|remove|removeSubs|set|setSub|setSubs)\b(?=\()</string>
 			<key>name</key>
-			<string>support.function.Button.js.yui</string>
+			<string>support.function.Cookie.js.yui</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\.(addButton|addButtons|check|destroy|focus|getButton|getButtons|getCount|init|initAttributes|removeButton)\b(?=\()</string>
+			<string>\.(abort|css|script)\b(?=\()</string>
 			<key>name</key>
-			<string>support.function.ButtonGroup.js.yui</string>
+			<string>support.function.Get.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(bgImgObj|fetch|group|imgObj|pngBgImgObj|srcImgObj)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ImageLoader.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(dateToString|isSafe|parse|stringify|stringToDate)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.JSON.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(destroy|getActiveHandleEl|getProxyEl|getResizeById|getStatusEl|getWrapEl|isActive|isLocked|lock|reset|toString|unlock)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Resize.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(filter|query|test)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Selector.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(clear|getItem|getName|hasKey|key|setItem)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.Storage.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(get|register)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.StorageManager.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addListener|calculateCurrentSize|clear|displaySettings|getItems|getLength|getModificationDate|getShareData|getTypeAt|getTypeOf|getUseCompression|getValueAt|getValueOf|hasAdequateDimensions|on|removeItem|setItem|setShareData|setSize|setUseCompression|toString)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.SWFStore.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(callSWF|toString)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.SWF.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(disable|enable|getCssText|getId|isEnabled|set|isValidSelector|register|toCssText|unset)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.StyleSheet.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(addModule|calculate|formatSkin|getProvides|getRequires|insert|loadNext|onFailure|onProgress|onSuccess|onTimeout|parseSkin|require|sandbox)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.YUILoader.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(focus|getInputValue|handleDisabledBtns|renderForm|resetForm)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DateCellEditor.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(focus|getInputValue|handleDisabledBtns|renderForm|resetForm)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.DropdownCellEditor.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(focus|getInputValue|handleDisabledBtns|renderForm|resetForm)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.RadioCellEditor.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(disable|getBdContainerEl|getBdTableEl|getHdContainerEl|getHdTableEl|insertColumn|onColumnChange|removeColumn|reorderColumn|scrollTo|setColumnWidth|showTableMessage|validateColumnWidths)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.ScrollingDataTable.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(focus|getInputValue|handleDisabledBtns|move|renderForm|resetForm)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TextareaCellEditor.js.yui</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\.(focus|getInputValue|move|renderForm|resetForm)\b(?=\()</string>
+			<key>name</key>
+			<string>support.function.TextboxCellEditor.js.yui</string>
 		</dict>
 		<dict>
 			<key>include</key>

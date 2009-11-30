@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>var ${1:sheet} = ${YUI_STYLESHEET:YAHOO.util.StyleSheet}($0);
+
+var ${1:loader} = new ${YUI_LOADER:YAHOO.util.YUILoader}({
+	require: ["colorpicker", "treeview"],
+	loadOptional: true,
+	timeout: 10000,
+	combine: true,
+
+	onSuccess: function() {
+
+	}
+});
+
+</string>
+	<key>name</key>
+	<string>YUILoader</string>
+	<key>scope</key>
+	<string>source.js.yui</string>
+	<key>tabTrigger</key>
+	<string>loader</string>
+	<key>uuid</key>
+	<string>FD317AC6-39E3-497C-85D7-8AADC1A348F5</string>
+</dict>
+</plist>

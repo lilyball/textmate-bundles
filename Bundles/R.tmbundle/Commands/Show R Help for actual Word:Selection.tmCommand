@@ -14,6 +14,8 @@ do
 done
 } &amp;
 
+RhelperAnswer="/tmp/textmate_Rhelper_out"
+
 if [ -z "$TM_SELECTED_TEXT" ]; then
 	export WORD=$(ruby -- &lt;&lt;-SCR1 
 		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
@@ -52,198 +54,19 @@ fi
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] &amp;&amp; echo "No keyword found." &amp;&amp; exit_show_tool_tip
 
-. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
-
-IS_HELPSERVER=$(cat "$TM_BUNDLE_SUPPORT"/isHelpserver)
-PORT=0
-HELPPIPE_IN=""
-HELPPIPE_OUT=""
-FILE=""
-
-if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	## Find or start a Help Server 
-	# Check if Rdaemon runs, if so use that http help server
-	RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
-	RDOFF=$(echo -n "$TM_SCOPE" | grep -c -F 'source.r')
-	[[ "${TM_CURRENT_LINE:0:1}" == "+" ]] &amp;&amp; RD="0"
-	if [ $RD -gt 0 -o $RDOFF -gt 0 ]; then
-		#get R's PID
-		RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
-		#check whether Rdaemon runs
-		if [ ! -z $RPID ]; then
-			RDHOME="$HOME/Library/Application Support/Rdaemon"
-			if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
-				RDRAMDISK="/tmp/TMRramdisk1"
-			else
-				RDRAMDISK="$RDHOME"
-			fi
-			[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
-			TASK="@|sink('$RDRAMDISK/r_tmp')"
-			echo "$TASK" &gt; "$RDHOME"/r_in
-			TASK="@|ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)"
-			echo "$TASK" &gt; "$RDHOME"/r_in
-			TASK="@|sink(file=NULL)"
-			echo "$TASK" &gt; "$RDHOME"/r_in
-			while [ 1 ]
-			do
-				RES=$(tail -c 2 "$RDRAMDISK"/r_out)
-				[[ "$RES" == "&gt; " ]] &amp;&amp; break
-				[[ "$RES" == ": " ]] &amp;&amp; break
-				[[ "$RES" == "+ " ]] &amp;&amp; break
-				sleep 0.03
-			done
-			PORT=$(cat "$RDRAMDISK"/r_tmp | tail -n 1 | sed 's/.* //;')
-			if [ "$PORT" == "0" -o -z "$PORT" ]; then
-				echo -en "No Help Server found. Please try it again.\nIf this should fail again, please inform the bundle maintainer."
-				exit_show_tool_tip
-			fi
-			#get the reference for WORD
-			echo "@|help('$WORD',try.all.packages=T)[1]" &gt; "$RDHOME"/r_in
-			sleep 0.001
-			while [ 1 ]
-			do
-				RES=$(tail -c 2 "$RDRAMDISK"/r_out)
-				[[ "$RES" == "&gt; " ]] &amp;&amp; break
-				[[ "$RES" == ": " ]] &amp;&amp; break
-				[[ "$RES" == "+ " ]] &amp;&amp; break
-				sleep 0.03
-			done
-			FILE=$(cat "$RDRAMDISK"/r_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
-			[[ "${FILE:0:6}" == "help('" ]] &amp;&amp; FILE="NA"
-			if [ "$FILE" != "NA" -a "$IS_HELPSERVER" == "TRUE" ]; then
-				LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
-				LIB=$(echo "$LINK" | cut -d '/' -f1)
-				FUN=$(echo "$LINK" | cut -d '/' -f2)
-				FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
-				echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
-				curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
-				exit_show_html
-			fi
-			if [ "$FILE" == "NA" -a "$IS_HELPSERVER" == "TRUE" ]; then
-				echo "@|sink('/tmp/Rdaemon_r_help_tmp');cat(apply(help.search('^$WORD')[[4]][,c(3,1)],1,function(x) paste(x,collapse='/')),sep='\n');sink(file=NULL)" &gt; "$RDHOME"/r_in
-				while [ 1 ]
-				do
-					RES=$(tail -c 2 "$RDRAMDISK"/r_out)
-					[[ "$RES" == "&gt; " ]] &amp;&amp; break
-					[[ "$RES" == ": " ]] &amp;&amp; break
-					[[ "$RES" == "+ " ]] &amp;&amp; break
-					sleep 0.03
-				done
-				FILE=$(cat /tmp/Rdaemon_r_help_tmp | sort | uniq)
-				[[ "$FILE" == "sink(file=NULL)" ]] &amp;&amp; FILE=""
-				rm /tmp/Rdaemon_r_help_tmp
-			fi
-			HELPPIPE_IN="$RDHOME/r_in"
-			HELPPIPE_OUT="$RDRAMDISK/r_tmp"
+if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
+	FILE=$(cat "$RhelperAnswer")
+	if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
+		if [ "${FILE:0:1}" = "/" ]; then
+			echo "&lt;base href=\"tm-file://$FILE\"&gt;"
+			cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
+		else
+			echo "&lt;base href=\"$FILE\"&gt;"
+			curl -gsS "$FILE"
 		fi
+		exit_show_html
 	fi
-	# If no Rdaemon runs start a dummy helper daemon
-	if [ $RDOFF -gt 0 -a -z "$FILE" ]; then
-		RPID=$(ps aw | grep '[0-9] /Lib.*TMRHelperDaemon' | awk '{print $1;}' )
-		#check whether dummy daemon runs if not start it
-		if [ -z $RPID ]; then
-			WDIR="$TM_BUNDLE_SUPPORT"/bin
-			cd "$WDIR"
-			if [ ! -e /tmp/r_helper_dummy ]; then
-				mkfifo /tmp/r_helper_dummy
-			else
-				if [ ! -p /tmp/r_helper_dummy ]; then
-					rm /tmp/r_helper_dummy
-					mkfifo /tmp/r_helper_dummy
-				fi
-			fi
-			ruby Rhelperbuilder.rb &amp;&gt; /dev/null &amp;
-			### wait for Rhelper
-			#safety counter
-			SAFECNT=0
-			while [ ! -f /tmp/r_helper_dummy_out ]
-			do
-				SAFECNT=$(($SAFECNT+1))
-				if [ $SAFECNT -gt 50000 ]; then
-					echo -en "Start failed! No response from R Helper server!"
-					exit 206
-				fi
-				sleep 0.03
-			done
-
-			#wait for Rdaemon's output is ready
-			SAFECNT=0
-			while [ 1 ]
-			do
-				ST=$(tail -n 1 /tmp/r_helper_dummy_out )
-				[[ "$ST" == "&gt; " ]] &amp;&amp; break
-				SAFECNT=$(($SAFECNT+1))
-				if [ $SAFECNT -gt 50000 ]; then
-					echo -en "Start failed! No response from R Helper server!"
-					exit 206
-				fi
-				sleep 0.03
-			done
-		fi
-		echo "ifelse(!tools:::httpdPort,tools::startDynamicHelp(T),tools:::httpdPort)" &gt; /tmp/r_helper_dummy
-		while [ 1 ]
-		do
-			RES=$(tail -c 2 /tmp/r_helper_dummy_out)
-			[[ "$RES" == "&gt; " ]] &amp;&amp; break
-			[[ "$RES" == ": " ]] &amp;&amp; break
-			[[ "$RES" == "+ " ]] &amp;&amp; break
-			sleep 0.03
-		done
-		PORT=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;')
-		if [ "$PORT" == "0" -o -z "$PORT" ]; then
-			echo -en "No Help Server found. Please try it again.\nIf this should fail again, please inform the bundle maintainer."
-			exit_show_tool_tip
-		fi
-		#get the reference for WORD
-		echo "help('$WORD',try.all.packages=T)[1]" &gt; /tmp/r_helper_dummy
-		while [ 1 ]
-		do
-			RES=$(tail -c 2 /tmp/r_helper_dummy_out)
-			[[ "$RES" == "&gt; " ]] &amp;&amp; break
-			[[ "$RES" == ": " ]] &amp;&amp; break
-			[[ "$RES" == "+ " ]] &amp;&amp; break
-			sleep 0.03
-		done
-		FILE=$(cat /tmp/r_helper_dummy_out | tail -n 2 | head -n 1 | sed 's/.* //;s/"//g')
-		if [ "$FILE" != "NA" -a $"IS_HELPSERVER" != "TRUE" ]; then
-			LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
-			LIB=$(echo "$LINK" | cut -d '/' -f1)
-			FUN=$(echo "$LINK" | cut -d '/' -f2)
-			FUNHTML=$(echo -n "$FUN" | perl -ne 'if(m/.*\.html$/){print}else{print "$_.html"}')
-			echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML\"&gt;"
-			curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUNHTML"
-			exit_show_html
-		fi
-		HELPPIPE_IN="/tmp/r_helper_dummy"
-		HELPPIPE_OUT="/tmp/r_helper_dummy_out"
-	fi
-	echo "$PORT" &gt; "$TM_BUNDLE_SUPPORT"/httpPort
-fi
-
-
-CNT=$(echo -e "$FILE" | wc -l)
-
-# Fallback if FILE is empty execute "help(WORD)" in “R --slave”
-[[ -z "$FILE" ]] &amp;&amp; FILE=$(echo "cat(help('$WORD',try.all.packages=T)[1])" | R --vanilla --slave --no-readline --encoding=UTF-8)
-# FILE == NA means no single help file found
-if [ "$FILE" == "NA" -o -z "$FILE" ];then
-	CNT=0
-fi
-
-# If only one help page is found display it and exit
-if [ $CNT == 1 ]; then
-	if [ $"IS_HELPSERVER" != "TRUE" -a -e "$FILE" ]; then
-		RFILE=$(echo "$FILE" | perl -pe 's!(.*?)/library/(.*?)/help/(.*)!$1/library/$2/html/$3.html!')
-		cat "$RFILE" | iconv -s -f ISO8859-1 -t UTF-8
-		echo "&lt;base href='tm-file://$FILE.html'&gt;"
-	else
-		LINK=$(echo "$FILE" | perl -pe 's!.*/library/(.*?)/.*?/(.*)!$1/$2!')
-		LIB=$(echo "$LINK" | cut -d '/' -f1)
-		FUN=$(echo "$LINK" | cut -d '/' -f2)
-		echo "&lt;base href=\"http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html\"&gt;"
-		curl -gsS "http://127.0.0.1:$PORT/library/$LIB/html/$FUN.html"
-	fi
-	exit_show_html
 fi
 
 # Function to output the HTML frame set
@@ -257,46 +80,42 @@ printframe() {
 	&lt;/HEAD&gt;
 	&lt;FRAMESET COLS="$ROWSIZE,*" FRAMEBORDER="5" FRAMESPACING="5" BORDER="7" FRAMEBORDER="YES" onload='parent.search.sform.search.value="$WORD";parent.search.sform.search.select();parent.search.sform.search.focus()'&gt;
 		&lt;FRAMESET ROWS="*,90" FRAMEBORDER="1" FRAMESPACING="0" BORDER="1" FRAMEBORDER="NO"&gt;
-			&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/head.html" NAME="head" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
-			&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/search.html" NAME="search" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="NO"&gt;
+			&lt;FRAME SRC="tm-file:///tmp/textmate_Rhelper_head.html" NAME="head" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
+			&lt;FRAME SRC="tm-file:///tmp/textmate_Rhelper_search.html" NAME="search" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="NO"&gt;
 		&lt;/FRAMESET&gt;
-		&lt;FRAME SRC="tm-file://${TM_BUNDLE_SUPPORT// /%20}/lib/data.html" NAME="data" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
+		&lt;FRAME SRC="tm-file:///tmp/textmate_Rhelper_data.html" NAME="data" MARGINWIDTH="30" MARGINHEIGHT="0"  SCROLLING="YES"&gt;
 	&lt;/FRAMESET&gt;
 	&lt;/HTML&gt;
 HF
 
 }
 
-HEAD="$TM_BUNDLE_SUPPORT/lib/head.html"
-DATA="$TM_BUNDLE_SUPPORT/lib/data.html"
-SEARCH="$TM_BUNDLE_SUPPORT/lib/search.html"
+HEAD="/tmp/textmate_Rhelper_head.html"
+DATA="/tmp/textmate_Rhelper_data.html"
+SEARCH="/tmp/textmate_Rhelper_search.html"
 RHOME=${R_HOME:=/Library/Frameworks/R.framework/Versions/Current/Resources}
+
+echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
+
+"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "cat(getRversion()&gt;='2.10.0',sep='')"
+IS_HELPSERVER=$(cat "$RhelperAnswer")
+"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHttpPort()"
+PORT=$(cat "$RhelperAnswer")
 
 cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 &lt;html&gt;
 	&lt;head&gt;
 	&lt;script type='text/javascript' charset='utf-8'&gt;
-		function Search(term) {
-			var w = (document.sform.where[0].checked) ? '1':'0';
-			if (term.length &gt; 0) {
-				TextMate.isBusy = true;
-				TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" ' + w, null);
-				parent.head.location.reload();
-				TextMate.isBusy = false;
-				//TextMate.system('sleep 0.9', null);
-				parent.data.location.reload();
-			}
-		}
 		function SearchServer(term) {
 			if (term.length &gt; 0) {
 				TextMate.isBusy = true;
 				if(document.sform.where.checked == true) {
-					TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 1', null);
+					TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "' + term + '" 1', null);
 				} else {
-					TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "' + term + '" 0', null);
+					TextMate.system('"$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "' + term + '" 0', null);
 				}
+				TextMate.system('sleep 0.3', null);
 				parent.head.location.reload();
-				TextMate.system('sleep 0.1', null);
 				parent.data.location.reload();
 				TextMate.isBusy = false;
 				parent.search.sform.search.value = term;
@@ -311,7 +130,32 @@ else
 			echo "TextMate.system('open \"http://127.0.0.1:$PORT/doc/html/index.html\"', null);" &gt;&gt; "$SEARCH"
 fi
 
-cat &lt;&lt;-"HFS01" &gt;&gt; "$SEARCH"
+export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
+
+if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" ]; then
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
+	FILE=$(cat "$RhelperAnswer")
+else
+	FILE=""
+fi
+
+if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" -a ! -z "$FILE" -a "$FILE" != "NA" ]; then
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD$',F)"
+	WORD="^$WORD$"
+	BEGINSEARCH=""
+else
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD')"
+
+	sleep 0.01
+	BEGINSEARCH="checked"
+	if [ -z `cat "$RhelperAnswer"` ]; then
+		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('$WORD')"
+		BEGINSEARCH=""
+		sleep 0.05
+	fi
+fi
+
+cat &lt;&lt;-HFS01 &gt;&gt; "$SEARCH"
 		}
 	&lt;/script&gt;
 	&lt;/head&gt;
@@ -319,31 +163,13 @@ cat &lt;&lt;-"HFS01" &gt;&gt; "$SEARCH"
 	&lt;table&gt;
 		&lt;tr&gt;
 			&lt;td&gt;
-HFS01
-
-if [ "$IS_HELPSERVER" != "TRUE" ]; then
-	echo "&lt;form name='sform' onsubmit='Search(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"
-	echo "&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;" &gt;&gt; "$SEARCH"
-	echo "&lt;input tabindex='0' id='search' type='search' autosave='TMRHelpSearch' results='20' placeholder='egrep -i [REGEXP]' onsearch='Search(this.value)'&gt;" &gt;&gt; "$SEARCH"
-else
-	echo "&lt;form name='sform' onsubmit='SearchServer(document.sform.search.value)'&gt;" &gt;&gt; "$SEARCH"
-	echo "&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;" &gt;&gt; "$SEARCH"
-	echo "&lt;input tabindex='0' id='search' type='search' placeholder='regexp' results='20' onsearch='SearchServer(this.value)'&gt;" &gt;&gt; "$SEARCH"
-fi
-
-cat &lt;&lt;-"HFS1" &gt;&gt; "$SEARCH"
+			&lt;form name='sform' onsubmit='SearchServer(document.sform.search.value)'&gt;
+			&lt;small&gt;&lt;small&gt;&lt;i&gt;Search for&lt;/i&gt;&lt;br /&gt;&lt;/small&gt;&lt;/small&gt;
+			&lt;input tabindex='0' id='search' type='search' placeholder='regexp' results='20' onsearch='SearchServer(this.value)'&gt;
 			&lt;/td&gt;
 			&lt;td&gt;
 			&lt;font style='font-size:7pt'&gt;
-HFS1
-
-if [ "$IS_HELPSERVER" != "TRUE" ]; then
-	echo "&lt;input type='radio' id='where' name='where' value='key' checked  onclick='Search(document.sform.search.value)'&gt;keywords&lt;br /&gt;&lt;input type='radio' id='where' name='where' value='full' onclick='Search(document.sform.search.value)'&gt;full&amp;nbsp;text" &gt;&gt; "$SEARCH"
-else
-	echo "&lt;br /&gt;&lt;button onclick='SearchServer(document.sform.search.value)'&gt;Search&lt;/button&gt;&lt;br /&gt;&lt;input type='checkbox' name='where' value='key' checked&gt;&lt;i&gt; begins with&lt;/i&gt;" &gt;&gt; "$SEARCH"
-fi
-
-cat &lt;&lt;-"HFS2" &gt;&gt; "$SEARCH"
+			&lt;br /&gt;&lt;button onclick='SearchServer(document.sform.search.value)'&gt;Search&lt;/button&gt;&lt;br /&gt;&lt;input type='checkbox' name='where' value='key' $BEGINSEARCH&gt;&lt;i&gt; begins with&lt;/i&gt;
 			&lt;/font&gt;
 			&lt;/td&gt;
 			&lt;/form&gt;
@@ -357,69 +183,46 @@ cat &lt;&lt;-"HFS2" &gt;&gt; "$SEARCH"
 	&lt;/table&gt;
 	&lt;/body&gt;
 &lt;/html&gt;
-HFS2
+HFS01
 
 echo "&lt;html&gt;&lt;body style='margin-top:5mm'&gt;" &gt; "$HEAD"
 echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padding-right:1cm;border-bottom:1px solid black'&gt;&lt;b&gt;Package&lt;/b&gt;&lt;/td&gt;&lt;td style='border-bottom:1px solid black'&gt;&lt;b&gt;Topic&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 
-
-HCNT=0
-export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
-
-if [ "$IS_HELPSERVER" == "TRUE" ]; then
-	if [ $CNT -eq 0 ]; then 
-		FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!.*?/library/(.*?)/.*?/(.*?)\.tex!$1/$2!')
-	fi
-	CNT=$(echo -e "$FILE" | wc -l)
-	if [ $CNT -gt 300 ]; then
-		echo "&lt;tr&gt;&lt;td&gt;&lt;i&gt;too much matches...&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;"
-	else
-		for i in $FILE
-		do
-			lib=$(echo "$i" | cut -d '/' -f 1)
-			fun=$(echo "$i" | cut -d '/' -f 2)
-			echo "&lt;tr&gt;&lt;td&gt;$lib&lt;/td&gt;&lt;td&gt;&lt;a href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
-		done
-	fi
+CNT=`cat "$RhelperAnswer" | wc -l`
+if [ $CNT -gt 500 ]; then
+	echo "&lt;tr colspan=2&gt;&lt;td&gt;&lt;i&gt;too much matches...&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 else
-	# If no single page was found look for ^WORD in the index help file
-	[[ $CNT == 0 ]] &amp;&amp; FILE=$(grep "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}'  | sort | uniq | perl -pe 's!/latex/!/html/!;s!tex$!html!')
-	CNT=$(echo -e "$FILE" | wc -l)
-	if [ $CNT -gt 300 ]; then
-		echo "&lt;tr colspan=2&gt;&lt;td&gt;&lt;i&gt;too much matches...&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
-	else
-		for i in $FILE
-		do
-			echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; "$HEAD"
-			echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$2!' &gt;&gt; "$HEAD"
-			echo "&lt;/td&gt;&lt;td&gt;&lt;a href='tm-file://$i' target='data'&gt;" &gt;&gt; "$HEAD"
-			echo "$i" | perl -pe 's!(.*?)/library/(.*?)/html/(.*?)\.html!$3!' &gt;&gt; "$HEAD"
-			echo "&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
-		done
-	fi
-fi
-
-echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
-
-if [ $CNT -eq 1 ]; then
+	exec&lt;"$RhelperAnswer"
 	if [ "$IS_HELPSERVER" == "TRUE" ]; then
-		lib=$(echo "$FILE" | cut -d '/' -f 1)
-		fun=$(echo "$FILE" | cut -d '/' -f 2)
-		curl -gsS "http://127.0.0.1:$PORT/library/$lib/html/$fun.html" &gt; "$DATA"
-		echo "&lt;base href='http://127.0.0.1:$PORT/library/$lib/html/$fun.html'&gt;" &gt;&gt; "$DATA"
+		while read i
+		do
+			lib=$(echo -e "$i" | cut -d '	' -f1)
+			fun=$(echo -e "$i" | cut -d '	' -f2)
+			link=$(echo -e "$i" | cut -d '	' -f3)
+			echo "&lt;tr&gt;&lt;td&gt;$lib&lt;/td&gt;&lt;td&gt;&lt;a href='$link' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+		done
+		if [ $CNT -eq 1 ]; then
+			echo "&lt;base href=\"$link\"&gt;" &gt; "$DATA"
+			curl -gsS "$link" &gt;&gt; "$DATA"
+		fi
 	else
-		[[ -e "$FILE" ]] &amp;&amp; cat "$FILE" &gt; "$DATA"
-		echo "&lt;base href='tm-file://$FILE'&gt;" &gt;&gt; "$DATA"
+		while read i
+		do
+			lib=$(echo -e "$i" | cut -d '	' -f1)
+			fun=$(echo -e "$i" | cut -d '	' -f2)
+			link=$(echo -e "$i" | cut -d '	' -f3)
+			echo "&lt;tr&gt;&lt;td&gt;$lib&lt;/td&gt;&lt;td&gt;&lt;a href='tm-file://$link' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
+		done
+		if [ $CNT -eq 1 ]; then
+			echo "&lt;base href=\"tm-file://$link\"&gt;"
+			cat "$link" | iconv -s -f ISO8859-1 -t UTF-8
+		fi
 	fi
-else
-	echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
 fi
+echo "&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;" &gt;&gt; "$HEAD"
 
 printframe 340
 
-if [ $CNT -eq 0 ]; then
-	. "$TM_BUNDLE_SUPPORT/bin/Rsearch.sh" "$TM_BUNDLE_SUPPORT" "$WORD" 1 "$PORT"
-fi
 "$DIALOG" -x $token 2&amp;&gt;/dev/null
 exit_show_html
 

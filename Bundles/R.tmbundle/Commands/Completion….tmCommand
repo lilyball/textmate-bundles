@@ -16,6 +16,8 @@ SCR1
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] &amp;&amp; echo "No keyword found" &amp;&amp; exit_show_tool_tip
 
+RhelperAnswer="/tmp/textmate_Rhelper_out"
+
 WORDORG="$WORD"
 export RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
 
@@ -57,27 +59,25 @@ if [ $RD -gt 0 ]; then
 			sleep 0.05
 		done
 		LOCAL=$(cat "$RDRAMDISK"/r_tmp | sort)
-		#echo -en "$LOCAL" &amp;&amp; exit 206
+		# echo -en "$LOCAL" &amp;&amp; exit 206
 	fi
 fi
-
-. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
 
 [[ $RD -eq 0 ]] &amp;&amp; LOCAL=$(cat | grep '&lt;\- *function' | perl -pe 's/\t//g;s/ *(.*?) *&lt;\-.*/$1\t{local}/' | sort | egrep -i "^${WORD//./\\.}")
 
 #get suggestions
-RES=$(egrep -i "^${WORD//./\\.}" "$TM_BUNDLE_SUPPORT"/help.index | perl -pe 's!(.*?)\t.*?library/(.*?)/.*!$1\t{$2}!')
+"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getCompletionList('$WORD',T)"
+RES=$(cat "$RhelperAnswer")
 export RES=$(echo -e "$LOCAL"; echo -en "$RES")
 
-
-#echo -en "$RES" &amp;&amp; exit 206
 ruby -- &lt;&lt;-SCRIPT 2&gt; /dev/null
 require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
 word = "$WORD"
 wordorg = "$WORDORG"
 text = ENV['RES']
-funs = text.split("\n")
+funs = text.gsub(/\n{2,}/,"\n").split("\n")
+
 rdfuns = funs.select {|x| x =~ /\|OK$/ }
 rdfuns.collect! {|x| x.gsub(/\|OK$/, "") }
 funs.delete_if {|x| x.match('\|OK$') }
@@ -85,17 +85,28 @@ f1 = funs.collect{|item| item.gsub(/\t.*/, "")}
 rdfuns.sort! {|x,y| y &lt;=&gt; x }
 rdfuns.each_index do |i|
 	if  ! f1.include?(rdfuns[i]) &amp;&amp; rdfuns[i].length &gt; 0
-		funs.unshift(rdfuns[i] + "\t…local…" )
+		funs.unshift(rdfuns[i] + "	local" )
 	end
 end
 
 funs.delete_if {|x| x.match('[,\- ]') }
 funs.delete_if {|x| x.match('matrices.*rgl') }
-#funs.delete_if {|x| x.match("#{word}\t") }
-funs.collect! {|x| (rdfuns.include?(x.gsub(/\t.*/,""))) ? x.gsub(/\}/, "…").gsub(/\{/, "…") : x }
+funs.delete_if {|x| x.match('^\s*$') }
+max=0
+funs.each {|i| max = i.length if i.length &gt; max }
+max=(max/4+1)*4
+funs.collect! do |x| 
+	if rdfuns.include?(x.gsub(/\t.*/,""))
+		a=x.gsub(/\t.*/,"")
+		x= "%s 　 …%s…" % [ a, x.gsub(/.*\t/,"") ]
+	else
+		a=x.gsub(/\t.*/,"")
+		x= "%s 　 {%s}" % [ a, x.gsub(/.*\t/,"") ]
+	end
+end
 
-functions = funs.select{|item| item =~ /^#{word}/}
-func = funs.select{|item| item !~ /^#{word}/}
+functions = funs.select{|item| item =~ /^#{word.gsub(".","\\.")}/}
+func = funs.select{|item| item !~ /^#{word.gsub(".","\\.")}/}
 fp = func.join("\n")
 if (functions.size &lt; 1 &amp;&amp; (ENV['TM_SELECTED_TEXT'].nil? || ENV['TM_SELECTED_TEXT'].empty?)) then
 	if fp.size &gt; 0
@@ -104,17 +115,19 @@ if (functions.size &lt; 1 &amp;&amp; (ENV['TM_SELECTED_TEXT'].nil? || ENV['TM_SE
 		TextMate.exit_show_tool_tip("Nothing found")
 	end
 end
+
 if (! ENV['TM_SELECTED_TEXT'].nil? &amp;&amp; ! ENV['TM_SELECTED_TEXT'].empty?) then
 	functions.replace(funs)
 end
-if (functions.size == 1 &amp;&amp; ENV['R_AUTOCOMPLETE'].to_i == 1 &amp;&amp; (ENV['RD'].to_i == 0 || ! functions.first.match('\{')))
-  function = functions.first
+
+if (functions.size == 1 &amp;&amp; (ENV['R_AUTOCOMPLETE'].to_i == 1 || ENV['TM_R_AUTOCOMPLETE'].to_i == 1))
+	function = functions.first
 else
 	isDIALOG2 = ! ENV["DIALOG"].match(/2$/).nil?
 	if isDIALOG2
 		fn = []
 		functions.each do |f|
-			fn &lt;&lt; {'insert' =&gt; "\${1:(\${2:})}", 'display' =&gt; f, 'match' =&gt; f.gsub(/\t.*/,"")}
+			fn &lt;&lt; {'insert' =&gt; "\${1:(\${2:})}", 'display' =&gt; f, 'match' =&gt; f.gsub(/\s.*/,"")}
 		end
 		TextMate::UI.complete(fn, :extra_chars =&gt; '.')
 		TextMate.exit_discard
@@ -124,11 +137,11 @@ else
 		function = functions[idx]
 	end
 end
-#TextMate.exit_discard if function.empty?
+# TextMate.exit_discard if function.empty?
 if ENV['TM_SELECTED_TEXT'].nil? or ENV['TM_SELECTED_TEXT'].empty?
-  print function.gsub!(/\t.*/,"")[wordorg.length..-1]
+  print function.gsub!(/\s.*/,"")[wordorg.length..-1]
 else
-  print function.gsub!(/\t.*/,"")
+  print function.gsub!(/\s.*/,"")
 end
 SCRIPT
 </string>

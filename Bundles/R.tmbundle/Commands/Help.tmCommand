@@ -6,6 +6,15 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>
+# clean unused file
+rm -f "$TM_BUNDLE_SUPPORT/help.index"
+rm -f "$TM_BUNDLE_SUPPORT/helpshort.index"
+rm -f "$TM_BUNDLE_SUPPORT/help.pkgs"
+rm -f "$TM_BUNDLE_SUPPORT/lib/data.html"
+rm -f "$TM_BUNDLE_SUPPORT/lib/head.html"
+rm -f "$TM_BUNDLE_SUPPORT/lib/search.html"
+
+
 . "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
 html_header "R Bundle Help" "R"
@@ -15,8 +24,6 @@ html_header "R Bundle Help" "R"
 html_footer</string>
 	<key>input</key>
 	<string>none</string>
-	<key>keyEquivalent</key>
-	<string></string>
 	<key>name</key>
 	<string>Help</string>
 	<key>output</key>

@@ -23,22 +23,21 @@ SCR1
 )
 
 WORD=$(echo -en "$WORD" | perl -pe 's/\([^\(]*$//')
-# echo "$WORD" &amp;&amp; exit_show_tool_tip
+
 [[ -z "$WORD" ]] &amp;&amp; echo "No keyword found" &amp;&amp; exit_show_tool_tip
 
-. "$TM_BUNDLE_SUPPORT"/bin/rebuild_help_index.sh
+"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getPackageFor('$WORD')"
+LIB=$(cat /tmp/textmate_Rhelper_out)
+if [ -z "$LIB" ]; then
+	echo -en "No package found."
+	exit 206
+fi
 
-FILE=$(grep "^${WORD//./\\.}	" "$TM_BUNDLE_SUPPORT"/help.index | awk '{print $2;}')
-LIB=$(echo -en \"$FILE\" | perl -pe 's!.*/library/(.*?)/latex.*!$1!')
-
-[[ -z "$LIB" ]] &amp;&amp; echo "Nothing found" &amp;&amp; exit_show_tool_tip
-[[ "$LIB" == "\"\"" ]] &amp;&amp; echo "Nothing found" &amp;&amp; exit_show_tool_tip
-
-TABS=$(echo -en "$LINE" | perl -e '$a=&lt;&gt;;$a=~m/^([\t ]+)/;print $1 if defined($1)')
 if [ `echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console'` -gt 0 ]; then
 	echo -en "&gt; require($LIB); "
 	echo -n "$LINE" | sed 's/^&gt; //'
 else
+	TABS=$(echo -en "$LINE" | perl -e '$a=&lt;&gt;;$a=~m/^([\t ]+)/;print $1 if defined($1)')
 	echo -en "$TABS"
 	echo -e "require($LIB)"
 	echo -n "$LINE"

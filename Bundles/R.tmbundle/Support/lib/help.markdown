@@ -40,18 +40,15 @@ It executes the current line or selection in R.app and goes to the end of the ne
 <button>&nbsp;^.&nbsp;</button>
 Based on all installed packages and local function declarations it shows an inline menu with completion suggestions for the current word or selection as <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;{library}&nbsp;</code>. The library `local` refers to functions defined within the current document.
 
-As default it also displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the shell variable `R_AUTOCOMPLETE` to `1`.
+As default it also displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the TextMate shell variable `TM_R_AUTOCOMPLETE` to `1`.
 
 ***Hint*** This command works case-sensitively. E.g. if you type `math` (without selection and there is no command beginning with `math`) and invoke this command it lists all case-insensitive matched commands like `Math.fraction`, etc. as a tooltip caused by the chosen "Insert as Snippet" mechanism.
 
 ## Show R Help for actual Word/Selection
 <button>&nbsp;^H&nbsp;</button>
-It shows an HTML document with the found R help for the current word or of that command in which the caret is located. If no help file is found it opens an HTML window with all found keywords beginning with the current word. Furthermore this help window offers a `Search for` field. It allows to search for a term within
+It shows an HTML document with the found R help for the current word or of that command in which the caret is located. If no help file is found it opens an HTML window with all found keywords beginning with the current word. Furthermore this help window offers a `Search for` field to enter a new search term (a regular expression). The check box `Begins with` adds a `^` at the beginning of the search term. The search makes usage of the R command `help.search(TERM)`.
 
-* all `keywords` meaning all commands, aliases, and descriptions of a command
-* all man help pages as `full text`
-
-***Hint*** Both search functions make usage of `egrep -i`, and the search term will be interpreted as regular expression. This also means that the search is line-oriented and case-insensitive.
+***Hint*** The search function `help.search` allows to look for the entered term case-sensitively by using the regular expression flag `(?-i)` e.g. to look exactly for `T` type `“(?-i)^T$”`.
     
 ## Show Function Usage
 <button>&nbsp;&#x2325;&#x21E7;H&nbsp;</button>
@@ -62,17 +59,6 @@ Based on all installed packages and local function declarations it shows a toolt
 Based on all installed packages and local function declarations it shows a tooltip with the function signature for the current word and it inserts “()” or “(”.
 
 ***Hint*** This functionality can be switched off by deactivating the bound key equivalent within in the Bundle Editor.
-
-## Create Command Help Index
-
-It creates the index files `$TM_BUNDLE_SUPPORT/help.index` and `$TM_BUNDLE_SUPPORT/help.pkgs` based on **all installed packages** which are needed by the following commands:
-
-* Show R Help for actual Word/Selection
-* Show Function Usage
-* Insert Function Parameter…
-* Function Completion…
-
-***Hint*** These index files will be built automatically if one of the above mentioned commands will be executed for the first time or if you removed or installed packages. There won't be a rebuilt if one updates a package.
 
 ## Function Parameter…
 <button>&nbsp;^,&nbsp;</button>
@@ -184,11 +170,15 @@ It inserts:<br><pre>	x <- function(var) {
 	
 	By pressing SHIFT while dragging it inserts the absolute file path.
 
-# Shell Variables
+# TextMate Shell Variables
 
-## R&#95;AUTOCOMPLETE
+## TM&#95;R&#95;AUTOCOMPLETE
 
-As default TextMate displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the shell variable `R_AUTOCOMPLETE` to `1`. See also [Completion…](#sect_2.5).
+As default TextMate displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the shell variable `TM_R_AUTOCOMPLETE` to `1`. See also [Completion…](#sect_2.5).
+
+## TM&#95;R&#95;SHOW&#95;ALWAYS&#95;HELPSEARCH
+
+As default `Show R Help for actual Word` opens a single window without a search field if the actual word matches one keyword. To avoid this set that shell variable to “1”.
 
 ## TM&#95;RMATE&#95;OUTPUT&#95;FONT
 
@@ -200,11 +190,6 @@ Set the font size of Rmate's output window. Default is set to “10”.
 
 # Troubleshooting &amp; FAQ
 
-
--   __I click at a hyperlink in the Help window but nothing happens except for the spinning wheel__
-
-    It's very likely that this only can occur for R versions >= 2.10. The new introduced help system - an httpd server - has to run for querying the help pages. Such a server will be started in the background (if Rdaemon doesn't run). If the server wasn't used for 10 minutes the server will be terminated automatically. If an help window was opened and the server was terminated an hyperlink will be broken. Simply close the window and start your search again.
-
 -   __`'re-encoding is not available on this system'` or `'object ".PSenv" not found'`__
 
     If you see one of these messages then you are most likely using an older version of R. In this case you should upgrade to the latest (currently, version 2.6.1) by downloading the pre-built universal R.app installer from <a href="http://www.r-project.org">r-project.org</a>.
@@ -213,10 +198,6 @@ Set the font size of Rmate's output window. Default is set to “10”.
 
     If you see such an error (or similar) while sending something to "R.app" it is very likely that you are also running the "Rdaemon" with loaded "CarbonEL". Unfortunately "CarbonEL" uses the same application name "R", thus the AppleScript will send the R code to it, not to "R.app". In such a case you have to quit the Rdaemon.
     
--   __After updating a R package new commands are not found by "Completion…", "Show Command Usage", etc.__
-
-    The help index files will only be rebuilt if these don't exist or if one removed/installed R packages. An update of a package won't be recognized. Run "Create Command Help Index" manually.
-
 -   __.../R.tmbundle/Support/lib/popen3.rb:18: warning: Insecure world writable dir "DIR"  in PATH, mode 040777__
 
     If Rmate is outputting this warning message it is very likely that "DIR" has write permissions set to **group** and **others**. To change the permission for that "DIR" run this command from a Terminal window:
@@ -233,7 +214,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Nov 24 2009***
+***Date: Dec 01 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

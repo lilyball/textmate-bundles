@@ -54,6 +54,50 @@ fi
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] &amp;&amp; echo "No keyword found." &amp;&amp; exit_show_tool_tip
 
+# Check if it is a Rdaemon doc
+RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
+if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
+	#get R's PID
+	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+	#check whether Rdaemon runs
+	if [ ! -z $RPID ]; then
+		RDHOME="$HOME/Library/Application Support/Rdaemon"
+		if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+			RDRAMDISK="/tmp/TMRramdisk1"
+		else
+			RDRAMDISK="$RDHOME"
+		fi
+		[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
+		TASK="@|sink('$RDRAMDISK/r_tmp')"
+		echo "$TASK" &gt; "$RDHOME"/r_in
+		echo "@|cat(ifelse(getRversion()&gt;='2.10.0',gsub('.*/library/(.*?)/.*?/(.*?)(\\\\.html|$)',paste('http://127.0.0.1:',ifelse(tools:::httpdPort&lt;1,tools::startDynamicHelp(T),tools:::httpdPort),'/library/\\\\1/html/\\\\2.html',sep=''),help('$WORD',try.all.packages=F)[1]),gsub('(.*?)/library/(.*?)/.*?/(.*?)(\\\\.html|$)','\\\\1/library/\\\\2/html/\\\\3.html',help('$WORD',try.all.packages=F)[1])))" &gt; "$RDHOME"/r_in
+		sleep 0.001
+		while [ 1 ]
+		do
+			RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+			[[ "$RES" == "&gt; " ]] &amp;&amp; break
+			[[ "$RES" == ": " ]] &amp;&amp; break
+			[[ "$RES" == "+ " ]] &amp;&amp; break
+			sleep 0.005
+		done
+		FILE=$(cat "$RDRAMDISK"/r_tmp)
+		TASK="@|sink(NULL)"
+		echo "$TASK" &gt; "$RDHOME"/r_in
+		sleep 0.001
+		if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
+			if [ "${FILE:0:1}" = "/" ]; then
+				echo "&lt;base href=\"tm-file://$FILE\"&gt;"
+				cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
+			else
+				echo "&lt;base href=\"$FILE\"&gt;"
+				curl -gsS "$FILE"
+			fi
+			exit_show_html
+		fi
+	fi
+fi
+
+
 if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
 	FILE=$(cat "$RhelperAnswer")

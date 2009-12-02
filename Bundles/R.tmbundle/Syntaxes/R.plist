@@ -232,6 +232,12 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>\b([[:alnum:]_]+)(?=::)</string>
+			<key>name</key>
+			<string>entity.name.type.namespace.r</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>\b([[:alnum:]._]+)\b</string>
 			<key>name</key>
 			<string>variable.other.r</string>

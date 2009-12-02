@@ -1,8 +1,14 @@
 
 export WORD=$(ruby -- <<-SCR1
-print ENV['TM_CURRENT_LINE'][0...ENV['TM_LINE_INDEX'].to_i].gsub!(/ *$/, "").match(/[\w.]*$/).to_s
+print ENV['TM_CURRENT_LINE'][0...ENV['TM_LINE_INDEX'].to_i].gsub!(/ *$/, "").match(/[\w.:]*$/).to_s
 SCR1
 )
+
+PKG=""
+if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
+	PKG=",package='${WORD%%:*}'"
+fi
+WORD="${WORD##*:}"
 
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] && exit 200
@@ -24,11 +30,7 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 	[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
 
 	# execute "args()" in Rdaemon
-	TASK="@|sink('$RDRAMDISK/r_tmp')"
-	echo "$TASK" > "$RDHOME"/r_in
-	TASK="@|args($WORD)"
-	echo "$TASK" > "$RDHOME"/r_in
-	TASK="@|sink(file=NULL)"
+	TASK="@|sink('$RDRAMDISK/r_tmp');args($WORD);sink(file=NULL)"
 	echo "$TASK" > "$RDHOME"/r_in
 	while [ 1 ]
 	do
@@ -36,41 +38,15 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 		[[ "$RES" == "> " ]] && break
 		[[ "$RES" == ": " ]] && break
 		[[ "$RES" == "+ " ]] && break
-		sleep 0.02
+		sleep 0.03
 	done
 	RES=$(cat "$RDRAMDISK"/r_tmp | sed 's/NULL$//;')
 	[[ "$RES" == "NULL" ]] && RES=""
 	# "args()" did find something
 	if [ ! -z "$RES" ]; then
-		echo -en "$WORD${RES:9}" | perl -e 'undef($/);$a=<>;$a=~s/"\t"/"\\t"/sg;$a=~s/"\n"/"\\n"/sg;print $a'
-		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getPackageFor('$WORD')"
-		LIB=$(cat "$RhelperAnswer")
-		if [ -z "$LIB" ]; then
-			LIB="local"
-		fi
-		echo -en "\n•• library: $LIB"
-		exit 206
-	# "args()" didn't find anything ergo library isn't yet loaded
-	else
-		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
-		FILE=$(cat "$RhelperAnswer")
-		if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
-			if [ "${FILE:0:1}" = "/" ]; then
-				RES=$(cat "$FILE")
-			else
-				RES=$(curl -gsS "$FILE")
-			fi
-			echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 0
-		else
-			exit 200
-		fi
-		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getPackageFor('$WORD')"
-		LIB=$(cat "$RhelperAnswer")
-		TASK="@|sink('$RDRAMDISK/r_tmp')"
-		echo "$TASK" > "$RDHOME"/r_in
-		TASK="@|cat(sum((.packages()) %in% \"$LIB\"),sep='')"
-		echo "$TASK" > "$RDHOME"/r_in
-		TASK="@|sink(file=NULL)"
+		OUT=$(echo -en "$WORD${RES:9}" | perl -e 'undef($/);$a=<>;$a=~s/"\t"/"\\t"/sg;$a=~s/"\n"/"\\n"/sg;print $a')
+		rm -f "$RDRAMDISK"/r_tmp
+		TASK="@|sink('$RDRAMDISK/r_tmp');cat(gsub('.*?/library/(.*?)/.*','\\\\1',as.vector(help('$WORD',try.all.packages=F))),sep='\n');@|sink(file=NULL)"
 		echo "$TASK" > "$RDHOME"/r_in
 		while [ 1 ]
 		do
@@ -78,35 +54,84 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 			[[ "$RES" == "> " ]] && break
 			[[ "$RES" == ": " ]] && break
 			[[ "$RES" == "+ " ]] && break
-			sleep 0.02
+			sleep 0.03
 		done
-		RES=$(cat "$RDRAMDISK"/r_tmp)
-		if [ ! -z "$RES" -a "$RES" == "1" ]; then
-			echo -en "\n•• library: $LIB"
-		else
-			echo -en "\n• Library “${LIB}” not yet loaded! [press CTRL+SHIFT+L]"
+		LIB=$(cat "$RDRAMDISK"/r_tmp)
+		if [ -z "$LIB" ]; then
+			LIB="local"
 		fi
-		exit 206
+		CNT=$(echo "$LIB" | wc -l)
+		if [ $CNT -eq 1 ]; then
+			echo -en "$OUT"
+			echo -en "\n•• library: $LIB"
+			exit 206
+		fi
+	# "args()" didn't find anything ergo library isn't yet loaded
+	else
+		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$PKG)"
+		FILE=$(cat "$RhelperAnswer")
+		if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
+			exec<"$RhelperAnswer"
+			while read i
+			do
+			if [ "${i:0:1}" = "/" ]; then
+				RES=$(cat "$i")
+			else
+				RES=$(curl -gsS "$i")
+			fi
+			echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 0
+			LIB=$(echo "$i" | perl -pe 's!.*?/library/(.*?)/.*!$1!')
+			TASK="@|sink('$RDRAMDISK/r_tmp')"
+			echo "$TASK" > "$RDHOME"/r_in
+			TASK="@|cat(sum((.packages()) %in% \"$LIB\"),sep='')"
+			echo "$TASK" > "$RDHOME"/r_in
+			TASK="@|sink(file=NULL)"
+			echo "$TASK" > "$RDHOME"/r_in
+			while [ 1 ]
+			do
+				RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+				[[ "$RES" == "> " ]] && break
+				[[ "$RES" == ": " ]] && break
+				[[ "$RES" == "+ " ]] && break
+				sleep 0.02
+			done
+			RES=$(cat "$RDRAMDISK"/r_tmp)
+			if [ ! -z "$RES" -a "$RES" == "1" ]; then
+				echo -en "\n•• library: $LIB"
+			else
+				echo -en "\n• Library “${LIB}” not yet loaded! [press CTRL+SHIFT+L]"
+			fi
+			echo
+			done
+			exit 206
+		else
+			exit 200
+		fi
 	fi
 fi
 
 # R script
-"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
+"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$PKG)"
 FILE=$(cat "$RhelperAnswer")
 if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
-	if [ "${FILE:0:1}" = "/" ]; then
-		RES=$(cat "$FILE")
-	else
-		RES=$(curl -gsS "$FILE")
-	fi
-	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getPackageFor('$WORD')"
-	LIB=$(cat "$RhelperAnswer")
-	RES=$(echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 0)
-	if [ ! -z "$RES" -a "${RES:0:1}" == "${WORD:0:1}" ]; then
-		echo -n "$RES"
-		echo -en "\n•• library: $LIB"
-		exit 206
-	fi
+	exec<"$RhelperAnswer"
+	while read i
+	do
+		if [ "${i:0:1}" = "/" ]; then
+			RES=$(cat "$i")
+		else
+			RES=$(curl -gsS "$i")
+		fi
+		# "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getPackageFor('$WORD')"
+		# LIB=$(cat "$RhelperAnswer")
+		LIB=$(echo "$i" | perl -pe 's!.*?/library/(.*?)/.*!$1!')
+		RES=$(echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 0)
+		if [ ! -z "$RES" -a "${RES:0:1}" == "${WORD:0:1}" ]; then
+			echo -n "$RES"
+			echo -en "\n•• library: $LIB\n"
+		fi
+	done
+	exit 206
 else
 	# Parse R script for functions
 	OUT=$(echo -en "$TEXT" | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD")

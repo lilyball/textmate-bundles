@@ -17,6 +17,7 @@ print $1 if defined($1);
 [[ -z "$WORD" ]] && echo "No keyword found" && exit 206
 
 #check for user-defined parameter list
+"$TM_BUNDLE_SUPPORT"/bin/initCommandArgsDir.sh
 if [ -e "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" ]; then
 	RES=$(cat "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD")
 else
@@ -91,9 +92,9 @@ if function == "All Parameters"
 	funs.slice!(0)
 	funs.each do |item|
 		com = ", " if cnt > 1
-		if cnt%5 == 0
-			com = ",\n\t"
-		end
+		#if cnt%5 == 0
+		#	com = ",\n\t"
+		#end
 		if item.match("=")
 			arr = item.gsub(/ = /, "=").match('([^=]+?)=(.*)')
 			if arr[2].match('^\"')

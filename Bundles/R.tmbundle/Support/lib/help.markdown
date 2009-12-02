@@ -64,7 +64,7 @@ Based on all installed packages and local function declarations it shows a toolt
 <button>&nbsp;^,&nbsp;</button>
 It shows an inline menu with all available parameters and inserts a snippet with the chosen one(s). This command also tries to figure out whether it is necessary to insert a comma “, ”. If the inserted comma “, ” is set falsely one can press <button>&#x21E5;</button> twice to highlight it.
 
-***Hint*** It is possible the write its own parameter list for a given function. This list has to be saved in `$TM_BUNDLE_SUPPORT/lib/command_args` and its name represents the function name.
+***Hint*** It is possible to write its own parameter list for given functions. These lists have to be saved in `~/Library/Application Support/TextMate/R/lib/command_args` and the file name represents exactly the function name. Invoke simply the command `“R” → “Documentation” → “Edit user-defined Function Parameter”` to edit those parameter lists.
 
 See here an example for <a onclick="document.getElementById('plot').style.display=(document.getElementById('plot').style.display=='')?'none':''" href="#">`$TM_BUNDLE_SUPPORT/lib/command_args/plot`</a>:
 
@@ -214,7 +214,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 01 2009***
+***Date: Dec 02 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

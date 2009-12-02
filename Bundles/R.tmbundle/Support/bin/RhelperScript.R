@@ -1,4 +1,11 @@
-TM_RdaemongetHelpURL <- function(x) cat(ifelse(getRversion()>='2.10.0',gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",ifelse(tools:::httpdPort<1,tools::startDynamicHelp(T),tools:::httpdPort),"/library/\\1/html/\\2.html",sep=""),help(x,try.all.packages=T)[1]),gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",help(x,try.all.packages=T)[1])))
+TM_RdaemongetHelpURL <- function(x,...) {
+	if(getRversion()>='2.10.0') {
+		cat(gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",ifelse(tools:::httpdPort<1,tools::startDynamicHelp(T),tools:::httpdPort),"/library/\\1/html/\\2.html",sep=""),as.vector(help(x,try.all.packages=T,...))),sep='\n')
+	} else {
+		cat(gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",as.vector(help(x,try.all.packages=T,...))),sep='\n')
+	}
+}
+
 TM_RdaemongetHttpPort <- function() cat(ifelse(getRversion()>='2.10.0',ifelse(tools:::httpdPort<1,tools::startDynamicHelp(T),tools:::httpdPort),-2))
 TM_RdaemongetSearchHelp <- function(x,ic=T)
 	cat(

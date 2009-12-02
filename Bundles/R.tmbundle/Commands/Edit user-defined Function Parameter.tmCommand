@@ -5,13 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>
-WDIR="$HOME/Library/Application Support/TextMate/R/help/command_args"
+	<string>WDIR="$HOME/Library/Application Support/TextMate/R/help/command_args"
 
-if [ ! -e "$WDIR" ]; then
-	mkdir -p "$WDIR"
-	cp -R "$TM_BUNDLE_SUPPORT"/lib/command_args "$WDIR"
-fi
+"$TM_BUNDLE_SUPPORT"/bin/initCommandArgsDir.sh
 
 mate "$WDIR"</string>
 	<key>input</key>

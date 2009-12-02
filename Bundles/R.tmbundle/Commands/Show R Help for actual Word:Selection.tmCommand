@@ -17,9 +17,9 @@ done
 RhelperAnswer="/tmp/textmate_Rhelper_out"
 
 if [ -z "$TM_SELECTED_TEXT" ]; then
-	export WORD=$(ruby -- &lt;&lt;-SCR1 
+	WORD=$(ruby -- &lt;&lt;-SCR1 
 		require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
-		word = Word.current_word('\w\.')
+		word = Word.current_word('\w\.:')
 		word.gsub!(/^[\d\.\-]+$/,"")
 		print word
 	SCR1
@@ -27,7 +27,7 @@ if [ -z "$TM_SELECTED_TEXT" ]; then
 
 	if [ -z "$WORD" ]; then
 		#look for nested commands
-		export WORD=$(perl -e '
+		WORD=$(perl -e '
 		$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
 		$line=substr($line,0,$col);
 		$line=~s/ //g;
@@ -36,20 +36,26 @@ if [ -z "$TM_SELECTED_TEXT" ]; then
 		if($i==-1) {
 			print "";
 		} else {
-			substr($line,0,$i)=~m/([\w\.]+)$/;
+			substr($line,0,$i)=~m/([\w\.:]+)$/;
 			print $1 if defined($1);
 		}
 		')
 	fi
 else
 	#take the selected text
-	export WORD=$(echo -en "$TM_SELECTED_TEXT" | perl -e '$_=&lt;&gt;;chomp;s/^[\t ]*//;s/([\w\.]+)[ \(\{].*/$1/g;print')
+	WORD=$(echo -en "$TM_SELECTED_TEXT" | perl -e '$_=&lt;&gt;;chomp;s/^[\t ]*//;s/([\w\.:]+)[ \(\{].*/$1/g;print')
 fi
 
 if [ -z "$WORD" ]; then
 	WORD=$("$DIALOG" -m -p 'prompt="Search for:";title="Look up in R Documentation";' RequestString | perl -e 'undef($/);$a=&lt;&gt;;$a=~s/\n|\t//mg;$a=~m/.*?&lt;key&gt;returnArgument&lt;\/key&gt;&lt;string&gt;(.*?)&lt;\/string&gt;.*/; print $1 if (length($1))')
 	[[ -z "$WORD" ]] &amp;&amp; exit_discard
 fi
+
+LIB=""
+if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
+	LIB=",package='${WORD%%:*}'"
+fi
+WORD="${WORD##*:}"
 
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] &amp;&amp; echo "No keyword found." &amp;&amp; exit_show_tool_tip
@@ -70,7 +76,7 @@ if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 		[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
 		TASK="@|sink('$RDRAMDISK/r_tmp')"
 		echo "$TASK" &gt; "$RDHOME"/r_in
-		echo "@|cat(ifelse(getRversion()&gt;='2.10.0',gsub('.*/library/(.*?)/.*?/(.*?)(\\\\.html|$)',paste('http://127.0.0.1:',ifelse(tools:::httpdPort&lt;1,tools::startDynamicHelp(T),tools:::httpdPort),'/library/\\\\1/html/\\\\2.html',sep=''),help('$WORD',try.all.packages=F)[1]),gsub('(.*?)/library/(.*?)/.*?/(.*?)(\\\\.html|$)','\\\\1/library/\\\\2/html/\\\\3.html',help('$WORD',try.all.packages=F)[1])))" &gt; "$RDHOME"/r_in
+		echo "@|if(getRversion()&gt;='2.10.0'){cat(gsub('.*/library/(.*?)/.*?/(.*?)(\\\\.html|$)',paste('http://127.0.0.1:',ifelse(tools:::httpdPort&lt;1,tools::startDynamicHelp(T),tools:::httpdPort),'/library/\\\\1/html/\\\\2.html',sep=''),as.vector(help('$WORD'$LIB))),sep='\n')}else{cat(gsub('(.*?)/library/(.*?)/.*?/(.*?)(\\\\.html|$)','\\\\1/library/\\\\2/html/\\\\3.html',as.vector(help('$WORD'$LIB))),sep='\n')}" &gt; "$RDHOME"/r_in
 		sleep 0.001
 		while [ 1 ]
 		do
@@ -97,11 +103,13 @@ if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 	fi
 fi
 
-
+FILE=""
+CNT=0
 if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
-	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$LIB)"
 	FILE=$(cat "$RhelperAnswer")
-	if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
+	CNT=`echo -e "$FILE" | wc -l`
+	if [ ! -z "$FILE" -a "$FILE" != "NA" -a $CNT -eq 1 ]; then
 		if [ "${FILE:0:1}" = "/" ]; then
 			echo "&lt;base href=\"tm-file://$FILE\"&gt;"
 			cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
@@ -110,6 +118,9 @@ if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 			curl -gsS "$FILE"
 		fi
 		exit_show_html
+	else
+		FILE=""
+		CNT=0
 	fi
 fi
 
@@ -174,28 +185,33 @@ else
 			echo "TextMate.system('open \"http://127.0.0.1:$PORT/doc/html/index.html\"', null);" &gt;&gt; "$SEARCH"
 fi
 
-export token=$("$DIALOG" -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Searching…';}")
 
 if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" ]; then
-	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
-	FILE=$(cat "$RhelperAnswer")
-else
-	FILE=""
-fi
-
-if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" -a ! -z "$FILE" -a "$FILE" != "NA" ]; then
 	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD$',F)"
-	WORD="^$WORD$"
+	FILE=$(cat "$RhelperAnswer")
+	if [ -z "$FILE" -o "$FILE" == "NA" ]; then
+		CNT=0
+	else
+		CNT=`echo -e "$FILE" | wc -l`
+	fi
 	BEGINSEARCH=""
-else
+fi
+if [ $CNT -eq 0 ]; then
 	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD')"
-
 	sleep 0.01
+	FILE=$(cat "$RhelperAnswer")
+	if [ -z "$FILE" -o "$FILE" == "NA" ]; then
+		CNT=0
+	else
+		CNT=`echo -e "$FILE" | wc -l`
+	fi
 	BEGINSEARCH="checked"
-	if [ -z `cat "$RhelperAnswer"` ]; then
+	if [ $CNT -eq 0 ]; then
 		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('$WORD')"
-		BEGINSEARCH=""
 		sleep 0.05
+		FILE=$(cat "$RhelperAnswer")
+		CNT=`echo -e "$FILE" | wc -l`
+		BEGINSEARCH=""
 	fi
 fi
 
@@ -232,17 +248,23 @@ HFS01
 echo "&lt;html&gt;&lt;body style='margin-top:5mm'&gt;" &gt; "$HEAD"
 echo "&lt;table style='border-collapse:collapse'&gt;&lt;tr&gt;&lt;td style='padding-right:1cm;border-bottom:1px solid black'&gt;&lt;b&gt;Package&lt;/b&gt;&lt;/td&gt;&lt;td style='border-bottom:1px solid black'&gt;&lt;b&gt;Topic&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 
-CNT=`cat "$RhelperAnswer" | wc -l`
+if [ $CNT -gt 10 ]; then
+	export token=$("$DIALOG" -c -a ProgressDialog -p "{title=Rdaemon;isIndeterminate=1;summary='R Documentation';details='Please wait. Building Help Page… $CNT items found';}")
+fi
+
 if [ $CNT -gt 500 ]; then
 	echo "&lt;tr colspan=2&gt;&lt;td&gt;&lt;i&gt;too much matches...&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 else
-	exec&lt;"$RhelperAnswer"
+		oifs="$IFS"
+		IFS="
+"
 	if [ "$IS_HELPSERVER" == "TRUE" ]; then
-		while read i
+		for i in $FILE
 		do
 			lib=$(echo -e "$i" | cut -d '	' -f1)
 			fun=$(echo -e "$i" | cut -d '	' -f2)
 			link=$(echo -e "$i" | cut -d '	' -f3)
+			# "$DIALOG" -t $token -p "{details='${fun//\'/’}';}" 2&amp;&gt;/dev/null
 			echo "&lt;tr&gt;&lt;td&gt;$lib&lt;/td&gt;&lt;td&gt;&lt;a href='$link' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 		done
 		if [ $CNT -eq 1 ]; then
@@ -250,7 +272,7 @@ else
 			curl -gsS "$link" &gt;&gt; "$DATA"
 		fi
 	else
-		while read i
+		for i in $FILE
 		do
 			lib=$(echo -e "$i" | cut -d '	' -f1)
 			fun=$(echo -e "$i" | cut -d '	' -f2)

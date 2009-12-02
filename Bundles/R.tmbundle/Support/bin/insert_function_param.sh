@@ -9,9 +9,15 @@ $line=substr($line,0,$col);
 $line=~s/ //g;
 @arr=split(//,$line);$c=0;
 for($i=$#arr;$i>-1;$i--){$c-- if($arr[$i] eq ")");$c++ if($arr[$i] eq "(");last if $c>0;}
-substr($line,0,$i)=~m/([\w\.]+)$/;
+substr($line,0,$i)=~m/([\w\.:]+)$/;
 print $1 if defined($1);
 ')
+
+PKG=""
+if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
+	PKG=",package='${WORD%%:*}'"
+fi
+WORD="${WORD##*:}"
 
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] && echo "No keyword found" && exit 206
@@ -23,8 +29,13 @@ if [ -e "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" ]
 else
 
 	# Get URL for current function
-	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD')"
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$PKG)"
 	FILE=$(cat /tmp/textmate_Rhelper_out)
+	if [ `cat /tmp/textmate_Rhelper_out | wc -l` -gt 1 ]; then
+		echo -e "Function '$WORD' is ambiguous.\nFound in packages:"
+		echo "$FILE" | perl -pe 's!.*?/library/(.*?)/.*?/.*!$1!'
+		exit 206
+	fi
 	if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
 		if [ "${FILE:0:1}" = "/" ]; then
 			RES=$(cat "$FILE")
@@ -42,10 +53,9 @@ else
 	fi
 
 	[[ -z "$OUT" ]] && echo "Nothing found" && exit 206
-
 	# Evaluate function arguments and get a list of them
 	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "for (i in names(formals(function $OUT {})->a)) {cat(i);cat(' = ');print(a[[i]])}"
-	RES=$(cat /tmp/textmate_Rhelper_out | perl -pe 's/ = \[1\] / = /g;s/^\.\.\..*\n//g')
+	RES=$(cat /tmp/textmate_Rhelper_out | perl -e 'undef($/);$a=<>;$a=~s/ = \[1\] / = /g;$a=~s/\.\.\..*\n//g;$a=~s/\n +//g;print $a' )
 
 fi
 

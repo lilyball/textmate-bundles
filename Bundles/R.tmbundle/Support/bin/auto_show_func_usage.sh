@@ -4,6 +4,8 @@ print ENV['TM_CURRENT_LINE'][0...ENV['TM_LINE_INDEX'].to_i].gsub!(/ *$/, "").mat
 SCR1
 )
 
+
+WORDORG="$WORD"
 PKG=""
 if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
 	PKG=",package='${WORD%%:*}'"
@@ -30,7 +32,7 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 	[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
 
 	# execute "args()" in Rdaemon
-	TASK="@|sink('$RDRAMDISK/r_tmp');args($WORD);sink(file=NULL)"
+	TASK="@|sink('$RDRAMDISK/r_tmp');args($WORDORG);sink(file=NULL)"
 	echo "$TASK" > "$RDHOME"/r_in
 	while [ 1 ]
 	do

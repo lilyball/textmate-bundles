@@ -33,6 +33,18 @@ if [ -z "$LIB" ]; then
 	exit 206
 fi
 
+if [ `echo "$LIB" | wc -l` -gt 1 ]; then
+	LIB=$(echo "$LIB" | sort -f | ruby -e '
+		require File.join(ENV["TM_SUPPORT_PATH"], "lib/ui.rb")
+		require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
+		words = STDIN.read().split("\n")
+		index=TextMate::UI.menu(words)
+		if index != nil
+			print words[index]
+		end
+	')
+fi
+
 if [ `echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console'` -gt 0 ]; then
 	echo -en "&gt; require($LIB); "
 	echo -n "$LINE" | sed 's/^&gt; //'

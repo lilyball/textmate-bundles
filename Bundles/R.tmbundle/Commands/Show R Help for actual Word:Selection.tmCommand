@@ -98,8 +98,9 @@ if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 				echo "&lt;base href=\"tm-file://$FILE\"&gt;"
 				cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
 			else
-				echo "&lt;base href=\"$FILE\"&gt;"
-				curl -gsS "$FILE"
+				# echo "&lt;base href=\"$FILE\"&gt;"
+				# curl -gsS "$FILE"
+				echo -en "&lt;meta http-equiv='REFRESH' content='0;url=$FILE'&gt;&lt;/head&gt;"
 			fi
 			exit_show_html
 		fi
@@ -117,8 +118,7 @@ if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 			echo "&lt;base href=\"tm-file://$FILE\"&gt;"
 			cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
 		else
-			echo "&lt;base href=\"$FILE\"&gt;"
-			curl -gsS "$FILE"
+			echo -en "&lt;meta http-equiv='REFRESH' content='0;url=$FILE'&gt;&lt;/head&gt;"
 		fi
 		exit_show_html
 	else
@@ -278,6 +278,8 @@ else
 		if [ $CNT -eq 1 ]; then
 			echo "&lt;base href=\"$link\"&gt;" &gt; "$DATA"
 			curl -gsS "$link" &gt;&gt; "$DATA"
+			# echo -en "&lt;meta http-equiv='REFRESH' content='1;url=$link'&gt;&lt;/head&gt;" &gt; "$DATA"
+
 		fi
 	else
 		for i in $FILE

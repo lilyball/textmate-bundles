@@ -51,11 +51,14 @@ if [ -z "$WORD" ]; then
 	[[ -z "$WORD" ]] &amp;&amp; exit_discard
 fi
 
+
 LIB=""
-if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
-	LIB=",package='${WORD%%:*}'"
+if [ ! -z "${WORD//:/}" ]; then
+	if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
+		LIB=",package='${WORD%%:*}'"
+	fi
+	WORD="${WORD##*:}"
 fi
-WORD="${WORD##*:}"
 
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] &amp;&amp; echo "No keyword found." &amp;&amp; exit_show_tool_tip

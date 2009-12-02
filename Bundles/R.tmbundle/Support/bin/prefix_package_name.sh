@@ -1,12 +1,17 @@
-[[ -n "$TM_SELECTED_TEXT" ]] && echo "Please unselect first." && exit_show_tool_tip
+[[ -n "$TM_SELECTED_TEXT" ]] && echo "Please unselect first." && exit 206
 
 LINE=$(cat | perl -e '
 	$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
 	$lineL=substr($line,0,$col);
 	$lineR=substr($line,$col);
+	if($lineL=~m/([\w_\.]*)$/) {
+		$lineL=~s/([\w_\.]*)$//;
+		$lineR=$1.$lineR if(defined $1);
+	}
 	$lineL=~s/(?=[\$`\\])/\\/g;
 	$lineR=~s/(?=[\$`\\])/\\/g;
-	print "$lineL\${0:}$lineR";
+	$lineR=~s/^([\w_\.]*)/$1\${0:}/;
+	print "$lineL\n$lineR";
 ')
 WORD=$(ruby -- <<-SCR1 
 	require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
@@ -17,7 +22,7 @@ SCR1
 
 WORD=$(echo -en "$WORD" | perl -pe 's/\([^\(]*$//')
 
-[[ -z "$WORD" ]] && echo "No keyword found" && exit_show_tool_tip
+[[ -z "$WORD" ]] && echo "No keyword found" && exit 206
 
 "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getPackageFor('$WORD')"
 LIB=$(cat /tmp/textmate_Rhelper_out)
@@ -40,7 +45,8 @@ fi
 [[ -z $LIB ]] && exit 200
 
 
-OUT="${LINE/$WORD/$LIB::$WORD}"
+OUT="${LINE/
+/$LIB::}"
 if [ `echo "$OUT" | grep -c "$LIB::"` -lt 1 ]; then
 	echo "Please set the caret at the end of the function name and redo it."
 	exit 206

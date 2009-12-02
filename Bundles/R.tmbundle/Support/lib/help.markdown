@@ -88,6 +88,10 @@ It shows an inline menu with all parameters defined in `$TM_BUNDLE_SUPPORT/lib/c
 <button>&nbsp;^&#x21E7;L&nbsp;</button>
 It looks for that package in which the current keyword &mdash; "()" will be recognized &mdash; is defined, and it inserts the R code to load that package `require(PACKAGE)` above the current line.
 
+## Prefix Package Name to current Function
+<button>&nbsp;^&#x2325;&#x21E7;L&nbsp;</button>
+It prefixes the current function with the found package name. Useful e.g. if a function occurs in more than one loaded package.
+
 ## Package Name…
 <button>&nbsp;&#x2325;&#x21E7;&#x2318;L&nbsp;</button>
 It shows all installed packages as an inline menu.

@@ -190,12 +190,15 @@ fi
 
 
 if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" ]; then
-	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD$',F)"
+	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$LIB)"
 	FILE=$(cat "$RhelperAnswer")
 	if [ -z "$FILE" -o "$FILE" == "NA" ]; then
 		CNT=0
+		FILE=""
 	else
 		CNT=`echo -e "$FILE" | wc -l`
+		LIB=$(echo "$FILE" | perl -pe 's!.*?/library/(.*?)/.*!$1!')
+		FILE="$LIB	$WORD	$FILE"
 	fi
 	BEGINSEARCH=""
 fi

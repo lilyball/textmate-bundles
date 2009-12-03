@@ -52,7 +52,10 @@ else
 		fi
 	fi
 
-	[[ -z "$OUT" ]] && echo "Nothing found" && exit 206
+	if [ -z "$OUT" ]; then
+		echo "Nothing found"
+		exit 206
+	fi
 	# Evaluate function arguments and get a list of them
 	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "for (i in names(formals(function $OUT {})->a)) {cat(i);cat(' = ');print(a[[i]])}"
 	RES=$(cat /tmp/textmate_Rhelper_out | perl -e 'undef($/);$a=<>;$a=~s/ = \[1\] / = /g;$a=~s/\.\.\..*\n//g;$a=~s/\n +//g;print $a' )

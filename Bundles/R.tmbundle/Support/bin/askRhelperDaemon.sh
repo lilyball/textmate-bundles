@@ -22,7 +22,19 @@ do
 	fi
 	RES=$(tail -c 2 /tmp/textmate_Rhelper_console)
 	[[ "$RES" == "> " ]] && break
-	sleep 0.05
+	sleep 0.01
 done
-#sleep 0.1
+if [ -e /tmp/textmate_Rhelper_status ]; then
+	SAFECNT=0
+	while [ `cat /tmp/textmate_Rhelper_status` != "READY" ]
+	do
+		SAFECNT=$(($SAFECNT+1))
+		if [ $SAFECNT -gt 1000 ]; then
+			echo -en "No RESULT from R Helper server!"
+			exit 206
+		fi
+		sleep 0.01
+	done
+fi
+
 

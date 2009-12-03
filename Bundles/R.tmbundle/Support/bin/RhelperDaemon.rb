@@ -60,10 +60,10 @@ PTY.spawn(cmd) { |r,w,pid|
 		task = $fin.gets.chomp
 		%x{echo -en "BUSY" > '#{$pipe_status}'}
 		if task[0,1] == "@"
-			w.puts "sink('/tmp/textmate_Rhelper_out');TM_Rdaemon#{task[1..-1]};sink(file=NULL);while(sink.number()>0){sink(file=NULL)};cat('READY',file='#{$pipe_status}',sep='')"
+			w.puts "sink('/tmp/textmate_Rhelper_out');TM_Rdaemon#{task[1..-1]};sink(file=NULL);cat('READY',file='#{$pipe_status}',sep='')"
 		else
-			w.puts "sink('/tmp/textmate_Rhelper_out');#{task};sink(file=NULL)"
+			w.puts "sink('/tmp/textmate_Rhelper_out');#{task};sink(file=NULL);cat('READY',file='#{$pipe_status}',sep='')"
 		end
-    # w.puts "while(sink.number()>0){sink(file=NULL)};cat('READY',file='#{$pipe_status}',sep='')"
+    w.puts "while(sink.number()>0){sink(file=NULL)}"
 	end
 }

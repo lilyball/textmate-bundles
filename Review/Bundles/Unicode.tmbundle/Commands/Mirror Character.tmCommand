@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -9,14 +9,26 @@
 # coding=utf-8
 
 # written by Hans-Jörg Bibiko; bibiko at eva.mpg.de
-import sys
-import os
 
-if "TM_SELECTED_TEXT" in os.environ:
+import sys
+import unicodedata
+import re
+import warnings
+
+from os import popen2, path, environ as env
+
+tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
+if not tm_support_path in env:
+     sys.path.insert(0, tm_support_path)
+
+import dialog
+import tm_helpers
+
+if "TM_SELECTED_TEXT" in env:
      print "Please remove the selection firstly."
      sys.exit(206)
 
-line, x = os.environ["TM_CURRENT_LINE"], int(os.environ["TM_LINE_INDEX"])
+line, x = env["TM_CURRENT_LINE"], int(env["TM_LINE_INDEX"])
 
 inputleft = unicode(line[:x], "UTF-8")
 
@@ -27,23 +39,26 @@ tail = unicode(line[x:], "UTF-8")
 char = inputleft[-1]
 head = inputleft[:-1]
 
-inp, out = os.popen2("grep '^"+char.encode("UTF-8")+"' '"+os.path.join(os.environ["TM_BUNDLE_SUPPORT"], "/lib/mirror.txt'"))
-inp.close()
-data = unicode(out.read(), "UTF-8").rstrip()
-out.close()
+with warnings.catch_warnings():
+	warnings.simplefilter("ignore")
 
-if len(data) &lt; 3:
-    sys.exit(200)
+	inp, out = popen2("grep '^"+char.encode("UTF-8")+"' '"+path.join(env["TM_BUNDLE_SUPPORT"], "lib/mirror.txt'"))
+	inp.close()
+	data = unicode(out.read(), "UTF-8").rstrip()
+	out.close()
 
-cc, mirror = data.split('\t')
+	if len(data) &lt; 3:
+	    sys.exit(200)
 
-if len(mirror):
-    sys.__stdout__.write(head.encode("UTF-8"))
-    sys.__stdout__.write(mirror.encode("UTF-8"))
-    sys.__stdout__.write(tail.encode("UTF-8"))
-    sys.exit(201)
+	cc, mirror = data.split('\t')
 
-sys.exit(200)
+	if len(mirror):
+	    sys.__stdout__.write(head.encode("UTF-8"))
+	    sys.__stdout__.write(mirror.encode("UTF-8"))
+	    sys.__stdout__.write(tail.encode("UTF-8"))
+	    sys.exit(201)
+
+	sys.exit(200)
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

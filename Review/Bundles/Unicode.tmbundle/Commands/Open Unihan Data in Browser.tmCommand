@@ -10,6 +10,7 @@
 
 import sys
 import os
+import warnings
 
 def lastCharInUCSdec(s):
     if s:
@@ -32,9 +33,11 @@ charcode = "%04X" % lastCharDecCode
 if len(charcode) == 0:
     sys.exit(200)
 
-inp, out = os.popen2("open 'http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=" + charcode + "&amp;useutf8=false'")
-inp.close()
-out.close()
+with warnings.catch_warnings():
+	warnings.simplefilter("ignore")
+	inp, out = os.popen2("open 'http://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=" + charcode + "&amp;useutf8=false'")
+	inp.close()
+	out.close()
 </string>
 	<key>fallbackInput</key>
 	<string>none</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -12,7 +12,8 @@
 
 import sys
 import codecs
-from os import popen2, path, environ as env
+
+from os import path, environ as env
 
 tm_support_path = path.join(env["TM_SUPPORT_PATH"], "lib")
 if not tm_support_path in env:

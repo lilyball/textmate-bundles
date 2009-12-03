@@ -48,7 +48,9 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 	if [ ! -z "$RES" ]; then
 		OUT=$(echo -en "$WORD${RES:9}" | perl -e 'undef($/);$a=<>;$a=~s/"\t"/"\\t"/sg;$a=~s/"\n"/"\\n"/sg;print $a')
 		rm -f "$RDRAMDISK"/r_tmp
-		TASK="@|sink('$RDRAMDISK/r_tmp');cat(gsub('.*?/library/(.*?)/.*','\\\\1',as.vector(help('$WORD',try.all.packages=F))),sep='\n');@|sink(file=NULL)"
+		TASK="@|sink('$RDRAMDISK/r_tmp');cat(gsub('.*?/library/(.*?)/.*','\\\\1',as.vector(help('$WORD',try.all.packages=F))),sep='\n')"
+		echo "$TASK" > "$RDHOME"/r_in
+		TASK="@|sink(file=NULL)"
 		echo "$TASK" > "$RDHOME"/r_in
 		while [ 1 ]
 		do

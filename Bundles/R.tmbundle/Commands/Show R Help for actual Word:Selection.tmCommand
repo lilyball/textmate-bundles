@@ -157,8 +157,10 @@ echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
 
 "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "cat(getRversion()&gt;='2.10.0',sep='')"
 IS_HELPSERVER=$(cat "$RhelperAnswer")
+sleep 0.05
 "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHttpPort()"
 PORT=$(cat "$RhelperAnswer")
+sleep 0.05
 
 cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 &lt;html&gt;
@@ -200,6 +202,11 @@ if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" ]; then
 		if [ $CNT -eq 1 ]; then
 			theLib=$(echo "$FILE" | perl -pe 's!.*?/library/(.*?)/.*!$1!')
 			FILE="$theLib	$WORD	$FILE"
+		else
+			"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD$')"
+			sleep 0.01
+			FILE=$(cat "$RhelperAnswer")
+			CNT=`echo -e "$FILE" | wc -l`
 		fi
 	fi
 	BEGINSEARCH=""
@@ -266,6 +273,7 @@ else
 		oifs="$IFS"
 		IFS="
 "
+
 	if [ "$IS_HELPSERVER" == "TRUE" ]; then
 		for i in $FILE
 		do

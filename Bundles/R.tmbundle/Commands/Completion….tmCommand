@@ -19,7 +19,7 @@ SCR1
 RhelperAnswer="/tmp/textmate_Rhelper_out"
 
 WORDORG="$WORD"
-export RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
+RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
 
 if [ $RD -gt 0 ]; then
 	RDHOME="$HOME/Library/Application Support/Rdaemon"
@@ -59,23 +59,22 @@ if [ $RD -gt 0 ]; then
 			sleep 0.05
 		done
 		LOCAL=$(cat "$RDRAMDISK"/r_tmp | sort)
-		# echo -en "$LOCAL" &amp;&amp; exit 206
 	fi
 fi
 
-[[ $RD -eq 0 ]] &amp;&amp; LOCAL=$(cat | grep '&lt;\- *function' | perl -pe 's/\t//g;s/ *(.*?) *&lt;\-.*/$1\t{local}/' | sort | egrep -i "^${WORD//./\\.}")
+[[ $RD -eq 0 ]] &amp;&amp; LOCAL=$(cat | grep '&lt;\- *function' | perl -pe 's/\t//g;s/ *(.*?) *&lt;\-.*/$1|OK/' | sort | egrep -i "^${WORD//./\\.}")
 
 #get suggestions
 "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getCompletionList('$WORD',T)"
 RES=$(cat "$RhelperAnswer")
-export RES=$(echo -e "$LOCAL"; echo -en "$RES")
+RES=$(echo -e "$LOCAL"; echo -en "$RES")
 
 ruby -- &lt;&lt;-SCRIPT 2&gt; /dev/null
 require File.join(ENV["TM_SUPPORT_PATH"], "lib/exit_codes.rb")
 require "#{ENV["TM_SUPPORT_PATH"]}/lib/ui"
 word = "$WORD"
 wordorg = "$WORDORG"
-text = ENV['RES']
+text = "$RES"
 funs = text.gsub(/\n{2,}/,"\n").split("\n")
 
 rdfuns = funs.select {|x| x =~ /\|OK$/ }
@@ -92,16 +91,21 @@ end
 funs.delete_if {|x| x.match('[,\- ]') }
 funs.delete_if {|x| x.match('matrices.*rgl') }
 funs.delete_if {|x| x.match('^\s*$') }
-max=0
-funs.each {|i| max = i.length if i.length &gt; max }
-max=(max/4+1)*4
-funs.collect! do |x| 
-	if rdfuns.include?(x.gsub(/\t.*/,""))
-		a=x.gsub(/\t.*/,"")
-		x= "%s 　 …%s…" % [ a, x.gsub(/.*\t/,"") ]
-	else
-		a=x.gsub(/\t.*/,"")
-		x= "%s 　 {%s}" % [ a, x.gsub(/.*\t/,"") ]
+if "$RD" == "1"
+	funs.collect! do |x|
+		if rdfuns.include?(x.gsub(/\t.*/,""))
+			x= "%s 　 …%s…" % x.split("\t")
+		else
+			x= "%s 　 {%s}" % x.split("\t")
+		end
+	end
+else
+	funs.collect! do |x|
+		if rdfuns.include?(x.gsub(/\t.*/,""))
+			x= "%s 　 …%s…" % x.split("\t")
+		else
+			x= "%s 　 [%s]" % x.split("\t")
+		end
 	end
 end
 

@@ -20,7 +20,7 @@ It executes the current document or selection in a self-sufficient environment o
 
 ## Send Selection/Document to Rdaemon
 <button>&nbsp;&#x21E7;&#x2318;R&nbsp;</button>
-It sends the current document or selection line by line to the Rdaemon. If Rdaemon is not yet running it will start it, it opens the Rsession project, and the file `~/Library/Application Support/Rdaemon/console.Rcon` will contain the output.
+It sends the current document or selection line by line to the Rdaemon. If Rdaemon is installed and it is not yet running it will start it, it opens the Rsession project, and the file `~/Library/Application Support/Rdaemon/console.Rcon` will contain the output.
 
 ***Hint*** To use that command you have to install the Rdaemon Bundle in beforehand.
 
@@ -38,9 +38,11 @@ It executes the current line or selection in R.app and goes to the end of the ne
 
 ## Completion…
 <button>&nbsp;^.&nbsp;</button>
-Based on all installed packages and local function declarations it shows an inline menu with completion suggestions for the current word or selection as <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;{library}&nbsp;</code>. The library `local` refers to functions defined within the current document.
+Based on all installed packages and local function declarations within the current R script it shows an inline menu with completion suggestions for the current word or selection as <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;[library]&nbsp;</code> or as <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;…local…&nbsp;</code> indicating that `function` is defined within the current R script.
 
-As default it also displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the TextMate shell variable `TM_R_AUTOCOMPLETE` to `1`.
+If the “Completion…” command is invoked from a running Rdaemon document the notation <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;{library}&nbsp;</code> indicates that the `library` is not yet loaded (or `function` is not found as valid function name in a loaded library) whereby the notation  <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;…library…&nbsp;</code> indicates that `library` is loaded.
+
+As default it also displays an inline menu if there is only one suggestion found in order to give you an hint about the required library. You can force TextMate to complete it without displaying that menu by setting the TextMate shell variable `TM_R_AUTOCOMPLETE` to `1`.
 
 ***Hint*** This command works case-sensitively. E.g. if you type `math` (without selection and there is no command beginning with `math`) and invoke this command it lists all case-insensitive matched commands like `Math.fraction`, etc. as a tooltip caused by the chosen "Insert as Snippet" mechanism.
 
@@ -48,7 +50,7 @@ As default it also displays an inline menu if there is only one suggestion found
 <button>&nbsp;^H&nbsp;</button>
 It shows an HTML document with the found R help for the current word or of that command in which the caret is located. If no help file is found it opens an HTML window with all found keywords beginning with the current word. Furthermore this help window offers a `Search for` field to enter a new search term (a regular expression). The check box `Begins with` adds a `^` at the beginning of the search term. The search makes usage of the R command `help.search(TERM)`.
 
-***Hint*** The search function `help.search` allows to look for the entered term case-sensitively by using the regular expression flag `(?-i)` e.g. to look exactly for `T` type `“(?-i)^T$”`.
+***Hint*** The search function `help.search` allows to look for the entered term case-sensitively by using the regular expression flag `(?-i)` e.g. to look exactly for `T` type `“(?-i)^T$”` whereby ^ means look only from the beginning of an help entry and $ means to look until the end of an help entry.
     
 ## Show Function Usage
 <button>&nbsp;&#x2325;&#x21E7;H&nbsp;</button>
@@ -125,9 +127,9 @@ It tries to highlight the next/previous element (if quoted only the content) of 
 ## Tidy (removes all comments!)
 <button>&nbsp;^&#x21E7;H&nbsp;</button>
 It tidies the selection or the entire document by deparsing them on-the-fly using the command-line version of R. General syntax errors will be displayed as tooltip and the caret will be moved to the first error.
-
-***Attention*** All comments will be deleted!
-
+<font color=red><br><br>
+<b>Attention:</b> All comments will be deleted!
+</font><br><br>
 ***Hint*** This command can also be used as a kind of `Syntax Checker`. It only checks the R code for general syntax error like missing brackets, or commas, etc. It does **not** check for semantic errors like if a variable was assigned correctly or not.
 
 ## Function Call
@@ -218,7 +220,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 02 2009***
+***Date: Dec 03 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

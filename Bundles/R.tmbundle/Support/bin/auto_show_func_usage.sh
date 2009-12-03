@@ -62,7 +62,8 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 		done
 		LIB=$(cat "$RDRAMDISK"/r_tmp)
 		if [ -z "$LIB" ]; then
-			LIB="local"
+			echo -en "$OUT\n• local declaration"
+			exit 206
 		fi
 		CNT=$(echo "$LIB" | wc -l)
 		if [ $CNT -eq 1 ]; then
@@ -139,13 +140,7 @@ if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
 else
 	# Parse R script for functions
 	OUT=$(echo -en "$TEXT" | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD")
-
-	LIB="local"
-
 	[[ -z "$OUT" ]] && exit 200
-
-	OUT=$WORD$OUT
-	echo -n "$OUT"
-	echo -en "\n•• library: $LIB"
+	echo -en "$WORD$OUT\n• local declaration"
 	exit 206
 fi

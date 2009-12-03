@@ -95,11 +95,8 @@ if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 		sleep 0.001
 		if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
 			if [ "${FILE:0:1}" = "/" ]; then
-				echo "&lt;base href=\"tm-file://$FILE\"&gt;"
-				cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
+				echo -en "&lt;meta http-equiv='REFRESH' content='0;url=tm-file://$FILE'&gt;&lt;/head&gt;"
 			else
-				# echo "&lt;base href=\"$FILE\"&gt;"
-				# curl -gsS "$FILE"
 				echo -en "&lt;meta http-equiv='REFRESH' content='0;url=$FILE'&gt;&lt;/head&gt;"
 			fi
 			exit_show_html
@@ -115,8 +112,7 @@ if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 	CNT=`echo -e "$FILE" | wc -l`
 	if [ ! -z "$FILE" -a "$FILE" != "NA" -a $CNT -eq 1 ]; then
 		if [ "${FILE:0:1}" = "/" ]; then
-			echo "&lt;base href=\"tm-file://$FILE\"&gt;"
-			cat "$FILE" | iconv -s -f ISO8859-1 -t UTF-8
+			echo -en "&lt;meta http-equiv='REFRESH' content='0;url=tm-file://$FILE'&gt;&lt;/head&gt;"
 		else
 			echo -en "&lt;meta http-equiv='REFRESH' content='0;url=$FILE'&gt;&lt;/head&gt;"
 		fi
@@ -157,10 +153,9 @@ echo "&lt;html&gt;&lt;/html&gt;" &gt; "$DATA"
 
 "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "cat(getRversion()&gt;='2.10.0',sep='')"
 IS_HELPSERVER=$(cat "$RhelperAnswer")
-sleep 0.05
 "$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHttpPort()"
 PORT=$(cat "$RhelperAnswer")
-sleep 0.05
+
 
 cat &lt;&lt;-"HFS" &gt; "$SEARCH"
 &lt;html&gt;
@@ -204,7 +199,6 @@ if [ "$TM_R_SHOW_ALWAYS_HELPSEARCH" == "1" ]; then
 			FILE="$theLib	$WORD	$FILE"
 		else
 			"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('^$WORD$')"
-			sleep 0.01
 			FILE=$(cat "$RhelperAnswer")
 			CNT=`echo -e "$FILE" | wc -l`
 		fi
@@ -223,7 +217,6 @@ if [ $CNT -eq 0 ]; then
 	BEGINSEARCH="checked"
 	if [ $CNT -eq 0 ]; then
 		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('$WORD')"
-		sleep 0.05
 		FILE=$(cat "$RhelperAnswer")
 		CNT=`echo -e "$FILE" | wc -l`
 		BEGINSEARCH=""
@@ -280,14 +273,11 @@ else
 			lib=$(echo -e "$i" | cut -d '	' -f1)
 			fun=$(echo -e "$i" | cut -d '	' -f2)
 			link=$(echo -e "$i" | cut -d '	' -f3)
-			# "$DIALOG" -t $token -p "{details='${fun//\'/’}';}" 2&amp;&gt;/dev/null
 			echo "&lt;tr&gt;&lt;td&gt;$lib&lt;/td&gt;&lt;td&gt;&lt;a href='$link' target='data'&gt;$fun&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; "$HEAD"
 		done
 		if [ $CNT -eq 1 ]; then
 			echo "&lt;base href=\"$link\"&gt;" &gt; "$DATA"
 			curl -gsS "$link" &gt;&gt; "$DATA"
-			# echo -en "&lt;meta http-equiv='REFRESH' content='1;url=$link'&gt;&lt;/head&gt;" &gt; "$DATA"
-
 		fi
 	else
 		for i in $FILE

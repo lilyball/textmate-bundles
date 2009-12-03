@@ -24,3 +24,5 @@ do
 	[[ "$RES" == "> " ]] && break
 	sleep 0.05
 done
+#sleep 0.1
+

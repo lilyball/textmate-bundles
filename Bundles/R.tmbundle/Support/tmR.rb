@@ -1,11 +1,11 @@
 #!/usr/bin/ruby
 #
-# RMate v0.1, 2006-05-03.
+# RMate v0.92, 2009-12-04.
 # Copied, by Charilaos Skiadas, from RubyMate by Sune Foldager.
 # v0.1  (2005-08-12): Initial version.
 # v0.9  Heavily modified by Kevin Ballard
-# v0.91 Plots are displayed inside of the HTML window; using a thread for sending R code to R by Hans-Jörg Bibiko
-
+# v0.92 Heavily modified by by Hans-Jörg Bibiko
+ 
 require 'cgi'
 require 'fcntl'
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
@@ -13,7 +13,8 @@ SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 # JavaScript to hide the start message on runtime
 hideStartMessageJS = %{<script type="text/javascript">document.getElementById('start_message').className='hidden'</script>}
 # line counter for hyperlinking R's prompt to jump back to the doc
-linecounter = 0
+selectionlinestart = ENV['TM_INPUT_START_LINE'] ? ENV['TM_INPUT_START_LINE'].to_i-1 : 0
+linecounter = selectionlinestart
 linecountermarker = " #§*"
 
 # HTML escaping function.
@@ -73,7 +74,7 @@ outputFont = (ENV['TM_RMATE_OUTPUT_FONT'] == nil) ? "Monaco" : ENV['TM_RMATE_OUT
 outputFontSize = (ENV['TM_RMATE_OUTPUT_FONTSIZE'] == nil) ? "10pt" : "#{ENV['TM_RMATE_OUTPUT_FONTSIZE']}pt"
 
 # what comes in
-what = (ENV['TM_SELECTED_TEXT'] == nil) ? "document" : "selection"
+what = ENV['TM_SELECTED_TEXT'] ? "document" : "selection"
 
 # Headers...
 print <<-EOS
@@ -119,7 +120,7 @@ stdin.puts(%{if(getRversion()>="2.7") pdf.options(onefile=FALSE)})
 stdin.puts(%{options(pager="/bin/cat")})
 stdin.puts("options(echo=T)")
 
-# suggestion by Hans-J. Bibiko: if a doc is too large give R the chance to execute code, otherwise the pipe blocks (?)
+# if a doc is too large give R the chance to execute code, otherwise the pipe stalls
 Thread.new {
   STDIN.each do |line|
     stdin.puts(line.chomp + "#{linecountermarker}")
@@ -161,7 +162,9 @@ until descriptors.empty?
           print "<i><font color=blue>#{esc(m[2]).chomp}</font></i>\n"
         # check for error messages
         elsif m=line.match(/(?i)^\s*(error|erreur|fehler|errore|erro)( |:)/)
-          print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter}'>line #{linecounter}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
+          where = selectionlinestart>0 ? " of selection" : ""
+          print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter}'>line #{linecounter-selectionlinestart}#{where}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
+          print "<hr noshade width='300' size='2' align='left' color=lightgrey>"
           break
         # check for warnings
         elsif line.match(/^\s*(Warning|Warning messages?|Message d.avis|Warnmeldung|Messaggio di avvertimento|Mensagem de aviso):/)
@@ -182,14 +185,14 @@ STDOUT.flush
 # check for generated plots; if yes, embed them into the HTML output as PDF images
 if !Dir::glob("#{tmpDir}/*.pdf").empty?
   width = (Dir::glob("#{tmpDir}/*.pdf").size > 1) ? "50%" : "100%"
-  puts '<br /><strong><i style="font-size:9pt">Click on image to open it in the default application for PDF files.</i></strong><hr />'
+  puts "<br /><strong><i style='font-size:8pt'>Click at image to open it.</i></strong><hr noshade size='2' align='left' color=lightgrey>"
   counter = 0
   Dir::glob("#{tmpDir}/*.pdf") { |f| 
     counter +=  1
     print "<img width=#{width} onclick=\"TextMate.system(\'open \\'#{f}\\'\',null);\" src='file://#{f}' />"
     print "<br>" if (counter % 2 == 0)
   }
-  puts "<hr /><center><input type=button onclick=\"TextMate.system(\'open -a Preview \\'#{tmpDir}\\'\',null);\" value='Open all Images in Preview' />&nbsp;&nbsp;&nbsp;<input type=button onclick=\"TextMate.system(\'open -a Finder \\'#{tmpDir}\\'\',null);\" value='Reveal all Images in Finder' /></center>"
+  puts "<hr noshade size='2' align='left' color=lightgrey><center><input type=button onclick=\"TextMate.system(\'open -a Preview \\'#{tmpDir}\\'\',null);\" value='Open all Images in Preview' />&nbsp;&nbsp;&nbsp;<input type=button onclick=\"TextMate.system(\'open -a Finder \\'#{tmpDir}\\'\',null);\" value='Reveal all Images in Finder' /></center>"
 end
 
 puts '</div></pre></div>'

@@ -1,5 +1,7 @@
 MYDIR="$HOME/Library/Application Support/Rdaemon/help/savePlotAs"
 SOURCE=${1//file:\/\//}
+SOURCE=${SOURCE//%20/ }
+
 DEV=$2
 if [ -f "$MYDIR"/bin/icf.plist ]; then
 	PLERR=$(plutil -lint -s "$MYDIR"/bin/icf.plist)
@@ -48,8 +50,8 @@ do
 	TMD_gray=`cat <<-AS | ruby --
     require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
     print OSX::PropertyList::load(%x{echo -en "$DIA"})["gray"]
-    AS
-    `
+AS
+`
 	if [ "$TMD_returnCode" -eq 5 ]; then
 		echo "$DIA" >  "$MYDIR"/bin/icf.plist
 		TMD_filename=${TMD_filename//~/$HOME}
@@ -69,10 +71,10 @@ do
 				formatOptions=""
 				match=""
 				grayicc="$HOME/Library/Application Support/Rdaemon/help/savePlotAs/BlackWhite.icc"
-				[[ "$TMD_gray" == "1" ]] && match="-m $grayicc"
+                # [[ "$TMD_gray" == "1" ]] && match="-m '$grayicc'"
 				[[ "$TMD_outfmtValue" == "tiff" ]] && formatOptions="-s formatOptions $TMD_tiffcompValue"
 				[[ "${TMD_outfmtValue:0:2}" == "jp" ]] && formatOptions="-s formatOptions $TMD_qualityValue"
-#				sips -i -z $new_height $new_width $formatOptions $match -s format $TMD_outfmtValue -s dpiHeight $TMD_resValue -s dpiWidth $TMD_resValue "$SOURCE" --out "$TMD_filename.$TMD_outfmtValue"
+#				sips -i -z $new_height $new_width $formatOptions $match -s format $TMD_outfmtValue -s dpiHeight $TMD_resValue -s dpiWidth $TMD_resValue '"$SOURCE"' --out "$TMD_filename.$TMD_outfmtValue"
 				sips -i $formatOptions $match -s format $TMD_outfmtValue "$SOURCE" --out "$TMD_filename.$TMD_outfmtValue"
 			fi
 			exit

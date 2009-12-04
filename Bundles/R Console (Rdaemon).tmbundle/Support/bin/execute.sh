@@ -141,13 +141,13 @@ POSNEW=$(stat "$RDRAMDISK"/r_out | awk '{ print $8 }')
 OFF=$(($POSNEW - $POS + $OFFBIAS))
 #clean/escape the response
 echo -en "$PROMPT"
-tail -c $OFF "$RDRAMDISK"/r_out | head -n50000|perl -e '
+tail -c $OFF "$RDRAMDISK"/r_out | head -n20000|perl -e '
 	undef($/); $a=<>;
 	$a=~s/\x0D{1,}/\x0D/sg;
 	while($a=~m/(.*?)\x0D<.{50}(.) +\x08+(.*)/) { $a=~s/(.*?)\x0D<.{50}(.) +\x08+(.*)/$1$2$3/sg; }
 	$a=~s/\\/\\\\/g;$a=~s/\`/\\\`/sg;$a=~s/\$/\\\$/sg;$a=~s/_\x08//sg;
 	$a=~s/\x07//sg;
-	$a=$a."…cut…\nWarning: more than 50000 lines (see the entire output in the “Console Logfile/r_out” ⌥⌘T)\n> " if ($a=~tr/\n/\n/ > 49999);
+	$a=$a."…cut…\nWarning: more than 20000 lines (see the entire output in the “Console Logfile/r_out” ⌥⌘T)\n> " if ($a=~tr/\n/\n/ > 19999);
 	$a .= "\n> " if ($a!~/> $/ && $a!~/\+ $/);
 	print "$a";
 '

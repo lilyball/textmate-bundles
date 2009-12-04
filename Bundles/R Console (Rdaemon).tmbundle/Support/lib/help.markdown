@@ -7,6 +7,8 @@ The entire source code is written in scripting languages (Ruby, Perl, HTML (Java
 
 ***Important*** This bundle is an extension to the "R Bundle" which comes with syntax highlighting, help functionality, etc. Thus it is recommended to install that bundle as well.
 
+<big><font color=blue> ⇢ This bundle requires a R version greater R 2.8.</font></big>
+
 # Installation
 
 In order to work with the Rdaemon it is necessary to install the Rdaemon in `~/Library/Application Support/Rdaemon`.
@@ -421,7 +423,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Nov 21 2009***
+***Date: Dec 04 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

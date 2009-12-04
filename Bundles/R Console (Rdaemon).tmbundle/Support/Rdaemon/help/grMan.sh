@@ -78,11 +78,11 @@ function saveMe(obj){
 	var id = obj.split('_')[0];
 	var index = obj.split('_')[1];
 	var plots = document.getElementsByTagName('img');
-	var cmd = "$HOME/Library/Application Support/Rdaemon/help/savePlotAs.sh '" + plots[index].src + "' " + id;
+	var cmd = "'$HOME/Library/Application Support/Rdaemon/help/savePlotAs.sh' '" + plots[index].src + "' " + id;
 	myCommand = TextMate.system(cmd, function(task) { });
 }
 function refresh(){
-	var cmd = "$HOME/Library/Application Support/Rdaemon/help/grMan2.sh";
+	var cmd = "'$HOME/Library/Application Support/Rdaemon/help/grMan2.sh'";
 	myCommand = TextMate.system(cmd, function(task) { });
 	myCommand.onreadoutput = output;
 }

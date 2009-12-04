@@ -10,7 +10,7 @@ undef($/);
 $w=$ENV{"WORD"};
 $f=$ENV{"FLAG"};
 $a=<>;
-$a=~s!.*?<h.>Usage</h.>\s*<pre>[^>]*?($w\(.*?\))\n.*?</pre>.*!$1!ms;
+$a=~s!.*?<h.>Usage</h.>\s*<pre>[^>]*?($w\([^>]*?\))\n.*?</pre>.*!$1!ms;
 $a=~s/"\t"/"\\t"/sg;
 $a=~s/"\n"/"\\n"/sg;
 if($f) {

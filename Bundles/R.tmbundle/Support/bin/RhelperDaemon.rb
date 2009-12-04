@@ -64,6 +64,6 @@ PTY.spawn(cmd) { |r,w,pid|
 		else
 			w.puts "sink('/tmp/textmate_Rhelper_out');#{task};sink(file=NULL);cat('READY',file='#{$pipe_status}',sep='')"
 		end
-    w.puts "while(sink.number()>0){sink(file=NULL)}"
+    w.puts "cat('READY',file='#{$pipe_status}',sep='');while(sink.number()>0){sink(file=NULL)}"
 	end
 }

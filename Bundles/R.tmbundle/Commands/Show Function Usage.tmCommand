@@ -24,7 +24,7 @@ if [ -z "$TM_SELECTED_TEXT" ]; then
 		export WORD=$(perl -e '
 		$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
 		$line=substr($line,0,$col);
-		$line=~s/ //g;
+		#$line=~s/ //g;
 		@arr=split(//,$line);$c=0;
 		for($i=$#arr;$i&gt;-1;$i--){$c-- if($arr[$i] eq ")");$c++ if($arr[$i] eq "(");last if $c&gt;0;}
 		if($i==-1) {
@@ -97,7 +97,7 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 		done
 		LIB=$(cat "$RDRAMDISK"/r_tmp)
 		if [ -z "$LIB" ]; then
-			echo -en "$OUT\n• local declaration"
+			echo -en "$OUT\n• local"
 			exit 206
 		fi
 		CNT=$(echo "$LIB" | wc -l)
@@ -176,7 +176,7 @@ else
 	# Parse R script for functions
 	OUT=$(echo -en "$TEXT" | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD")
 	[[ -z "$OUT" ]] &amp;&amp; exit 200
-	echo -en "$WORD$OUT\n• local declaration"
+	echo -en "$WORD$OUT\n• local"
 	exit 206
 fi
 </string>

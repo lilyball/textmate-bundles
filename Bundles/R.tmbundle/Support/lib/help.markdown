@@ -7,7 +7,9 @@ R provides a wide variety of statistical (linear and non-linear modeling, classi
 (Text taken from [What is R?](http://www.r-project.org/about.html))
 
 More information about R can be found at [r-project.org](http://www.r-project.org/).
-       
+
+<big><font color=blue> ⇢ This bundle requires a R version greater R 2.8.</font></big>
+
 # Commands
 
 ## Run Selection/Document In R
@@ -182,6 +184,10 @@ It inserts:<br><pre>	x <- function(var) {
 
 As default TextMate displays an inline menu if there is only one suggestion found in order to give you an hint for the required library. You can force TextMate to complete it without displaying that menu by setting the shell variable `TM_R_AUTOCOMPLETE` to `1`. See also [Completion…](#sect_2.5).
 
+## TM&#95;R&#95;WRAP&#95;DEFAULT&#95;FUNCTION
+
+Set the default function for “Wrap Selection → Function Call” ^⇧W. If unset `sum` will be taken.
+
 ## TM&#95;R&#95;SHOW&#95;ALWAYS&#95;HELPSEARCH
 
 As default `Show R Help for actual Word` opens a single window without a search field if the actual word matches one keyword. To avoid this set that shell variable to “1”.
@@ -220,7 +226,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 03 2009***
+***Date: Dec 04 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

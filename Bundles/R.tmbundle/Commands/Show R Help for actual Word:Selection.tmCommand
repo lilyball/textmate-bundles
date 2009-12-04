@@ -30,7 +30,7 @@ if [ -z "$TM_SELECTED_TEXT" ]; then
 		WORD=$(perl -e '
 		$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
 		$line=substr($line,0,$col);
-		$line=~s/ //g;
+		#$line=~s/ //g;
 		@arr=split(//,$line);$c=0;
 		for($i=$#arr;$i&gt;-1;$i--){$c-- if($arr[$i] eq ")");$c++ if($arr[$i] eq "(");last if $c&gt;0;}
 		if($i==-1) {
@@ -52,7 +52,7 @@ if [ -z "$WORD" ]; then
 fi
 
 
-LIB=""
+# LIB=
 if [ ! -z "${WORD//:/}" ]; then
 	if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
 		LIB=",package='${WORD%%:*}'"

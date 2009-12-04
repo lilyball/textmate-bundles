@@ -12,16 +12,20 @@ TM_RdaemongetSearchHelp <- function(x,ic=T)
 	if (getRversion()>='2.10.0') {
 		p<-ifelse(tools:::httpdPort<1,tools::startDynamicHelp(T),tools:::httpdPort)
 		a<-help.search(x,ignore.case=ic)[[4]][,c(3,1)]
-		if(is.null(dim(a))) {a<-matrix(a,ncol=2)}
-		sort(apply(a,1,function(x) {
-			h<-gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",p,"/library/\\1/html/\\2.html",sep=""),help(x[2],package=x[1])[1])
-			paste(c(x[1],x[2],h),collapse='\t')}))
+		if(length(a)>0){
+			if(is.null(dim(a))) {a<-matrix(a,ncol=2)}
+			sort(apply(a,1,function(x) {
+				h<-gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",p,"/library/\\1/html/\\2.html",sep=""),help(x[2],package=x[1])[1])
+				paste(c(x[1],x[2],h),collapse='\t')}))
+		}
 	} else {
 		a<-help.search(x,ignore.case=ic)[[4]][,c(3,1)]
-		if(is.null(dim(a))) {a<-matrix(a,ncol=2)}
-		sort(apply(a,1,function(x) {
-			h<-gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",help(x[2],package=x[1])[1])
-			paste(c(x[1],x[2],h),collapse='\t')}))
+		if(length(a)>0){
+			if(is.null(dim(a))) {a<-matrix(a,ncol=2)}
+			sort(apply(a,1,function(x) {
+				h<-gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",help(x[2],package=x[1])[1])
+				paste(c(x[1],x[2],h),collapse='\t')}))
+		}
 	},sep='\n')
 TM_RdaemongetInstalledPackages <- function() cat(installed.packages()[,1],sep='\n')
 TM_RdaemongetLoadedPackages <- function() cat(sort(.packages()),sep='\n')

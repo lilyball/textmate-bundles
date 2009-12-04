@@ -4,18 +4,18 @@ LINE=$(cat | perl -e '
 	$line=$ENV{"TM_CURRENT_LINE"};$col=$ENV{"TM_LINE_INDEX"};
 	$lineL=substr($line,0,$col);
 	$lineR=substr($line,$col);
-	if($lineL=~m/([\w_\.\(]*)$/) {
-		$lineL=~s/([\w_\.\(]*)$//;
+	if($lineL=~m/([\w_\.]*)$/) {
+		$lineL=~s/([\w_\.]*)$//;
 		$lineR=$1.$lineR if(defined $1);
 	}
 	$lineL=~s/(?=[\$`\\])/\\/g;
 	$lineR=~s/(?=[\$`\\])/\\/g;
-	$lineR=~s/^([\w_\.\(]*)/$1\${0:}/;
+	$lineR=~s/^([\w_\.]*)/$1\${0:}/;
 	print "$lineL\n$lineR";
 ')
 WORD=$(ruby -- <<-SCR1 
 	require File.join(ENV["TM_SUPPORT_PATH"], "lib/current_word.rb")
-	word = Word.current_word('\w._\(')
+	word = Word.current_word('\w._')
 	print word
 SCR1
 )

@@ -211,6 +211,7 @@ if [ $CNT -eq 0 ]; then
 	FILE=$(cat "$RhelperAnswer")
 	if [ -z "$FILE" -o "$FILE" == "NA" ]; then
 		CNT=0
+		FILE=""
 	else
 		CNT=`echo -e "$FILE" | wc -l`
 	fi
@@ -218,7 +219,12 @@ if [ $CNT -eq 0 ]; then
 	if [ $CNT -eq 0 ]; then
 		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getSearchHelp('$WORD')"
 		FILE=$(cat "$RhelperAnswer")
-		CNT=`echo -e "$FILE" | wc -l`
+		if [ -z "$FILE" -o "$FILE" == "NA" ]; then
+			CNT=0
+			FILE=""
+		else
+			CNT=`echo -e "$FILE" | wc -l`
+		fi
 		BEGINSEARCH=""
 	fi
 fi

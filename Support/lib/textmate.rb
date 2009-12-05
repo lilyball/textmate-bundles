@@ -202,6 +202,17 @@ module TextMate
     end
   end
   
+  def TextMate.each_text_file_in_project (&block)
+    project_dir = ENV['TM_PROJECT_DIRECTORY']
+    current_file = ENV['TM_FILEPATH']
+
+    if project_dir then
+      TextMate.scan_dir(project_dir, block, ProjectFileFilter.new)
+    elsif current_file then
+      block.call(current_file)
+    end
+  end
+  
   # returns a array if all currently selected files or nil
   def TextMate.selected_files( tm_selected_files = ENV['TM_SELECTED_FILES'] )
     return nil  if tm_selected_files.nil? or tm_selected_files.empty?
@@ -212,6 +223,9 @@ module TextMate
 end
 
 # if $0 == __FILE__ then
+#   `touch /tmp/a.txt /tmp/b.txt`
 #   ENV['TM_PROJECT_DIRECTORY'] = "/tmp"
+#   ENV['TM_SELECTED_FILES'] = "/tmp/a.txt"
 #   TextMate.each_text_file { |f| puts f }
+#   TextMate.each_text_file_in_project { |f| puts f }
 # end

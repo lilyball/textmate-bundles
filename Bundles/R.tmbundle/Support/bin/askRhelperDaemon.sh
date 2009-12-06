@@ -26,6 +26,7 @@ do
 done
 if [ -e /tmp/textmate_Rhelper_status ]; then
 	SAFECNT=0
+	sleep 0.001
 	while [ `cat /tmp/textmate_Rhelper_status` != "READY" ]
 	do
 		SAFECNT=$(($SAFECNT+1))

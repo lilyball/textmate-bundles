@@ -42,6 +42,7 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 		[[ "$RES" == "+ " ]] && break
 		sleep 0.03
 	done
+	sleep 0.001
 	RES=$(cat "$RDRAMDISK"/r_tmp | sed 's/NULL$//;')
 	[[ "$RES" == "NULL" ]] && RES=""
 	# "args()" did find something
@@ -60,14 +61,16 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 			[[ "$RES" == "+ " ]] && break
 			sleep 0.03
 		done
+		sleep 0.001
 		LIB=$(cat "$RDRAMDISK"/r_tmp)
 		if [ -z "$LIB" ]; then
-			echo -en "$OUT\n• local"
+			echo -n "$OUT"
+			echo -en "\n• local"
 			exit 206
 		fi
 		CNT=$(echo "$LIB" | wc -l)
 		if [ $CNT -eq 1 ]; then
-			echo -en "$OUT"
+			echo -n "$OUT"
 			echo -en "\n•• library: $LIB"
 			exit 206
 		fi
@@ -84,7 +87,7 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 			else
 				RES=$(curl -gsS "$i")
 			fi
-			echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 0
+			echo -n "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 0
 			LIB=$(echo "$i" | perl -pe 's!.*?/library/(.*?)/.*!$1!')
 			TASK="@|sink('$RDRAMDISK/r_tmp')"
 			echo "$TASK" > "$RDHOME"/r_in
@@ -100,11 +103,12 @@ if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 				[[ "$RES" == "+ " ]] && break
 				sleep 0.02
 			done
+			sleep 0.001
 			RES=$(cat "$RDRAMDISK"/r_tmp)
 			if [ ! -z "$RES" -a "$RES" == "1" ]; then
 				echo -en "\n•• library: $LIB"
 			else
-				echo -en "\n• Library “${LIB}” not yet loaded! [press CTRL+SHIFT+L]"
+				echo -en "\n• library “${LIB}” not loaded [press CTRL+SHIFT+L]"
 			fi
 			echo
 			done
@@ -141,6 +145,7 @@ else
 	# Parse R script for functions
 	OUT=$(echo -en "$TEXT" | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD")
 	[[ -z "$OUT" ]] && exit 200
-	echo -en "$WORD$OUT\n• local"
+	echo -n "$WORD$OUT
+• local"
 	exit 206
 fi

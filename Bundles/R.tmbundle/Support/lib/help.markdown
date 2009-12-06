@@ -42,7 +42,7 @@ It executes the current line or selection in R.app and goes to the end of the ne
 <button>&nbsp;^.&nbsp;</button>
 Based on all installed packages and local function declarations within the current R script it shows an inline menu with completion suggestions for the current word or selection as <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;[library]&nbsp;</code> or as <code style="background-color:lightgrey;color:black">&nbsp;command&nbsp;…local…&nbsp;</code> indicating that `function` is defined within the current R script.
 
-If the “Completion…” command is invoked from a running Rdaemon document the notation <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;{library}&nbsp;</code> indicates that the `library` is not yet loaded (or `function` is not found as valid function name in a loaded library) whereby the notation  <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;…library…&nbsp;</code> indicates that `library` is loaded.
+If the “Completion…” command is invoked from a running Rdaemon document the notation <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;{library}&nbsp;</code> indicates that the `library` is not loaded (or `function` is not found as valid function name in a loaded library) whereby the notation  <code style="background-color:lightgrey;color:black">&nbsp;function&nbsp;…library…&nbsp;</code> indicates that `library` is loaded.
 
 As default it also displays an inline menu if there is only one suggestion found in order to give you an hint about the required library. You can force TextMate to complete it without displaying that menu by setting the TextMate shell variable `TM_R_AUTOCOMPLETE` to `1`.
 
@@ -226,7 +226,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 04 2009***
+***Date: Dec 06 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

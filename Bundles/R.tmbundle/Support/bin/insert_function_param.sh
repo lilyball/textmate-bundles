@@ -18,7 +18,7 @@ if [ `echo "$WORD" | grep -Fc ':'` -gt 0 ]; then
 	PKG=",package='${WORD%%:*}'"
 fi
 WORD="${WORD##*:}"
-
+OUT=""
 #check whether WORD is defined otherwise quit
 [[ -z "$WORD" ]] && echo "No keyword found" && exit 206
 
@@ -27,34 +27,63 @@ WORD="${WORD##*:}"
 if [ -e "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD" ]; then
 	RES=$(cat "$HOME/Library/Application Support/TextMate/R/help/command_args/$WORD")
 else
-
-	# Get URL for current function
-	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$PKG)"
-	FILE=$(cat /tmp/textmate_Rhelper_out)
-	if [ `cat /tmp/textmate_Rhelper_out | wc -l` -gt 1 ]; then
-		echo -e "Function '$WORD' is ambiguous.\nFound in packages:"
-		echo "$FILE" | perl -pe 's!.*?/library/(.*?)/.*?/.*!$1!'
-		exit 206
-	fi
-	if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
-		if [ "${FILE:0:1}" = "/" ]; then
-			RES=$(cat "$FILE")
+	# Rdaemon
+	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+	RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
+	if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
+		RDHOME="$HOME/Library/Application Support/Rdaemon"
+		if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+			RDRAMDISK="/tmp/TMRramdisk1"
 		else
-			RES=$(curl -gsS "$FILE")
+			RDRAMDISK="$RDHOME"
 		fi
-		OUT=$(echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 1)
-	else
-		# Parse R script for functions
-		OUT=$(cat | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD" | perl -e 'undef($/);$a=<>;$a=~s/"\t"/"\\t"/sg;$a=~s/"\n"/"\\n"/sg;$a=~s/\n//sg;print $a')
-		# Check for errors
-		if [ `echo -n "$OUT" | grep -F 'declaration possibly erroneous:' | wc -l` -gt 0 ]; then
-			echo "$WORD$OUT" && exit 206
-		fi
+		[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
+
+		# execute "args()" in Rdaemon
+		TASK="@|sink('$RDRAMDISK/r_tmp');args($WORD);sink(file=NULL)"
+		echo "$TASK" > "$RDHOME"/r_in
+		while [ 1 ]
+		do
+			RES=$(tail -c 2 "$RDRAMDISK"/r_out)
+			[[ "$RES" == "> " ]] && break
+			[[ "$RES" == ": " ]] && break
+			[[ "$RES" == "+ " ]] && break
+			sleep 0.03
+		done
+		sleep 0.001
+		OUT=$(cat "$RDRAMDISK"/r_tmp | perl -e 'undef($/);$a=<>;$a=~s/NULL$//;$a=~s/^.*?\(/(/;$a=~s/"\t"/"\\t"/sg;$a=~s/"\n"/"\\n"/sg;$a=~s/\n//sg;print $a')
+		[[ "$OUT" == "NULL" ]] && OUT=""
 	fi
 
 	if [ -z "$OUT" ]; then
-		echo "Nothing found"
-		exit 206
+		# Get URL for current function
+		"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "@getHelpURL('$WORD'$PKG)"
+		FILE=$(cat /tmp/textmate_Rhelper_out)
+		if [ `cat /tmp/textmate_Rhelper_out | wc -l` -gt 1 ]; then
+			echo -e "Function '$WORD' is ambiguous.\nFound in packages:"
+			echo "$FILE" | perl -pe 's!.*?/library/(.*?)/.*?/.*!$1!'
+			exit 206
+		fi
+		if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
+			if [ "${FILE:0:1}" = "/" ]; then
+				RES=$(cat "$FILE")
+			else
+				RES=$(curl -gsS "$FILE")
+			fi
+			OUT=$(echo -en "$RES" | "$TM_BUNDLE_SUPPORT/bin/parseHTMLForUsage.sh" "$WORD" 1)
+		else
+			# Parse R script for functions
+			OUT=$(cat | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD" | perl -e 'undef($/);$a=<>;$a=~s/"\t"/"\\t"/sg;$a=~s/"\n"/"\\n"/sg;$a=~s/\n//sg;print $a')
+			# Check for errors
+			if [ `echo -n "$OUT" | grep -F 'declaration possibly erroneous:' | wc -l` -gt 0 ]; then
+				echo "$WORD$OUT" && exit 206
+			fi
+		fi
+
+		if [ -z "$OUT" ]; then
+			echo "Nothing found"
+			exit 206
+		fi
 	fi
 	# Evaluate function arguments and get a list of them
 	"$TM_BUNDLE_SUPPORT"/bin/askRhelperDaemon.sh "for (i in names(formals(function $OUT {})->a)) {cat(i);cat(' = ');print(a[[i]])}"
@@ -140,7 +169,7 @@ else
 	if function.match("=")
 		arr = function.gsub(/ = /, "=").match('([^=]+?)=(.*)')
 		if arr[2].match('^\"')
-			print "#{comma}#{arr[1]} = \"\${1:#{arr[2].gsub(/\"/, "")}}\"\${3:}"
+			print "#{comma}#{arr[1]} = \"\${1:#{arr[2].gsub(/^\"|\"$/, "")}}\"\${3:}"
 		else
 			if arr[2].match('^c\(')
 				subarr = arr[2].gsub(/^c\(/, "").gsub(/\)$/,"").gsub(/ /,"").split(",")

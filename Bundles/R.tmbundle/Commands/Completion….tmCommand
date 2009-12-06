@@ -58,6 +58,7 @@ if [ $RD -gt 0 ]; then
 			[[ "$RES" == ": " ]] &amp;&amp; break
 			sleep 0.05
 		done
+		sleep 0.001
 		LOCAL=$(cat "$RDRAMDISK"/r_tmp | sort)
 	fi
 fi

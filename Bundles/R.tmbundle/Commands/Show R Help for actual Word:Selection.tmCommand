@@ -89,6 +89,7 @@ if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 			[[ "$RES" == "+ " ]] &amp;&amp; break
 			sleep 0.005
 		done
+		sleep 0.001
 		FILE=$(cat "$RDRAMDISK"/r_tmp)
 		TASK="@|sink(NULL)"
 		echo "$TASK" &gt; "$RDHOME"/r_in

@@ -91,7 +91,7 @@ It sends the current line or the selection line by line to the Rdaemon and does 
 
 This command must be executed if you want to use the R commands `fix()` or `edit()`!
 
-## Evaluate Line/Selection and Copy into Pasteboard
+## Execute Line/Selection and Copy into Pasteboard
 <button>⇧&#x2305;</button>
 It executes the selection or the current line and copies the result into the pasteboard. If the result has a dimension like a matrix write.table(sep='\t') will be used.
 
@@ -423,7 +423,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Dec 04 2009***
+***Date: Dec 06 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

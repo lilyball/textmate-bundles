@@ -217,7 +217,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Reset Output__
 
-      Some commands make usage of `sink()`. In an exceptional case it could be necessary to reset the output path. In a few very rare exceptional cases one has to reset more than once.
+      Some internal commands make usage of `sink()`. In an exceptional case it could be necessary to reset the output path. In a few very rare exceptional cases one has to reset more than once. “Reset Output” will execute `sink(file=NULL)` until all redirects are reset.
 
 -    __Show Last Error Message__
 
@@ -395,14 +395,9 @@ As default it also displays an inline menu if there is only one suggestion found
 
     To finish the `locator()` command please do a CONTROL+click with the mouse.
 
--   __`fix()` or `edit()` blocks TextMate__
+-   __`edit()` does not return the edited value__
 
-    Both commands can __only__ be executed in the background (using "Execute Line/Selection (Background > r_res)") because the Rdaemon will call TextMate via `mate -w`.
-
--   __`pipe('pbcopy')` or '|pbcopy' doesn't work__
-
-    Each command which writes something to a pipe __must__ be executed by using “Execute Selection”
-    <button>&#x2305;</button>. Otherwise nothing will be written to the pipe. Please note if you want to  pipe something into the pasteboard you can use the command “Evaluate Selection/Line and Copy into Pasteboard” <button>⇧&#x2305;</button>.
+    `> edit(x)` will call TextMate via `mate -w`. For that reason TextMate can't wait for its result. To use `edit(x)` please execute it à la `y <- edit(x)` to assign `y` with the returned value.
 
 -   __How can I save a plot as JPEG, PNG, etc.__
 

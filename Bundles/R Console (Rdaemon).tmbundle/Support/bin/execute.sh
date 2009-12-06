@@ -74,12 +74,10 @@ if [ "$QTASK" == "q()" -o "$QTASK" == "quit()" ]; then
 	fi
 fi
 
+EDITFLAG=0
 #check if user wants to edit or fix
-QTASK=$(echo -en "$TASK" | perl -pe 's/ *//g;s/\(.*?\)//g')
-if [ "$QTASK" == "fix" -o "$QTASK" == "edit" ]; then
-	echo -e "Please use “Execute Line/Selection (Background > r_res)”!\nKey: SHIFT + ⌅"
-	exit 206
-fi
+QTASK=$(echo -en "$TASK" | perl -ne 's/\s*//g;if(m/(\bfix\(|\bedit\()/i){print "1";}else{print "";}')
+[[ ! -z "$QTASK" ]] && EDITFLAG=1
 
 #set history counter to 0
 echo -n 0 > "$RDHOME"/history/Rhistcounter.txt
@@ -101,6 +99,11 @@ else
 		"$DIALOG" -t $token -p "{details='${LINE//\'/’}';}" 2&>/dev/null
 	done
 	"$DIALOG" -x $token 2&>/dev/null
+fi
+
+if [ $EDITFLAG -eq 1 ]; then
+	echo -en "\n> "
+	exit 203
 fi
 
 

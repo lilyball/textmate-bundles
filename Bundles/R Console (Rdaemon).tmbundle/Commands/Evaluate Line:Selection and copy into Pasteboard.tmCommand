@@ -5,12 +5,10 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>TASK=$(cat)
-TASK="ifelse(is.null(dim($TASK)),
-		write($TASK, '|pbcopy'),
-		write.table($TASK, file=pipe('pbcopy'),quote=F,row.names=F, sep='\t'))"
+	<string>TASK=$(cat | perl -pe 's/^&gt; \s*//')
+TASK="ifelse(is.null(dim($TASK)),write($TASK, '|pbcopy'),write.table($TASK, file=pipe('pbcopy'),quote=F,row.names=F, sep='\t'))"
 
-echo "$TASK" | "$TM_BUNDLE_SUPPORT"/bin/execute.sh &gt; /dev/null &amp;
+echo "@|$TASK" | "$TM_BUNDLE_SUPPORT"/bin/execute.sh &gt; /dev/null &amp;
 
 # | sed '1d;$d' | pbcopy</string>
 	<key>fallbackInput</key>

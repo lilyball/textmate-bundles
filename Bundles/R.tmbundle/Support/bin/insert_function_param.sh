@@ -143,7 +143,7 @@ if function == "All Parameters"
 				print "#{com}#{arr[1]} = \"\${"
 				print cnt.to_s
 				cnt+=1
-				print ":#{arr[2].gsub(/\"/, "").gsub(/=/, " = ")}}\""
+				print ":#{arr[2].gsub(/^\"|\"$/, "").gsub(/=/, " = ")}}\""
 			else
 				if arr[2].match('^c\(')
 					print "#{com}#{arr[1]} = c(\${"

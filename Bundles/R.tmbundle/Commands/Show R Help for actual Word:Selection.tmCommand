@@ -79,7 +79,7 @@ if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 		[[ -e "$RDRAMDISK"/r_tmp ]] &amp;&amp; rm "$RDRAMDISK"/r_tmp
 		TASK="@|sink('$RDRAMDISK/r_tmp')"
 		echo "$TASK" &gt; "$RDHOME"/r_in
-		echo "@|if(getRversion()&gt;='2.10.0'){cat(gsub('.*/library/(.*?)/.*?/(.*?)(\\\\.html|$)',paste('http://127.0.0.1:',ifelse(tools:::httpdPort&lt;1,tools::startDynamicHelp(T),tools:::httpdPort),'/library/\\\\1/html/\\\\2.html',sep=''),as.vector(help('$WORD'$LIB))),sep='\n')}else{cat(gsub('(.*?)/library/(.*?)/.*?/(.*?)(\\\\.html|$)','\\\\1/library/\\\\2/html/\\\\3.html',as.vector(help('$WORD'$LIB))),sep='\n')}" &gt; "$RDHOME"/r_in
+		echo "@|if(getRversion()&gt;='2.10.0'){cat(gsub('.*/library/(.*?)/.*?/(.*?)(\\\\.html|$)',paste('http://127.0.0.1:',ifelse(tools:::httpdPort&lt;1,tools::startDynamicHelp(T),tools:::httpdPort),'/library/\\\\1/html/\\\\2.html',sep=''),as.vector(help('$WORD'$LIB)),perl=T),sep='\n')}else{cat(gsub('(.*?)/library/(.*?)/.*?/(.*?)(\\\\.html|$)','\\\\1/library/\\\\2/html/\\\\3.html',as.vector(help('$WORD'$LIB)),perl=T),sep='\n')}" &gt; "$RDHOME"/r_in
 		sleep 0.001
 		while [ 1 ]
 		do

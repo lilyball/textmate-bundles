@@ -1,9 +1,9 @@
 TM_RdaemongetHelpURL <- function(x,...) {
 	if(getRversion()>='2.10.0') {
-		a<-gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",ifelse(tools:::httpdPort<1,tools::startDynamicHelp(T),tools:::httpdPort),"/library/\\1/html/\\2.html",sep=""),as.vector(help(x,try.all.packages=T,...)))
+		a<-gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",ifelse(tools:::httpdPort<1,tools::startDynamicHelp(T),tools:::httpdPort),"/library/\\1/html/\\2.html",sep=""),as.vector(help(x,try.all.packages=T,...)),perl=T)
 		ifelse(length(a),cat(a,sep='\n'),cat("NA",sep=''))
 	} else {
-		a<-gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",as.vector(help(x,try.all.packages=T,...)))
+		a<-gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",as.vector(help(x,try.all.packages=T,...)),perl=T)
 		ifelse(length(a),cat(a,sep='\n'),cat("NA",sep=''))
 	}
 }
@@ -16,7 +16,7 @@ TM_RdaemongetSearchHelp <- function(x,ic=T) {
 		if(length(a)>0){
 			if(is.null(dim(a))) {a<-matrix(a,ncol=2)}
 			cat(sort(apply(a,1,function(x) {
-				h<-gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",p,"/library/\\1/html/\\2.html",sep=""),help(x[2],package=x[1])[1])
+				h<-gsub(".*/library/(.*?)/.*?/(.*?)(\\.html|$)",paste("http://127.0.0.1:",p,"/library/\\1/html/\\2.html",sep=""),help(x[2],package=x[1])[1],perl=T)
 				paste(c(x[1],x[2],h),collapse='\t')})),sep='\n')
 		} else {
 			cat("NA",sep='')
@@ -26,7 +26,7 @@ TM_RdaemongetSearchHelp <- function(x,ic=T) {
 		if(length(a)>0){
 			if(is.null(dim(a))) {a<-matrix(a,ncol=2)}
 			cat(sort(apply(a,1,function(x) {
-				h<-gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",help(x[2],package=x[1])[1])
+				h<-gsub("(.*?)/library/(.*?)/.*?/(.*?)(\\.html|$)","\\1/library/\\2/html/\\3.html",help(x[2],package=x[1])[1],perl=T)
 				paste(c(x[1],x[2],h),collapse='\t')})),sep='\n')
 		} else {
 			cat("NA",sep='')

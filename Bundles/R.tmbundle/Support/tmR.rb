@@ -17,6 +17,13 @@ selectionlinestart = ENV['TM_INPUT_START_LINE'] ? ENV['TM_INPUT_START_LINE'].to_
 linecounter = selectionlinestart
 linecountermarker = " #§*"
 
+
+cran="http://cran.cnr.Berkeley.edu"
+if ARGV.count>0
+  cran=ARGV[0]
+end
+
+
 # HTML escaping function.
 def esc(str)
   CGI.escapeHTML(str)
@@ -114,7 +121,7 @@ Dir::mkdir(tmpDir)
 stdin, stdout, stderr, pid = my_popen3("R --vanilla --slave --encoding=UTF-8 2>&1")
 # init the R slave
 stdin.puts(%{options(device="pdf")})
-stdin.puts(%{options(repos="http://cran.cnr.Berkeley.edu")})
+stdin.puts(%{options(repos="#{cran}")})
 stdin.puts(%{formals(pdf)[c("file","onefile","width","height")] <- list("#{tmpDir}/Rplot%03d.pdf", FALSE, 8, 8)})
 stdin.puts(%{if(getRversion()>="2.7") pdf.options(onefile=FALSE)})
 stdin.puts(%{options(pager="/bin/cat")})

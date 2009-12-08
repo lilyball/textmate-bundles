@@ -12,7 +12,14 @@
 OS=$(uname -r | perl -pe 's/(\d+)\..*/$1/')
 [[ $OS -eq 8 ]] &amp;&amp; export DISPLAY=:0.0
 
-"$TM_BUNDLE_SUPPORT/tmR.rb"</string>
+CRAN="http://cran.cnr.berkeley.edu"
+SOFILE="$HOME/Library/Application Support/Rdaemon/startOptions.R"
+if [ -f "$SOFILE" ]; then
+	RES=$(cat "$SOFILE" | egrep 'options.*?repos.*?list' | perl -pe 's/^\s*options\s*.*?repos\s*=\s*.*?[\x{27}"](.*?)[\x{27}"].*/$1/g' | tail -n 1)
+	[[ ! -z "$RES" ]] &amp;&amp; [[ "${RES:0:4}" == "http" ]] &amp;&amp; CRAN="$RES"
+fi
+
+"$TM_BUNDLE_SUPPORT/tmR.rb" "$CRAN"</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>

@@ -143,7 +143,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Start X11__
 
-      Starts the X11 server. [not needed on Mac OSX 10.5.x]
+      Starts the X11 server. [not needed on Mac OSX > 10.4.x]
 
 -    __Try to interrupt current task__
 
@@ -196,15 +196,15 @@ As default it also displays an inline menu if there is only one suggestion found
 
      - ***Hint*** To create a transparent PDF, open a `png(bg = "transparent")` device, fill it with the desired data, and open the Graphic Manager.
 
--    __Show Current Plot as PDF__
+-    __View Active Graphic Device as PDF__
 
       Executes `dev.print(pdf)` and opens the created PDF file in Preview. You can change the default PDF viewer by setting the shell variable `TM_RdaemonPDFVIEWER` to e.g. "PDFView" or "Safari".
 
--    __New Quartz()__
+-    __New Quartz Device__
 
       Opens a new Quartz device using `quartz()`. If you run a R version prior than 2.7.0 it also loads the library "CarbonEL".
 
--    __Order Front all Quartz Windows__
+-    __Bring All Quartz Windows to Front__
 
       Shows all Quartz windows.
 
@@ -230,15 +230,15 @@ As default it also displays an inline menu if there is only one suggestion found
 
       Removes all items from the history list.
 
--    __Reveal "Rdaemon" in Finder/as TM Project__
+-    __Reveal/Open "Rdaemon" in Finder/as TM Project__
 
-      Opens the folder `~/Library/Application Support/Rdaemon` in Finder or as a TextMate project.
+      Reveals/Opens the folder `~/Library/Application Support/Rdaemon` in Finder or as a TextMate project.
 
 -    __Show End of r_out__
 
       Shows the tail of the console logfile "r_out" containing the raw data coming from Rdaemon.
 
--    __Open Console Logfile__
+-    __Open Console Logfile r_out__
 
       Opens the console logfile "r_out" containing the raw data coming from Rdaemon.
 
@@ -418,8 +418,18 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Dec 06 2009***
+***Date: Dec 08 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>
 </pre>
+
+## Credits
+
+Many thanks to 
+<pre>
+- John Purnell
+- Balthasar Bickel
+</pre>
+
+for all the valuable suggestions and the exhausting tests.

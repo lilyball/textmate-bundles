@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -8,7 +8,7 @@
 	<string>if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
 echo "RAM drive on '/tmp/TMRramdrive1':"
 RES=$(df -H | grep TMRramdisk1 | awk '{ print $5 }')
-echo -n " $RES are used of"
+echo -n " $RES is used of"
 RES=$(df -H | grep TMRramdisk1 | awk '{ print $2 }')
 echo -n " $RES."
 else

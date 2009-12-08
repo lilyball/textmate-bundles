@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,13 +11,13 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-echo -e "@|quartz();plot.new\n" &gt; "$HOME/Library/Application Support/Rdaemon/r_in"</string>
+echo -e "@|quartz();plot.new()\n" &gt; "$HOME/Library/Application Support/Rdaemon/r_in"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>~@g</string>
 	<key>name</key>
-	<string>New Quartz()</string>
+	<string>New Quartz Device</string>
 	<key>output</key>
 	<string>showAsTooltip</string>
 	<key>scope</key>

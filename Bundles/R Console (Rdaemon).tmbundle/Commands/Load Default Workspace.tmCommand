@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,10 +11,21 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-if [ ! -f "$HOME/Library/Application Support/Rdaemon"/.RData ]; then
-	echo "No .RData file found."
+if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then
+	RDRAMDISK="/tmp/TMRramdisk1"
 else
-	echo "@|load('.RData')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
+	RDRAMDISK="$HOME/Library/Application Support/Rdaemon"
+fi
+
+echo "@|sink('$RDRAMDISK/r_tmp');cat(getwd());sink(file=NULL)" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
+sleep 0.1
+CURDIR=$(cat "$RDRAMDISK"/r_tmp)
+if [ ! -e "$CURDIR/.RData" ]; then
+	echo "No file .RData found in current working directory '$CURDIR'."
+else
+	echo "@|load(file='$CURDIR/.RData')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
+	sleep 0.1
+	echo "Workspace loaded"
 fi</string>
 	<key>input</key>
 	<string>none</string>

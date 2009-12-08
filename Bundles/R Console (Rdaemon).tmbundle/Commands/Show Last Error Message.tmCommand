@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -18,9 +18,15 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-echo "@|sink('$RDRAMDISK/r_tmp');geterrmessage();sink(file=NULL)" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
+echo "@|sink('$RDRAMDISK/r_tmp');cat(geterrmessage());sink(file=NULL)" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
 sleep 0.2
-echo -e `cat "$RDRAMDISK"/r_tmp`</string>
+OUT=$(echo -e `cat "$RDRAMDISK"/r_tmp`)
+
+if [ -z "$OUT" ]; then
+	echo "No previous error"
+else
+	echo "$OUT"
+fi</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

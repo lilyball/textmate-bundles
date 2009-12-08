@@ -226,10 +226,19 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 06 2009***
+***Date: Dec 08 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>
 </pre>
 
+## Credits
+
+Many thanks to 
+<pre>
+- John Purnell
+- Balthasar Bickel
+</pre>
+
+for all the valuable suggestions and the exhausting tests.

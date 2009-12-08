@@ -40,8 +40,9 @@ else
 		[[ -e "$RDRAMDISK"/r_tmp ]] && rm "$RDRAMDISK"/r_tmp
 
 		# execute "args()" in Rdaemon
-		TASK="@|sink('$RDRAMDISK/r_tmp');args($WORD);sink(file=NULL)"
+		TASK="@|sink('$RDRAMDISK/r_tmp');args($WORD)"
 		echo "$TASK" > "$RDHOME"/r_in
+		echo "@|sink(file=NULL)" > "$RDHOME"/r_in
 		while [ 1 ]
 		do
 			RES=$(tail -c 2 "$RDRAMDISK"/r_out)

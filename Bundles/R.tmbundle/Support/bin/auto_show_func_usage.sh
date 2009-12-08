@@ -143,6 +143,7 @@ if [ ! -z "$FILE" -a "$FILE" != "NA" ]; then
 	done
 	exit 206
 else
+	[[ `echo -n "$TM_SCOPE" | grep -c -F 'text.tex.latex.rdaemon'` -gt 0 ]] && exit 200
 	# Parse R script for functions
 	OUT=$(echo -en "$TEXT" | "$TM_BUNDLE_SUPPORT/bin/parseDocForFunctions.sh" "$WORD")
 	[[ -z "$OUT" ]] && exit 200

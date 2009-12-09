@@ -11,7 +11,7 @@ RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
 #check whether Rdaemon runs
 test -z $RPID &amp;&amp; echo -en "Rdaemon is not running." &amp;&amp; exit 206
 
-echo "@|dev.print(pdf, file='~/Library/Application Support/Rdaemon/plots/RcurrentPlot.pdf')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
+echo "@|quartz.save(type='pdf', file='$HOME/Library/Application Support/Rdaemon/plots/RcurrentPlot.pdf')" &gt; "$HOME/Library/Application Support/Rdaemon"/r_in
 sleep 0.5
 open -a ${TM_RdaemonPDFVIEWER:-Preview} "file://$HOME/Library/Application Support/Rdaemon/plots/RcurrentPlot.pdf"
 

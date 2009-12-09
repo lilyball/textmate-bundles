@@ -35,7 +35,7 @@ do
 	"$DIALOG" -t $token -p "{details='`tail -n 1 "$RDRAMDISK"/r_out|perl -pe 's/\x27/\\\\\x27/g'`';progressValue=$CP;}" 2&>/dev/null
 done
 "$DIALOG" -x $token 2&>/dev/null
-
+sleep 0.05
 cat <<-H1 > "$RDHOME/plots/tmp/grMan.html"
 <html>
 <head>
@@ -78,7 +78,8 @@ function saveMe(obj){
 	var id = obj.split('_')[0];
 	var index = obj.split('_')[1];
 	var plots = document.getElementsByTagName('img');
-	var cmd = "'$HOME/Library/Application Support/Rdaemon/help/savePlotAs.sh' '" + plots[index].src + "' " + id;
+	//var cmd = "'$HOME/Library/Application Support/Rdaemon/help/savePlotAs.sh' '" + plots[index].src + "' " + id;
+	var cmd = "open " + plots[index].src;
 	myCommand = TextMate.system(cmd, function(task) { });
 }
 function refresh(){

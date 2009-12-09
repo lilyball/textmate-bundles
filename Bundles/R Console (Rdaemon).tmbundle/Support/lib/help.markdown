@@ -187,18 +187,13 @@ As default it also displays an inline menu if there is only one suggestion found
      - press <button>Close Device</button> to close that device (`dev.off`)
      - press <button>Close All Devices</button> to close all device (`graphics.off`)
      - press <button>Refresh</button> to refresh the window.
-     - press <button>Save</button> to save it.
-       
-       Formats:
-          - __pdf__ - it will copy the shown pdf to the chosen destination without any modifications (you also can drag and drop the image directly)
-          - __eps__ - it uses `dev.copy2eps` to generate the eps which will be saved to the chosen destination without any modifications
-          - __all other formats__ - it will convert the PDF into an image by using `sips`. Up to now it will generate pixel images with 150 dpi.
+     - press <button>Open</button> to open it in the default PDF viewer.
 
      - ***Hint*** To create a transparent PDF, open a `png(bg = "transparent")` device, fill it with the desired data, and open the Graphic Manager.
 
 -    __View Active Graphic Device as PDF__
 
-      Executes `dev.print(pdf)` and opens the created PDF file in Preview. You can change the default PDF viewer by setting the shell variable `TM_RdaemonPDFVIEWER` to e.g. "PDFView" or "Safari".
+      Executes `quartz.save()` and opens the created PDF file in the default PDF viewer. You can change the default PDF viewer by setting the shell variable `TM_RdaemonPDFVIEWER` to e.g. "PDFView" or "Safari".
 
 -    __New Quartz Device__
 
@@ -217,7 +212,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -    __Reset Output__
 
-      Some internal commands make usage of `sink()`. In an exceptional case it could be necessary to reset the output path. In a few very rare exceptional cases one has to reset more than once. “Reset Output” will execute `sink(file=NULL)` until all redirects are reset.
+      Some internal commands make usage of `sink()`. In an exceptional case it could be necessary to reset the output path. “Reset Output” will execute `sink(file=NULL)` until all redirects are reset.
 
 -    __Show Last Error Message__
 
@@ -335,7 +330,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 -   __Different TextMate documents are set to "R Console (Rdaemon)"__
 
-    Based on the issue that Rdaemon is a daemon there is no problem to have more than one window open set to "R Console (Rdaemon)". All these windows execute R code within the same Rdaemon session.
+    Based on the issue that Rdaemon is a daemon there is no problem to have more than one window open set to "R Console (Rdaemon)". All these windows execute R code within the __same__ Rdaemon session.
 
 # Shell variables
 
@@ -418,7 +413,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Dec 08 2009***
+***Date: Dec 09 2009***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

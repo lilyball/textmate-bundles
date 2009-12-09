@@ -21,6 +21,35 @@ quartz <- function(display = "", width = 9, height = 9, pointsize = 12,
 }
 }
 
+quartz.save <- function(file, type = "png", device = dev.cur(), 
+	dpi = 100, ...) {
+	dev.set(device)
+	current.device <- dev.cur()
+	nm <- names(current.device)[1]
+	if (nm == "null device") 
+		stop("no device to print from")
+	oc <- match.call()
+	oc[[1]] <- as.name("dev.copy")
+	oc$file <- NULL
+	oc$device <- quartz
+	oc$type <- type
+	oc$file <- path.expand(file)
+	oc$dpi <- dpi
+	din <- dev.size("in")
+	w <- din[1]
+	h <- din[2]
+	if (is.null(oc$width)) 
+		oc$width <- if (!is.null(oc$height)) 
+			w/h * eval.parent(oc$height)
+		else w
+	if (is.null(oc$height)) 
+		oc$height <- if (!is.null(oc$width)) 
+			h/w * eval.parent(oc$width)
+		else h
+	dev.off(eval.parent(oc))
+	dev.set(current.device)
+}
+
 file.edit <- function(..., title = file, editor = "mate") {
 	file <- c(...)
 	.Internal(file.edit(file, rep(as.character(title), len = length(file)), 
@@ -89,61 +118,60 @@ install.packages <- function (pkgs, lib, repos = getOption("repos"), contriburl 
 	    Ncpus = getOption("Ncpus"), ...)
 }
 
-
-demo <- function (topic, package = NULL, lib.loc = NULL, character.only = FALSE, 
-    verbose = getOption("verbose")) 
-{
-    paths <- .find.package(package, lib.loc, verbose = verbose)
-    paths <- paths[file_test("-d", file.path(paths, "demo"))]
-    if (missing(topic)) {
-        db <- matrix(character(0), nrow = 0, ncol = 4)
-        for (path in paths) {
-            entries <- NULL
-            if (file_test("-f", INDEX <- file.path(path, "Meta", 
-                "demo.rds"))) {
-                entries <- .readRDS(INDEX)
-            }
-            if (NROW(entries) > 0) {
-                db <- rbind(db, cbind(basename(path), dirname(path), 
-                  entries))
-            }
-        }
-        colnames(db) <- c("Package", "LibPath", "Item", "Title")
-        footer <- if (missing(package)) 
-            paste("Use ", sQuote(paste("demo(package =", ".packages(all.available = TRUE))")), 
-                "\n", "to list the demos in all *available* packages.", 
-                sep = "")
-        else NULL
-        y <- list(title = "Demos", header = NULL, results = db, 
-            footer = footer)
-        class(y) <- "packageIQR"
-        return(y)
-    }
-    if (!character.only) 
-        topic <- as.character(substitute(topic))
-    available <- character(0)
-    paths <- file.path(paths, "demo")
-    for (p in paths) {
-        files <- basename(tools::list_files_with_type(p, "demo"))
-        files <- files[topic == tools::file_path_sans_ext(files)]
-        if (length(files) > 0) 
-            available <- c(available, file.path(p, files))
-    }
-    if (length(available) == 0) 
-        stop(gettextf("No demo found for topic '%s'", topic), 
-            domain = NA)
-    if (length(available) > 1) {
-        available <- available[1]
-        warning(gettextf("Demo for topic '%s' found more than once,\nusing the one found in '%s'", 
-            topic, dirname(available[1])), domain = NA)
-    }
-    cat("\n\n", "\tdemo(", topic, ")\n", "\t---- ", rep.int("~", 
-        nchar(topic, type = "w")), "\n", sep = "")
-    if (interactive()) {
-        #cat("\nType  <Return>\t to start : ")
-        readline("Press RETURN to start the demo.", alert=TRUE)
-    }
-    source(available, echo = TRUE, max.deparse.length = 250)
+demo <- function(topic, package = NULL, lib.loc = NULL, character.only = FALSE, 
+	verbose = getOption("verbose")) {
+	paths <- .find.package(package, lib.loc, verbose = verbose)
+	paths <- paths[file_test("-d", file.path(paths, "demo"))]
+	if (missing(topic)) {
+		db <- matrix(character(0), nrow = 0, ncol = 4)
+		for (path in paths) {
+			entries <- NULL
+			if (file_test("-f", INDEX <- file.path(path, 
+			  "Meta", "demo.rds"))) {
+			  entries <- .readRDS(INDEX)
+			}
+			if (NROW(entries) > 0) {
+			  db <- rbind(db, cbind(basename(path), dirname(path), 
+				entries))
+			}
+		}
+		colnames(db) <- c("Package", "LibPath", "Item", "Title")
+		footer <- if (missing(package)) 
+			paste("Use ", sQuote(paste("demo(package =", 
+			  ".packages(all.available = TRUE))")), "\n", 
+			  "to list the demos in all *available* packages.", 
+			  sep = "")
+		else NULL
+		y <- list(title = "Demos", header = NULL, results = db, 
+			footer = footer)
+		class(y) <- "packageIQR"
+		return(y)
+	}
+	if (!character.only) 
+		topic <- as.character(substitute(topic))
+	available <- character(0)
+	paths <- file.path(paths, "demo")
+	for (p in paths) {
+		files <- basename(tools::list_files_with_type(p, 
+			"demo"))
+		files <- files[topic == tools::file_path_sans_ext(files)]
+		if (length(files) > 0) 
+			available <- c(available, file.path(p, files))
+	}
+	if (length(available) == 0) 
+		stop(gettextf("No demo found for topic '%s'", topic), 
+			domain = NA)
+	if (length(available) > 1) {
+		available <- available[1]
+		warning(gettextf("Demo for topic '%s' found more than once,\nusing the one found in '%s'", 
+			topic, dirname(available[1])), domain = NA)
+	}
+	cat("\n\n", "\tdemo(", topic, ")\n", "\t---- ", rep.int("~", 
+		nchar(topic, type = "w")), "\n", sep = "")
+	if (interactive()) {
+		readline("Press RETURN to start the demo.", alert = TRUE)
+	}
+	source(available, echo = TRUE, max.deparse.length = 250)
 }
 
 alarm <- function() {
@@ -178,57 +206,61 @@ prompt <- function(object, filename = NULL, name = NULL, ...) {
 	out <- ""
 	if (getRversion() < "2.7") {
 		exclDevs <- c("pdf", "postscript")
-	} else {
+	}
+	else {
 		exclDevs <- c("pdf", "postscript", "quartz_off_screen")
 	}
 	if (length(plots) > 0) {
 		actPlot <- dev.cur()
 		randomNum <- rnorm(1, mean = 10) * 1e+05
 		plotPathPref <- paste("file://", Sys.getenv("HOME"), 
-			"/Library/Application Support/Rdaemon/plots/tmp/Rplot_", randomNum, "_", 
-			sep = "", collapse = "")
+			"/Library/Application Support/Rdaemon/plots/tmp/Rplot_", 
+			randomNum, "_", sep = "", collapse = "")
 		for (i in 1:(length(plots))) {
 			borderCol <- ifelse(actPlot == plots[i], "red", 
 			  "#DDDDDD")
 			btnVisibility <- ifelse(actPlot == plots[i], 
 			  "hidden", "visible")
 			if (!names(plots[i]) %in% exclDevs) {
-			  dev.set(plots[i])
-			  out <- paste(out, "<div id='dev", plots[i], 
-				"'><h3>Device ", plots[i], " (", names(plots[i]), 
-				")</h3>", sep = "", collapse = "")
-			  out <- paste(out, "<img onclick='setAct(this.id)' id=", 
-				plots[i], "_", (i - 1), " style='border:3px solid ", 
-				borderCol, "' width=90% src='", plotPathPref, 
-				sprintf("%03d", plots[i]), ".pdf", "'/><br>", 
-				sep = "", collapse = "")
-			  dev.print(pdf, file = paste("~/Library/Application Support/Rdaemon/plots/tmp/Rplot_", 
-				randomNum, "_", sprintf("%03d", plots[i]), 
-				".pdf", sep = "", collapse = ""))
-			  out <- paste(out, "<button style='visibility:", 
-				btnVisibility, "' id=", plots[i], "_", (i - 
-				  1), " onclick='closeMe(this.id)'>Close Device</button>", 
-				sep = "", collapse = "")
-			  out <- paste(out, "<input type='button' id=", 
-				plots[i], "_", (i - 1), " onclick='saveMe(this.id)' value='Save'>", 
-				sep = "", collapse = "")
-			  out <- paste(out, "</div>", sep = "", collapse = "")
+				dev.set(plots[i])
+				out <- paste(out, "<div id='dev", plots[i], 
+					"'><h3>Device ", plots[i], " (", names(plots[i]), 
+					")</h3>", sep = "", collapse = "")
+				out <- paste(out, "<img onclick='setAct(this.id)' id=", 
+					plots[i], "_", (i - 1), " style='border:3px solid ", 
+					borderCol, "' width=90% src='", plotPathPref, 
+					sprintf("%03d", plots[i]), ".pdf", "'/><br>", 
+					sep = "", collapse = "")
+				# try(dev.print(pdf, file = paste("~/Library/Application Support/Rdaemon/plots/tmp/Rplot_", 
+				# 	randomNum, "_", sprintf("%03d", plots[i]), 
+				# 	".pdf", sep = "", collapse = "")))
+				try(quartz.save(type='pdf', file = paste("~/Library/Application Support/Rdaemon/plots/tmp/Rplot_", 
+					randomNum, "_", sprintf("%03d", plots[i]), 
+					".pdf", sep = "", collapse = "")))
+				out <- paste(out, "<button style='visibility:", 
+					btnVisibility, "' id=", plots[i], "_", (i - 1),
+					" onclick='closeMe(this.id)'>Close Device</button>", 
+					sep = "", collapse = "")
+				out <- paste(out, "<input type='button' id=", 
+					plots[i], "_", (i - 1), " onclick='saveMe(this.id)' value='Open'>", 
+					sep = "", collapse = "")
+				out <- paste(out, "</div>", sep = "", collapse = "")
 			}
 			else {
-			  out <- paste(out, "<div id='dev", plots[i], 
-				"'><h3>Device ", plots[i], " (", names(plots[i]), 
-				")</h3>", "<font color=red>is not a screen device</font>", 
-				sep = "", collapse = "")
-			  out <- paste(out, "<img onclick='setAct(this.id)' id=", 
-				plots[i], "_", (i - 1), " style='border:3px solid ", 
-				borderCol, "' width=90% src='file://", Sys.getenv("HOME"), 
-				"/Library/Application Support/Rdaemon/daemon/dummy_noimage.pdf'/><br>", 
-				sep = "", collapse = "")
-			  out <- paste(out, "<button style='visibility:", 
-				btnVisibility, "' id=", plots[i], "_", (i - 
-				  1), " onclick='closeMe(this.id)'>Close Device</button>", 
-				sep = "", collapse = "")
-			  out <- paste(out, "</div>", sep = "", collapse = "")
+				out <- paste(out, "<div id='dev", plots[i], 
+					"'><h3>Device ", plots[i], " (", names(plots[i]), 
+					")</h3>", "<font color=red>is not a screen device</font>", 
+					sep = "", collapse = "")
+				out <- paste(out, "<img onclick='setAct(this.id)' id=", 
+					plots[i], "_", (i - 1), " style='border:3px solid ", 
+					borderCol, "' width=90% src='file://", Sys.getenv("HOME"), 
+					"/Library/Application Support/Rdaemon/daemon/dummy_noimage.pdf'/><br>", 
+					sep = "", collapse = "")
+				out <- paste(out, "<button style='visibility:", 
+					btnVisibility, "' id=", plots[i], "_", (i - 1),
+					" onclick='closeMe(this.id)'>Close Device</button>", 
+					sep = "", collapse = "")
+				out <- paste(out, "</div>", sep = "", collapse = "")
 			}
 		}
 		dev.set(actPlot)

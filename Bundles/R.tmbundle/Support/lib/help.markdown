@@ -14,7 +14,7 @@ More information about R can be found at [r-project.org](http://www.r-project.or
 
 ## Run Selection/Document In R
 <button>&nbsp;&#x2318;R&nbsp;</button>
-It executes the current document or selection in a self-sufficient environment of the command-line version of R and it displays the output in an HTML window. By default new plots use the "pdf" device and are placed in a temporary folder and displayed at the end of the HTML window.
+It executes the current document or selection (if the selection only contains out-commented R code the current document) in a self-sufficient environment of the command-line version of R and it displays the output in an HTML window. By default new plots use the "pdf" device and are placed in a temporary folder and displayed at the end of the HTML window.
 
 ## Execute Selection/Document In R (Insert/Pasteboard/Tooltip)
 <button>&nbsp;^&#x2318;R&nbsp;</button>
@@ -226,7 +226,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 08 2009***
+***Date: Dec 10 2009***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

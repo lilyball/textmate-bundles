@@ -10,19 +10,16 @@ require 'cgi'
 require 'fcntl'
 SUPPORT_LIB = ENV['TM_SUPPORT_PATH'] + '/lib/'
 
+cran = ARGV[0]
+isSelection = (ARGV[1] == "1") ? true : false
+
 # JavaScript to hide the start message on runtime
 hideStartMessageJS = %{<script type="text/javascript">document.getElementById('start_message').className='hidden'</script>}
-# line counter for hyperlinking R's prompt to jump back to the doc
-selectionlinestart = ENV['TM_INPUT_START_LINE'] ? ENV['TM_INPUT_START_LINE'].to_i-1 : 0
+
+# line counter for hyperlinking R's prompt signs to jump back to the doc
+selectionlinestart = isSelection ? ENV['TM_INPUT_START_LINE'].to_i-1 : 0
 linecounter = selectionlinestart
 linecountermarker = " #§*"
-
-
-cran="http://cran.cnr.Berkeley.edu"
-if ARGV.count>0
-  cran=ARGV[0]
-end
-
 
 # HTML escaping function.
 def esc(str)
@@ -81,7 +78,7 @@ outputFont = (ENV['TM_RMATE_OUTPUT_FONT'] == nil) ? "Monaco" : ENV['TM_RMATE_OUT
 outputFontSize = (ENV['TM_RMATE_OUTPUT_FONTSIZE'] == nil) ? "10pt" : "#{ENV['TM_RMATE_OUTPUT_FONTSIZE']}pt"
 
 # what comes in
-what = ENV['TM_SELECTED_TEXT'] ? "document" : "selection"
+what = (isSelection) ? "document" : "selection"
 
 # Headers...
 print <<-EOS
@@ -169,7 +166,7 @@ until descriptors.empty?
           print "<i><font color=blue>#{esc(m[2]).chomp}</font></i>\n"
         # check for error messages
         elsif m=line.match(/(?i)^\s*(error|erreur|fehler|errore|erro)( |:)/)
-          where = selectionlinestart>0 ? " of selection" : ""
+          where = (isSelection) ? " of selection" : ""
           print "<span style='color: red'>#{esc str.gsub(%r{(?m).*?#{m[1]}},m[1]).chomp}<br /><i>RMate</i> stopped at <a href='txmt://open?line=#{linecounter}'>line #{linecounter-selectionlinestart}#{where}</a></span><br />".gsub(%r{source\(&quot;(.*?)&quot;\)},'source(&quot;<a href="txmt://open?url=file://\1">\1</a>&quot;)')
           print "<hr noshade width='300' size='2' align='left' color=lightgrey>"
           break

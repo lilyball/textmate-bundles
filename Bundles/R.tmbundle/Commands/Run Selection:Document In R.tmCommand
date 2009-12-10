@@ -19,11 +19,20 @@ if [ -f "$SOFILE" ]; then
 	[[ ! -z "$RES" ]] &amp;&amp; [[ "${RES:0:4}" == "http" ]] &amp;&amp; CRAN="$RES"
 fi
 
-"$TM_BUNDLE_SUPPORT/tmR.rb" "$CRAN"</string>
+if [ ! -z "$TM_INPUT_START_LINE" ]; then
+	if [ `echo -en "$TM_SELECTED_TEXT" | egrep -cv '^[	 ]*#'` -gt 0 ]; then
+		echo -en "$TM_SELECTED_TEXT" | "$TM_BUNDLE_SUPPORT/tmR.rb" "$CRAN" 1
+	else
+		cat | "$TM_BUNDLE_SUPPORT/tmR.rb" "$CRAN" 0
+	fi
+else
+	cat | "$TM_BUNDLE_SUPPORT/tmR.rb" "$CRAN" 0
+fi
+</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>
-	<string>selection</string>
+	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>

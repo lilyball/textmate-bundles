@@ -6,6 +6,7 @@ import os
 import select
 from scons_gcc_filter import SConsGCCFilter
 import cgi
+import subprocess
 
 def findSConstructDir():
     """Search upward from the current dir for the top-level SConstruct dir."""
@@ -24,21 +25,20 @@ def write(s):
         sys.stdout.write(s)
         sys.stdout.flush()
     
-def filterOutput(cmd):
+def filterOutput(args):
     """Run a shell cmd, reformatting output as HTML."""
     theFilter = SConsGCCFilter(findSConstructDir())
     
-    childIn, childOut, childErr = os.popen3(cmd, 0)
-    infd = childIn.fileno()
-    outfd = childOut.fileno()
-    errfd = childErr.fileno()
+    p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    outfd = p.stdout.fileno()
+    errfd = p.stderr.fileno()
     inSet = [outfd, errfd]
-    errSet = [infd, outfd, errfd]
+    errSet = [outfd, errfd]
     
     while True:
         ins, outs, errs = select.select(inSet, [], errSet)
         if errs:
-            print "<b>Error descriptors: <i>%s</i><b>" % repr(errs)
+            print("<b>Error descriptors: <i>%s</i><b>" % repr(errs))
             for item in errs:
                 errSet.remove(item)
             if not errSet:
@@ -52,21 +52,19 @@ def filterOutput(cmd):
         if ins:
             write(theFilter.filter())
         if not inSet:
-            childIn.close()
-            childOut.close()
-            childErr.close()
+            p.stdout.close()
+            p.stderr.close()
             write(theFilter.filter(consumeAll=True))
             break
         
     
 def runSCons(args):
     """Run SCons in a not-very-flexible way."""
-    # Watch me screw this up...
-    cmd = "scons %s 2>&1" % " ".join([repr(a) for a in args])
-        
-    print "<i># Working dir: %s</i><br/>" % cgi.escape(os.getcwd())
-    print "<b>%s</b><br/>" % cgi.escape(cmd)
-    filterOutput(cmd)
+    args = ["scons"] + args
+
+    print("<i># Working dir: %s</i><br/>" % cgi.escape(os.getcwd()))
+    print("<b>%s</b><br/>" % cgi.escape(" ".join([str(a) for a in args])))
+    filterOutput(args)
     
 def main():
     args = sys.argv[1:] or []

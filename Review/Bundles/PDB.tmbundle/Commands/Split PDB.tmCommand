@@ -10,13 +10,16 @@
 # Split the PDB file into seperate files based on split command
 
 output=$(CocoaDialog inputbox --title "Split PDB based on split argument" \
-    --informative-text "argument:" --text "MODEL" \
+    --informative-text "Split argument:" --text "MODEL" \
     --button1 "OK" --button2 "Cancel")
 
 [[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
 split=$(tail -n1 &lt;&lt;&lt; "$output")
 
 if [[ $split ]]; then
+	if ! [[ $TM_FILEPATH ]]; then
+		TM_FILEPATH="/Users/$( whoami )/Desktop/structure.pdb"
+	fi
 	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -i $split -q $TM_FILEPATH
 fi
 

@@ -7,31 +7,31 @@
 	<key>command</key>
 	<string>#!/usr/bin/env bash
 
-# Renumber the ATOM and HETATM residues.
+# Renumber the ATOM and HETATM atoms.
 
-output=$(CocoaDialog inputbox --title "Renumber residues starting from" \
-    --informative-text "number:" --text "1" \
+output=$(CocoaDialog inputbox --title "Renumber atoms starting from" \
+    --informative-text "number:" --text "1"\
     --button1 "OK" --button2 "Cancel")
 
 [[ $(head -n1 &lt;&lt;&lt; "$output") == "2" ]] &amp;&amp; exit_discard
-resnum=$(tail -n1 &lt;&lt;&lt; "$output")
+atnum=$(tail -n1 &lt;&lt;&lt; "$output")
 
-if [[ $resnum ]]; then
-	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -r $resnum
+if [[ $atnum ]]; then
+	python "$TM_BUNDLE_SUPPORT"/PDBeditor.py -p $atnum
 fi</string>
 	<key>fallbackInput</key>
 	<string>document</string>
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>@R</string>
+	<string>@A</string>
 	<key>name</key>
-	<string>Renumber residues</string>
+	<string>Renumber atoms</string>
 	<key>output</key>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>source.pdb</string>
 	<key>uuid</key>
-	<string>6E7EAF59-D079-420A-B74D-7D55CB09D76B</string>
+	<string>8076E4CA-499F-4DAF-B672-5799C6F3CA5F</string>
 </dict>
 </plist>

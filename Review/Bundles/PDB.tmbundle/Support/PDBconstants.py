@@ -9,7 +9,6 @@ This is the constants file used by most python PDB editing functions.
 You can change these constants to fit your needs.
 
 PDB bundle version 1.0   Copyright (C) 2009, Marc van Dijk.
-
 ==========================================================================================
 """
 

@@ -49,7 +49,8 @@ masses and extracting data from PDB files can be changed if desired using the 'E
 &lt;li&gt;Split PDB:&lt;/li&gt;
 &lt;p&gt;Split ensemble PDB files based on a split argument like 'MODEL' for models or 'TER' for
 chains. Seperated parts are saved as seperate files in the same directory as the original and
-opened as a new project.&lt;/p&gt;
+opened as a new project. In case the PDB file is 'fetched' from the RCSB database, the 
+seperated files are saved to the desktop as 'structure_X.pdb'&lt;/p&gt;
 &lt;li&gt;Join PDB files:&lt;/li&gt;
 &lt;p&gt;Select PDB files in the project drawer and join them together in a new PDB file
 as ensemble. The ensemble PDB will be displayed in a new TextMate document.&lt;/p&gt;

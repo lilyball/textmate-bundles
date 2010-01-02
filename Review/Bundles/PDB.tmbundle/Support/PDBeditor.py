@@ -137,13 +137,15 @@ class PDBeditor:
 		self.b = []
 		self.segid = []
 		
-		self.pdbString = ''	
+		self.pdbString = ''
+		self.endstring = False	
 	
 	def ReadPDB(self,fromfile=None):
 	
 		head = re.compile('^(HEADER|COMPND|REMARK|SEQRES|CRYST1|SCALE|ORIG|TITLE|FORMUL|HELIX|SHEET|DBREF|SEQADV|SOURCE|KEYWDS|EXPDTA|AUTHOR|REVDAT|JRNL)')
   		atom = re.compile('(ATOM|HETATM)')
 		ter = re.compile('TER')
+		end = re.compile('END')
   		foot = re.compile('(CONECT|MASTER)')
   		model = re.compile('(MODEL|ENDMDL)')
 
@@ -186,6 +188,7 @@ class PDBeditor:
 				self.linecount += 1	
   		  	elif foot.match(line):
  				self.footer.append(line)
+			elif end.match(line): self.endstring = True	
 		
 		self.firstatnr = self.atnum[0]	#Need to know original number of first atom for possible CONECT statement correction when renumbering atoms	
   	
@@ -206,7 +209,10 @@ class PDBeditor:
 				elif vtype == 'float': return float(line[location[0]])
 				else: return line[location[0]].upper()
 		else:
-			if len(line) < location[1] or len(line[location[0]:location[1]].strip()) == 0: 
+			if len(line) < location[0]:
+				if debug: print("Line %i: No %s found in line location %i-%i" % (self.linecount,name,location[0],location[1]))
+				return " " * (location[1]-location[0])
+			elif len(line[location[0]:location[1]].strip()) == 0: 
 				if debug: print("Line %i: No %s found in line location %i-%i" % (self.linecount,name,location[0],location[1]))
 				return " " * (location[1]-location[0])
 			else:
@@ -259,6 +265,7 @@ class PDBeditor:
 		   string to not print a blank line between selection and follow-up lines.
 		"""
 		
+		if self.endstring: self.pdbString += 'END\n'
 		sys.stdout.write(self.pdbString.strip())	
 
 	def splitPDB(self,mode,filepath):
@@ -268,7 +275,7 @@ class PDBeditor:
 		"""
 		lines = sys.stdin.readlines()
 		mode = mode.upper()
-
+		
 		modelcount = 0
 		models = {}
 		
@@ -340,9 +347,9 @@ class PDBeditor:
 		"""
 		ch = re.compile('[a-z]+', re.IGNORECASE)
 		
-		if not len(new[0].strip()): self.chain = ([' ']*len(self.chain))
+		if not len(new[0].strip()) or new == '1': self.chain = ([' ']*len(self.chain))
 		elif ch.match(new[0]): self.chain = ([new[0].upper()]*len(self.chain))
-
+		
 	def setSegidID(self,new):
 
 		"""Change the segid ID in the current selection to the new value. Segment indentifiers can be composed
@@ -383,6 +390,7 @@ class PDBeditor:
 		for i in elems:
 			if Mass_table.has_key(i): mass += Mass_table[i]
 		
+		print("Number of atoms:%i" % len(elems))
 		print("Molecular mass: %1.3f g/mol" % mass)	
 		sys.exit()
 	

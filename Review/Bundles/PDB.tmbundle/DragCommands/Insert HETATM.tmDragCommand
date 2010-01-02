@@ -5,7 +5,9 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>grep HETATM "$TM_DROPPED_FILE"</string>
+	<string>#Insert HETATM lines of the dropped file into current document
+
+grep HETATM "$TM_DROPPED_FILE"</string>
 	<key>draggedFileExtensions</key>
 	<array>
 		<string>pdb</string>

@@ -9,7 +9,7 @@ ignore_file_pattern = /(\/.*)*(\/\..*|\.(tmproj|o|pyc)|Icon)/
 CURRENT_DIR		= Dir.pwd + "/"
 
 require support + "/lib/shelltokenize.rb"
-require support + "/lib/Builder.rb"
+require bundle + "/lib/Builder.rb"
 require bundle + "/hg_helper.rb"
 include HGHelper
 

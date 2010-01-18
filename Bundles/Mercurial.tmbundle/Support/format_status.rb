@@ -2,9 +2,9 @@
 # Includes
 support = ENV['TM_SUPPORT_PATH']
 bundle	= ENV['TM_BUNDLE_SUPPORT']
-require support + "/lib/Builder.rb"
 require support + "/lib/shelltokenize.rb"
 require support + "/lib/escape.rb"
+require bundle + "/lib/Builder.rb"
 require bundle + "/hg_helper.rb"
 require "cgi"
 include HGHelper

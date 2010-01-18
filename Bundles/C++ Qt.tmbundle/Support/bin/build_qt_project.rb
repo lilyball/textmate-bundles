@@ -6,7 +6,7 @@ $support = ENV['TM_SUPPORT_PATH']
 require $bundle   + "/bin/find_qt_project"
 require $bundle   + "/lib/run_helper"
 require $support  + "/lib/tm_parser"
-require $support  + "/lib/Builder"
+require $bundle  + "/lib/Builder"
 
 SCRIPT = <<ENDSCRIPT #javascript
 function showElement( div_id )

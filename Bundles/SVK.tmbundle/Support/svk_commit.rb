@@ -4,12 +4,11 @@ svk				= ENV['TM_SVK']
 #commit_paths	= ENV['CommitPaths']
 commit_tool		= ENV['CommitWindow']
 bundle			= ENV['TM_BUNDLE_SUPPORT']
-support			= ENV['TM_SUPPORT_PATH']
 
 CURRENT_DIR		= Dir.pwd + "/"
 
-require (support + '/lib/shelltokenize.rb')
-require (support + "/lib/Builder.rb")
+require ENV['TM_SUPPORT_PATH'] + '/lib/shelltokenize.rb'
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/Builder.rb'
 
 mup = Builder::XmlMarkup.new(:target => STDOUT)
 

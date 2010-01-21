@@ -22,7 +22,7 @@ RAMSIZE=${TM_RdaemonRAMSIZE:-50}
 
 runs() {
 	RUBYRUN=$(ps xw | grep '[0-9] ruby.*Rdaemon')
-	RRUN=$(ps aw | grep '[0-9] /Lib.*TMRdaemon')
+	RRUN=$(ps aw | grep '[0-9] /.*TMRdaemon')
 	if [ ${#RRUN} == 0 -a ${#RUBYRUN} == 0 ]; then
 		return 0
 	else
@@ -161,7 +161,7 @@ do
 done
 
 #get R's PID
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 
 runs
 if [ $? == 1 ]; then

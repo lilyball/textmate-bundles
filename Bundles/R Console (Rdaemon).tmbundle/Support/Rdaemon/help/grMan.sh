@@ -1,4 +1,4 @@
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 
 RDHOME="$HOME/Library/Application Support/Rdaemon"
 if [ "$TM_RdaemonRAMDRIVE" == "1" ]; then

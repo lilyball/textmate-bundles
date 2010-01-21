@@ -12,7 +12,7 @@ fi
 IN=$1
 
 #get R's PID
-export RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+export RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 
 #check whether Rdaemon runs
 test -z $RPID && echo -en "Rdaemon is not running." && exit 206

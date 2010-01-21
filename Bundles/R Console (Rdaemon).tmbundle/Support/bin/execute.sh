@@ -11,7 +11,7 @@ fi
 ######### begin script #########
 
 #get R's PID
-export RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+export RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 
 
 # dispose all frozen ProgressDialogs if there're some

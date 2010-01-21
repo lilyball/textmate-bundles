@@ -6,7 +6,7 @@
 	<string>
 
 #get R's PID
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 
 #check whether Rdaemon runs - if not start it
 if [ -z $RPID ]; then

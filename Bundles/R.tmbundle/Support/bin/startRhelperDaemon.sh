@@ -1,4 +1,4 @@
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRHelperDaemon' | awk '{print $1}' )
+RPID=$(ps aw | grep '[0-9] /.*TMRHelperDaemon' | awk '{print $1}' )
 #check whether Helper daemon runs if not start it
 if [ -z "$RPID" ]; then
 	WDIR="$TM_BUNDLE_SUPPORT"/bin

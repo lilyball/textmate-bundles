@@ -20,7 +20,7 @@ TEXT=$(cat)
 RhelperAnswer="/tmp/textmate_Rhelper_out"
 
 # Rdaemon
-RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
 if [ ! -z "$RPID" -a "$RD" -gt 0 ]; then
 	RDHOME="$HOME/Library/Application Support/Rdaemon"

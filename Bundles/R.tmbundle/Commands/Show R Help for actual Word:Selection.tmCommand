@@ -67,7 +67,7 @@ fi
 RD=$(echo -n "$TM_SCOPE" | grep -c -F 'source.rd.console')
 if [ $RD -gt 0 -a "$TM_R_SHOW_ALWAYS_HELPSEARCH" != "1" ]; then
 	#get R's PID
-	RPID=$(ps aw | grep '[0-9] /Lib.*TMRdaemon' | awk '{print $1;}' )
+	RPID=$(ps aw | grep '[0-9] /.*TMRdaemon' | awk '{print $1;}' )
 	#check whether Rdaemon runs
 	if [ ! -z $RPID ]; then
 		RDHOME="$HOME/Library/Application Support/Rdaemon"

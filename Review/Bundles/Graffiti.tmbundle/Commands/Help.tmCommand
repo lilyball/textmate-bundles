@@ -12,7 +12,7 @@ html_header "Graffiti Help" "Graffiti"
 
 # Introduction
 
-The Graffiti TextMate bundle provides a set of commands to manipulate and browse Ruby, C/C++ and Java source code. It is based on two commands famous in the Unix world: [CScope][1] and [Exuberant CTags][2].
+The Graffiti TextMate bundle provides a set of commands to manipulate and browse source code in Ruby, Makefiles, C/C++, Java, etc. It is based on two commands famous in the Unix world: [CScope][1] and [Exuberant CTags][2].
 
 For example, it allows you to jump to the definition of a function and then to jump back, it finds all the locations where a symbol can be found, it provides a completion menu made up of all the class, function and variable names found in the code of your project...
 
@@ -29,51 +29,51 @@ Graffiti will create an index, recursively, for the source files found in the di
 # Command List
 
 **Complete** - 
-Use the *ctags* file to display a list of completion proposals as a popup.
+Use the `ctags` file to display a list of completion proposals as a popup.
 
 **Jump to Definition of Current Symbol** - 
-Ask to cscope the locations where the symbol can be found,
+Ask to `ctags` the locations where the symbol can be found,
 ask the user via popup to choose one and jump to it at the proper line.
 
 **Jump Back** - 
 Jump to the previous location in the history.
 
-**Jump to Function Calling Current Function** - 
-Ask to cscope where the function under the cursor is called,
+**Jump to Function Calling Current Function** *(only for C/C++ and Java)* - 
+Ask to `cscope` where the function under the cursor is called,
 ask the user via popup to choose one and jump to it at the proper line.
 
-**Jump to File Including Current File** - 
-Ask to cscope where the current file is #included,
+**Jump to File Including Current File** *(only for C/C++ and Java)* - 
+Ask to `cscope` where the current file is #included,
 ask the user via popup to choose one and jump to it at the proper line.
 
 **Find Definitions of Current Symbol** - 
-Ask to cscope where the symbol is defined,
+Ask to `ctags` where the symbol is defined,
 and print it out as a nice HTML list.
 
-**Find Locations of Current Symbol** - 
-Ask to cscope the locations where the symbol can be found,
+**Find Locations of Current Symbol** *(only for C/C++ and Java)* - 
+Ask to `cscope` the locations where the symbol can be found,
 and print it out as a nice HTML list.
 
-**Find Functions Calling Current Function** - 
-Ask to cscope where the function under the cursor is called,
+**Find Functions Calling Current Function** *(only for C/C++ and Java)* - 
+Ask to `cscope` where the function under the cursor is called,
 and print it out as a nice HTML list.
 
-**Find Files Including Current File** - 
-Ask to cscope where the current file is #included,
+**Find Files Including Current File** *(only for C/C++ and Java)* - 
+Ask to `cscope` where the current file is #included,
 and print it out as a nice HTML list.
 
 **Find Definitions of a Symbol...** -
 Display a prompt so that the user can enter a symbol,
-ask to cscope where this symbol is defined,
+ask to `cscope` where this symbol is defined,
 and print it out as a nice HTML list.
 
-**Find Locations of a Symbol...** -
-Display a prompt so that the user can enter a symbol,
-ask to cscope the locations where this symbol can be found,
+**Find Locations of a Symbol...** *(only for C/C++ and Java)* -
+Display a prompt so that the user can enter a symbol or a regular expression,
+ask to `ctags` the locations where this symbol can be found,
 and print it out as a nice HTML list.
 
 **Update Tags** - 
-Create the `.graffiti` if needed. Create *ctags* and *cscope* tag files
+Create the `.graffiti` if needed. Create `ctags` and `cscope` tag files
 starting from `TM_PROJECT_DIRECTORY`. Display this in a nice HTML output.
 
 # Configuration
@@ -102,8 +102,6 @@ EOF</string>
 	<string>Help</string>
 	<key>output</key>
 	<string>showAsHTML</string>
-	<key>scope</key>
-	<string>source.c, source.c++, source.objc, source.objc++, source.java, source.ruby, text.xml, text.plain, source.makefile</string>
 	<key>uuid</key>
 	<string>04CD64C3-29E2-428B-BD66-6B5756740485</string>
 </dict>

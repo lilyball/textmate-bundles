@@ -11,7 +11,7 @@
 
 
 ###############################################################################
-# The tools ctags and cscope are in the directory ('$TM_BUNDLE_SUPPORT/bin').
+# The tools `ctags` and `cscope` are in the directory ('$TM_BUNDLE_SUPPORT/bin').
 #
 require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview.rb'
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate.rb'
@@ -57,15 +57,58 @@ module Graffiti
 
 
     ###############################################################################
-    # askCscope
+    # askCtags
     #
-    # Query cscope with a 'symbol' name and a 'cmdId' command number and build
-    # and return the array 'tagsTable' with query result. 'tagsTable' contains
-    # one line per result found by cscope. This line contains:
+    # Query `ctags` with a 'symbol' name and return the array 'tagsTable' with
+    # the list of results.
+    # This is very similar to 'askCscope' but supports more languages.
+    #
+    # 'tagsTable' contains one line per result found. This line contains:
     # 0 - File path.
     # 1 - Symbol name.
     # 2 - Line number.
     # 3 - Text of the line where the definition has been found.
+    # 4 - Tag type.
+    # 5 - Language type.
+    # 6 - Signature.
+    #
+    # The returned table cannot be null, but can be empty.
+    # 
+    def askCtags(symbol)
+        checkTagFiles()
+
+        tagsTable = []
+        ctagsAskCmd = "grep '^#{symbol}\t.*' #{@@ctagsTagFilePath} | sort -u"
+
+        debugPrint ctagsAskCmd #DEBUG
+        ctagsCmdResult = `#{ctagsAskCmd}`
+        ctagsCmdResult.each_line do |line|
+            lineArray = line.chop.split("\t")
+            tagsTable << [@@projectDirPath.to_s + "/" + lineArray[1],
+            lineArray[0],
+            lineArray[2].to_s.gsub(';"', ''),
+            lineArray[0] + lineArray[5].to_s.gsub('signature:', ''),
+            lineArray[3].to_s.gsub('kind:', ''),
+            lineArray[4].to_s.gsub('language:', ''),
+            lineArray[5].to_s.gsub('signature:', '')].flatten
+        end
+
+        return tagsTable
+    end
+
+
+    ###############################################################################
+    # askCscope
+    #
+    # Query `cscope` with a 'symbol' name and a 'cmdId' command number and build
+    # and return the array 'tagsTable' with query result.
+    #
+    # 'tagsTable' contains one line per result found. This line contains:
+    # 0 - File path.
+    # 1 - Symbol name.
+    # 2 - Line number.
+    # 3 - Text of the line where the definition has been found.
+    #
     # The returned table cannot be null, but can be empty.
     # 
     def askCscope(cmdId, symbol)
@@ -91,21 +134,27 @@ module Graffiti
 
 
     ###############################################################################
-    # askCscopePopupResults
+    # askToolPopupResults
     #
-    # Query cscope with a 'symbol' name and a 'cmdId' command number and ask the
-    # user to choose one, with a popup menu, if multiple occurrences are found.
-    # Return an array containing:
+    # If 'cmdId' is in 0..8, query `cscope` with a 'symbol' name and a 'cmdId'
+    # command number, if 'cmdId' is :ctags, query `ctags`. Then ask the user to
+    # choose one, with a popup menu, if multiple occurrences are found.
+    # 
+    # Return 'tagsTable' contains one line. This line contains:
     # 0 - File path.
     # 1 - Symbol name.
     # 2 - Line number.
     # 3 - Text of the line where the definition has been found.
+    #
     # The returned table cannot be null and cannot be empty. If nothing found
     # or selected by user, show a tool tip and exit.
     # 
-    def askCscopePopupResults(cmdId, symbol)
-        # Ask to cscope the list of locations.
-        tagsTable = askCscope(cmdId, symbol)
+    def askToolPopupResults(cmdId, symbol)
+        # Ask to `cscope` the list of locations.
+        tagsTable = case cmdId
+        when :ctags then askCtags(symbol)
+        when 0..8   then askCscope(cmdId, symbol)
+        end
 
         if (tagsTable.size == 0) then
             # No match.
@@ -133,11 +182,21 @@ module Graffiti
     ###############################################################################
     # displayTagsTable
     #
-    # Get a tags table returned by ask cscope function and display it as a list
+    # Get a tags table returned by ask `cscope` function and display it as a list
     # in a nice HTML output.
     # 
     def displayTagsTable(title, tagsTable)
         raise "Nothing found." if tagsTable.empty?
+
+        # Sort the table according to the file name and line number.
+        tagsTable.sort! do |x, y|
+            order = (x[0] <=> y[0])
+            if order == 0 then
+                (x[2].to_i <=> y[2].to_i)
+            else
+                order
+            end
+        end
 
         html_header(title, @@bundleName)
         print "<ul>\n"
@@ -152,6 +211,8 @@ module Graffiti
             symbol = tagLine[1]
             line = tagLine[2]
             text = tagLine[3]
+            kind = tagLine[4]
+            language = tagLine[5]
             
             # Display the file name and path, only once per file.
             unless (previousFilepath == filepath) then
@@ -187,8 +248,8 @@ module Graffiti
     ###############################################################################
     # findLocationsOfPromptedWord
     #
-    # Display a prompt so that the user can enter a symbol,
-    # ask to cscope the locations where this symbol can be found,
+    # Display a prompt so that the user can enter a symbol or a regular expression,
+    # ask to `cscope` the locations where this symbol can be found,
     # and print it out as a nice HTML list.
     # 
     def findLocationsOfPromptedWord()
@@ -204,7 +265,7 @@ module Graffiti
     ###############################################################################
     # findLocationsOfCurrentSymbol
     #
-    # Ask to cscope the locations where the symbol can be found,
+    # Ask to `cscope` the locations where the symbol can be found,
     # and print it out as a nice HTML list.
     # 
     def findLocationsOfCurrentSymbol()
@@ -218,11 +279,11 @@ module Graffiti
     ###############################################################################
     # jumpToLocationOfCurrentSymbol
     #
-    # Ask to cscope the locations where the symbol can be found,
+    # Ask to `cscope` the locations where the symbol can be found,
     # ask the user via popup to choose one and jump to it at the proper line.
     # 
     def jumpToLocationOfCurrentSymbol()
-        jumpToTagLine(askCscopePopupResults(0, getCurrentWord()))
+        jumpToTagLine(askToolPopupResults(0, getCurrentWord()))
     rescue => msg
         toolTip(msg)
     end
@@ -232,14 +293,14 @@ module Graffiti
     # findDefinitionsOfPromptedWord
     #
     # Display a prompt so that the user can enter a symbol,
-    # ask to cscope where this symbol is defined,
+    # ask to `ctags` where this symbol is defined,
     # and print it out as a nice HTML list.
     # 
     def findDefinitionsOfPromptedWord()
         promptedWord = askWordToUser()
         exit if promptedWord.nil?
         title = "Definitions of \"#{promptedWord}\""
-        displayTagsTable(title, askCscope(1, promptedWord))
+        displayTagsTable(title, askCtags(promptedWord))
     rescue => msg
         toolTip(msg)
     end
@@ -248,12 +309,12 @@ module Graffiti
     ###############################################################################
     # findDefinitionsOfCurrentWord
     #
-    # Ask to cscope where the symbol is defined,
+    # Ask to `ctags` where the symbol is defined,
     # and print it out as a nice HTML list.
     # 
     def findDefinitionsOfCurrentWord()
         title = "Definitions of \"#{getCurrentWord()}\""
-        displayTagsTable(title, askCscope(1, getCurrentWord()))        
+        displayTagsTable(title, askCtags(getCurrentWord()))        
     rescue => msg
         toolTip(msg)
     end
@@ -262,11 +323,11 @@ module Graffiti
     ###############################################################################
     # jumpToDefinitionOfCurrentWord
     #
-    # Ask to cscope where the symbol is defined,
+    # Ask to `ctags` where the symbol is defined,
     # ask the user via popup to choose one and jump to it at the proper line.
     # 
     def jumpToDefinitionOfCurrentWord()
-        jumpToTagLine(askCscopePopupResults(1, getCurrentWord()))
+        jumpToTagLine(askToolPopupResults(:ctags, getCurrentWord()))
     rescue => msg
         toolTip(msg)
     end
@@ -275,7 +336,7 @@ module Graffiti
     ###############################################################################
     # findFunctionsCallingCurrentFunction
     #
-    # Ask to cscope where the function under the cursor is called,
+    # Ask to `cscope` where the function under the cursor is called,
     # and print it out as a nice HTML list.
     # 
     def findFunctionsCallingCurrentFunction()
@@ -289,11 +350,11 @@ module Graffiti
     ###############################################################################
     # jumpToFunctionCallingCurrentFunction
     #
-    # Ask to cscope where the function under the cursor is called,
+    # Ask to `cscope` where the function under the cursor is called,
     # ask the user via popup to choose one and jump to it at the proper line.
     # 
     def jumpToFunctionCallingCurrentFunction()
-        jumpToTagLine(askCscopePopupResults(3, getCurrentWord()))
+        jumpToTagLine(askToolPopupResults(3, getCurrentWord()))
     rescue => msg
         toolTip(msg)
     end
@@ -302,7 +363,7 @@ module Graffiti
     ###############################################################################
     # findFilesIncludingCurrentFile
     #
-    # Ask to cscope where the current file is #included,
+    # Ask to `cscope` where the current file is #included,
     # and print it out as a nice HTML list.
     # 
     def findFilesIncludingCurrentFile()
@@ -316,11 +377,11 @@ module Graffiti
     ###############################################################################
     # jumpToFileIncludingCurrentFile
     #
-    # Ask to cscope where the current file is #included,
+    # Ask to `cscope` where the current file is #included,
     # ask the user via popup to choose one and jump to it at the proper line.
     # 
     def jumpToFileIncludingCurrentFile()
-        jumpToTagLine(askCscopePopupResults(8, getCurrentFileName()))
+        jumpToTagLine(askToolPopupResults(8, getCurrentFileName()))
     rescue => msg
         toolTip(msg)
     end
@@ -354,7 +415,7 @@ module Graffiti
     ###############################################################################
     # jumpToTagLine
     #
-    # Jump to a location returned by ask cscope functions.
+    # Jump to a location returned by ask `cscope` functions.
     # 
     def jumpToTagLine(tagLine)
         jumpToFile(tagLine[0], tagLine[2].to_i, 0)
@@ -408,7 +469,7 @@ module Graffiti
     ###############################################################################
     # completeCurrentWord
     #
-    # Use the *ctags* file to display a list of completion proposals as a popup.
+    # Use the `ctags` file to display a list of completion proposals as a popup.
     # TODO: Find out why '_' is not handled as a normal char, as expected.
     # 
     def completeCurrentWord()
@@ -420,9 +481,11 @@ module Graffiti
         grepCmd = "grep '^#{currentWord}' #{@@ctagsTagFilePath} | " +
         "sed -e 's/^\\(#{currentWord}[[:alnum:]_]*\\).*/\\1/p' -e 'd' | sort -u"
         `#{grepCmd}`.split("\n").each do |tagLine|
-            choices += [{'display' => tagLine, 'match' => tagLine.sub(currentWord, '')}]
+#            choices += [{'display' => tagLine, 'insert' => tagLine.sub(currentWord, '')}]
+#            choices += [{'display' => tagLine, 'match' => tagLine.sub(currentWord, '')}]
+            choices += [{'display' => tagLine}]
         end
-
+        
         raise "Nothing found." if choices.size == 0
 
         # Display the completion popup.
@@ -437,14 +500,14 @@ module Graffiti
     ###############################################################################
     # updateTagFiles
     #
-    # Create the prefDirPath if needed. Create ctags and cscope tag files
+    # Create the prefDirPath if needed. Create `ctags` and `cscope` tag files
     # starting from projectDirPath. Display this in a nice HTML output.
     # Check the existence of the project directory.
     #
-    # TODO: Try the option "−L file" of ctags.
-    # TODO: Try the option "−k" of cscope.
+    # TODO: Try the option "−L file" of `ctags`.
+    # TODO: Try the option "−k" of `cscope`.
     # TODO: Add a way to exclude some directories.
-    # TODO: Try to see if it is possible to just update the cscope database.
+    # TODO: Try to see if it is possible to just update the `cscope` database.
     #
     def updateTagFiles()
         html_header("Updating Tags", @@bundleName)
@@ -468,13 +531,13 @@ module Graffiti
 
         Dir.mkdir(@@prefDirPath) unless FileTest.directory?(@@prefDirPath);
 
-        # Generate the ctags tag file.
+        # Generate the `ctags` tag file.
         print "<li>Updating ctags file...<br/>\n"
         
         ctagsUpdateCmd = "cd '#{@@projectDirPath}' && " +
         "time #{@@ctags} --recurse --extra=+f --fields=-a+i+k+l-m+S+z-s-n-f-K " +
         "--excmd=number -I #{@@ctagsIdentifiers} --c-kinds=+p+x " +
-        "-f \"#{@@ctagsTagFileShortPath}\"" # Ctags does not like the spaces, even escaped.
+        "-f \"#{@@ctagsTagFileShortPath}\""
 
         print '<pre style="word-wrap: break-word;">'
         debugPrint ctagsUpdateCmd #DEBUG
@@ -486,13 +549,13 @@ module Graffiti
         end
         print "Done.</pre>\n"
 
-        # Generate the cscope tag file.
+        # Generate the `cscope` tag file.
         print "<li>Updating cscope file...<br/>\n"
         
         cscopeUpdateCmd = "cd '#{@@projectDirPath}' && " +
         "find . -name \\*\.c -o -name \\*\.cpp -o " +
         "-name \\*\.h -o -name \\*\.m -o -name \\*\.java " +
-        "| sed 's/^/\"/; s/$/\"/' > " + # Escapes the spaces.
+        "| sed 's/^/\"/; s/$/\"/' > " + # `cscope` does not like the spaces, even escaped.
         "'#{@@cscopeDbFileShortPath}' && " +
         "time #{@@cscope} -i '#{@@cscopeDbFileShortPath}' -f '#{@@cscopeTagFileShortPath}' -b -q"
 
@@ -526,12 +589,12 @@ module Graffiti
     ###############################################################################
     # checkTagFile
     #
-    # Check that the ctags and cscope tag files are present.
+    # Check that the `ctags` and `cscope` tag files are present.
     #
-    # TODO: Add the check for cscope.
+    # TODO: Add the check for `cscope`.
     #
     def checkTagFiles()
-        raise "No tag file found, call 'Update tags' command." unless FileTest.exist?(@@ctagsTagFilePath)
+        raise "No tag file found, please run 'Update Tags' command." unless FileTest.exist?(@@ctagsTagFilePath)
     end
 
 

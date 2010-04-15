@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -wKU
 
-word, sect, scpt = *ARGV
+sect, word, scpt = *ARGV
 
 STDOUT << <<-HTML
 <html>
@@ -26,7 +26,6 @@ STDOUT << toc.map { |section| "<option value='##{section}'>#{section}</option>\n
 STDOUT << "</select>\n"
 STDOUT << "<hr>\n"
 STDOUT << "<pre>\n"
-
 
 page.gsub!(/&/, '&amp;')
 page.gsub!(/</, '&lt;')

@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby -wKU
+
+word, sect, scpt = *ARGV
+
+STDOUT << <<-HTML
+<html>
+<head>
+  <meta name="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Documentation for “#{word}”</title>
+  <script type="text/javascript">
+    function man (sect, word) {
+      var page = TextMate.system("'#{scpt}' " + sect + " " + word, null).outputString;
+      window.location="tm-file://" + page;
+    }
+  </script>
+</head>
+<body>
+HTML
+
+page = %x{ man #{sect} #{word}|col -b }
+
+toc = page.scan(/^[A-Z ]+$/)
+STDOUT << "<select onclick=\"document.location = this.value\">\n"
+STDOUT << "<option value=''>-- Select a section --</option>\n"
+STDOUT << toc.map { |section| "<option value='##{section}'>#{section}</option>\n" }.join
+STDOUT << "</select>\n"
+STDOUT << "<hr>\n"
+STDOUT << "<pre>\n"
+
+
+page.gsub!(/&/, '&amp;')
+page.gsub!(/</, '&lt;')
+page.gsub!(/^[A-Z ]+$/, '<a name="\0">\0</a>')
+page.gsub!(/\b([a-z]+)\((\d)\)/, '<a href="javascript:man(\2, &quot;\1&quot;)">\0</a>')
+
+STDOUT << page

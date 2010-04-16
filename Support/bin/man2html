@@ -19,17 +19,19 @@ HTML
 
 page = %x{ man #{sect} #{word}|col -b }
 
-toc = page.scan(/^[A-Z ]+$/)
-STDOUT << "<select onclick=\"document.location = this.value\">\n"
-STDOUT << "<option value=''>-- Select a section --</option>\n"
-STDOUT << toc.map { |section| "<option value='##{section}'>#{section}</option>\n" }.join
-STDOUT << "</select>\n"
-STDOUT << "<hr>\n"
-STDOUT << "<pre>\n"
+toc = [ ]
 
 page.gsub!(/&/, '&amp;')
 page.gsub!(/</, '&lt;')
-page.gsub!(/^[A-Z ]+$/, '<a name="\0">\0</a>')
-page.gsub!(/\b([a-z]+)\((\d)\)/, '<a href="javascript:man(\2, &quot;\1&quot;)">\0</a>')
+page.gsub!(/``(.*?)''/, '‘‘\1’’')
+page.gsub!(/`(.*?)'/, '‘\1’')
+page.gsub!(/\n*^([A-Z0-9_\- ]+)$\n/) { toc << $1; "</pre>\n<h2 id='#$1'>#{$1.capitalize}</h2>\n<pre>" }
+page.gsub!(/\b([a-z0-9_\-]+)\((\d)\)/, '<a href="javascript:man(\2, &quot;\1&quot;)">\1</a>(\2)')
 
+STDOUT << "<select onclick=\"document.location = this.value\">\n"
+STDOUT << "<option value=''>— Select a section —</option>\n"
+STDOUT << toc.map { |section| "<option value='##{section}'>#{section.capitalize}</option>\n" }.join
+STDOUT << "</select>\n"
+STDOUT << "<hr>\n"
+STDOUT << "<pre>\n"
 STDOUT << page

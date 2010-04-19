@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -wKU
 
-sect, word, scpt = *ARGV
+sect, word = *ARGV
 page = %x{ man #{sect} #{word}|col -b }
 
 if page =~ /^([A-Za-z0-9_.\-]+)\(\d\)/

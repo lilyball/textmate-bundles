@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -19,11 +19,9 @@ The Transmit bundle offers you a way to have the current document or its contain
 
 The two commands with a “(DockSend)” suffix assumes that you have configured Transmit to have DockSend enabled for the containing folder of the current document.
 
-This is done by starting Transmit, connect to your server as usual and then from the Favorites menu select Add to Favorites…
+This is done by starting Transmit and adding a bookmark for your server from the favorites tab of the connect panel. As you are adding your favorite click the “More Options” button.
 
-In the sheet which appears, you need to click the downward pointing arrow with a “More Options” label.
-
-This expands the sheet so it looks like in the following picture:
+This expands the panel so it looks like in the following picture:
 
 ![Add to Favorites](add_to_favorites.png)
 
@@ -35,9 +33,9 @@ There are 3 settings of importance here:
 
  3. **Use DockSend** — Check this box to enable the feature.
 
-In the picture we have set the remote path to `/usr/home/raven/public_html` and the local path to `~/scavenger`.
+In the picture we have set the remote path to `/users/home/jdoe/web/` and the local path to `~/Sites/example.com`.
 
-What this means is that if we edit `~/scavenger/index.html` and select Trasmit → Send Document (DockSend) then it will be uploaded to the server as `/usr/home/raven/public_html/index.html`
+What this means is that if we edit `~/Sites/example.com/index.html` and select Trasmit → Send Document (DockSend) then it will be uploaded to the server as `/users/home/jdoe/web/index.html`
 
 MARKDOWN
 html_footer

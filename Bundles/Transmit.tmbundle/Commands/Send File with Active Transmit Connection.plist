@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>osascript &lt;&lt;-"APPLESCRIPT" - "$TM_FILEPATH"
-on run(argv)
-	tell application "Transmit"
-		(upload item (item 1 of argv)) in current session of first document
-	end tell
-end run
-APPLESCRIPT
+	<string>#!/usr/bin/env ruby
+
+os = `sw_vers -productVersion`
+
+# TODO: Can simplify when Leopard only
+if os !~ /^10\.[0-3]/
+  %x{osascript &lt;&lt;APPLESCRIPT
+    if version of application "Transmit" &gt; "4.0" then
+    	run script (system attribute "TM_BUNDLE_SUPPORT") &amp; "/bin/upload_4.applescript" as POSIX file
+    else
+    	run script (system attribute "TM_BUNDLE_SUPPORT") &amp; "/bin/upload_3.applescript" as POSIX file
+    end if
+  APPLESCRIPT
+  }
+else
+  %x{osascript &lt;&lt;APPLESCRIPT
+	  run script (system attribute "TM_BUNDLE_SUPPORT") &amp; "/bin/upload_3.applescript" as POSIX file
+  APPLESCRIPT
+  }
+end
 </string>
 	<key>input</key>
 	<string>none</string>

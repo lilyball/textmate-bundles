@@ -6,7 +6,7 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/bin/sh
-osascript "${TM_BUNDLE_SUPPORT}/send_to_transmit.applescript" "$TM_FILEPATH" &amp;&gt;/dev/console &amp;
+osascript "${TM_BUNDLE_SUPPORT}/bin/send_to_transmit.applescript" "$TM_FILEPATH" &amp;&gt;/dev/console &amp;
 echo "Sent ‘${TM_FILENAME}’ to Transmit"
 </string>
 	<key>input</key>

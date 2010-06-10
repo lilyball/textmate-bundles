@@ -9,7 +9,7 @@
 &lt;?php
 function stringTo2DArray($stringIn, $delimitter=" "){
 	// strips all white space, rows are lines
-	$stringIn = ereg_replace("[ \t]+", " ", $stringIn); // whitespace-runs --&gt; single space char 
+//	$stringIn = ereg_replace("[\t]+", " ", $stringIn); // whitespace-runs --&gt; single space char 
 	$stringIn = trim($stringIn); // trim leading and trailing white space
 	$rows     = explode("\n", $stringIn); //break on lines
 	$o        = array();
@@ -40,7 +40,7 @@ if (0) {
    //$in = file_get_contents('php://stdin');
     $in = $_ENV["TM_SELECTED_TEXT"];	
 }
-$in = stringTo2DArray($in, $delimitter=" ");
+$in = stringTo2DArray($in, $delimitter="\t");
 $o = "&lt;table border=\"1\"&gt;";
 foreach ($in as $key =&gt; $row) {
 	$o .= "&lt;tr&gt;";

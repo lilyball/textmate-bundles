@@ -200,6 +200,10 @@ Set the font of Rmate's output window. Default is set to “Monaco”.
 
 Set the font size of Rmate's output window. Default is set to “10”.
 
+## TM&#95;RMATE&#95;ENABLE&#95;LINECOUNTER
+
+For debugging large R scripts it could be useful to have the chance to use the outputted leading prompt <code>&gt;</code> as hyperlink to jump into the corresponding line of the R script. For that purpose you can set this shell variable to “1”. Please note that by enabling it the script **may not** contain multi-line string declarations, otherwise the string variables will be erroneous (these strings contain the internal string marker<code> #§*</code>).
+
 # Troubleshooting &amp; FAQ
 
 -   __`'re-encoding is not available on this system'` or `'object ".PSenv" not found'`__
@@ -216,6 +220,10 @@ Set the font size of Rmate's output window. Default is set to “10”.
 
     `chmod og-w 'DIR'`
 
+-   __`Text strings defined as multi-line declarations inside a R script contain " #§*"`__
+
+    Please disable TextMate's shell variable TM&#95;RMATE&#95;ENABLE&#95;LINECOUNTER.
+
 # The bundle "R Console (Rdaemon)"
 
 In addition there is the bundle "R Console (Rdaemon)" available. This bundle allows to run the command-line version of R ***inside*** TextMate. A normal document window, which is set to the language "R Console (Rdaemon)", serves as R console. More details within this bundle.  
@@ -226,7 +234,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Dec 10 2009***
+***Date: Jun 14 2010***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

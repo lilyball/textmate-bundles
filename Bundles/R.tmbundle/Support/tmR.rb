@@ -127,7 +127,11 @@ stdin.puts("options(echo=T)")
 # if a doc is too large give R the chance to execute code, otherwise the pipe stalls
 Thread.new {
   STDIN.each do |line|
-    stdin.puts(line.chomp + "#{linecountermarker}")
+    if(ENV['TM_RMATE_ENABLE_LINECOUNTER'] == '1')
+      stdin.puts(line.chomp + "#{linecountermarker}")
+    else
+      stdin.puts(line.chomp)
+    end
   end
   stdin.close
 }

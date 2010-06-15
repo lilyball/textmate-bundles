@@ -222,9 +222,15 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(var|atom(ic)?|integer|float|compound|n(onvar|umber))(?=[(])</string>
+			<string>\b(var|atom(ic)?|integer|float|c(allable|ompound)|n(onvar|umber))(?=[(])</string>
 			<key>name</key>
 			<string>support.function.term-testing.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b(compare)(?=[(])</string>
+			<key>name</key>
+			<string>support.function.term-comparison.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>

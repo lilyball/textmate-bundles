@@ -168,7 +168,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(mod|rem)\b(?![-!(^~])</string>
+			<string>\b(e|pi|mod|rem)\b(?![-!(^~])</string>
 			<key>name</key>
 			<string>keyword.operator.evaluable.logtalk</string>
 		</dict>
@@ -222,7 +222,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(var|atom(ic)?|integer|float|c(allable|ompound)|n(onvar|umber))(?=[(])</string>
+			<string>\b(var|atom(ic)?|integer|float|c(allable|ompound)|n(onvar|umber)|ground)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.term-testing.logtalk</string>
 		</dict>
@@ -240,7 +240,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(arg|copy_term|functor)(?=[(])</string>
+			<string>\b(arg|copy_term|functor|numbervars)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.term-creation-and-decomposition.logtalk</string>
 		</dict>
@@ -291,6 +291,12 @@
 			<string>\b(halt)\b</string>
 			<key>name</key>
 			<string>support.function.implementation-defined-hooks.logtalk</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((key)?(sort))(?=[(])</string>
+			<key>name</key>
+			<string>support.function.sorting.logtalk</string>
 		</dict>
 		<dict>
 			<key>match</key>

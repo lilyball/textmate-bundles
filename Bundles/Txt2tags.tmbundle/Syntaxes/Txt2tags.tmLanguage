@@ -132,6 +132,26 @@
 		</dict>
 		<dict>
 			<key>match</key>
+			<string>''([^\s](|.*?[^\s])'*)''</string>
+			<key>name</key>
+			<string>string.quoted.other.tagged.inline.txt2tags</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^''' (?=.).*$\n?</string>
+			<key>name</key>
+			<string>string.quoted.other.tagged.line.txt2tags</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^'''\s*$</string>
+			<key>end</key>
+			<string>^'''\s*$\n?</string>
+			<key>name</key>
+			<string>string.quoted.other.tagged.block.txt2tags</string>
+		</dict>
+		<dict>
+			<key>match</key>
 			<string>^ *\+ (?=[^ ])</string>
 			<key>name</key>
 			<string>markup.list.numbered.txt2tags</string>

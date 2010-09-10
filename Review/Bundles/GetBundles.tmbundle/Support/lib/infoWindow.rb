@@ -146,7 +146,7 @@ def gitInfo(bundle)
   begin
     GBTimeout::timeout($timeout) do
       begin
-        plist = OSX::PropertyList::load(%x{curl -sSL "#{url}/tree/master/info.plist?raw=true"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+        plist = OSX::PropertyList::load(%x{curl -sSL "#{url}/blob/master/info.plist?raw=true"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
       rescue
         writeToLogFile($!)
       end
@@ -175,7 +175,7 @@ def gitInfo(bundle)
   # get Readme if available plus CSS for display
   readme = nil
   if data =~ /<div +id="readme".*?>/m
-    readme = data.gsub( /.*?(<div +id="readme".*?>.*?)<div class="push">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
+    readme = data.gsub( /.*?(<div +id="readme".*?>.*?)<div +id="footer" +class="clearfix">.*/m, '\1').gsub(/<span class="name">README.*?<\/span>/, '')
   end
   # css = data.gsub( /.*?(<link href=".*?\/stylesheets\/.*?\/>).*/m, '\1')
   data = ""

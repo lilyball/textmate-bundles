@@ -370,7 +370,7 @@ To set up proxy support in `git`, do the following:
 
 # Main Bundle Maintainer
 
-***Date: Mar 25 2009***
+***Date: Sep 10 2010 – version 1.3***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

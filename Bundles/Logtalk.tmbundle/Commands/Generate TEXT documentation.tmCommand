@@ -7,8 +7,9 @@
 	<key>command</key>
 	<string>cd "$TM_DIRECTORY"
 FILE=`basename "$TM_FILENAME" .lgt`
-$LOGTALK_COMMAND "logtalk_compile($FILE), halt."
-lgt2txt
+$LOGTALK_COMMAND "set_logtalk_flag(altdirs, on), set_logtalk_flag(xmldir, 'xml_docs/'), logtalk_compile($FILE), halt."
+cd "$TM_DIRECTORY/xml_docs"
+$LOGTALK_TXT_COMMAND
 open *.txt
 </string>
 	<key>input</key>

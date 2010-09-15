@@ -6,7 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>cd "$TM_DIRECTORY"
-FILE=`basename "$TM_FILENAME" .lgt`
+FILE=`basename $TM_FILENAME .lgt`
 $LOGTALK_COMMAND "logtalk_compile($FILE), halt."
 </string>
 	<key>input</key>

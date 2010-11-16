@@ -166,7 +166,7 @@ module TextMate
         3.times { io << ::IO::pipe }
 
         # F_SETOWN = 6, ideally this would be under Fcntl::F_SETOWN
-        io[0][0].fcntl(6, ENV['TM_PID'].to_i) if ENV.has_key? 'TM_PID'
+        io[0][0].fcntl(6, ENV['TM_PID'].to_i) if ENV.has_key?('TM_PID') && File.exists?(TM_INTERACTIVE_INPUT_DYLIB)
 
         pid = fork {
           at_exit { exit! }

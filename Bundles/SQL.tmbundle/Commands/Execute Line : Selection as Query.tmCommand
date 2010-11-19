@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>query=${TM_SELECTED_TEXT:-$TM_CURRENT_LINE}
 
-"${TM_RUBY:=ruby}" "$TM_BUNDLE_SUPPORT/bin/db_browser.rb" --query="$(tr '\n' ' ' &lt;&lt;&lt; "$query")"
+ruby "$TM_BUNDLE_SUPPORT/bin/db_browser.rb" --query="$(tr '\n' ' ' &lt;&lt;&lt; "$query")"
 </string>
 	<key>fallbackInput</key>
 	<string>line</string>

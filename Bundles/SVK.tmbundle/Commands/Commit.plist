@@ -13,7 +13,7 @@ export CommitWindow
 TM_SVK="${TM_SVK:=svk}"
 export TM_SVK
 
-"${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/svk_commit.rb"
+ruby -- "${TM_BUNDLE_SUPPORT}/svk_commit.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVK:=svk}" "If you have installed svk, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVK&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-"${TM_RUBY:=ruby}" -r "$TM_SUPPORT_PATH/lib/shelltokenize.rb" &lt;&lt;END
+ruby -r "$TM_SUPPORT_PATH/lib/shelltokenize.rb" &lt;&lt;END
 	svk = ENV['TM_SVK'] || "svk"
 	puts %x{#{svk} add #{TextMate.selected_paths_for_shell}}
 END</string>

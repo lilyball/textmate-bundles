@@ -10,16 +10,15 @@
 #      only do the first one!
 
 TM_SVK="${TM_SVK:=svk}"
-TM_RUBY="${TM_RUBY:=ruby}"
 FORMAT_LOG="${TM_BUNDLE_SUPPORT}/format_log.rb"
 TM_SVK_LOG_RANGE="${TM_SVK_LOG_RANGE:=BASE:1}"
 
 if [[ -z $TM_SELECTED_FILES ]]; then
    "$TM_SVK" log -vr"$TM_SVK_LOG_RANGE" "$TM_FILEPATH" \
-   2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
+   2&gt;&amp;1| ruby -- "$FORMAT_LOG"
 else
    eval "$TM_SVK" log -vr"$TM_SVK_LOG_RANGE" $TM_SELECTED_FILES \
-   2&gt;&amp;1| "$TM_RUBY" -- "$FORMAT_LOG"
+   2&gt;&amp;1| ruby -- "$FORMAT_LOG"
 fi</string>
 	<key>input</key>
 	<string>none</string>

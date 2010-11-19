@@ -8,7 +8,7 @@
 	<string>require_cmd "${TM_SVK:=svk}" "If you have installed svk, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVK&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
 "${TM_SVK:=svk}" blame "$TM_FILEPATH" \
-2&gt;&amp;1| "${TM_RUBY:=ruby}" -- "${TM_BUNDLE_SUPPORT}/format_blame.rb"</string>
+2&gt;&amp;1| ruby -- "${TM_BUNDLE_SUPPORT}/format_blame.rb"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

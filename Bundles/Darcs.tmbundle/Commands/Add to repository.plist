@@ -14,7 +14,7 @@ else
 fi
 export DARCSPaths
 
-"${TM_RUBY:=ruby}" &lt;&lt;'EOF'
+ruby &lt;&lt;'EOF'
 require 'pathname'
 
 basedir = Pathname.new(ENV['TM_DIRECTORY']).realpath()

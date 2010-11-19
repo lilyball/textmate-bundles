@@ -14,7 +14,7 @@ fi
 
 
 cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/hg_update.rb"
+ruby -- "${TM_BUNDLE_SUPPORT}/hg_update.rb"
 
 
 

@@ -178,7 +178,7 @@ js_functions = <<ENDJS #javascript
 						#{ %{cmd += "export   TM_HG_DIFF_CMD=#{ e_sh_js ENV['TM_HG_DIFF_CMD']   };";} if ENV['TM_HG_DIFF_CMD']   }
 						#{ %{cmd += "export   TM_HG_FROM_STATUS=true;";}   }
 						
-						cmd += '"#{ENV['TM_RUBY'] || "ruby"}" -- #{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/hg_commit.rb'
+						cmd += 'ruby -- #{e_sh_js ENV['TM_BUNDLE_SUPPORT']}/hg_commit.rb'
 						document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'
 						
 						TextMate.isBusy = false;

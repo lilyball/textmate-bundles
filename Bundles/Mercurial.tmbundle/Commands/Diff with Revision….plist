@@ -41,7 +41,7 @@ fi
 revs=`echo "$revs" | tr '\r' '\n' | cut -d ":" -f 1`
 revs=( $revs )
 
-"${TM_RUBY:=ruby}" -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
+ruby -I "$TM_BUNDLE_SUPPORT/" &lt;&lt;END
 	if ENV['TM_HG_EXT_DIFF']
 		require 'hg_extdiff'
 	else

@@ -15,7 +15,7 @@ fi
 export TM_HG
 
 cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/hg_pull.rb"
+ruby -- "${TM_BUNDLE_SUPPORT}/hg_pull.rb"
 </string>
 	<key>input</key>
 	<string>none</string>

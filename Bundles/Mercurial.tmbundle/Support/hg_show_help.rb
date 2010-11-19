@@ -218,12 +218,6 @@ body = <<-HTML
 	   <div class="description">the path to your hg executable.</div>
 	</dd>
 	
-	<dt><a name="tm_ruby">$TM_RUBY</a></dt>
-	<dd>
-	   <div class="default"><code>ruby</code></div>
-	   <div class="description">Here you can tweak with what Ruby the formatting scripts will be executed.</div>
-	</dd>
-	
 	<dt><a name="tm_hg_close">$TM_HG_CLOSE</a></dt>
 	<dd>
 	   <div class="default"><code>false</code></div>

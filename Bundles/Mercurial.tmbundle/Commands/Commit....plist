@@ -11,7 +11,7 @@ export TM_HG
 export CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
 
 cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
-"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/hg_commit.rb"</string>
+ruby -- "${TM_BUNDLE_SUPPORT}/hg_commit.rb"</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

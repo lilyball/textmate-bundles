@@ -11,7 +11,6 @@
 //		TM_BUNDLE_SUPPORT
 //      CommitWindow
 //      TM_SVN
-//		TM_RUBY
 //
 
 the_filename    = null;
@@ -96,7 +95,7 @@ function displayCommandOutput(id, className, string){
 function svnCommit(){
 		
 	cmd  = 'cd "${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"; '
-	cmd += '"${TM_RUBY:-ruby}" -- "$TM_BUNDLE_SUPPORT/svn_commit.rb" --output=plaintext "' + WorkPaths.join('" "') + '"'
+	cmd += 'ruby -- "$TM_BUNDLE_SUPPORT/svn_commit.rb" --output=plaintext "' + WorkPaths.join('" "') + '"'
 
 //	displayCommandOutput('info', 'info', cmd);
 //	document.getElementById('commandOutput').innerHTML = TextMate.system(cmd, null).outputString + ' \\n'

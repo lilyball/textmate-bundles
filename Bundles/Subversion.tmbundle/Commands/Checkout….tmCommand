@@ -33,7 +33,7 @@ location=$(CocoaDialog filesave --float \
 
 # format the checkout output
 export WorkPath="$location" # format_status will show paths as relative to this value
-"$TM_SVN" checkout "$url" "$location" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" --checkout
+"$TM_SVN" checkout "$url" "$location" 2&gt;&amp;1 |ruby -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" --checkout
 
 open -b com.macromates.textmate "$location"
 </string>

@@ -59,7 +59,7 @@ END`
 
 
 "$TM_SVNMERGE" avail --log -S "`basename $theHead`" 2&gt;&amp;1 \
-	| "${TM_RUBY:=ruby}" -- "$FORMAT_LOG" '--title=Revisions Available for Merging'
+	| ruby -- "$FORMAT_LOG" '--title=Revisions Available for Merging'
 </string>
 	<key>input</key>
 	<string>none</string>

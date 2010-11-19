@@ -7,9 +7,8 @@
 	<key>command</key>
 	<string>require_cmd "${TM_SVN:=svn}" "If you have installed svn, then you need to either update your &lt;tt&gt;PATH&lt;/tt&gt; or set the &lt;tt&gt;TM_SVN&lt;/tt&gt; shell variable (e.g. in Preferences / Advanced)"
 
-require_cmd "${TM_RUBY:=ruby}" "We need Ruby to proceed."
+require_cmd "ruby" "We need Ruby to proceed."
 
-export TM_RUBY
 export TM_SVN
 export CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/CommitWindow"
 
@@ -17,9 +16,9 @@ export CommitWindow="$TM_SUPPORT_PATH/bin/CommitWindow.app/Contents/MacOS/Commit
 	then
 	export WorkPath="${TM_PROJECT_DIRECTORY:-$TM_DIRECTORY}"
 	export TM_SELECTED_FILES="'"${WorkPath//\'/\'\\\'\'}"'"
-	"$TM_SVN" status "$WorkPath" 2&gt;&amp;1| "${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
+	"$TM_SVN" status "$WorkPath" 2&gt;&amp;1| ruby -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
 	else
-	eval "$TM_SVN" status "$TM_SELECTED_FILES" 2&gt;&amp;1 |"${TM_RUBY:-ruby}" -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
+	eval "$TM_SVN" status "$TM_SELECTED_FILES" 2&gt;&amp;1 |ruby -KU -- "${TM_BUNDLE_SUPPORT}/format_status.rb" "--status"
 fi; }
 </string>
 	<key>dontFollowNewOutput</key>

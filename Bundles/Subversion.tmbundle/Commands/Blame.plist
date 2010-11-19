@@ -9,7 +9,7 @@
 
 export LANG='EN'
 "$TM_SVN" blame -v "$TM_FILEPATH" 2&gt;&amp;1 \
-|"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_blame.rb"</string>
+|ruby -- "${TM_BUNDLE_SUPPORT}/format_blame.rb"</string>
 	<key>dontFollowNewOutput</key>
 	<true/>
 	<key>input</key>

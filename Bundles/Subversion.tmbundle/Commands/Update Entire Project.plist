@@ -16,7 +16,7 @@ export TM_SVN
 export WorkPath
 
 "$TM_SVN" update "$WorkPath" 2&gt;&amp;1 \
-|"${TM_RUBY:-ruby}" -- "${TM_BUNDLE_SUPPORT}/format_status.rb"
+|ruby -- "${TM_BUNDLE_SUPPORT}/format_status.rb"
 
 # force TM to refresh the current file..
 rescan_project

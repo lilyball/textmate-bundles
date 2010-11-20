@@ -8,7 +8,7 @@
 	<string>. "$TM_SUPPORT_PATH/lib/webpreview.sh"
 
 cd "$TM_DIRECTORY"
-result=`scalac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)`
+result=`scalac -encoding UTF8 "$TM_FILENAME" &amp;&gt; &gt;(ruby -rtm_parser -eTextMate.parse_errors)`
 
 if (($? == 0)); 
 then

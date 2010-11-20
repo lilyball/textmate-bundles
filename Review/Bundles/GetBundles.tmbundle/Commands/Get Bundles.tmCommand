@@ -17,7 +17,7 @@ fi
 rm -f ~/Library/Logs/TextMateGetBundles.log
 
 if [ $CHECK == 0 ]; then
-	"${TM_RUBY:-ruby}" -wKU "$TM_BUNDLE_SUPPORT/getBundles.rb" &amp;&gt;~/Library/Logs/TextMateGetBundles.log &amp;
+	ruby -wKU "$TM_BUNDLE_SUPPORT/getBundles.rb" &amp;&gt;~/Library/Logs/TextMateGetBundles.log &amp;
 else
 ERR=$(cat &lt;&lt;-AS | iconv -f UTF-8 -t MACROMAN | osascript -- 2&gt;&amp;1 1&gt;/dev/null
 tell application "TextMate" to activate

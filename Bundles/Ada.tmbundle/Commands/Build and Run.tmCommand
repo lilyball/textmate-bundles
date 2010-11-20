@@ -23,7 +23,7 @@
 html_header "Compiling “${TM_FILENAME}”…"
 
 cd "$TM_DIRECTORY"
-gnatmake "$TM_FILENAME" &amp;&gt; &gt;("${TM_RUBY:-ruby}" -rtm_parser -eTextMate.parse_errors)
+gnatmake "$TM_FILENAME" &amp;&gt; &gt;(ruby -rtm_parser -eTextMate.parse_errors)
 if (($? &gt;= 1)); then exit; fi
 
 { "./${TM_FILENAME%.adb}"

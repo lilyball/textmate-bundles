@@ -24,11 +24,11 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title><%= window_title %></title>
-  <%- screen_themes.each do |style| -%>
-  <link rel="stylesheet" href="file://<%= e_url style %>/style.css" type="text/css" charset="utf-8" media="screen">
+  <%- themes[:screen].each do |theme| -%>
+  <link rel="stylesheet" href="file://<%= e_url theme[:path] %>/style.css" type="text/css" charset="utf-8" media="screen">
   <%- end -%>
-  <%- print_themes.each do |style| -%>
-  <link rel="stylesheet" href="file://<%= e_url style %>/print.css" type="text/css" charset="utf-8" media="print">
+  <%- themes[:print].each do |theme| -%>
+  <link rel="stylesheet" href="file://<%= e_url theme[:path] %>/print.css" type="text/css" charset="utf-8" media="print">
   <%- end -%>
   <script src="file://<%= e_url support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= e_url support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
@@ -46,10 +46,8 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
         <div>
           Theme:        
           <select onchange="selectTheme(event);" id="theme_selector">
-            <%- screen_themes.sort { |lhs, rhs| File.basename(lhs) <=> File.basename(rhs) }.each do |path| -%>
-              <%- if path =~ %r{^.*/((.)([^/]*))$} -%>
-            <option value="<%= $1 %>" title="<%= path %>"><%= $2.upcase + $3 %></option>
-              <%- end -%>
+            <%- themes[:screen].reject { |e| e[:name].nil? }.sort { |lhs, rhs| lhs[:name] <=> rhs[:name] }.uniq.each do |theme| -%>
+            <option value="<%= theme[:class] %>" title="<%= theme[:path] %>"><%= theme[:name] %></option>
             <%- end -%>
           </select>
         </div>
@@ -83,10 +81,11 @@ module TextMate
           html_head << "<base href='tm-file://#{CGI.escape(ENV['TM_FILEPATH'])}'>"
         end
 
-        screen_themes, print_themes = collect_themes
+        themes = collect_themes
         html_theme = selected_theme
-        theme_path = screen_themes.find { |e| e =~ %r{.*/#{html_theme}$} }
-
+        if dict = themes[:screen].find { |e| e[:class] == html_theme }
+          theme_path = dict[:path]
+        end
         support_path = ENV['TM_SUPPORT_PATH']
 
         ERB.new(HTMLOUTPUT_TEMPLATE, 0, '%-<>').result(binding)
@@ -99,8 +98,8 @@ module TextMate
       private
       
       def collect_themes
-        screen = [ ]
-        print  = [ ]
+        res  = { :screen => [ ], :print => [ ] }
+        seen = [ ]
 
         paths = ENV['TM_THEME_PATH'].to_s.split(/:/)
         paths << "#{ENV['TM_SUPPORT_PATH']}/themes"
@@ -109,12 +108,22 @@ module TextMate
 
         paths.each do |path|
           Dir.foreach(path) do |file|
-            screen << "#{path}/#{file}" if File.exist?("#{path}/#{file}/style.css")
-            print  << "#{path}/#{file}" if File.exist?("#{path}/#{file}/print.css")
+            name = $1.upcase + $2 if file =~ /^(.)(.*)$/
+            name = nil if seen.include?(file) || file == 'default'
+            seen << file
+
+            if File.exist?("#{path}/#{file}/style.css")
+              res[:screen] << { :name => name, :class => file, :path => "#{path}/#{file}" }
+            end
+
+            if File.exist?("#{path}/#{file}/print.css")
+              res[:print] << { :name => name, :class => file, :path => "#{path}/#{file}" }
+            end
+
           end if File.exists? path
         end
 
-        return [ screen, print ]
+        res
       end
 
       def selected_theme

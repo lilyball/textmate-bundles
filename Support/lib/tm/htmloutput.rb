@@ -15,6 +15,7 @@
 
 require 'erb'
 require 'cgi'
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape.rb"
 
 HTMLOUTPUT_TEMPLATE = <<-HTML
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -69,6 +70,13 @@ module TextMate
   module HTMLOutput
     class << self
       def show(options = { }, &block)
+        $stdout << header(options)
+        $stdout.sync = true
+        block.call($stdout)
+        $stdout << footer()
+      end
+
+      def header(options)
         window_title = options[:window_title] || options[:title]    || 'Window Title'
         page_title   = options[:page_title]   || options[:title]    || 'Page Title'
         sub_title    = options[:sub_title]    || ENV['TM_FILENAME'] || 'untitled'
@@ -84,13 +92,12 @@ module TextMate
         theme_path = screen_themes.find { |e| e =~ %r{.*/#{html_theme}$} }
 
         support_path = ENV['TM_SUPPORT_PATH']
-  
-        $stdout.sync = true
-        $stdout << ERB.new(HTMLOUTPUT_TEMPLATE).result(binding)
-  
-        block.call($stdout)
 
-        $stdout << "</div>\n</body>\n</html>"
+        ERB.new(HTMLOUTPUT_TEMPLATE).result(binding)
+      end
+
+      def footer
+      	"  </div>\n</body>\n</html>"
       end
       
       private

@@ -37,10 +37,10 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
 </head>
 <body id="tm_webpreview_body" class="<%= html_theme %>">
   <div id="tm_webpreview_header">
-    <img id="gradient" src="file://<%= theme_path %>/images/header.png" alt="header">
+    <img id="gradient" src="file://<%= e_url theme_path %>/images/header.png" alt="header">
     <p class="headline"><%= page_title %></p>
     <p class="type"><%= sub_title %></p>
-    <img id="teaser" src="file://<%= theme_path %>/images/teaser.png" alt="teaser">
+    <img id="teaser" src="file://<%= e_url theme_path %>/images/teaser.png" alt="teaser">
     <div id="theme_switcher">
       <form action="#" onsubmit="return false;">
         <div>

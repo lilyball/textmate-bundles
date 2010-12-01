@@ -77,8 +77,7 @@ module TextMate
         html_head    = options[:html_head]    || ''
 
         if options[:fix_href] && File.exist?(ENV['TM_FILEPATH'].to_s)
-          require "cgi"
-          html_head << "<base href='tm-file://#{CGI.escape(ENV['TM_FILEPATH'])}'>"
+          html_head << "<base href='file://#{e_url ENV['TM_FILEPATH']}'>\n"
         end
 
         themes = collect_themes

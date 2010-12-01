@@ -5,7 +5,7 @@
 */
 function selectTheme(event) {
 	var theme = event.target.value;
-	var title = event.target.options[event.target.options.selectedIndex].title;
+	var path  = event.target.options[event.target.options.selectedIndex].title;
 
 	TextMate.system("defaults write com.macromates.textmate.webpreview SelectedTheme '" + theme + "'", null);
 
@@ -15,7 +15,7 @@ function selectTheme(event) {
 	var replacements = {teaser: "teaser", gradient: "header"};
 	for(var r in replacements) {
 		var element = document.getElementById(r);
-		element.src = 'file://' + title + theme + '/images/' + replacements[r] + ".png";
+		element.src = 'file://' + path + '/images/' + replacements[r] + ".png";
 	}
 }
 

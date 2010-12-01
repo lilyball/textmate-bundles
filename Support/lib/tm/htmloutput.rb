@@ -23,24 +23,18 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title><%= window_title %></title>
-  <% common_styles.each { |style| %>
-    <link rel="stylesheet" href="file://<%= support_path %>/themes/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
-  <% } %>
-  <% bundle_styles.each { |style| %>
-    <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
-    <link rel="stylesheet" href="file://<%= bundle_support %>/css/<%= style %>/print.css"   type="text/css" charset="utf-8" media="print">
-  <% } %>
-  <link rel="stylesheet" href="file://<%= support_path %>/themes/default/print.css"   type="text/css" charset="utf-8" media="print">
-  <link rel="stylesheet" href="file://<%= user_path %>print.css"   type="text/css" charset="utf-8" media="print">
-  <% user_styles.each { |style| %>
-    <link rel="stylesheet" href="file://<%= user_path %><%= style %>/style.css"   type="text/css" charset="utf-8" media="screen">
-    <link rel="stylesheet" href="file://<%= user_path %><%= style %>/print.css"   type="text/css" charset="utf-8" media="print">
-  <% } %>
-  <script src="file://<%= support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
-  <script src="file://<%= support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
-  <script src="file://<%= support_path %>/script/sortable.js" type="text/javascript" charset="utf-8"></script>
+  <% screen_themes.each do |style| %>
+    <link rel="stylesheet" href="file://<%= e_url style %>/style.css" type="text/css" charset="utf-8" media="screen">
+  <% end %>
+  <% print_themes.each do |style| %>
+    <link rel="stylesheet" href="file://<%= e_url style %>/print.css" type="text/css" charset="utf-8" media="print">
+  <% end %>
+
+  <script src="file://<%= e_url support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
+  <script src="file://<%= e_url support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
+  <script src="file://<%= e_url support_path %>/script/sortable.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-    var image_path = "file://<%= support_path %>/images/";
+    var image_path = "file://<%= e_url support_path %>/images/";
   </script>
   <%= html_head %>
 </head>
@@ -55,16 +49,11 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
         <div>
           Theme:        
           <select onchange="selectTheme(event);" id="theme_selector">
-            <optgroup label="TextMate">
-            <% common_styles.each { |style| %>
-              <option value="<%= style %>" title="<%= support_path %>/themes/"><%= style %></option>
-            <% } %>
-            </optgroup>
-            <optgroup label="User">
-            <% user_styles.each { |style| %>
-              <option value="<%= style %>" title="<%= user_path %>"><%= style %></option>
-            <% } %>
-            </optgroup>
+            <% screen_themes.sort { |lhs, rhs| File.basename(lhs) <=> File.basename(rhs) }.each do |path| %>
+              <% if path =~ %r{^.*/((.)([^/]*))$} %>
+                <option value="<%= $1 %>" title="<%= path %>"><%= $2.upcase + $3 %></option>
+              <% end %>
+            <% end %>
           </select>
         </div>
         <script type="text/javascript" charset="utf-8">
@@ -79,34 +68,10 @@ HTML
 module TextMate
   module HTMLOutput
     class << self
-      
       def show(options = { }, &block)
         window_title = options[:window_title] || options[:title]    || 'Window Title'
         page_title   = options[:page_title]   || options[:title]    || 'Page Title'
         sub_title    = options[:sub_title]    || ENV['TM_FILENAME'] || 'untitled'
-
-        support_path   = ENV['TM_SUPPORT_PATH']
-        bundle_support = ENV['TM_BUNDLE_SUPPORT']
-        user_path      = ENV['HOME'] + '/Library/Application Support/TextMate/Themes/Webpreview/'
-  
-        common_styles  = ['default'];
-        user_styles    = [];
-        bundle_styles  = bundle_support.nil? ? [] : ['default'];
-
-        Dir.foreach(user_path) { |file|
-          user_styles << file if File.exist?(user_path + file + '/style.css')
-        } if File.exist? user_path
-  
-        Dir.foreach(support_path + '/themes/') { |file|
-          next if file == 'default'
-          common_styles << file if File.exists?(support_path + "/themes/" + file + '/style.css')
-        }
-  
-        common_styles.each { |style|
-          next if style == 'default'
-          bundle_styles << style if File.directory?(bundle_support + '/css/' + style)
-        } unless bundle_support.nil?
-
         html_head    = options[:html_head]    || ''
 
         if options[:fix_href] && File.exist?(ENV['TM_FILEPATH'].to_s)
@@ -114,21 +79,12 @@ module TextMate
           html_head << "<base href='tm-file://#{CGI.escape(ENV['TM_FILEPATH'])}'>"
         end
 
-        support_path   = support_path.sub(/ /, '%20')
-        bundle_support = bundle_support.sub(/ /, '%20') unless bundle_support.nil?
-        user_path      = user_path.sub(/ /, '%20')
+        screen_themes, print_themes = collect_themes
+        html_theme = selected_theme
+        theme_path = screen_themes.find { |e| e =~ %r{.*/#{html_theme}$} }
 
-        html_theme     = selected_theme
+        support_path = ENV['TM_SUPPORT_PATH']
   
-        theme_path     = support_path + '/themes/'
-        if(user_styles.include?(html_theme))
-          theme_path = user_path + html_theme
-        elsif(common_styles.include?(html_theme))
-          theme_path += html_theme
-        else
-          theme_path += "default"
-        end
-
         $stdout.sync = true
         $stdout << ERB.new(HTMLOUTPUT_TEMPLATE).result(binding)
   
@@ -139,6 +95,25 @@ module TextMate
       
       private
       
+      def collect_themes
+        screen = [ ]
+        print  = [ ]
+
+        paths = ENV['TM_THEME_PATH'].to_s.split(/:/)
+        paths << "#{ENV['TM_SUPPORT_PATH']}/themes"
+        paths << "#{ENV['TM_BUNDLE_SUPPORT']}/css" if ENV.has_key? 'TM_BUNDLE_SUPPORT'
+        paths << "#{ENV['HOME']}/Library/Application Support/TextMate/Themes/Webpreview"
+
+        paths.each do |path|
+          Dir.foreach(path) do |file|
+            screen << "#{path}/#{file}" if File.exist?("#{path}/#{file}/style.css")
+            print  << "#{path}/#{file}" if File.exist?("#{path}/#{file}/print.css")
+          end if File.exists? path
+        end
+
+        return [ screen, print ]
+      end
+
       def selected_theme
         res = %x{ defaults 2>/dev/null read com.macromates.textmate.webpreview SelectedTheme }.chomp
         $? == 0 ? res : 'bright'

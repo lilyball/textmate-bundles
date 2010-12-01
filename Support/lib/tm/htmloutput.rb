@@ -24,20 +24,16 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title><%= window_title %></title>
-  <% screen_themes.each do |style| %>
-    <link rel="stylesheet" href="file://<%= e_url style %>/style.css" type="text/css" charset="utf-8" media="screen">
-  <% end %>
-  <% print_themes.each do |style| %>
-    <link rel="stylesheet" href="file://<%= e_url style %>/print.css" type="text/css" charset="utf-8" media="print">
-  <% end %>
-
+  <%- screen_themes.each do |style| -%>
+  <link rel="stylesheet" href="file://<%= e_url style %>/style.css" type="text/css" charset="utf-8" media="screen">
+  <%- end -%>
+  <%- print_themes.each do |style| -%>
+  <link rel="stylesheet" href="file://<%= e_url style %>/print.css" type="text/css" charset="utf-8" media="print">
+  <%- end -%>
   <script src="file://<%= e_url support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= e_url support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
-  <script src="file://<%= e_url support_path %>/script/sortable.js" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript" charset="utf-8">
-    var image_path = "file://<%= e_url support_path %>/images/";
-  </script>
-  <%= html_head %>
+  <script src="file://<%= e_url support_path %>/script/sortable.js"   type="text/javascript" charset="utf-8"></script>
+  <%= html_head -%>
 </head>
 <body id="tm_webpreview_body" class="<%= html_theme %>">
   <div id="tm_webpreview_header">
@@ -50,11 +46,11 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
         <div>
           Theme:        
           <select onchange="selectTheme(event);" id="theme_selector">
-            <% screen_themes.sort { |lhs, rhs| File.basename(lhs) <=> File.basename(rhs) }.each do |path| %>
-              <% if path =~ %r{^.*/((.)([^/]*))$} %>
-                <option value="<%= $1 %>" title="<%= path %>"><%= $2.upcase + $3 %></option>
-              <% end %>
-            <% end %>
+            <%- screen_themes.sort { |lhs, rhs| File.basename(lhs) <=> File.basename(rhs) }.each do |path| -%>
+              <%- if path =~ %r{^.*/((.)([^/]*))$} -%>
+            <option value="<%= $1 %>" title="<%= path %>"><%= $2.upcase + $3 %></option>
+              <%- end -%>
+            <%- end -%>
           </select>
         </div>
         <script type="text/javascript" charset="utf-8">
@@ -93,7 +89,7 @@ module TextMate
 
         support_path = ENV['TM_SUPPORT_PATH']
 
-        ERB.new(HTMLOUTPUT_TEMPLATE).result(binding)
+        ERB.new(HTMLOUTPUT_TEMPLATE, 0, '%-<>').result(binding)
       end
 
       def footer

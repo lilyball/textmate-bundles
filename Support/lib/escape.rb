@@ -30,7 +30,7 @@ end
 def htmlize(str, opts = {})
   str = str.to_s.gsub("&", "&amp;").gsub("<", "&lt;")
   str = str.gsub(/\t+/, '<span style="white-space:pre;">\0</span>')
-  str = str.reverse.gsub(/ (?= |$)/, ';psbn&').reverse
+  str = str.gsub(/(^ +)|( )( +)/) { "#$2#{'&nbsp;' * ($1 || $3).length}" }
   if opts[:no_newline_after_br].nil?
     str.gsub("\n", "<br>\n")
   else

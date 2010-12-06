@@ -21,7 +21,7 @@ def infoDIALOG(dlg)
   end
   if mode == "url" && bundle.has_key?('url')
     mode = case bundle['url']
-      when /^http:\/\/github\.com/: "github"
+      when /^https:\/\/github\.com/: "github"
       else "url"
     end
   end
@@ -70,7 +70,7 @@ def infoDIALOG(dlg)
 end
 
 def gitInfo(bundle)
-  
+
   info = { }
   plist = { }
   readme = ""
@@ -146,7 +146,7 @@ def gitInfo(bundle)
   begin
     GBTimeout::timeout($timeout) do
       begin
-        plist = OSX::PropertyList::load(%x{curl -sSL "#{url}/blob/master/info.plist?raw=true"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
+        plist = OSX::PropertyList::load(%x{curl -sSL "#{url}/raw/master/info.plist"}.gsub(/.*?(<plist.*?<\/plist>)/m,'\1'))
       rescue
         writeToLogFile($!)
       end
@@ -193,10 +193,10 @@ def gitInfo(bundle)
   File.open("#{$tempDir}/info.html", "w") do |io|
     io << <<-HTML
       <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
-      <base href='http://github.com'>
+      <base href='https://github.com'>
       <head>
       <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-      <link href="http://assets0.github.com/stylesheets/bundle.css" media="screen" rel="stylesheet" type="text/css" />
+      <link href="https://assets0.github.com/stylesheets/bundle_common.css" media="screen" rel="stylesheet" type="text/css" />
       </head>
       <body><div id='main'><div class='site'>
       <font color='blue' size=12pt>#{plist['name']}</font><br /><br />

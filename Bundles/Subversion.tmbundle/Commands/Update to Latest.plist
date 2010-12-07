@@ -18,7 +18,7 @@ ruby -r "$TM_SUPPORT_PATH/lib/shelltokenize.rb" &lt;&lt;END
 	#	puts %x{#{svn} update #{TextMate.selected_paths_for_shell}}
 	# else
 		update = IO.popen("'#{svn}' update #{TextMate.selected_paths_for_shell}", 'r')
-		format = IO.popen("'#{ruby}' -- '#{support}/format_status.rb'", 'w')
+		format = IO.popen("ruby -- '#{support}/format_status.rb'", 'w')
 		update.each_line { |line| format.puts(line) }
 	# end	
 END

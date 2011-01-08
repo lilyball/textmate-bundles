@@ -32,7 +32,7 @@ page.gsub!(/&/, '&amp;')
 page.gsub!(/</, '&lt;')
 page.gsub!(/``(.*?)''/, '‘‘\1’’')
 page.gsub!(/`([^`\n]*?)'/, '‘\1’')
-page.gsub!(/\n*^([A-Z0-9_\- ]+)$\n/) { toc << $1; "</pre>\n<h2 id='#$1'>#{$1.capitalize}</h2>\n<pre>" }
+page.gsub!(/\n*^([A-Z0-9][A-Z0-9_\- ]+)$\n/) { toc << $1; "</pre>\n<h2 id='#$1'>#{$1.capitalize}</h2>\n<pre>" }
 page.gsub!(/\b([a-z0-9_.\-]+)\((\d)\)/) { see_also << [ $1, $2 ]; "<a href='javascript:man(#$2, &quot;#$1&quot;)'>#$1</a>(#$2)" }
 
 STDOUT << "<div style=\"position: fixed; top: 0; left: 0; height: 3em; background-color: #eef; width: 100%; z-index: 100\">\n"

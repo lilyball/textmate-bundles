@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string># input is selection or document
+osascript -e 'on run(theCode)' \
+          -e 'tell application "Google Chrome" to set t to title of active tab of window 1' \
+          -e 'try'\
+          -e ' set t to  (characters 1 thru -36 of t) as string --for wikipedia'\
+          -e 'on error'\
+          -e ' set t to t'\
+          -e 'end try'\
+          -e ' "{{subst:uw-vandalism2|${1:" &amp; t &amp; "}}} ~~~~"'\
+          -e 'end run' -- 	</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>name</key>
+	<string>vandalism (intentional)</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.mediawiki</string>
+	<key>tabTrigger</key>
+	<string>vand</string>
+	<key>uuid</key>
+	<string>82818008-054C-451E-85F1-DD433AE697F0</string>
+</dict>
+</plist>

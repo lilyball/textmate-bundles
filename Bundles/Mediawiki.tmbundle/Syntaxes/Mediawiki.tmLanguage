@@ -4,52 +4,35 @@
 <dict>
 	<key>comment</key>
 	<string>
-		This language grammar tries to handle Mediawiki syntax.  Mediawiki
-		syntax is a mess.  This grammar will likely never quite work right.
-		This is unsurprising as Mediawiki itself has never quite worked right.
-		
-				--Jacob
-		
 		TODO: lots of fixes still to do:
 		
 		 1. Add a bunch of HTML tags.  See the #block and #style sections.
 		 3. Correctly scope all the parser functions and their contents.
 		    This on will be complicated, as there are several: expr, if, etc.
-		 4. This is probably the biggest one: get all the lists to scope
-		    correctly by type of list.  Right now we just scope every list
-		    as a list, and do not worry about what happens beyond that.
-		    Eventually we want to do numbered and unnumbered separately, etc.
 		 5. Get some kind of folding by heading.  Maybe it should just fold
 		    to the next header, no matter which level it is.  Then we can
 		    make a contents just by folding everything.  Not completely sure
 			this is possible with current TM folding.
 		 7. Make sure that illegal things are correctly scoped illegal.
 		    This is non-trivial, and has several parts
-		    
-		      - Bold/italic are based on brain-dead heuristics.  I want to
-		        be stricter than Mediawiki on this one.  Also, we should
+		      - Bold/italic are based on brain-dead heuristics.  Also, we should
 		        scope as illegal when for instance a new heading starts
 		        before an italic has been closed.
-		      - Templates... these will be pretty tough to do, as they can
-		        be so flexible.
-		      - 
+		      - Templates... these will be pretty tough as they are flexible.
 		
-		 9. &lt;timeline&gt;&lt;/timeline&gt; tag.  I am really not sure this one is
-		    worth trying to do
+		 9. &lt;timeline&gt;&lt;/timeline&gt; tag.  Not sure this one is worth the effort
+
 		10. Figure out a better scope for meta.function-call.  Infininight
 		    suggests entity.name.function.call, to be paralleled by
 		    entity.name.function.definition.  I am not completly sure I like
 		    that solution, but it is probably better than meta.function-call
 		
 		
-		TODO items not closely related to the grammar:
-		
-		 2. Add a drop command for links/images, add keyboard shortcuts for
-		    them too
+		TODO items not closely related to the grammar:		
+		 2. Add a drop command (and keyboard shortcuts) for links/images
 		 3. Make sure all the preference items are sorted out, for instance
 		    smart typing pairs, indent patterns, etc.
-		 4. Commands to do bold/italic, and maybe things like big/small 
-		 5. 
+		 4. Commands to do things like big/small
 		
 		FINISHED:
 		 2. Add support for LaTeX math mode inside of &lt;math&gt;&lt;/math&gt; tags.
@@ -57,6 +40,9 @@
 		 6. Get the symbol list working on headings.  Trivial.
 		 8. &lt;gallery&gt;&lt;/gallery&gt; tag.  This one adds some complication, but
 		    is worth supporting.
+		4. commands for bold/italic  (tbates)
+		 4. This is probably the biggest one: get all the lists to scope
+		    correctly by type of list.  (tbates)
 		 
 	</string>
 	<key>fileTypes</key>
@@ -112,12 +98,6 @@
 							<string>#link</string>
 						</dict>
 					</array>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>^=+\s*$</string>
-					<key>name</key>
-					<string>markup.heading.mediawiki</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -180,7 +160,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^([#*:;])</string>
+					<string>^([#:;])</string>
 					<key>comment</key>
 					<string>
 						This is preliminary.  Eventually it would be nice
@@ -200,7 +180,24 @@
 					<key>end</key>
 					<string>^(?!\1)</string>
 					<key>name</key>
-					<string>markup.list.mediawiki</string>
+					<string>markup.list.numbered.mediawiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^([*:;])</string>
+					<key>comment</key>
+					<string>unordered list</string>
+					<key>end</key>
+					<string>^(?!\1)</string>
+					<key>name</key>
+					<string>markup.list.unnumbered.mediawiki</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -286,6 +283,23 @@
 						<dict>
 							<key>include</key>
 							<string>text.tex.math</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&lt;table[^&gt;]*&gt;</string>
+					<key>contentName</key>
+					<string>source.html</string>
+					<key>end</key>
+					<string>&lt;/table&gt;</string>
+					<key>name</key>
+					<string>meta.embedded.html.table</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html</string>
 						</dict>
 					</array>
 				</dict>
@@ -766,19 +780,16 @@
 		<dict>
 			<key>comment</key>
 			<string>
-				TODO: We still need to add:
-
+				TODO: Still need to add:
 				  * font
 				  * ruby, rb, rp, rt
 				  * cite
-				
 				inline tags to this section, and make sure that the other
 				tags can accept attributes in the tag opening, etc.  The
 				current implementation is intended to be naive, but covering
 				the majority of uses in mediawiki code.
 				
 				We also need to add mediawiki-specific tags:
-				
 				  * nowiki, noinclude, includeonly
 				
 			</string>

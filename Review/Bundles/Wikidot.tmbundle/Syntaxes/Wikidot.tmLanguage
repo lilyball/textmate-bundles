@@ -47,6 +47,42 @@
 			<string>comment.block.documentation.wikidot</string>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>(\[\[)(html)(\]\])</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.template.block.wikidot</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.wikidot</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.tag.wikidot</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.wikidot</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\[\[/)(html)(\]\])</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>text.html.basic</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>include</key>
 			<string>#inline</string>
 		</dict>
@@ -229,42 +265,6 @@
 			<string>\1</string>
 			<key>name</key>
 			<string>markup.raw.wikidot</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(&lt;)(html)(&gt;)</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.tag.template.block.wikidot</string>
-				</dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.wikidot</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.wikidot</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.wikidot</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(&lt;/)(html)(&gt;)</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>text.html.basic</string>
-				</dict>
-			</array>
 		</dict>
 		<dict>
 			<key>match</key>

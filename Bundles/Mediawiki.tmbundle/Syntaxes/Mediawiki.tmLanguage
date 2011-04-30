@@ -4,35 +4,30 @@
 <dict>
 	<key>comment</key>
 	<string>
-		TODO: lots of fixes still to do:
+		TODO: language
 		
 		 1. Add a bunch of HTML tags.  See the #block and #style sections.
 		 3. Correctly scope all the parser functions and their contents.
 		    This on will be complicated, as there are several: expr, if, etc.
-		 5. Get some kind of folding by heading.  Maybe it should just fold
-		    to the next header, no matter which level it is.  Then we can
-		    make a contents just by folding everything.  Not completely sure
-			this is possible with current TM folding.
+		 5. Get some kind of folding by heading (Not possible with TM1 rules).
 		 7. Make sure that illegal things are correctly scoped illegal.
 		    This is non-trivial, and has several parts
 		      - Bold/italic are based on brain-dead heuristics.  Also, we should
 		        scope as illegal when for instance a new heading starts
 		        before an italic has been closed.
 		      - Templates... these will be pretty tough as they are flexible.
-		
 		 9. &lt;timeline&gt;&lt;/timeline&gt; tag.  Not sure this one is worth the effort
 
 		10. Figure out a better scope for meta.function-call.  Infininight
 		    suggests entity.name.function.call, to be paralleled by
 		    entity.name.function.definition.  I am not completly sure I like
 		    that solution, but it is probably better than meta.function-call
-		
-		
-		TODO items not closely related to the grammar:		
+
+		TODO snippents and commands
 		 2. Add a drop command (and keyboard shortcuts) for links/images
 		 3. Make sure all the preference items are sorted out, for instance
 		    smart typing pairs, indent patterns, etc.
-		 4. Commands to do things like big/small
+		 4. Command: big/small
 		
 		FINISHED:
 		 2. Add support for LaTeX math mode inside of &lt;math&gt;&lt;/math&gt; tags.
@@ -40,10 +35,8 @@
 		 6. Get the symbol list working on headings.  Trivial.
 		 8. &lt;gallery&gt;&lt;/gallery&gt; tag.  This one adds some complication, but
 		    is worth supporting.
-		4. commands for bold/italic  (tbates)
-		 4. This is probably the biggest one: get all the lists to scope
-		    correctly by type of list.  (tbates)
-		 
+		 4. commands for bold/italic  (tbates)
+		 4. All lists scoped by type of list.  (tbates)
 	</string>
 	<key>fileTypes</key>
 	<array>
@@ -52,9 +45,9 @@
 		<string>wiki</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>^(=+)</string>
+	<string>&lt;[^/]</string>
 	<key>foldingStopMarker</key>
-	<string>^.*$(?=\n(=+)|(?!\n))</string>
+	<string>&lt;/</string>
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
@@ -96,6 +89,74 @@
 						<dict>
 							<key>include</key>
 							<string>#link</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string> ?(&lt;)(source)[ \t]+(lang)(=)("[^"]+")(&gt;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.mediawiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.mediawiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.mediawiki</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.mediawiki</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mediawiki</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.mediawiki</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>source: &lt;source lang="R"&gt;</string>
+					<key>end</key>
+					<string> ?(&lt;/)(source)(&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.mediawiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>storage.type.mediawiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.mediawiki</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.tag.source.mediawiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#tag-stuff</string>
 						</dict>
 					</array>
 				</dict>
@@ -163,19 +224,10 @@
 					<string>^([#:;])</string>
 					<key>comment</key>
 					<string>
-						This is preliminary.  Eventually it would be nice
-						to scope each type of list differently, and even to
-						do scopes of nested lists.  There are 4 main things
-						which will be scoped as lists:
-						
-						  - numbered lists (#)
-						  - unnumbered lists (*)
-						  - definition lists (; :)
-						  - indented paragraphs, as used on talk pages (:)
-						
-						this last one might not even be scoped as a list in
-						the ideal case.  It is fine as a list for now,
-						however.
+						need to scope nested lists
+						  - need to cope with 
+                                definition lists (; :)
+						    indented paragraphs, as used on talk pages (:)
 					</string>
 					<key>end</key>
 					<string>^(?!\1)</string>
@@ -191,7 +243,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^([*:;])</string>
+					<string>^([*])</string>
 					<key>comment</key>
 					<string>unordered list</string>
 					<key>end</key>
@@ -586,7 +638,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.brackets.mediwiki</string>
+							<string>entity.name.tag.mediawiki</string>
 						</dict>
 						<key>4</key>
 						<dict>

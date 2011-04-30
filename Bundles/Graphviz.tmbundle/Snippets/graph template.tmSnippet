@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>digraph G {
+	splines="FALSE";
+  /*	entities */
+  ${1:varA}  [label="${2:$1}", shape=box${3:, URL="${4:http://en.wikipedia.org/wiki/John de Fries}"}]
+  var$0
+
+ /*	relationships */
+	${5:F1} -&gt; $1 ${6:[label="${7:.63}"]}
+ /* ranks */
+  { rank=${8:max}; $1;}; /* max is bottom */
+  { rank=${9:min}; $5}; /* max is bottom */
+}
+</string>
+	<key>name</key>
+	<string>graph template</string>
+	<key>scope</key>
+	<string>source.dot</string>
+	<key>tabTrigger</key>
+	<string>graph</string>
+	<key>uuid</key>
+	<string>AD2AB606-D634-4DFD-9BDA-A53CD235E1C4</string>
+</dict>
+</plist>

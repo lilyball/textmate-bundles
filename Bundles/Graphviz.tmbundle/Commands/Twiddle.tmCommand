@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/php
+&lt;?php
+if (0) {
+	echo "&lt;pre&gt;&lt;br&gt;";
+	$input = "capability -&gt; health;";
+	echo "you gave me:\n $input\n&lt;hr&gt;";
+}else{
+	$input = $_ENV[TM_SELECTED_TEXT]; // available vars
+}
+
+$input = trim($input, ";");
+$aInput = explode(" -&gt; ", $input);
+
+$aTwiddle = array($aInput[1], $aInput[0]);
+$twiddle = implode(" -&gt; ", $aTwiddle). ";";
+echo $twiddle;
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^t</string>
+	<key>name</key>
+	<string>Twiddle</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.dot</string>
+	<key>uuid</key>
+	<string>D8486A54-3F2A-490B-BF93-E6881BFA5DA9</string>
+</dict>
+</plist>

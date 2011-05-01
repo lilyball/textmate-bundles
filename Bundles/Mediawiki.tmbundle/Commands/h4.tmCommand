@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env php
+&lt;?php
+// Turn a line or selection into a heading
+// Created: 23.12.08 Author: timothy.c.bates@gmail.com
+// nb: Overrides existing cmd-n
+// Also Works on multiple lines and lines that already have a heading applied
+
+$level    = '=';
+$newLevel = str_repeat ( $level, 4); // Change this to alter the level being affected
+$o        = array();
+
+if (0) { //set to 1 for debugging
+	echo "&lt;pre&gt;";
+	$existing = "$level$level$level     Why is is this so badly formed? $level$level$level";
+	$existing = "$level$level$level     Why is is this so badly formed? $level$level$level
+$level$level$level     Why is is this so badly formed? $level$level$level
+
+$level$level$level     Why is is this so badly formed? $level$level$level";
+	// $existing = ""; // test case of empty line
+	echo "started with:\n&lt;font color=red&gt;\"$existing\"&lt;/font&gt;\n--&gt;\n";
+} else {
+	$existing = fread(STDIN, 1024);
+}
+$aLines = explode("\n", $existing);
+$l = count($aLines);
+foreach ($aLines as $key =&gt; $line) {
+	$line = trim ( $line);
+	if (empty($line)) {
+		if ($l&gt;1) {
+			$o[] = "";
+		}else{
+			$o[] = "$level \${1:Level 1 heading} $level";
+		}
+	} else {
+		$new = trim ( $line, " $level" ); //trim existing markers from either end
+		$o[] = "$newLevel $new $newLevel";
+	}
+}
+echo implode("\n", $o);
+?&gt;</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>@4</string>
+	<key>name</key>
+	<string>h4</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>scope</key>
+	<string>text.html.mediawiki</string>
+	<key>uuid</key>
+	<string>C77B0111-D741-40E8-BC04-160C6277FE5D</string>
+</dict>
+</plist>

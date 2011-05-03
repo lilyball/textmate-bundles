@@ -340,7 +340,40 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>&lt;table[^&gt;]*&gt;</string>
+					<string>&lt;imagemap[^&gt;]*&gt;</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.html</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>source.html</string>
+					<key>end</key>
+					<string>&lt;/imagemap&gt;</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.html</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.embedded.html.table.mediawiki</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#inline</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>&lt;(table)[^&gt;]*&gt;</string>
 					<key>contentName</key>
 					<string>source.html</string>
 					<key>end</key>

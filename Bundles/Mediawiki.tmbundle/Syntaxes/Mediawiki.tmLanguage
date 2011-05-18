@@ -45,9 +45,9 @@
 		<string>wiki</string>
 	</array>
 	<key>foldingStartMarker</key>
-	<string>&lt;[^/]</string>
+	<string>&lt;[^/]|{\|</string>
 	<key>foldingStopMarker</key>
-	<string>&lt;/</string>
+	<string>&lt;/|\|}</string>
 	<key>keyEquivalent</key>
 	<string>^~M</string>
 	<key>name</key>
@@ -165,9 +165,8 @@
 					<string>^(=+)(?=.*\1\s*$)</string>
 					<key>comment</key>
 					<string>
-						This matches lines which begin and end with some
-					    number of “=” marks.  If they are mismatched, then
-					    interior “=” marks will be treated as invalid.
+						This matches lines which begin and end with  “=” marks.
+						Mismatched “=” marks marked invalid.
 				    </string>
 					<key>end</key>
 					<string>\1\s*$\n?</string>
@@ -293,7 +292,6 @@
 			<key>comment</key>
 			<string>
 				The available block HTML tags supported are:
-				
 				  * blockquote, center, pre, div, hr, p
 				  * tables: table, th, tr, td, caption
 				  * lists: ul, ol, li
@@ -606,6 +604,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#table</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#template</string>
 				</dict>
 				<dict>
@@ -731,13 +733,11 @@
 				<dict>
 					<key>begin</key>
 					<string>(?x:
-		({{)                         # opening brackets
-		  ([Rr]edirect)             # redirect?
-		  [ ]*                       # spaces
-		  ( (([^\[\]|]+)(:))?        # namespace
-		    ([^\[\]|]+)(?&lt;!\s)[ ]*   # link name
-		 )?
-	)</string>
+					({{)                # opening brackets
+						([Rr]edirect)   # redirect?
+							[ ]*        # spaces
+							(\|)        # pipe
+					)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -750,23 +750,34 @@
 							<key>name</key>
 							<string>keyword.operator.wiki-link.redirect.mediawiki</string>
 						</dict>
-						<key>4</key>
+						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.other.namespace.mediawiki</string>
+							<string>constant.other.pipe.mediawiki</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>(?x:
-		  ([^}]*)?     # pipe, spaces, anything, spaces
-		(}})                         # closing brackets
-	)</string>
+							(([\|}]+)(\|)([\|}]+))?   #  from | to 
+							([^}]*)                   # anything
+							(}})                      # closing brackets
+					)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.fix_this_later.brackets.mediawiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>markup.underline.link.internal.mediawiki</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>constant.other.pipe.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1252,7 +1263,15 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>^{\|</string>
+					<string>^({\|)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.table.mediawiki</string>
+						</dict>
+					</dict>
 					<key>comment</key>
 					<string>
 						we are going to have to add the styling capabilities
@@ -1260,11 +1279,38 @@
 						though, so I am putting it off.
 					</string>
 					<key>end</key>
-					<string>^\|}</string>
+					<string>(^\|})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.table.mediawiki</string>
+						</dict>
+					</dict>
 					<key>name</key>
 					<string>markup.other.table.mediawiki</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.inline.table.caption.mediawiki</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>variable.parameter.name.string.mediawiki</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>^(\|\+)[\t ]*(.*)$</string>
+							<key>name</key>
+							<string>meta.table.caption.mediawiki</string>
+						</dict>
 						<dict>
 							<key>begin</key>
 							<string>^\|-</string>
@@ -1275,7 +1321,7 @@
 								like moving a whole row up/down, etc.
 							</string>
 							<key>end</key>
-							<string>^(?=\|-|\|})</string>
+							<string>^(?=\|-|^\|})</string>
 							<key>name</key>
 							<string>markup.other.table.row.mediawiki</string>
 							<key>patterns</key>
@@ -1285,6 +1331,25 @@
 									<string>#inline</string>
 								</dict>
 							</array>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.inline.table.cellwall.mediawiki</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>string.other.table.cellcontents.mediawiki</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(^\||\|\|)([^\|]*)</string>
+							<key>name</key>
+							<string>meta.table.cell.mediawiki</string>
 						</dict>
 						<dict>
 							<key>include</key>

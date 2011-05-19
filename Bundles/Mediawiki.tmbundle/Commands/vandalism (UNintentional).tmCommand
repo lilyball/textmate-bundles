@@ -8,8 +8,15 @@
 	<string># input is selection or document
 osascript -e 'on run(theCode)' \
           -e 'tell application "Google Chrome" to set t to title of active tab of window 1' \
+-e 'set a to "Revision history of "' \
+-e 'set revLength to length of characters of a' \
+-e 'if (characters 1 thru revLength of t) = a then' \
+-e '	set revLength to length of characters of a' \
+-e 'else' \
+-e '	set revLength to 1' \
+-e 'end' \
           -e 'try'\
-          -e ' set t to  (characters 1 thru -36 of t) as string --for wikipedia'\
+          -e ' set t to  (characters revLength thru -36 of t) as string --for wikipedia'\
           -e 'on error'\
           -e ' set t to t'\
           -e 'end try'\

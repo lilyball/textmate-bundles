@@ -32,6 +32,7 @@ HTMLOUTPUT_TEMPLATE = <<-HTML
   <%- end -%>
   <script src="file://<%= e_url support_path %>/script/default.js"    type="text/javascript" charset="utf-8"></script>
   <script src="file://<%= e_url support_path %>/script/webpreview.js" type="text/javascript" charset="utf-8"></script>
+  <script>var image_path = "file://<%= e_url support_path %>/images/";</script>
   <script src="file://<%= e_url support_path %>/script/sortable.js"   type="text/javascript" charset="utf-8"></script>
   <%= html_head -%>
 </head>

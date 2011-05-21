@@ -733,17 +733,17 @@
 				<dict>
 					<key>begin</key>
 					<string>(?x:
-					({{)                # opening brackets
-						([Rr]edirect)   # redirect?
-							[ ]*        # spaces
-							(\|)        # pipe
+					({{)                       # opening brackets
+						([Rr]edirect|subst:.*)   # redirect?
+						[ ]*                   # spaces
+						(\|)                   # pipe
 					)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.brackets.mediawiki</string>
+							<string>meta.tag.inline.redirect.mediawiki</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -778,6 +778,11 @@
 						<dict>
 							<key>name</key>
 							<string>constant.other.pipe.mediawiki</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.redirect.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1273,11 +1278,7 @@
 						</dict>
 					</dict>
 					<key>comment</key>
-					<string>
-						we are going to have to add the styling capabilities
-						to this section eventually.  It is complicated,
-						though, so I am putting it off.
-					</string>
+					<string>TODO: add styling capabilities</string>
 					<key>end</key>
 					<string>(^\|})</string>
 					<key>endCaptures</key>
@@ -1314,12 +1315,16 @@
 						<dict>
 							<key>begin</key>
 							<string>^\|-</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>meta.tag.inline.table.mediawiki</string>
+								</dict>
+							</dict>
 							<key>comment</key>
-							<string>
-								hopefully we can allow selection of a whole
-								table row, and possibly later allow things
-								like moving a whole row up/down, etc.
-							</string>
+							<string>TODO: allow selection of rows; move row up/down, etc.</string>
 							<key>end</key>
 							<string>^(?=\|-|^\|})</string>
 							<key>name</key>
@@ -1347,7 +1352,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(^\||\|\|)([^\|]*)</string>
+							<string>(^\||\|\|) *([^\|]*) *</string>
 							<key>name</key>
 							<string>meta.table.cell.mediawiki</string>
 						</dict>

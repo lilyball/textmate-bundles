@@ -640,7 +640,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.tag.mediawiki</string>
+							<string>meta.tag.inline.any.mediawiki</string>
 						</dict>
 						<key>4</key>
 						<dict>
@@ -767,7 +767,7 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.brackets.mediawiki</string>
+							<string>meta.tag.inline.any.mediawiki</string>
 						</dict>
 						<key>3</key>
 						<dict>
@@ -811,7 +811,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.brackets.mediawiki</string>
+							<string>meta.tag.inline.any.mediawiki</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -841,7 +841,7 @@
 					</dict>
 					<key>end</key>
 					<string>(?x:
-						  (\|[ ]*([^\[\]|]+)[ ]*)?     # pipe, spaces, anything, spaces
+						  (\|[ ]*([^\[\]\|]+)[ ]*)?     # pipe, spaces, anything, spaces
 						(\]\])                         # closing brackets
 					)</string>
 					<key>endCaptures</key>
@@ -850,6 +850,11 @@
 						<dict>
 							<key>name</key>
 							<string>string.other.title.link.wiki-link.mediawiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.any.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1408,7 +1413,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.template.mediawiki</string>
+							<string>meta.tag.inline.template.mediawiki</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1427,7 +1432,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.template.mediawiki</string>
+							<string>meta.tag.inline.template.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1448,7 +1453,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.template.mediawiki</string>
+							<string>meta.tag.inline.template.mediawiki</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1457,12 +1462,7 @@
 						</dict>
 					</dict>
 					<key>comment</key>
-					<string>
-						I am not sure I really like the scope of
-						meta.function-call for templates, but it seems like
-						the closest thing to what a template is really doing,
-						with parameters, etc.
-					</string>
+					<string>scope as meta.function-call as the closest thing to a template with parameters, etc.</string>
 					<key>end</key>
 					<string>(}})</string>
 					<key>endCaptures</key>
@@ -1470,7 +1470,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.fix_this_later.template.mediawiki</string>
+							<string>meta.tag.inline.template.mediawiki</string>
 						</dict>
 					</dict>
 					<key>name</key>

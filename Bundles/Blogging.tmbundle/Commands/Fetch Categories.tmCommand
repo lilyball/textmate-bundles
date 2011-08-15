@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>beforeRunningCommand</key>
@@ -11,6 +11,7 @@
 require "#{ENV['TM_SUPPORT_PATH']}/lib/progress"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/ui"
 require "#{ENV['TM_BUNDLE_SUPPORT']}/lib/blogging"
 require 'xmlrpc/client'
 
@@ -33,18 +34,15 @@ def select_from_cats(cats)
   end
 
   names.sort! { |a, b| a &lt;=&gt; b }
-  names.map! { |p| '"' + e_as(p) + '"' }
+  
+  res = TextMate::UI.request_item(
+    :title =&gt; "Categories",
+    :prompt =&gt; "Choose categories to insert:",
+    :items =&gt; names,
+    :button1 =&gt; 'Insert'
+  )
 
-  res = %x{ iconv &lt;&lt;'APPLESCRIPT' -f utf-8 -t mac|osascript 2&gt;/dev/null
-    tell app "TextMate" to ¬
-      return choose from list { #{names.join ','} } ¬
-        with title "Categories" ¬
-        with prompt "Choose categories to insert:" ¬
-        OK button name "Insert" ¬
-        with multiple selections allowed
-  }.chomp
-
-  TextMate.exit_discard if res == 'false'
+  TextMate.exit_discard if res.nil?
   puts res.gsub(/([^,]+),?\s*/, "Category: \\1\n")
 end # select_cats
 

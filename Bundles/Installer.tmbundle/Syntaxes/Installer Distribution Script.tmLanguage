@@ -18,34 +18,116 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>((&lt;)(script)(&gt;))</string>
-			<key>captures</key>
+			<string>(^\s*)?(?=&lt;script&gt;)</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>meta.tag.xml</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.xml</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.xml</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.xml</string>
+					<string>punctuation.whitespace.embedded.leading.apple-dist</string>
 				</dict>
 			</dict>
+			<key>contentName</key>
+			<string>meta.embedded.js.apple-dist</string>
 			<key>end</key>
-			<string>((&lt;/)(script)(&gt;))</string>
-			<key>name</key>
-			<string>source.js.embedded.apple-dist</string>
+			<string>(?&lt;=&lt;/script&gt;)(?!&lt;script&gt;)(\s*$\n?)?</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.whitespace.embedded.trailing.apple-dist</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>((&lt;)(script)(&gt;))</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.embedded.begin.apple-dist</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.content.embedded.begin.apple-dist</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>source.js</string>
+					<key>end</key>
+					<string>(((&lt;/))(script)(&gt;))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.embedded.end.apple-dist</string>
+						</dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.content.embedded.end.apple-dist</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>source.js</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.xml</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.tag.xml</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#javascript</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.xml</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>javascript</key>
+		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -201,11 +283,7 @@
 				</dict>
 			</array>
 		</dict>
-		<dict>
-			<key>include</key>
-			<string>text.xml</string>
-		</dict>
-	</array>
+	</dict>
 	<key>scopeName</key>
 	<string>text.xml.apple-dist</string>
 	<key>uuid</key>

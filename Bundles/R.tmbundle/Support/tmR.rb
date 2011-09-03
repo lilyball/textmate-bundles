@@ -197,7 +197,8 @@ if !Dir::glob("#{tmpDir}/*.pdf").empty?
   counter = 0
   Dir::glob("#{tmpDir}/*.pdf") { |f| 
     counter +=  1
-    print "<img width=#{width} onclick=\"TextMate.system(\'open \\'#{f}\\'\',null);\" src='file://#{f}' />"
+    rndn = Time.now.to_i # random number needed to enforce reloading of cached images
+    print "<img width=#{width} onclick=\"TextMate.system(\'open \\'#{f}\\'\',null);\" src='file://#{f}?#{rndn}' />"
     print "<br>" if (counter % 2 == 0)
   }
   puts "<hr noshade size='2' align='left' color=lightgrey><center><input type=button onclick=\"TextMate.system(\'open -a Preview \\'#{tmpDir}\\'\',null);\" value='Open all Images in Preview' />&nbsp;&nbsp;&nbsp;<input type=button onclick=\"TextMate.system(\'open -a Finder \\'#{tmpDir}\\'\',null);\" value='Reveal all Images in Finder' /></center>"

@@ -355,10 +355,20 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(&lt;ref&gt;)</string>
-					<key>captures</key>
+					<string>(&lt;)(ref)(&gt;)</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.ref.mediawiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.ref.mediawiki</string>
+						</dict>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>meta.tag.inline.ref.mediawiki</string>
@@ -367,7 +377,25 @@
 					<key>contentName</key>
 					<string>meta.reference.content.mediawiki</string>
 					<key>end</key>
-					<string>(&lt;/ref&gt;)</string>
+					<string>(&lt;/)(ref)(&gt;)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.ref.mediawiki</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.ref.mediawiki</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>meta.tag.inline.ref.mediawiki</string>
+						</dict>
+					</dict>
 					<key>patterns</key>
 					<array>
 						<dict>

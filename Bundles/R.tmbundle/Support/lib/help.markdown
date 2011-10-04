@@ -62,7 +62,7 @@ Based on all installed packages and local function declarations it shows a toolt
 <button>&nbsp;(&nbsp;</button>
 Based on all installed packages and local function declarations it shows a tooltip with the function signature for the current word and it inserts “()” or “(”.
 
-***Hint*** This functionality can be switched off by deactivating the bound key equivalent within in the Bundle Editor.
+***Hint*** This command will run in a background task to avoid waiting for unknown commands or if lots of packages are installed. This functionality can be switched off by deactivating the bound key equivalent within in the Bundle Editor.
 
 ## Function Parameter…
 <button>&nbsp;^,&nbsp;</button>
@@ -234,7 +234,7 @@ In addition there is the bundle "R Console (R.app)" available. This bundle allow
 
 # Main Bundle Maintainer
 
-***Date: Sep 08 2011***
+***Date: Oct 04 2011***
 
 <pre>
 -  Charilaos Skiadas&nbsp;<a href="mailto:cskiadas@gmail.com">cskiadas@gmail.com</a>

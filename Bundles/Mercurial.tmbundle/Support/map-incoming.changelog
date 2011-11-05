@@ -16,14 +16,14 @@ last_branch = '{branch}</td> </tr>\n'
 parent = '<% par_rev = {rev} %><%= ("<tr> <th>Parent:</th> <td>" + par_rev.to_s + "<small>({node})</small></td></tr>") unless par_rev == -1 or par_rev == ($therev - 1) %>'
 
 start_files = ""
-file = '<li class="modified">\n<a href=\"txmt://open?url=file%3a%2f%2f<%= u("#{$work_path}{file}") %>\">{file}</a></li>\n'
-last_file = '<li class="modified">\n<a href=\"txmt://open?url=file%3a%2f%2f<%= u"#{$work_path}{file}" %>\">{file}</a></li>\n'
+file = '<li class="modified">\n<a href=\"txmt://open?url=file%3a%2f%2f<%= u($work_path + \'{file}\') %>\">{file}</a></li>\n'
+last_file = '<li class="modified">\n<a href=\"txmt://open?url=file%3a%2f%2f<%= u($work_path + \'{file}\') %>\">{file}</a></li>\n'
 
 start_file_adds = ""
-file_add = '<li class="added"><a href=\"txmt://open?url=file%3a%2f%2f<%= u("#{$work_path}{file_add}") %>\">{file_add}</a></li>\n'
-last_file_add = '<li class="added"><a href=\"txmt://open?url=file%3a%2f%2f<%= u"#{$work_path}{file_add}" %>\">{file_add}</a></li>\n'
+file_add = '<li class="added"><a href=\"txmt://open?url=file%3a%2f%2f<%= u( $work_path + \'{file_add}\') %>\">{file_add}</a></li>\n'
+last_file_add = '<li class="added"><a href=\"txmt://open?url=file%3a%2f%2f<%= u( $work_path + \'{file_add}\') %>\">{file_add}</a></li>\n'
 
 start_file_dels = ""
-file_del = '<li class="deleted"><%= h("#{$work_path}")%>{file_del}</li>\n'
-last_file_del ='<li class="deleted"><%= h("#{$work_path}")%>{file_del}</li>\n'
+file_del = '<li class="deleted"><%= h($work_path) %>{file_del}</li>\n'
+last_file_del ='<li class="deleted"><%= h($work_path) %>{file_del}</li>\n'
 

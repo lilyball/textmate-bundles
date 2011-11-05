@@ -13,7 +13,7 @@ body = <<-HTML
 
 <p>This document describes the commands of the TextMate <a href="http://www.selenic.com/mercurial/">Mercurial</a> bundle and how you can <a href="#conf">fine-tune</a> their behavior. For general Mercurial help and tutorial, you should read the Mercurial man pages (<a href="man:hg.1">hg(1)</a>, <a href="man:hgrc.5">hgrc(5)</a>, <a href="man:hgmerge.1">hgmerge(1)</a>, <a href="man:hgignore.5">hgignore(5)</a>), read the <a href="http://hgbook.red-bean.com/" title="Distributed revision control with Mercurial">hgbook</a> or check the <a href="http://www.selenic.com/mercurial/">wiki</a>.</p>
 
-<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong> (Tested up to 1.0.1).</p>
+<p><strong>NB: <a href="http://www.selenic.com/mercurial/release/">Mercurial 0.9.1 or greater</a> is required.</strong> This version has only been tested with Mercurial 2.0, but should work with older versions.</p>
 
 <h2><a name="commands">Commands</a></h2>
  
@@ -111,7 +111,7 @@ body = <<-HTML
 	   <div class="connect">No</div>
 	   <div class="description">
 		   Displays the basic commit message history for the selected files.
-		  <br />
+		  <br> 
 		   <strong>NB: Mercurial 0.8.1 is needed for the logs commands to work properly.</strong>
 	   </div>
 	</dd>
@@ -123,7 +123,7 @@ body = <<-HTML
 	   <div class="description">
 		   Displays the commit message history for the selected files.
 		   Includes links to files associated with the changeset and the complete commit message.
-		   Some parameters are configurable via shell variables; see the <a href="#tm_hg_log">Configuration Options</a> section below.<br />
+		   Some parameters are configurable via shell variables; see the <a href="#tm_hg_log">Configuration Options</a> section below.<br> 
 		   <strong>NB: Mercurial 0.8.1 is needed for the logs commands to work properly.</strong>
 	   </div>
 	</dd>
@@ -146,6 +146,14 @@ body = <<-HTML
 	   </div>
 	</dd>
 	
+	<dt><a name="add">Remove</a></dt>
+	 <dd>
+		<div class="target">selected project files/folders or the active file if it doesn't belong to a project</div>
+		<div class="connect">No</div>
+		<div class="description">
+                Schedules the targets to be removed from the repository.
+		</div>
+	 </dd>
 	
 	<dt><a name="revert">Revert</a></dt>
 	<dd>
@@ -233,10 +241,11 @@ body = <<-HTML
    <dt><a name="tm_hg_ext_diff">$TM_HG_EXT_DIFF</a></dt>
    <dd>
       <div class="default"><code>None</code></div>
-      <div class="description">Specify the external GUI diff tool to use. If this variable is not set, the bundle will use <code>hg diff</code>, output a .diff file and open it in TM. <br />
-         <strong>To use <a href="http://changesapp.com/" title="Changes">Changes.app</a>:</strong> Follow <a href="http://wiki.changesapp.com/index.php/SCM_Integration_Scripts#Mercurial_.28Hg.29_Integration">these instructions</a> to setup Changes integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>chdiff</code>.<br />
-        <strong> To use FileMerge.app:</strong> Follow <a href="http://www.selenic.com/mercurial/wiki/index.cgi/TipsAndTricks#head-eb500c4bf0eed0b501bb7a5266fd3c4729105fca">these instructions</a> to setup FileMerge integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>opendiff</code>.
-      </div>
+      <div class="description">Specify the external GUI diff tool to use. If this variable is not set, the bundle will use <code>hg diff</code>, output a .diff file and open it in TM. <br> 
+        <strong> To use FileMerge.app:</strong> Follow <a href="http://www.selenic.com/mercurial/wiki/index.cgi/TipsAndTricks#head-eb500c4bf0eed0b501bb7a5266fd3c4729105fca">these instructions</a> to setup FileMerge integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>opendiff</code>.<br>
+        <strong> To use <a href="http://www.araxis.com/merge_mac/" title="Araxis Merge for Mac">Araxis Merge.app</a>:</strong> Follow <a href="http://www.araxis.com/merge_mac/scm_integration.html#Mercurial" title="Instructions on Araxis website">these instructions</a> to setup Merge integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>arxdiff</code>.<br>
+        <strong>To use <a href="http://changesapp.com/" title="Changes">Changes.app</a>:</strong> Follow <a href="http://wiki.changesapp.com/index.php/SCM_Integration_Scripts#Mercurial_.28Hg.29_Integration" title="Instructions on Changes wiki">these instructions</a> to setup Changes integration in Mercurial, then set <code>TM_HG_EXT_DIFF</code> to <code>chdiff</code>.      
+       </div>
    </dd>
  </dl>
 
@@ -246,7 +255,7 @@ body = <<-HTML
  <ul>
 	<li>Chris Thomas & Torsten Becker for the svn bundle which is the inspiration for the hg bundle</li>
 	<li>Ollivier Robert did the first version of this bundle</li>
-	<li>Frédéric "FredB" Ballériaux rewrited it to its current state</li>
+	<li><a href="mailto:fredb7@gmail.com?subject=TM Mercurial bundle">Frédéric "FredB" Ballériaux</a> rewrited it to its current state and is the current maintainer.</li>
  </ul>
 HTML
 

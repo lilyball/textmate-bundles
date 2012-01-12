@@ -13,16 +13,14 @@ require 'fileutils'
 $pipe_in = "/tmp/textmate_Rhelper_in"
 $pipe_out = "/tmp/textmate_Rhelper_out"
 $pipe_status = "/tmp/textmate_Rhelper_status"
-$pipe_conerr = "/tmp/textmate_Rhelper_console_error"
 $pipe_console = "/tmp/textmate_Rhelper_console"
 
 
 if ENV['TM_REXEC'] != nil
 	check = %x{which #{ENV['TM_REXEC']}}
 	if check == ""
-		%x{echo -e "Please check TM_REXEC shell variable! “#{ENV['TM_REXEC']}” in PATH not found! Using “R” instead." >> #{$pipe_conerr}}
+		%x{osascript -e 'tell app "TextMate" to display dialog "Please check TM_REXEC shell variable! “#{ENV['TM_REXEC']}” in PATH not found! Using “R” instead." buttons "OK" default button "OK"'}
 		ENV['TM_REXEC'] = nil
-		%x{mate #{$pipe_conerr}}
 	end
 end
 
@@ -56,7 +54,6 @@ PTY.spawn(cmd) { |r,w,pid|
 		FileUtils.rm_f($pipe_out)
 		FileUtils.rm_f($pipe_status)
 		FileUtils.rm_f($pipe_console)
-		FileUtils.rm_f($pipe_conerr)
 		FileUtils.rm_f("/tmp/textmate_Rhelper_head.html")
 		FileUtils.rm_f("/tmp/textmate_Rhelper_data.html")
 		FileUtils.rm_f("/tmp/textmate_Rhelper_search.html")

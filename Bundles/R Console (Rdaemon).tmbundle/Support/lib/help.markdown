@@ -334,6 +334,10 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Shell variables
 
+-   __TM_REXEC__
+
+    If not set the Rdaemon will be invoked by <code>R --vanilla --slave --encoding=UTF-8</code> otherwise, if set e.g. to "R32", a R session will be invoked by <code>R32 --vanilla --slave --encoding=UTF-8</code> in order to be able to start Rdaemon explicitly in 64 ("R64") or 32 ("R32") bit mode. In addition it also allows to add more command line arguments like "R32 --verbose" will execute <code>R32 --verbose --vanilla --slave --encoding=UTF-8</code>.
+
 -   __TM_RdaemonPDFVIEWER__
 
 	If set it calls that application for showing the current plot as PDF. Its default is `Preview`.
@@ -413,7 +417,7 @@ As default it also displays an inline menu if there is only one suggestion found
 
 # Main Bundle Maintainer
 
-***Date: Dec 09 2009***
+***Date: Jan 12 2012***
 
 <pre>
 -  Hans-Jörg Bibiko&nbsp;&nbsp;<a href="mailto:bibiko@eva.mpg.de">bibiko@eva.mpg.de</a>

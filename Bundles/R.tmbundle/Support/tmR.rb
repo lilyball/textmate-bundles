@@ -114,8 +114,7 @@ recursive_delete(tmpDir) if File.exists?(tmpDir) # remove the temp dir if it's a
 Dir::mkdir(tmpDir)
 
 # Mechanism for dynamic reading
-# stdin, stdout, stderr = popen3("R", "--vanilla", "--no-readline", "--slave", "--encoding=UTF-8")
-stdin, stdout, stderr, pid = my_popen3("R --vanilla --slave --encoding=UTF-8 2>&1")
+stdin, stdout, stderr, pid = my_popen3("#{(ENV['TM_REXEC']==nil) ? 'R' : ENV['TM_REXEC']} --vanilla --slave --encoding=UTF-8 2>&1")
 # init the R slave
 stdin.puts(%{options(device="pdf")})
 stdin.puts(%{options(repos="#{cran}")})
@@ -154,7 +153,11 @@ until descriptors.empty?
       print hideStartMessageJS
       print %{<span style="color: red">#{esc str}</span>}
     elsif io == stdout
-      print hideStartMessageJS
+      # for some unknown reasons this could raise an exception
+      begin
+        print hideStartMessageJS
+      rescue
+      end
       str.each_line do |line|
         # line counter for top level source
         if line.include?("#{linecountermarker}")

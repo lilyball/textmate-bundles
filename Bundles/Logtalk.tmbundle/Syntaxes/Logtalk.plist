@@ -186,7 +186,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(a(bs|tan)|c(eiling|os)|exp|flo(at(_(integer|fractional)_part)?|or)|log|mod|r(em|ound)|s(i(n|gn)|qrt)|truncate)(?=[(])</string>
+			<string>\b(a(bs|cos|sin|tan)|c(eiling|os)|exp|flo(at(_(integer|fractional)_part)?|or)|log|m(ax|in|od)|r(em|ound)|s(i(n|gn)|qrt)|truncate)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.evaluable.logtalk</string>
 		</dict>
@@ -240,7 +240,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(arg|copy_term|functor|numbervars)(?=[(])</string>
+			<string>\b(arg|copy_term|functor|numbervars|term_variables)(?=[(])</string>
 			<key>name</key>
 			<string>support.function.term-creation-and-decomposition.logtalk</string>
 		</dict>

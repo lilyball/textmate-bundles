@@ -8,26 +8,24 @@
 	<string>#!/usr/bin/env ruby
 require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
 
-PENDING   = ENV['TM_BULLET_PENDING'] || '-'
-COMPLETED = ENV['TM_BULLET_COMPLETED'] || '✓'
+PENDING = ENV['TM_BULLET_PENDING'] || '-'
+SKIPPED = ENV['TM_BULLET_SKIPPED'] || '✗︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎'
 
 if ENV['TM_SELECTED_TEXT']
   toggled_text = STDIN.read
   if toggled_text =~ /^\s*#{Regexp.escape PENDING}/u  # Any pendings? Then check all!
-    toggled_text.gsub!(/^(\s*)(#{Regexp.escape PENDING})/u) { $1 + COMPLETED }
+    toggled_text.gsub!(/^(\s*)(#{Regexp.escape PENDING})/u) { $1 + SKIPPED }
   else  # Uncheck all!
-    toggled_text.gsub!(/^(\s*)(#{Regexp.escape COMPLETED})/u) { $1 + PENDING }
+    toggled_text.gsub!(/^(\s*)(#{Regexp.escape SKIPPED})/u) { $1 + PENDING }
   end
   print '${0:' + e_snp(toggled_text) + '}'  # Wrap in selection
 else  # Work with current line
   old_line = ENV['TM_CURRENT_LINE']
-  new_line = old_line.gsub(/^(\s*)([#{Regexp.escape COMPLETED}#{Regexp.escape PENDING}])/u) { $1 + ($2==PENDING ? COMPLETED : PENDING) }
+  new_line = old_line.gsub(/^(\s*)([#{Regexp.escape SKIPPED}#{Regexp.escape PENDING}])/u) { $1 + ($2==PENDING ? SKIPPED : PENDING) }
   column = ENV['TM_LINE_INDEX'].to_i
   unless $1 &amp;&amp; column &lt;= $1.length  # If we're past the line-initial whitespace,
     column += new_line.length - old_line.length  # compensate for different byte counts
   end
-  # new_line[column,0] = '${0}'  # Insert caret
-  # Fixed by Dhaval.
   new_line[new_line.length,0] = '${0}'  # Insert caret
   print new_line
 end
@@ -39,9 +37,9 @@ end
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>keyEquivalent</key>
-	<string>@d</string>
+	<string>@k</string>
 	<key>name</key>
-	<string>Toggle Completed</string>
+	<string>Toggle Skipped</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
@@ -51,7 +49,7 @@ end
 	<key>scope</key>
 	<string>text.tasks</string>
 	<key>uuid</key>
-	<string>40140EB8-3634-465A-A656-32D6C879C85B</string>
+	<string>EFE3F24D-A13E-4F86-BF2A-A1A538D56524</string>
 	<key>version</key>
 	<integer>2</integer>
 </dict>

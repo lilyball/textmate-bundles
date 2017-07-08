@@ -22,7 +22,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^(\s*)(✓)</string>
+			<string>^(\s*)(✓|✔︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -52,7 +52,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^(\s*)(-)</string>
+			<string>^(\s*)(-|\*)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -72,6 +72,36 @@
 			<string>$\n?</string>
 			<key>name</key>
 			<string>markup.list.pending.tasks</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#link</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(\s*)(x|✗︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.whitespace.list_item.leading.tasks</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list_item.tasks</string>
+				</dict>
+			</dict>
+			<key>contentName</key>
+			<string>meta.paragraph.list.tasks</string>
+			<key>end</key>
+			<string>$\n?</string>
+			<key>name</key>
+			<string>markup.list.skipped.tasks</string>
 			<key>patterns</key>
 			<array>
 				<dict>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+SKIPPED      = ENV['TM_BULLET_SKIPPED'] || '✗︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎︎'
+SKIPPED_ITEM = /^(\s*)#{Regexp.escape SKIPPED}.*  # A completion bullet, followed by any characters,
+                  (\n  # optionally followed by a line-break and…
+                    (\1\ \   # any number of lines starting with two spaces (matching bullet-and-space)…
+                      (?!-|#{Regexp.escape SKIPPED}|.*\:\s*$).*  # NOT followed by a bullet or ending with a colon (i.e. is a header)
+                    \n?)*
+                  )?
+                 /ux
+print STDIN.read.gsub(SKIPPED_ITEM, '')
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>@e</string>
+	<key>name</key>
+	<string>Expire Skipped</string>
+	<key>outputCaret</key>
+	<string>heuristic</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>replaceInput</string>
+	<key>scope</key>
+	<string>text.tasks</string>
+	<key>uuid</key>
+	<string>ED7D6FA4-2089-4ED4-B3C7-AA9160558247</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
